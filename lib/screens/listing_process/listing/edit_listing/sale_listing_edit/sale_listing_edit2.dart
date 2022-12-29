@@ -338,8 +338,8 @@ class _EditSale2State extends State<EditSale2> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -362,8 +362,8 @@ class _EditSale2State extends State<EditSale2> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -386,8 +386,8 @@ class _EditSale2State extends State<EditSale2> {
                             "Dollar",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -444,8 +444,8 @@ class _EditSale2State extends State<EditSale2> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -468,8 +468,8 @@ class _EditSale2State extends State<EditSale2> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -764,7 +764,7 @@ class _EditSale2State extends State<EditSale2> {
                       : '20';
 
       print(formData);
-      print("saleFee" + saleFee);
+      print("saleFee$saleFee");
 
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return EditSale3(

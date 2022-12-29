@@ -50,7 +50,7 @@ class _SingleStoryState extends State<SingleStory> {
     return widget.type == '.jpg' ||
             widget.type == '.png' ||
             widget.type == '.jpeg'
-        ? Container(
+        ? SizedBox(
             height: 200,
             child: Stack(
               alignment: Alignment.center,

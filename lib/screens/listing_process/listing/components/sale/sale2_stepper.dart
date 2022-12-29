@@ -309,8 +309,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -334,8 +334,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -362,8 +362,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -387,8 +387,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -415,8 +415,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "Dollar",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -440,8 +440,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "Dollar",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -554,8 +554,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                               "No",
                             ].map((option) {
                               return DropdownMenuItem(
-                                child: Text(option),
                                 value: option,
+                                child: Text(option),
                               );
                             }).toList(),
                             decoration: InputDecoration(
@@ -579,8 +579,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -615,8 +615,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -949,10 +949,10 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                       : '20';
 
       print(formData);
-      print("saleFee" + saleFee);
+      print("saleFee$saleFee");
 
       Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return Sale3();
+        return const Sale3();
       }));
     }
   }

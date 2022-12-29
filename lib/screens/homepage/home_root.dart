@@ -12,7 +12,6 @@ import 'package:findcribs/screens/agent_profile/profile.dart';
 import 'package:findcribs/screens/chat_screen/chat_screen.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_page.dart';
 import 'package:findcribs/screens/homepage/homepage_screen.dart';
-import 'package:findcribs/screens/homepage/upgrade_available.dart';
 import 'package:findcribs/screens/listing_process/get_started.dart';
 import 'package:findcribs/screens/listing_process/listing/listing.dart';
 import 'package:findcribs/screens/story/story_list.dart';
@@ -282,36 +281,6 @@ class _HomePageRootState extends State<HomePageRoot> {
                   curve: Curves.easeInOutCirc,
                   tailBaseWidth: 20,
                   tailLength: 10,
-                  child: GestureDetector(
-                    onTap: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      final token = prefs.getString('token');
-                      final isagent = prefs.getBool('isAgent');
-                      token == null
-                          ? showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const SocialLogin();
-                              })
-                          : isagent == true || isAgent == true
-                              ? isToolTip
-                                  ? tooltipController.hideTooltip()
-                                  : tooltipController.showTooltip()
-                              : handleGetStarted();
-                    },
-                    child: const Material(
-                      color: Color(0XFF0072BA),
-                      shape: CircleBorder(),
-                      elevation: 4.0,
-                      child: Padding(
-                        padding: EdgeInsets.all(18.0),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
                   // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
                   content: SizedBox(
                     height: 100,
@@ -379,6 +348,36 @@ class _HomePageRootState extends State<HomePageRoot> {
                       ],
                     ),
                   ),
+                  child: GestureDetector(
+                    onTap: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      final token = prefs.getString('token');
+                      final isagent = prefs.getBool('isAgent');
+                      token == null
+                          ? showModalBottomSheet<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const SocialLogin();
+                              })
+                          : isagent == true || isAgent == true
+                              ? isToolTip
+                                  ? tooltipController.hideTooltip()
+                                  : tooltipController.showTooltip()
+                              : handleGetStarted();
+                    },
+                    child: const Material(
+                      color: Color(0XFF0072BA),
+                      shape: CircleBorder(),
+                      elevation: 4.0,
+                      child: Padding(
+                        padding: EdgeInsets.all(18.0),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
           bottomNavigationBar: getFooter(size),
           body: UpgradeAlert(
@@ -387,7 +386,7 @@ class _HomePageRootState extends State<HomePageRoot> {
               dialogStyle: Platform.isIOS
                   ? UpgradeDialogStyle.cupertino
                   : UpgradeDialogStyle.material,
-              durationUntilAlertAgain: Duration(days: 1),
+              durationUntilAlertAgain: const Duration(days: 1),
             ),
             child: SafeArea(
               child: isLoading

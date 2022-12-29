@@ -3,12 +3,10 @@
 import 'dart:convert';
 
 import 'package:findcribs/models/house_list_model.dart';
-import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:findcribs/service/filter_property_category.dart';
 import 'package:findcribs/service/property_list_categoty_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +17,6 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../components/constants.dart';
 import '../../controller/filter_terrace_controller.dart';
-import '../authentication_screen/sign_up_page.dart';
 import 'package:http/http.dart' as http;
 
 import '../homepage/single_property.dart';
@@ -306,7 +303,6 @@ class _TerraceScreenState extends State<TerraceScreen> {
   @override
   Widget build(BuildContext context) {
     double mobileWidth = MediaQuery.of(context).size.width;
-    double mobileHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         body: isChecking
             ? Center(

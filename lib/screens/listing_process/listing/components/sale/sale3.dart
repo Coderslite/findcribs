@@ -172,12 +172,12 @@ class _Sale3State extends State<Sale3> with SingleTickerProviderStateMixin {
                 child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _tabController,
-                    children: [
-                      const Rent2Stepper(),
+                    children: const [
+                      Rent2Stepper(),
                       Sale3Stepper(
       
                       ),
-                   const   EstateMarket(),
+                   EstateMarket(),
                     ]),
               )
             ],

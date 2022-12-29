@@ -213,8 +213,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "Abuja"
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -273,8 +273,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "Abuja"
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -299,8 +299,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "Unfurnished"
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -325,8 +325,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "Unfurnished"
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -353,8 +353,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -378,8 +378,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -406,8 +406,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -431,8 +431,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -459,8 +459,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -484,8 +484,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(

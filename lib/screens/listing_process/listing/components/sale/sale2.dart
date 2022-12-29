@@ -169,12 +169,12 @@ class _Sale2State extends State<Sale2> with SingleTickerProviderStateMixin {
                 child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _tabController,
-                    children: [
-                      const Rent1(),
+                    children: const [
+                      Rent1(),
                       Sale2Stepper(
                   
                       ),
-                      const EstateMarket()
+                      EstateMarket()
                     ]),
               )
             ],

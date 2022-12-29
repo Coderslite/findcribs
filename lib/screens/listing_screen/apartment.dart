@@ -300,7 +300,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     filterApartmentController.handleResetInfo();
     super.dispose();
   }
@@ -309,7 +308,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     double mobileWidth = MediaQuery.of(context).size.width;
-    double mobileHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         body: isChecking
             ? Center(
@@ -440,7 +438,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                                   index
                                                               ? const Icon(
                                                                   Icons.check)
-                                                              : Text(""),
+                                                              : const Text(""),
                                                     ),
                                                   );
                                                 }));
@@ -465,12 +463,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                     Text(
                                       filterApartmentController.propertyType
                                           .toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: 'RedHatDisplay',
                                           fontWeight: FontWeight.w700,
                                           fontSize: 10),
                                     ),
-                                    Icon(
+                                    const Icon(
                                       CupertinoIcons.arrow_up_down,
                                       size: 11,
                                       // color: Color(0XFFE5E5E5),
@@ -510,7 +508,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text("Bedroom Size"),
+                                                  const Text("Bedroom Size"),
                                                   SfSlider(
                                                     min: 0,
                                                     max: 10,
@@ -528,7 +526,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                       });
                                                     },
                                                   ),
-                                                  Text("Bathoom Size"),
+                                                  const Text("Bathoom Size"),
                                                   SfSlider(
                                                     min: 0,
                                                     max: 10,
@@ -546,7 +544,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                       });
                                                     },
                                                   ),
-                                                  Text("Living Room Size"),
+                                                  const Text("Living Room Size"),
                                                   SfSlider(
                                                     min: 0,
                                                     max: 10,
@@ -564,7 +562,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                       });
                                                     },
                                                   ),
-                                                  Text("Kitchen Size"),
+                                                  const Text("Kitchen Size"),
                                                   SfSlider(
                                                     min: 0,
                                                     max: 10,
@@ -658,7 +656,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text("Price"),
+                                                    const Text("Price"),
                                                     // SfRangeSlider(
                                                     //   min: 5000.0,
                                                     //   max: 5000000000.0,
@@ -880,7 +878,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                                   index
                                                               ? const Icon(
                                                                   Icons.check)
-                                                              : Text(""),
+                                                              : const Text(""),
                                                     ),
                                                   );
                                                 }));
@@ -905,12 +903,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                     Text(
                                       filterApartmentController.state
                                           .toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: 'RedHatDisplay',
                                           fontWeight: FontWeight.w700,
                                           fontSize: 10),
                                     ),
-                                    Icon(
+                                    const Icon(
                                       CupertinoIcons.arrow_up_down,
                                       size: 11,
                                       // color: Color(0XFFE5E5E5),

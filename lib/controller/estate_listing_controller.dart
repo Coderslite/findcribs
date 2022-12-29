@@ -45,7 +45,6 @@ class EstateListingController extends GetxController {
   }
 
   handleResetInformation() {
-    print("reseting information");
     ageRestriction.value = 0;
     designType.value = '';
     propertyAddress.value = '';

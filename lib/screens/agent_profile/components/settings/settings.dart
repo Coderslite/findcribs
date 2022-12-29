@@ -1,7 +1,6 @@
 import 'package:findcribs/screens/agent_profile/components/settings/components/settings_change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);

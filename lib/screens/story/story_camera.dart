@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/screens/story/image_preview.dart';
-import 'package:findcribs/screens/story/video_trim.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:form_builder_file_picker/form_builder_file_picker.dart';

@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:timeago/timeago.dart';
 
 import '../../../../../controller/rent_listing_controller.dart';
 import '../../../../homepage/home_root.dart';
@@ -504,7 +503,6 @@ class _Rent4StepperState extends State<Rent4Stepper> {
           isLoading = true;
         });
         _formKey4.currentState!.save();
-        var formData = _formKey4.currentState!.value;
 
         final prefs = await SharedPreferences.getInstance();
 

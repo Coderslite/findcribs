@@ -725,10 +725,10 @@ class _EditRent4State extends State<EditRent4> {
         print(widget.water.toString());
         print(widget.space);
         print(widget.rentalFee);
-        print("agency" + widget.agencyFee.toString());
-        print("legal " + widget.legalFee.toString());
-        print("service" + widget.serviceCharge.toString());
-        print("caution" + widget.cautionFee.toString());
+        print("agency${widget.agencyFee}");
+        print("legal ${widget.legalFee}");
+        print("service${widget.serviceCharge}");
+        print("caution${widget.cautionFee}");
       }
     }
   }

@@ -425,7 +425,6 @@ class _Sale4StepperState extends State<Sale4Stepper> {
           isLoading = true;
         });
         _formKey4.currentState!.save();
-        var formData = _formKey4.currentState!.value;
 
         final prefs = await SharedPreferences.getInstance();
 

@@ -192,8 +192,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         prefs.setString('action', 'LoggedIn');
 
         prefs.setString('token', token);
+        // ignore: use_build_context_synchronously
         Navigator.of(context).popUntil((route) => route.isFirst);
 
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
           return const VerifiedScreen();
         }));

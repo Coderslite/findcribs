@@ -280,8 +280,8 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
                                         "30",
                                       ].map((option) {
                                         return DropdownMenuItem(
-                                          child: Text(option),
                                           value: option,
+                                          child: Text(option),
                                         );
                                       }).toList(),
                                       decoration: InputDecoration(
@@ -385,6 +385,7 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
         isPromoting = false;
       });
       // print(responseData['data']['authorization_url']);
+      // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return WebViewExample(
           webLink: responseData['data']['authorization_url'],

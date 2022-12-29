@@ -1011,7 +1011,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   Future<void> _cropImage() async {
     if (file != null) {
-      var _croppedFile = await ImageCropper().cropImage(
+      var croppedFile = await ImageCropper().cropImage(
         sourcePath: file!.path,
         compressFormat: ImageCompressFormat.jpg,
         compressQuality: 100,
@@ -1041,9 +1041,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
           ),
         ],
       );
-      if (_croppedFile != null) {
+      if (croppedFile != null) {
         setState(() {
-          croppedFile = _croppedFile;
+          croppedFile = croppedFile;
           handleUpdateImage();
         });
       }

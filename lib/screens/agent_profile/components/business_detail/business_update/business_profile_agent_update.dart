@@ -53,7 +53,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                     : 3;
         manageAllowed =
             value.agent!['systemManaged'].toString() == 'true' ? true : false;
-        print(value.agent!['systemManaged']);
+       
       });
     });
   }
@@ -257,9 +257,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
               if (snapshot.hasData) {
                 String data = snapshot.data!.agent!['availability'];
                 List<String> myAvailability = (data.split(','));
-                // print(availability);
-                print(myAvailability);
-                print(availability);
+          
                 availability = myAvailability;
                 agentType = snapshot.data!.agent!['category'];
 
@@ -318,9 +316,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                   FormBuilderValidators.required(context),
                                 ]),
                                 initialValue:
-                                    snapshot.data!.firstName.toString() +
-                                        " " +
-                                        snapshot.data!.lastName.toString(),
+                                    "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
                                 enabled: false,
                                 decoration: const InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
@@ -504,8 +500,8 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                             "No",
                                           ].map((option) {
                                             return DropdownMenuItem(
-                                              child: Text(option),
                                               value: option,
+                                              child: Text(option),
                                             );
                                           }).toList(),
                                           onChanged: (value) {
@@ -699,7 +695,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
 
   Future<void> _cropImage() async {
     if (file != null) {
-      var _croppedFile = await ImageCropper().cropImage(
+      var croppedFile = await ImageCropper().cropImage(
         sourcePath: file!.path,
         compressFormat: ImageCompressFormat.jpg,
         compressQuality: 100,
@@ -729,9 +725,9 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
           ),
         ],
       );
-      if (_croppedFile != null) {
+      if (croppedFile != null) {
         setState(() {
-          croppedFile = _croppedFile;
+          croppedFile = croppedFile;
         });
       }
     }
@@ -770,8 +766,6 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                         : '101+'
             : "",
       });
-      var responseData = jsonDecode(response.body);
-      print(responseData);
       if (response.statusCode == 200) {
         AwesomeDialog(
           context: context,

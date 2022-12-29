@@ -63,7 +63,7 @@ class _BusinessVerificationScreenState
         padding: const EdgeInsets.all(20.0),
         child: SafeArea(
             child: isLoading
-                ? Center(child: const CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : isVerified == 'pending'
                     ? Center(
                         child: Column(
@@ -84,7 +84,7 @@ class _BusinessVerificationScreenState
                                     "assets/images/vector.png",
                                     fit: BoxFit.cover,
                                   )),
-                              Text("Business Already Verified")
+                              const Text("Business Already Verified")
                             ],
                           ))
                         : Obx(

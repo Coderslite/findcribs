@@ -231,8 +231,8 @@ class _EditRent3State extends State<EditRent3> {
                             "Abuja"
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -250,8 +250,8 @@ class _EditRent3State extends State<EditRent3> {
                           items: ["Furnished", "Semi-Furnished", "Unfurnished"]
                               .map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -274,8 +274,8 @@ class _EditRent3State extends State<EditRent3> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -298,8 +298,8 @@ class _EditRent3State extends State<EditRent3> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(
@@ -322,8 +322,8 @@ class _EditRent3State extends State<EditRent3> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           decoration: InputDecoration(

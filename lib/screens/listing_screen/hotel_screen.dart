@@ -142,6 +142,61 @@ class _HotelScreenState extends State<HotelScreen> {
           curve: Curves.easeInOutCirc,
           tailBaseWidth: 20,
           tailLength: 10,
+          // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
+          content: SizedBox(
+            height: 100,
+            width: 170,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    handleGetStarted();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0XFF0072BA),
+                              width: 2,
+                            )),
+                        child: const Icon(
+                          Icons.play_arrow,
+                          color: Color(0XFF0072BA),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text("Post a story")
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    tooltipController
+                        .hideTooltip()
+                        .then((v) => handleGetStarted());
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/list_property.png"),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text("List a property")
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
           child: GestureDetector(
             onTap: () async {
               final prefs = await SharedPreferences.getInstance();
@@ -265,61 +320,6 @@ class _HotelScreenState extends State<HotelScreen> {
                   color: Colors.white,
                 ),
               ),
-            ),
-          ),
-          // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
-          content: SizedBox(
-            height: 100,
-            width: 170,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    handleGetStarted();
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: const Color(0XFF0072BA),
-                              width: 2,
-                            )),
-                        child: const Icon(
-                          Icons.play_arrow,
-                          color: Color(0XFF0072BA),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text("Post a story")
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    tooltipController
-                        .hideTooltip()
-                        .then((v) => handleGetStarted());
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/images/list_property.png"),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text("List a property")
-                    ],
-                  ),
-                )
-              ],
             ),
           ),
         ),

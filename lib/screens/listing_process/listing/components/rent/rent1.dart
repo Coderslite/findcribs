@@ -1495,8 +1495,8 @@ class _Rent1State extends State<Rent1> {
                                     "Duplex Bungalow",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1529,8 +1529,8 @@ class _Rent1State extends State<Rent1> {
                                     "Duplex Bungalow",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1560,8 +1560,8 @@ class _Rent1State extends State<Rent1> {
                                     "Modern",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1588,8 +1588,8 @@ class _Rent1State extends State<Rent1> {
                                     "Modern",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(

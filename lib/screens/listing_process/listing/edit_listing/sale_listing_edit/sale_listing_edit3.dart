@@ -225,8 +225,8 @@ class _EditSale3State extends State<EditSale3> {
                           "Abuja"
                         ].map((option) {
                           return DropdownMenuItem(
-                            child: Text(option),
                             value: option,
+                            child: Text(option),
                           );
                         }).toList(),
                         decoration: InputDecoration(
@@ -290,8 +290,8 @@ class _EditSale3State extends State<EditSale3> {
                           "No"
                         ].map((option) {
                           return DropdownMenuItem(
-                            child: Text(option),
                             value: option,
+                            child: Text(option),
                           );
                         }).toList(),
                         decoration: InputDecoration(
@@ -317,8 +317,8 @@ class _EditSale3State extends State<EditSale3> {
                           // "Good",
                         ].map((option) {
                           return DropdownMenuItem(
-                            child: Text(option),
                             value: option,
+                            child: Text(option),
                           );
                         }).toList(),
                         decoration: InputDecoration(

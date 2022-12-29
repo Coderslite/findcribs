@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:findcribs/screens/story/image_preview.dart';
 import 'package:findcribs/screens/story/single_active_listing.dart';
-import 'package:findcribs/screens/story/video_trim.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';

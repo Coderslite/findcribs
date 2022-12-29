@@ -502,8 +502,8 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     "Dollar",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -530,8 +530,8 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     "Dollar",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   validator: FormBuilderValidators.compose([
@@ -570,8 +570,8 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     "For 10Years",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -607,8 +607,8 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     "For 10Years",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -709,8 +709,8 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -745,8 +745,8 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     "No",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   onChanged: (value) {

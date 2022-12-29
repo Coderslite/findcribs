@@ -468,9 +468,9 @@ class _AgentProfileScreenState extends State<AgentProfileScreen> {
                                         width: 1)),
                                 child: Center(
                                   child: SizedBox(
+                                    height: 24,
                                     child: SvgPicture.asset(
                                         "assets/svgs/chat.svg"),
-                                    height: 24,
                                   ),
                                 ),
                               ),

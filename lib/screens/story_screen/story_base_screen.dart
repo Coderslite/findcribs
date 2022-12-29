@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/agent_profile/agent_profile.dart';
-import 'package:findcribs/screens/story_screen/each_video_story.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:photo_view/photo_view.dart';
@@ -235,11 +234,11 @@ class _StoryBaseScreenState extends State<StoryBaseScreen> {
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(10),
                           height: 60,
-                          decoration: BoxDecoration(color: Colors.black38),
+                          decoration: const BoxDecoration(color: Colors.black38),
                           child: Center(
                             child: Text(
                               widget.moment[_currentIndex]['caption'],
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           )))
         ],

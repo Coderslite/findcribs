@@ -13,7 +13,6 @@ class BusinessVerificationController extends GetxController {
   var isLoading = false.obs;
 
   handleVerifyAgent(File file, int id) async {
-    print(file.path);
     isLoading.value = true;
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
@@ -74,9 +73,7 @@ class BusinessVerificationController extends GetxController {
         desc: "Something went wrong",
         showCloseIcon: true,
         btnOkText: "Try Again",
-        btnOkOnPress: () {
-          ;
-        },
+        btnCancelOnPress: () {},
       ).show();
       // print("something went wrong");
     }

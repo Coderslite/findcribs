@@ -1,13 +1,10 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
 
 import 'package:findcribs/models/house_list_model.dart';
-import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:findcribs/service/property_list_categoty_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -18,11 +15,7 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import '../../components/constants.dart';
 import '../../controller/filter_duplex_controller.dart';
 import '../../service/filter_property_category.dart';
-import '../authentication_screen/sign_up_page.dart';
 import '../homepage/single_property.dart';
-import '../listing_process/get_started.dart';
-import '../listing_process/listing/listing.dart';
-import 'package:http/http.dart' as http;
 
 import '../product_details/product_details.dart';
 
@@ -301,7 +294,6 @@ class _DuplexScreenState extends State<DuplexScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     filterDuplexController.handleResetInfo();
     super.dispose();
   }
@@ -309,7 +301,6 @@ class _DuplexScreenState extends State<DuplexScreen> {
   @override
   Widget build(BuildContext context) {
     double mobileWidth = MediaQuery.of(context).size.width;
-    double mobileHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         body: isChecking
             ? Center(

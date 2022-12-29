@@ -260,7 +260,7 @@ class _ChatDetailsState extends State<ChatDetails> {
     socket.on("START_TYPING", (data) {
       // print(data);
       var statusData = jsonDecode(data);
-      print("my chat id" + widget.chatId.toString());
+      print("my chat id${widget.chatId}");
       print(statusData);
       if ((widget.chatId) == statusData['chatId']) {
         setState(() {
@@ -397,9 +397,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                widget.firstName.toString() +
-                                    " " +
-                                    widget.lastName.toString(),
+                                "${widget.firstName} ${widget.lastName}",
                                 style: const TextStyle(
                                     color: Color(0xFF263238), fontSize: 14),
                               ),

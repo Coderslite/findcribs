@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:camera/camera.dart';
-import 'package:findcribs/controller/get_chat_controller.dart';
 import 'package:findcribs/controller/initialize_controllers.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/message_model.dart';

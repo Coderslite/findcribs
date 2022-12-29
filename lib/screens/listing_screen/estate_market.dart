@@ -3,7 +3,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../components/constants.dart';
 import '../../models/house_list_model.dart';
@@ -404,8 +403,8 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                                                     "Abuja"
                                                   ].map((option) {
                                                     return DropdownMenuItem(
-                                                      child: Text(option),
                                                       value: option,
+                                                      child: Text(option),
                                                     );
                                                   }).toList(),
                                                   decoration: InputDecoration(

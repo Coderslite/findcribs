@@ -1,12 +1,8 @@
 import 'dart:io';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:findcribs/screens/story/attach_active_listing.dart';
-import 'package:findcribs/screens/story/image_preview.dart';
 import 'package:findcribs/screens/story/single_story.dart';
 import 'package:findcribs/screens/story/story_camera.dart';
-import 'package:findcribs/screens/story/video_trim.dart';
 import 'package:findcribs/service/get_user_story_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -197,7 +193,7 @@ class _StoryListState extends State<StoryList> {
                         //           ],
                         //         ),
                         //       )
-                        Text("")
+                        const Text("")
                         : GestureDetector(
                             onTap: () {
                               handlePickFromGallery();
@@ -293,11 +289,6 @@ class _StoryListState extends State<StoryList> {
                               height: 60,
                             )
                           : CustomPopupMenu(
-                              child: Container(
-                                child: Image.asset(
-                                    "assets/images/vertical_line.png"),
-                                padding: const EdgeInsets.all(20),
-                              ),
                               menuBuilder: () => ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: Container(
@@ -364,6 +355,11 @@ class _StoryListState extends State<StoryList> {
                               pressType: PressType.singleClick,
                               verticalMargin: -10,
                               controller: _controller,
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                child: Image.asset(
+                                    "assets/images/vertical_line.png"),
+                              ),
                             ),
                     ],
                   ),
@@ -490,40 +486,5 @@ class _StoryListState extends State<StoryList> {
 
   handlePickFromGallery() {
     tooltipController.hideTooltip();
-    var result = FilePicker.platform.pickFiles(
-      allowedExtensions: [
-        'png',
-        'jpg',
-      ],
-      type: FileType.custom,
-    ).then((value) {
-      if (value!.files.single.extension == 'mp4') {
-        if (isAttached) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-            return AttachActiveListing(
-                type: 'video', file: File(value.files.single.path.toString()));
-          }));
-        } else {
-          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-          //   return VideoTrim(file: File(value.files.single.path.toString()));
-          // }));
-          null;
-        }
-      } else {
-        if (isAttached) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-            return AttachActiveListing(
-                type: 'picture',
-                file: File(value.files.single.path.toString()));
-          }));
-        } else {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-            return ImagePreview(
-              file: File(value.files.single.path.toString()),
-            );
-          }));
-        }
-      }
-    });
   }
 }

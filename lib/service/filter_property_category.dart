@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:findcribs/models/house_detail_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../components/constants.dart';

@@ -176,8 +176,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   "Abuja"
                                 ].map((option) {
                                   return DropdownMenuItem(
-                                    child: Text(option),
                                     value: option,
+                                    child: Text(option),
                                   );
                                 }).toList(),
                                 decoration: InputDecoration(
@@ -236,8 +236,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   "Abuja"
                                 ].map((option) {
                                   return DropdownMenuItem(
-                                    child: Text(option),
                                     value: option,
+                                    child: Text(option),
                                   );
                                 }).toList(),
                                 decoration: InputDecoration(
@@ -353,8 +353,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   "No"
                                 ].map((option) {
                                   return DropdownMenuItem(
-                                    child: Text(option),
                                     value: option,
+                                    child: Text(option),
                                   );
                                 }).toList(),
                                 onChanged: (value) {
@@ -379,8 +379,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   "No"
                                 ].map((option) {
                                   return DropdownMenuItem(
-                                    child: Text(option),
                                     value: option,
+                                    child: Text(option),
                                   );
                                 }).toList(),
                                 initialValue: saleListingController.water.value,
@@ -411,8 +411,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   // "Good",
                                 ].map((option) {
                                   return DropdownMenuItem(
-                                    child: Text(option),
                                     value: option,
+                                    child: Text(option),
                                   );
                                 }).toList(),
                                 onChanged: (value) {
@@ -437,8 +437,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   // "Good",
                                 ].map((option) {
                                   return DropdownMenuItem(
-                                    child: Text(option),
                                     value: option,
+                                    child: Text(option),
                                   );
                                 }).toList(),
                                 initialValue:

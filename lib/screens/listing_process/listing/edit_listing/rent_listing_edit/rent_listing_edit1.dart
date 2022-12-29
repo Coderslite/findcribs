@@ -1509,8 +1509,8 @@ class _EditRent1State extends State<EditRent1> {
                               "Duplex Bungalow",
                             ].map((option) {
                               return DropdownMenuItem(
-                                child: Text(option),
                                 value: option,
+                                child: Text(option),
                               );
                             }).toList(),
                             decoration: InputDecoration(
@@ -1574,8 +1574,8 @@ class _EditRent1State extends State<EditRent1> {
                               "Modern",
                             ].map((option) {
                               return DropdownMenuItem(
-                                child: Text(option),
                                 value: option,
+                                child: Text(option),
                               );
                             }).toList(),
                             decoration: InputDecoration(
@@ -1927,10 +1927,10 @@ class _EditRent1State extends State<EditRent1> {
         );
       }));
       print(formData);
-      print("bedroom" + bedroomSize);
-      print("bathroom" + bathroomSize);
-      print("living room" + livingroomSize);
-      print("kitchen" + kitchenSize);
+      print("bedroom$bedroomSize");
+      print("bathroom$bathroomSize");
+      print("living room$livingroomSize");
+      print("kitchen$kitchenSize");
     }
   }
 

@@ -10,7 +10,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:findcribs/controller/connectivity_controller.dart';
 import 'package:findcribs/controller/story_list_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
-import 'package:findcribs/screens/external_dir/fetch_external_dir.dart';
 import 'package:findcribs/util/social_login.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
@@ -18,7 +17,6 @@ import 'package:path/path.dart' as p;
 import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/models/notification_model.dart';
 import 'package:findcribs/models/story_list_model.dart';
-import 'package:findcribs/screens/favourite_screen/create_network.dart';
 import 'package:findcribs/screens/homepage/each_story.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:findcribs/screens/homepage/single_property.dart';
@@ -44,7 +42,6 @@ import 'package:socket_io_client/socket_io_client.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../service/property_list_all_service.dart';
 import '../../service/search_property.dart';
 import '../favourite_screen/all_agent/all_agent.dart';
 import '../notification_screen/get_all_notificaton_controller.dart';
@@ -540,7 +537,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                         //   }));
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (_) {
-                                            return AllAgent();
+                                            return const AllAgent();
                                           }));
                                   },
                                   child: Container(

@@ -1475,8 +1475,8 @@ class _Sale1State extends State<Sale1> {
                                     "Duplex Bungalow",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1507,8 +1507,8 @@ class _Sale1State extends State<Sale1> {
                                     "Duplex Bungalow",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1538,8 +1538,8 @@ class _Sale1State extends State<Sale1> {
                                     "Modern",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1566,8 +1566,8 @@ class _Sale1State extends State<Sale1> {
                                     "Modern",
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1644,8 +1644,8 @@ class _Sale1State extends State<Sale1> {
                                     "Unfurnished"
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(
@@ -1673,8 +1673,8 @@ class _Sale1State extends State<Sale1> {
                                     "Unfurnished"
                                   ].map((option) {
                                     return DropdownMenuItem(
-                                      child: Text(option),
                                       value: option,
+                                      child: Text(option),
                                     );
                                   }).toList(),
                                   decoration: InputDecoration(

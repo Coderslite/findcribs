@@ -7,8 +7,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import '../../components/constants.dart';
-import '../../service/property_list_all_service.dart';
-import '../../widgets/bottom_sheet.dart';
 
 // ignore: camel_case_types
 class Search_Screen extends StatefulWidget {
@@ -220,21 +218,21 @@ class _Search_ScreenState extends State<Search_Screen> {
                                           topLeft: Radius.circular(20),
                                           topRight: Radius.circular(20))),
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 25),
                                     child: Column(
                                       children: [
                                         SingleChildScrollView(
-                                          physics: BouncingScrollPhysics(),
+                                          physics: const BouncingScrollPhysics(),
                                           child: Column(
                                             children: [
-                                              Text("Search By Location"),
+                                              const Text("Search By Location"),
                                               const SizedBox(
                                                 height: 20,
                                               ),
                                               Row(
-                                                children: [
-                                                  const Text("State"),
+                                                children: const [
+                                                  Text("State"),
                                                 ],
                                               ),
                                               FormBuilderDropdown(
@@ -305,8 +303,8 @@ class _Search_ScreenState extends State<Search_Screen> {
                                                 height: 20,
                                               ),
                                               Row(
-                                                children: [
-                                                  const Text("Area"),
+                                                children: const [
+                                                  Text("Area"),
                                                 ],
                                               ),
                                               TextFormField(

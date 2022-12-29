@@ -124,8 +124,8 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                         width: MediaQuery.of(context).size.width / 3.6,
                         child: Text(
                           widget.currency.toString() == 'Naira'
-                              ? "NGN " + widget.formattedPrice.toString()
-                              : "\$ " + widget.formattedPrice.toString(),
+                              ? "NGN ${widget.formattedPrice}"
+                              : "\$ ${widget.formattedPrice}",
                           style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -134,12 +134,6 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                       ),
                       CustomPopupMenu(
                         showArrow: false,
-                        // enablePassEvent: false,
-                        child: Container(
-                          child:
-                              Image.asset("assets/images/horizontal_line.png"),
-                          padding: const EdgeInsets.all(20),
-                        ),
                         menuBuilder: () => ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Container(
@@ -370,6 +364,12 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                         pressType: PressType.singleClick,
                         verticalMargin: -10,
                         controller: _controller,
+                        // enablePassEvent: false,
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child:
+                              Image.asset("assets/images/horizontal_line.png"),
+                        ),
                       ),
                     ],
                   ),

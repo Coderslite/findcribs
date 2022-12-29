@@ -52,6 +52,7 @@ class _HelpScreenState extends State<HelpScreen> {
               ),
               InkWell(
                 onTap: () async {
+                  // ignore: deprecated_member_use
                   launchUrl.launch("tel:07026195346");
                 },
                 child: Container(

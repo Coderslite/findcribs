@@ -86,8 +86,8 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                     "sale",
                   ].map((option) {
                     return DropdownMenuItem(
-                      child: Text(option),
                       value: option,
+                      child: Text(option),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -171,8 +171,8 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                               "For 10Years",
                             ].map((option) {
                               return DropdownMenuItem(
-                                child: Text(option),
                                 value: option,
+                                child: Text(option),
                               );
                             }).toList(),
                             decoration: InputDecoration(
@@ -198,8 +198,8 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                     "No",
                   ].map((option) {
                     return DropdownMenuItem(
-                      child: Text(option),
                       value: option,
+                      child: Text(option),
                     );
                   }).toList(),
                   decoration: InputDecoration(
@@ -256,8 +256,8 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                     "Abuja"
                   ].map((option) {
                     return DropdownMenuItem(
-                      child: Text(option),
                       value: option,
+                      child: Text(option),
                     );
                   }).toList(),
                   decoration: InputDecoration(
@@ -317,8 +317,8 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                     "Old",
                   ].map((option) {
                     return DropdownMenuItem(
-                      child: Text(option),
                       value: option,
+                      child: Text(option),
                     );
                   }).toList(),
                   decoration: InputDecoration(
@@ -342,8 +342,8 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                     "Dollar",
                   ].map((option) {
                     return DropdownMenuItem(
-                      child: Text(option),
                       value: option,
+                      child: Text(option),
                     );
                   }).toList(),
                   decoration: InputDecoration(

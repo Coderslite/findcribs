@@ -555,8 +555,8 @@ class _EditRent2State extends State<EditRent2> {
                             "Dollar",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -615,8 +615,8 @@ class _EditRent2State extends State<EditRent2> {
                             "For 10Years",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -726,8 +726,8 @@ class _EditRent2State extends State<EditRent2> {
                             "No",
                           ].map((option) {
                             return DropdownMenuItem(
-                              child: Text(option),
                               value: option,
+                              child: Text(option),
                             );
                           }).toList(),
                           onChanged: (value) {
