@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">1488460754950463</string>
+    <string name="facebook_client_token">548f60c79603311a2f7237d6c3102180</string>
+    <string name="default_notification_channel_id">com.findcribs</string>
+</resources>
