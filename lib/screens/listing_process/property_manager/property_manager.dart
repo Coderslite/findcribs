@@ -6,7 +6,8 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/listing.dart';
+import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
+import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -20,7 +21,6 @@ import 'package:image_cropper/image_cropper.dart';
 
 import '../../../models/user_profile_information_model.dart';
 import '../../../service/user_profile_service.dart';
-
 
 class PropertyManagerRegistration extends StatefulWidget {
   const PropertyManagerRegistration({Key? key}) : super(key: key);
@@ -39,7 +39,7 @@ class _PropertyManagerRegistrationState
   String message = '';
   String businessName = '';
   File? file;
-  CroppedFile? croppedFile;
+  CroppedFile? cropFile;
   List? availability;
 
   handleGetUserInfo() {
@@ -305,24 +305,25 @@ class _PropertyManagerRegistrationState
                                             const SizedBox(
                                               width: 5,
                                             ),
-                                            file == null
+                                            cropFile == null
                                                 ? const Text("select photo")
                                                 : const Text(
                                                     "image Available now"),
                                           ],
                                         ),
-                                        file == null
+                                        cropFile == null
                                             ? Image.asset(
                                                 "assets/images/avatar.png")
-                                            :SizedBox(
-                                            width: 40,
-                                            height: 40,
-                                              child: ClipOval(
-                                                  child: Image.file(
-                                                  file!,
+                                            : SizedBox(
+                                                width: 40,
+                                                height: 40,
+                                                child: ClipOval(
+                                                    child: Image.file(
+                                                  File(cropFile!.path
+                                                      .toString()),
                                                   fit: BoxFit.cover,
                                                 )),
-                                            )
+                                              )
                                       ],
                                     ),
                                   ),
@@ -437,7 +438,7 @@ class _PropertyManagerRegistrationState
       );
       if (croppedFile != null) {
         setState(() {
-          croppedFile = croppedFile;
+          cropFile = croppedFile;
         });
       }
     }
@@ -449,51 +450,47 @@ class _PropertyManagerRegistrationState
         isLoading = true;
       });
       if (availability == null || availability!.isEmpty) {
-       AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        borderSide: const BorderSide(
-          color: Colors.green,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        title: 'Registration Failed',
-        desc:"Please select availability",
-        showCloseIcon: true,
-        btnOkOnPress: () {},
-      ).show();
-     
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          borderSide: const BorderSide(
+            color: Colors.green,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          title: 'Registration Failed',
+          desc: "Please select availability",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
       } else if (file == null) {
-  AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        borderSide: const BorderSide(
-          color: Colors.green,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        title: 'Registration Failed',
-        desc: "Please choose an image",
-        showCloseIcon: true,
-        btnOkOnPress: () {},
-      ).show();
-     
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          borderSide: const BorderSide(
+            color: Colors.green,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          title: 'Registration Failed',
+          desc: "Please choose an image",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
       } else {
         _formKey.currentState!.save();
         final formData = _formKey.currentState!.value;
@@ -511,10 +508,10 @@ class _PropertyManagerRegistrationState
         request.fields['systemManaged'] = '0';
         request.headers['Authorization'] = "$token";
         final httpImage =
-            await http.MultipartFile.fromPath('profile_pic', croppedFile!.path);
+            await http.MultipartFile.fromPath('profile_pic', cropFile!.path);
         request.files.add(httpImage);
         var response = await request.send();
-               final respStr = await response.stream.bytesToString();
+        final respStr = await response.stream.bytesToString();
         print(respStr);
         if (response.statusCode == 201) {
           // var responseData = await response.stream.toBytes();
@@ -523,88 +520,81 @@ class _PropertyManagerRegistrationState
           setState(() {
             isLoading = false;
           });
-    AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        borderSide: const BorderSide(
-          color: Colors.green,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        title: 'Registration Successful',
-        desc: "You are now a registered Property Manager on FindCribs.",
-        showCloseIcon: true,
-        btnOkOnPress: () {
-            Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) {
-                        return ListPropertyScreen1(
-                          tab: 1,
-                        );
-                      }));
-        },
-      ).show();
-       
-               } else if (response.statusCode == 500) {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            borderSide: const BorderSide(
+              color: Colors.green,
+              width: 2,
+            ),
+            width: 280,
+            buttonsBorderRadius: const BorderRadius.all(
+              Radius.circular(2),
+            ),
+            dismissOnTouchOutside: true,
+            dismissOnBackKeyPress: false,
+            headerAnimationLoop: false,
+            animType: AnimType.bottomSlide,
+            title: 'Registration Successful',
+            desc: "You are now a registered Property Manager on FindCribs.",
+            showCloseIcon: true,
+            btnOkOnPress: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) {
+                return Rent1();
+              }));
+            },
+          ).show();
+        } else if (response.statusCode == 500) {
           setState(() {
             isLoading = false;
           });
-    AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        title: 'Registration Failed',
-        desc: "Something went wrong",
-        showCloseIcon: true,
-        btnOkOnPress: () {},
-      ).show();
-        
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            borderSide: const BorderSide(
+              color: Colors.red,
+              width: 2,
+            ),
+            width: 280,
+            buttonsBorderRadius: const BorderRadius.all(
+              Radius.circular(2),
+            ),
+            dismissOnTouchOutside: true,
+            dismissOnBackKeyPress: false,
+            headerAnimationLoop: false,
+            animType: AnimType.bottomSlide,
+            title: 'Registration Failed',
+            desc: "Something went wrong",
+            showCloseIcon: true,
+            btnOkOnPress: () {},
+          ).show();
         } else {
           setState(() {
             isLoading = false;
           });
           var msg = jsonDecode(respStr);
 
-    AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        title: 'Registration Failed',
-        desc: msg['message'],
-        showCloseIcon: true,
-        btnOkOnPress: () {},
-      ).show();
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            borderSide: const BorderSide(
+              color: Colors.red,
+              width: 2,
+            ),
+            width: 280,
+            buttonsBorderRadius: const BorderRadius.all(
+              Radius.circular(2),
+            ),
+            dismissOnTouchOutside: true,
+            dismissOnBackKeyPress: false,
+            headerAnimationLoop: false,
+            animType: AnimType.bottomSlide,
+            title: 'Registration Failed',
+            desc: msg['message'],
+            showCloseIcon: true,
+            btnOkOnPress: () {},
+          ).show();
         }
       }
     }

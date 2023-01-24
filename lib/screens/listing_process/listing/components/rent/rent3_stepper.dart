@@ -2,6 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/screens/listing_process/listing/components/rent/rent4.dart';
+import 'package:findcribs/screens/listing_process/listing/components/rent/rent4_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -52,7 +53,8 @@ class Rent3Stepper extends StatefulWidget {
 }
 
 class _Rent3StepperState extends State<Rent3Stepper> {
-  static final _formKey3 = GlobalKey<FormBuilderState>();
+  final formKey3 = GlobalKey<FormBuilderState>();
+
   List facilities = [];
   String totalAreaOfLand = "0";
   String coveredByProperty = "0";
@@ -61,7 +63,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
       Get.put(RentListingController());
   @override
   void dispose() {
-    _formKey3.currentState?.dispose();
+    formKey3.currentState?.dispose();
     super.dispose();
   }
 
@@ -70,529 +72,540 @@ class _Rent3StepperState extends State<Rent3Stepper> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Obx(
-        () => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return ListPropertyScreen1(
-                      //     tab: 1,
-                      //   );
-                      // }));
-                    },
-                    child: const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Color(0XFF0072BA),
-                      child: Text("1"),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return Rent2();
-                      // }));
-                    },
-                    child: const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Color(0XFF0072BA),
-                      child: Text("2"),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return Rent3();
-                      // }));
-                    },
-                    child: const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Color(0XFF0072BA),
-                      child: Text("3"),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return Rent4();
-                      // }));
-                    },
-                    child: const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Colors.grey,
-                      child: Text(
-                        "4",
-                        style: TextStyle(color: Colors.white),
+      body: SafeArea(
+        child: Obx(
+          () => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              children: [
+                const Text(
+                  "Rent Listing",
+                  style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return ListPropertyScreen1(
+                        //     tab: 1,
+                        //   );
+                        // }));
+                      },
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Color(0XFF0072BA),
+                        child: Text("1"),
                       ),
                     ),
-                  )
-                ],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: FormBuilder(
-                    key: _formKey3,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 0.0,
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return Rent2();
+                        // }));
+                      },
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Color(0XFF0072BA),
+                        child: Text("2"),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("State"),
-                          rentListingController.location.value == ''
-                              ? FormBuilderDropdown(
-                                  name: 'location',
-                                  isExpanded: true,
-                                  onChanged: (value) {
-                                    rentListingController.location.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Abia",
-                                    "Adamawa",
-                                    "Akwa-ibom",
-                                    "Anambra",
-                                    "Bauchi",
-                                    "Bayelsa",
-                                    "Benue",
-                                    "Borno",
-                                    "Cross River",
-                                    "Delta",
-                                    "Ebonyi",
-                                    "Edo",
-                                    "Ekiti",
-                                    "Enugu",
-                                    "Gombe",
-                                    "Imo",
-                                    "Jigawa",
-                                    "Kaduna",
-                                    "Kano",
-                                    "Kastina",
-                                    "Kebbi",
-                                    "Kogi",
-                                    "Kwara",
-                                    "Lagos",
-                                    "Nassarawa",
-                                    "Niger",
-                                    "Ogun",
-                                    "Ondo",
-                                    "Osun",
-                                    "Oyo",
-                                    "Plateau",
-                                    "Rivers",
-                                    "Sokoto",
-                                    "Taraba",
-                                    "Yobe",
-                                    "Zamfara",
-                                    "Abuja"
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return Rent3();
+                        // }));
+                      },
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Color(0XFF0072BA),
+                        child: Text("3"),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return Rent4();
+                        // }));
+                      },
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.grey,
+                        child: Text(
+                          "4",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: FormBuilder(
+                      key: formKey3,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 0.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("State"),
+                            rentListingController.location.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'location',
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      rentListingController.location.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Abia",
+                                      "Adamawa",
+                                      "Akwa-ibom",
+                                      "Anambra",
+                                      "Bauchi",
+                                      "Bayelsa",
+                                      "Benue",
+                                      "Borno",
+                                      "Cross River",
+                                      "Delta",
+                                      "Ebonyi",
+                                      "Edo",
+                                      "Ekiti",
+                                      "Enugu",
+                                      "Gombe",
+                                      "Imo",
+                                      "Jigawa",
+                                      "Kaduna",
+                                      "Kano",
+                                      "Kastina",
+                                      "Kebbi",
+                                      "Kogi",
+                                      "Kwara",
+                                      "Lagos",
+                                      "Nassarawa",
+                                      "Niger",
+                                      "Ogun",
+                                      "Ondo",
+                                      "Osun",
+                                      "Oyo",
+                                      "Plateau",
+                                      "Rivers",
+                                      "Sokoto",
+                                      "Taraba",
+                                      "Yobe",
+                                      "Zamfara",
+                                      "Abuja"
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : FormBuilderDropdown(
-                                  name: 'location',
-                                  isExpanded: true,
-                                  initialValue:
-                                      rentListingController.location.value,
-                                  onChanged: (value) {
-                                    rentListingController.location.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Abia",
-                                    "Adamawa",
-                                    "Akwa-ibom",
-                                    "Anambra",
-                                    "Bauchi",
-                                    "Bayelsa",
-                                    "Benue",
-                                    "Borno",
-                                    "Cross River",
-                                    "Delta",
-                                    "Ebonyi",
-                                    "Edo",
-                                    "Ekiti",
-                                    "Enugu",
-                                    "Gombe",
-                                    "Imo",
-                                    "Jigawa",
-                                    "Kaduna",
-                                    "Kano",
-                                    "Kastina",
-                                    "Kebbi",
-                                    "Kogi",
-                                    "Kwara",
-                                    "Lagos",
-                                    "Nassarawa",
-                                    "Niger",
-                                    "Ogun",
-                                    "Ondo",
-                                    "Osun",
-                                    "Oyo",
-                                    "Plateau",
-                                    "Rivers",
-                                    "Sokoto",
-                                    "Taraba",
-                                    "Yobe",
-                                    "Zamfara",
-                                    "Abuja"
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const Text("Interior design"),
-                          rentListingController.interiorDesign.value == ''
-                              ? FormBuilderDropdown(
-                                  name: 'interiorDesign',
-                                  isExpanded: true,
-                                  onChanged: (value) {
-                                    rentListingController.interiorDesign.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Furnished",
-                                    "Semi-Furnished",
-                                    "Unfurnished"
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderDropdown(
-                                  name: 'interiorDesign',
-                                  isExpanded: true,
-                                  initialValue: rentListingController
-                                      .interiorDesign.value,
-                                  onChanged: (value) {
-                                    rentListingController.interiorDesign.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Furnished",
-                                    "Semi-Furnished",
-                                    "Unfurnished"
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Parking space"),
-                          rentListingController.parkingSpace.value == ''
-                              ? FormBuilderDropdown(
-                                  name: 'space',
-                                  isExpanded: true,
-                                  onChanged: (value) {
-                                    rentListingController.parkingSpace.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderDropdown(
-                                  name: 'space',
-                                  isExpanded: true,
-                                  initialValue:
-                                      rentListingController.parkingSpace.value,
-                                  onChanged: (value) {
-                                    rentListingController.parkingSpace.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Availability of running water"),
-                          rentListingController.water.value == ''
-                              ? FormBuilderDropdown(
-                                  name: 'water',
-                                  isExpanded: true,
-                                  onChanged: (value) {
-                                    rentListingController.water.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderDropdown(
-                                  name: 'water',
-                                  isExpanded: true,
-                                  initialValue:
-                                      rentListingController.water.value,
-                                  onChanged: (value) {
-                                    rentListingController.water.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Availability of electricity"),
-                          rentListingController.water.value == ''
-                              ? FormBuilderDropdown(
-                                  name: 'electricity',
-                                  isExpanded: true,
-                                  onChanged: (value) {
-                                    rentListingController.electricity.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderDropdown(
-                                  name: 'electricity',
-                                  isExpanded: true,
-                                  initialValue:
-                                      rentListingController.electricity.value,
-                                  onChanged: (value) {
-                                    rentListingController.electricity.value =
-                                        value.toString();
-                                  },
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Facilities in the area(tick)"),
-                          MultiSelectDialogField(
-                            selectedColor: const Color(0XFF0072BA),
-                            searchable: true,
-                            dialogWidth: MediaQuery.of(context).size.width,
-                            buttonIcon: const Icon(
-                              Icons.check_box,
-                              color: Color(0XFF0072BA),
-                              size: 15,
-                            ),
-                            items: [
-                              "Schools",
-                              "Food",
-                              "Market",
-                              "Restaurant",
-                              "Grocery Stores",
-                              "Church",
-                              "Cinema",
-                              "Free Wifi",
-                              "Swimming Pool",
-                              "Gym Center",
-                              "Recreational Centers",
-                              "SPA",
-                              "Saloon Centers",
-                              "Security",
-                              "Good Internet",
-                              "Air-Conditioning",
-                              "Furnished Interior",
-                              "Secured Parking Space",
-                              "Lounge",
-                              "Walldrobe",
-                              "Microwave",
-                              "Trash Collection"
-                            ].map((e) => MultiSelectItem(e, e)).toList(),
-                            onConfirm: (List<String> selected) {
-                              // print(selected);
-                              setState(() {
-                                facilities = selected;
-                              });
-                            },
-                            onSaved: (newValue) {
-                              setState(() {
-                                facilities = newValue!;
-                                rentListingController.facilities.value =
-                                    newValue;
-                              });
-                            },
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                )),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Material(
-                                color: const Color(0XFF0072BA),
-                                borderRadius: BorderRadius.circular(5),
-                                child: MaterialButton(
-                                  onPressed: () {
-                                    handleNextScreen();
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      left:
-                                          MediaQuery.of(context).size.width / 5,
-                                      right:
-                                          MediaQuery.of(context).size.width / 5,
-                                      top: 4.5,
-                                      bottom: 4.5,
-                                    ),
-                                    child: const Text(
-                                      "Save & Continue",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: "RedHatDisplay",
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'location',
+                                    isExpanded: true,
+                                    initialValue:
+                                        rentListingController.location.value,
+                                    onChanged: (value) {
+                                      rentListingController.location.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Abia",
+                                      "Adamawa",
+                                      "Akwa-ibom",
+                                      "Anambra",
+                                      "Bauchi",
+                                      "Bayelsa",
+                                      "Benue",
+                                      "Borno",
+                                      "Cross River",
+                                      "Delta",
+                                      "Ebonyi",
+                                      "Edo",
+                                      "Ekiti",
+                                      "Enugu",
+                                      "Gombe",
+                                      "Imo",
+                                      "Jigawa",
+                                      "Kaduna",
+                                      "Kano",
+                                      "Kastina",
+                                      "Kebbi",
+                                      "Kogi",
+                                      "Kwara",
+                                      "Lagos",
+                                      "Nassarawa",
+                                      "Niger",
+                                      "Ogun",
+                                      "Ondo",
+                                      "Osun",
+                                      "Oyo",
+                                      "Plateau",
+                                      "Rivers",
+                                      "Sokoto",
+                                      "Taraba",
+                                      "Yobe",
+                                      "Zamfara",
+                                      "Abuja"
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                            const Text("Interior design"),
+                            rentListingController.interiorDesign.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'interiorDesign',
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      rentListingController.interiorDesign
+                                          .value = value.toString();
+                                    },
+                                    items: [
+                                      "Furnished",
+                                      "Semi-Furnished",
+                                      "Unfurnished"
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'interiorDesign',
+                                    isExpanded: true,
+                                    initialValue: rentListingController
+                                        .interiorDesign.value,
+                                    onChanged: (value) {
+                                      rentListingController.interiorDesign
+                                          .value = value.toString();
+                                    },
+                                    items: [
+                                      "Furnished",
+                                      "Semi-Furnished",
+                                      "Unfurnished"
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Parking space"),
+                            rentListingController.parkingSpace.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'space',
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      rentListingController.parkingSpace.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'space',
+                                    isExpanded: true,
+                                    initialValue: rentListingController
+                                        .parkingSpace.value,
+                                    onChanged: (value) {
+                                      rentListingController.parkingSpace.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Availability of running water"),
+                            rentListingController.water.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'water',
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      rentListingController.water.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'water',
+                                    isExpanded: true,
+                                    initialValue:
+                                        rentListingController.water.value,
+                                    onChanged: (value) {
+                                      rentListingController.water.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Availability of electricity"),
+                            rentListingController.water.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'electricity',
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      rentListingController.electricity.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'electricity',
+                                    isExpanded: true,
+                                    initialValue:
+                                        rentListingController.electricity.value,
+                                    onChanged: (value) {
+                                      rentListingController.electricity.value =
+                                          value.toString();
+                                    },
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Facilities in the area(tick)"),
+                            MultiSelectDialogField(
+                              selectedColor: const Color(0XFF0072BA),
+                              searchable: true,
+                              dialogWidth: MediaQuery.of(context).size.width,
+                              buttonIcon: const Icon(
+                                Icons.check_box,
+                                color: Color(0XFF0072BA),
+                                size: 15,
+                              ),
+                              items: [
+                                "Schools",
+                                "Food",
+                                "Market",
+                                "Restaurant",
+                                "Grocery Stores",
+                                "Church",
+                                "Cinema",
+                                "Free Wifi",
+                                "Swimming Pool",
+                                "Gym Center",
+                                "Recreational Centers",
+                                "SPA",
+                                "Saloon Centers",
+                                "Security",
+                                "Good Internet",
+                                "Air-Conditioning",
+                                "Furnished Interior",
+                                "Secured Parking Space",
+                                "Lounge",
+                                "Walldrobe",
+                                "Microwave",
+                                "Trash Collection"
+                              ].map((e) => MultiSelectItem(e, e)).toList(),
+                              onConfirm: (List<String> selected) {
+                                // print(selected);
+                                setState(() {
+                                  facilities = selected;
+                                  rentListingController.facilities.value =
+                                      facilities;
+                                });
+                              },
+                              onSaved: (newValue) {
+                                setState(() {
+                                  facilities = newValue!;
+                                  rentListingController.facilities.value =
+                                      newValue;
+                                });
+                              },
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  )),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Material(
+                                  color: const Color(0XFF0072BA),
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      handleNextScreen();
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        left:
+                                            MediaQuery.of(context).size.width /
+                                                5,
+                                        right:
+                                            MediaQuery.of(context).size.width /
+                                                5,
+                                        top: 4.5,
+                                        bottom: 4.5,
+                                      ),
+                                      child: const Text(
+                                        "Save & Continue",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontFamily: "RedHatDisplay",
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -600,9 +613,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
   }
 
   handleNextScreen() async {
-    if (_formKey3.currentState!.validate()) {
-      _formKey3.currentState!.save();
-      var formData = _formKey3.currentState!.value;
+    if (formKey3.currentState!.validate()) {
+      var formData = formKey3.currentState!.value;
       print(formData);
       print(facilities);
       if (facilities.isEmpty) {
@@ -627,31 +639,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
         ).show();
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return Rent4(
-            propertyAddress: widget.propertyAddress,
-            houseType: widget.houseType,
-            propertyCategory: widget.propertyCategory,
-            bedroom: widget.bedroom,
-            bathrooom: widget.bathrooom,
-            livingroom: widget.livingroom,
-            kitchen: widget.kitchen,
-            charge: widget.charge,
-            currency: widget.currency,
-            rent: widget.rent,
-            rentalFee: widget.rentalFee,
-            negotiable: widget.negotiable,
-            legalFee: widget.legalFee,
-            agencyFee: widget.agencyFee,
-            serviceCharge: widget.serviceCharge,
-            cautionFee: widget.cautionFee,
-            location: formData['location'],
-            area: formData['area'],
-            water: formData['water'],
-            covered: formData['covered'],
-            interiorDesign: formData['interiorDesign'],
-            space: formData['space'],
-            electricity: formData['electricity'],
-          );
+          return Rent4Stepper();
         }));
       }
     }

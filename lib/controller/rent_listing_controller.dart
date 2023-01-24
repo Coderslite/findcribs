@@ -1,9 +1,15 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RentListingController extends GetxController {
+ 
+
+
+  final propertyCategoryKey = GlobalKey<FormFieldState>();
+
   var ageRestriction = 0.obs;
   var designType = ''.obs;
   var propertyAddress = ''.obs;
@@ -88,5 +94,6 @@ class RentListingController extends GetxController {
 
     legalFeeIndex.value = 0;
     agencyFeeIndex.value = 0;
+    Get.delete<RentListingController>();
   }
 }

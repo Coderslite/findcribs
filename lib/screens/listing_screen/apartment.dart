@@ -23,7 +23,8 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import '../../components/constants.dart';
 import '../homepage/single_property.dart';
 import '../listing_process/get_started.dart';
-import '../listing_process/listing/listing.dart';
+import '../listing_process/listing/components/rent/rent1.dart';
+import '../listing_process/listing/select_listing_type.dart';
 import '../product_details/product_details.dart';
 
 class ApartmentScreen extends StatefulWidget {
@@ -544,7 +545,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                       });
                                                     },
                                                   ),
-                                                  const Text("Living Room Size"),
+                                                  const Text(
+                                                      "Living Room Size"),
                                                   SfSlider(
                                                     min: 0,
                                                     max: 10,
@@ -1117,9 +1119,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       var responseData = jsonResponse['data']['profile'];
       if (responseData['agent'] != null) {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return ListPropertyScreen1(
-            tab: 0,
-          );
+          return Rent1();
         }));
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {

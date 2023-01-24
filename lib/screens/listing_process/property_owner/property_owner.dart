@@ -6,7 +6,8 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/listing.dart';
+import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
+import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:findcribs/service/user_profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,7 +38,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
   String message = '';
   String businessName = '';
   File? file;
-  CroppedFile? croppedFile;
+  CroppedFile? cropFile;
 
   List? availability;
   bool manageAllowed = true;
@@ -301,13 +302,13 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          file == null
+                                          cropFile == null
                                               ? const Text("select photo")
                                               : const Text(
                                                   "image Available now"),
                                         ],
                                       ),
-                                      file == null
+                                      cropFile == null
                                           ? Image.asset(
                                               "assets/images/avatar.png")
                                           : SizedBox(
@@ -315,7 +316,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                                               height: 40,
                                               child: ClipOval(
                                                   child: Image.file(
-                                                file!,
+                                                File(cropFile!.path.toString()),
                                                 fit: BoxFit.cover,
                                               )),
                                             )
@@ -488,7 +489,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
       );
       if (croppedFile != null) {
         setState(() {
-          croppedFile = croppedFile;
+          cropFile = croppedFile;
         });
       }
     }
@@ -526,8 +527,8 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
         request.fields['systemManaged'] = manageAllowed ? '1' : '0';
 
         request.headers['Authorization'] = "$token";
-        final httpImage =
-            await http.MultipartFile.fromPath('profile_pic', croppedFile!.path);
+        final httpImage = await http.MultipartFile.fromPath(
+            'profile_pic', file!.path.toString());
         request.files.add(httpImage);
         var response = await request.send();
         final respStr = await response.stream.bytesToString();
@@ -560,9 +561,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
             btnOkOnPress: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (_) {
-                return ListPropertyScreen1(
-                  tab: 1,
-                );
+                return Rent1();
               }));
             },
           ).show();
@@ -630,7 +629,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
 
         request.headers['Authorization'] = "$token";
         final httpImage =
-            await http.MultipartFile.fromPath('profile_pic', croppedFile!.path);
+            await http.MultipartFile.fromPath('profile_pic', cropFile!.path);
         request.files.add(httpImage);
         var response = await request.send();
         final respStr = await response.stream.bytesToString();
@@ -663,9 +662,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
             btnOkOnPress: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (_) {
-                return ListPropertyScreen1(
-                  tab: 1,
-                );
+                return Rent1();
               }));
             },
           ).show();

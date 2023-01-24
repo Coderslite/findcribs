@@ -6,7 +6,8 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/listing.dart';
+import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
+import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -39,7 +40,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
   String businessName = '';
   File? file;
   List? availability;
-  CroppedFile? croppedFile;
+  CroppedFile? cropFile;
 
   late Future<UserProfile> userProfile;
   handleGetUserInfo() {
@@ -494,13 +495,13 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          file == null
+                                          cropFile == null
                                               ? const Text("select photo")
                                               : const Text(
                                                   "image Available now"),
                                         ],
                                       ),
-                                      file == null
+                                      cropFile == null
                                           ? Image.asset(
                                               "assets/images/avatar.png")
                                           : SizedBox(
@@ -508,7 +509,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                                               height: 40,
                                               child: ClipOval(
                                                   child: Image.file(
-                                                file!,
+                                                File(cropFile!.path.toString()),
                                                 fit: BoxFit.cover,
                                               )),
                                             )
@@ -642,7 +643,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
       );
       if (_croppedFile != null) {
         setState(() {
-          croppedFile = _croppedFile;
+          cropFile = _croppedFile;
         });
       }
     }
@@ -724,7 +725,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
         request.headers['Authorization'] = "$token";
 
         final httpImage =
-            await http.MultipartFile.fromPath('profile_pic', croppedFile!.path);
+            await http.MultipartFile.fromPath('profile_pic', cropFile!.path);
         request.files.add(httpImage);
 
         var response = await request.send();
@@ -758,9 +759,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
             btnOkOnPress: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (_) {
-                return ListPropertyScreen1(
-                  tab: 1,
-                );
+                return Rent1();
               }));
             },
           ).show();

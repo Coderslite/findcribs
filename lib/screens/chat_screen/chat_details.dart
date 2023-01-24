@@ -20,6 +20,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart' as launchUrl;
 
+import '../../controller/socket_controller.dart';
 import '../../service/user_profile_by_id_service.dart';
 
 // ignore: library_prefixes
@@ -79,19 +80,18 @@ class _ChatDetailsState extends State<ChatDetails> {
   List myMessageList = [];
   // Map<String, dynamic> messages = {};
   int? id;
-  late Socket socket;
   List online = [];
 
   var messageController = TextEditingController();
   String message = '';
   ScrollController listScrollController = ScrollController();
-  bool isTyping = false;
   String isTypingChatId = '';
   late StreamSubscription<bool> subscription;
   FocusNode focusNode = FocusNode();
   String receiverPhone = '';
 
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
+  SocketController socketController = Get.put(SocketController());
 
   @override
   void initState() {
@@ -171,47 +171,7 @@ class _ChatDetailsState extends State<ChatDetails> {
     setState(() {
       userProfile2 = getUserProfileById(widget.receiverId);
       userProfile2.then((value) {
-        receiverPhone = value.agent!['phone_number'].toString();
-      });
-    });
-  }
-
-  handleOnline(data) {
-    var userOnline = jsonDecode(data);
-    bool check = online.contains(userOnline['id']);
-    if (check == false) {
-      if (mounted) {
-        setState(() {
-          online.add(userOnline['id']);
-          print(online);
-        });
-      }
-    }
-  }
-
-  handleOffline(data) {
-    var userOnline = jsonDecode(data);
-    setState(() {
-      online.remove(userOnline['id']);
-    });
-  }
-
-  handleStatusDetector() {
-    socket.on("ONLINE", (data) {
-      if (mounted) {
-        setState(() {
-          handleOnline(data);
-        });
-      }
-
-      // print(online);
-      // print(data);
-    });
-    socket.on("OFFLINE", (data) {
-      // print("offline");
-      setState(() {
-        handleOffline(data);
-        print(data);
+        receiverPhone = value.phoneNumber.toString();
       });
     });
   }
@@ -220,30 +180,6 @@ class _ChatDetailsState extends State<ChatDetails> {
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     print(token);
-
-    socket = IO.io(
-        'http://18.233.168.44:5000/',
-        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-            .setExtraHeaders({'Authorization': "$token"}) // optional
-            .build());
-    socket.connect();
-    socket.onConnect((data) {
-      print("connected");
-      socket.emit('BULK_READ', {
-        "lastReadMesgId": widget.lastReadMsg,
-      });
-    });
-    handleStatusDetector();
-
-    socket.onDisconnect((data) => print("disconnected"));
-    socket.on(
-      "ERROR",
-      (data) {
-        var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
-        print(data);
-      },
-    );
 
     socket.emit('BULK_READ', {
       "lastReadMesgId": widget.lastReadMsg,
@@ -257,34 +193,6 @@ class _ChatDetailsState extends State<ChatDetails> {
     });
     // socket check typing status
     // if (messageController.text)
-    socket.on("START_TYPING", (data) {
-      // print(data);
-      var statusData = jsonDecode(data);
-      print("my chat id${widget.chatId}");
-      print(statusData);
-      if ((widget.chatId) == statusData['chatId']) {
-        setState(() {
-          isTyping = true;
-        });
-      }
-    });
-    socket.on("STOP_TYPING", (data) {
-      var statusData = jsonDecode(data);
-      print(statusData);
-      if ((widget.chatId) == statusData['chatId']) {
-        setState(() {
-          isTyping = false;
-        });
-      }
-
-      // if (widget.chatId == statusData['chatid']) {
-      //   if (mounted) {
-      //     setState(() {
-      //       isTyping = false;
-      //     });
-      //   }
-      // }
-    });
     socket.on("MESSAGE_SENT", (data) {
       print("message sent successfully");
 
@@ -334,7 +242,6 @@ class _ChatDetailsState extends State<ChatDetails> {
     subscription.cancel();
     focusNode.dispose();
     getAllChatController.handleGetMessage();
-
 
     super.dispose();
   }
@@ -389,51 +296,55 @@ class _ChatDetailsState extends State<ChatDetails> {
                       width: 10,
                     ),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "${widget.firstName} ${widget.lastName}",
-                                style: const TextStyle(
-                                    color: Color(0xFF263238), fontSize: 14),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  // ignore: deprecated_member_use
-                                  launchUrl.launch("tel:$receiverPhone");
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SvgPicture.asset("assets/svgs/call.svg"),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    // SvgPicture.asset("assets/svgs/search.svg"),
-                                  ],
+                      child: Obx(
+                        () => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${widget.firstName} ${widget.lastName}",
+                                  style: const TextStyle(
+                                      color: Color(0xFF263238), fontSize: 14),
                                 ),
-                              ),
-                            ],
-                          ),
-                          isTyping
-                              ? const Text("typing...")
-                              : online.contains(widget.receiverId)
-                                  ? const Text(
-                                      "Online",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xFF168912)),
-                                    )
-                                  : const Text(
-                                      "Offline",
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                    )
-                        ],
+                                GestureDetector(
+                                  onTap: () {
+                                    // ignore: deprecated_member_use
+                                    launchUrl.launch("tel:$receiverPhone");
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SvgPicture.asset("assets/svgs/call.svg"),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      // SvgPicture.asset("assets/svgs/search.svg"),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            socketController.isTypingChatId.toString() ==
+                                    widget.chatId.toString()
+                                ? const Text("typing...")
+                                : socketController.online
+                                        .contains(widget.receiverId)
+                                    ? const Text(
+                                        "Online",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Color(0xFF168912)),
+                                      )
+                                    : const Text(
+                                        "Offline",
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.grey),
+                                      )
+                          ],
+                        ),
                       ),
                     )
                   ],

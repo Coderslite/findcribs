@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
 import 'package:findcribs/service/property_list_categoty_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,7 @@ import 'package:http/http.dart' as http;
 import '../homepage/home_root.dart';
 import '../homepage/single_property.dart';
 import '../listing_process/get_started.dart';
-import '../listing_process/listing/listing.dart';
+import '../listing_process/listing/select_listing_type.dart';
 
 class HotelScreen extends StatefulWidget {
   const HotelScreen({Key? key}) : super(key: key);
@@ -809,9 +810,7 @@ class _HotelScreenState extends State<HotelScreen> {
       var responseData = jsonResponse['data']['profile'];
       if (responseData['agent'] != null) {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return ListPropertyScreen1(
-            tab: 0,
-          );
+          return Rent1();
         }));
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {

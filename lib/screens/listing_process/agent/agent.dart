@@ -6,7 +6,8 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/listing.dart';
+import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
+import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -30,7 +31,7 @@ class AgentRegistration extends StatefulWidget {
 
 class _AgentRegistrationState extends State<AgentRegistration> {
   final _formKey = GlobalKey<FormBuilderState>();
-  CroppedFile? croppedFile;
+  CroppedFile? cropFile;
   File? file;
   List? availability;
   bool isLoading = false;
@@ -303,13 +304,13 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          croppedFile == null
+                                          cropFile == null
                                               ? const Text("select photo")
                                               : const Text(
                                                   "image Available now"),
                                         ],
                                       ),
-                                      croppedFile == null
+                                      cropFile == null
                                           ? Image.asset(
                                               "assets/images/avatar.png")
                                           : SizedBox(
@@ -317,8 +318,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                                               height: 40,
                                               child: ClipOval(
                                                   child: Image.file(
-                                                File(croppedFile!.path
-                                                    .toString()),
+                                                File(cropFile!.path.toString()),
                                                 fit: BoxFit.cover,
                                               )),
                                             )
@@ -458,7 +458,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
       );
       if (_croppedFile != null) {
         setState(() {
-          croppedFile = _croppedFile;
+          cropFile = _croppedFile;
         });
       }
     }
@@ -529,7 +529,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
         request.headers['Authorization'] = "$token";
 
         final httpImage =
-            await http.MultipartFile.fromPath('profile_pic', croppedFile!.path);
+            await http.MultipartFile.fromPath('profile_pic', cropFile!.path);
         request.files.add(httpImage);
         var response = await request.send();
         final respStr = await response.stream.bytesToString();
@@ -562,9 +562,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
             btnOkOnPress: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (_) {
-                return ListPropertyScreen1(
-                  tab: 1,
-                );
+                return Rent1();
               }));
             },
           ).show();

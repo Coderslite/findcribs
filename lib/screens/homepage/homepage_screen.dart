@@ -8,6 +8,7 @@ import 'package:badges/badges.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:findcribs/controller/connectivity_controller.dart';
+import 'package:findcribs/controller/moment_socket_controller.dart';
 import 'package:findcribs/controller/story_list_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
 import 'package:findcribs/util/social_login.dart';
@@ -69,55 +70,10 @@ class _HomepageScreenState extends State<HomepageScreen> {
   // late Future<List<FavouriteStoryListModel>> storyList;
   bool isLoading = true;
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-  // There is next page or not
-
-  late Socket socket;
-
-  handleConnect() async {
-    var prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString("token");
-    socket = IO.io(
-        'http://18.233.168.44:5000/moment',
-        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-            .setExtraHeaders({'Authorization': "$token"}) // optional
-            .build());
-    socket.connect();
-    socket.onConnect((data) {
-      print("story socket connected");
-      getStoryListController.handleGetStory();
-    });
-    // handleStatusDetector();
-
-    socket.onDisconnect((data) => print("disconnected"));
-    socket.on(
-      "ERROR",
-      (data) {
-        var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
-        print(data);
-      },
-    );
-    socket.on("ADDED_STORY", (data) => getStoryListController.handleGetStory());
-    socket.on(
-        "DELETED_STORY", (data) => getStoryListController.handleGetStory());
-    // if (messageController.text)
-  }
 
   late Future<List<StoryListModel>> storyList;
   List<StoryListModel> firstStoryList = [];
   List<StoryListModel> filteredStoryList = [];
-
-  handleGetStory() {
-    storyList = getAllStoryList();
-    storyList.then((value) {
-      setState(() {
-        firstStoryList = filteredStoryList = value;
-        filteredStoryList = firstStoryList
-            .where((element) => element.moment!.isNotEmpty)
-            .toList();
-      });
-    });
-  }
 
   late Future<List<NotificationModel>> notificationList;
   List<NotificationModel> filteredNotificationList = [];
@@ -134,34 +90,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
       });
     });
   }
-
-  // handleGetPropertiesReferesh(int page) {
-  //   propertyList = getPropertyList(page);
-  //   setState(() {
-  //     isLoading = true;
-  //     filteredList = firstList = [];
-
-  //     // storyList = getFavouriteStoryList();
-  //     propertyList.then((value) {
-  //       // print(value);
-  //       if (value.isEmpty) {
-  //         setState(() {
-  //           isLoading = false;
-  //           _hasNextPage = false;
-  //           _isLoadMoreRunning = false;
-  //         });
-  //       } else {
-  //         setState(() {
-  //           firstList = value;
-  //           isLoading = false;
-  //           for (int s = 0; s < value.length; s++) {
-  //             filteredList.add(value[s]);
-  //           }
-  //         });
-  //       }
-  //     });
-  //   });
-  // }
 
   handleGetProperties(int page) {
     setState(() {
@@ -368,7 +296,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
     super.initState();
     // handleGetNotification();
     handleGetProperties(page);
-    handleConnect();
     // handleGetStory();
     // _controller = ScrollController()..addListener(_loadMore);
     _controller = ScrollController();
@@ -395,6 +322,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   GetAllNotificationController getAllNotificationController =
       Get.put(GetAllNotificationController());
+  MomentSocketController momentSocketController =
+      Get.put(MomentSocketController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/listing_process/listing/edit_listing/estate_market_edit/estate_market_edit.dart';
 import 'package:findcribs/screens/listing_process/listing/edit_listing/rent_listing_edit/rent_listing_edit1.dart';
 import 'package:flutter/material.dart';
@@ -162,6 +163,12 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                               'assets/images/promote.png'),
                                           const Color(0XFFFEC121),
                                         ),
+                                        ItemModel(
+                                          'Delete',
+                                          Image.asset(
+                                              'assets/images/delete.png'),
+                                          const Color(0XFFC62E3D),
+                                        ),
                                       ]
                                           .map(
                                             (item) => GestureDetector(
@@ -174,9 +181,14 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                                     ? handleEditListing()
                                                     : item.title == 'Promote'
                                                         ? handlePromoteListing()
-                                                        : handleDisableListing(
-                                                            widget.id
-                                                                .toString());
+                                                        : item.title ==
+                                                                'Disabled'
+                                                            ? handleDisableListing(
+                                                                widget.id
+                                                                    .toString())
+                                                            : handleDeleteActiveListing(
+                                                                widget.id
+                                                                    .toString());
                                               },
                                               child: Container(
                                                 height: 40,
@@ -472,8 +484,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
     });
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    var response = await http
-        .put(Uri.parse("http://18.233.168.44:5000/user/listing/"), headers: {
+    var response = await http.put(Uri.parse("$baseUrl/listing/"), headers: {
       "Authorization": "$token",
     }, body: {
       "id": id,
@@ -545,8 +556,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
     });
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    var response = await http
-        .put(Uri.parse("http://18.233.168.44:5000/user/listing/"), headers: {
+    var response = await http.put(Uri.parse("$baseUrl/listing/"), headers: {
       "Authorization": "$token",
     }, body: {
       "id": id,
@@ -617,8 +627,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
     });
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    var response = await http
-        .put(Uri.parse("http://18.233.168.44:5000/user/listing/"), headers: {
+    var response = await http.put(Uri.parse("$baseUrl/listing/"), headers: {
       "Authorization": "$token",
     }, body: {
       "id": id,
@@ -691,20 +700,17 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
 
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    var response = await http.delete(
-        Uri.parse("http://18.233.168.44:5000/user/listing/$id"),
-        headers: {
-          "Authorization": "$token",
-        },
-        body: {
-          "id": id,
-          "status": "Active"
-        });
+    var response =
+        await http.delete(Uri.parse("$baseUrl/listing/$id"), headers: {
+      "Authorization": "$token",
+    }, body: {
+      "id": id,
+      "status": "Active"
+    });
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
       setState(() {
         _controller.hideMenu();
-
         isDeleting = false;
       });
       AwesomeDialog(
@@ -728,6 +734,78 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
         btnOkOnPress: () {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
             return const DisabledListing();
+          }));
+        },
+      ).show();
+    } else {
+      setState(() {
+        _controller.hideMenu();
+
+        isDeleting = false;
+      });
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2,
+        ),
+        width: 280,
+        buttonsBorderRadius: const BorderRadius.all(
+          Radius.circular(2),
+        ),
+        dismissOnTouchOutside: true,
+        dismissOnBackKeyPress: false,
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        desc: responseData['message'],
+        showCloseIcon: true,
+        btnOkOnPress: () {},
+      ).show();
+    }
+  }
+
+  handleDeleteActiveListing(String id) async {
+    setState(() {
+      isDeleting = true;
+    });
+
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var response =
+        await http.delete(Uri.parse("$baseUrl/listing/$id"), headers: {
+      "Authorization": "$token",
+    }, body: {
+      "id": id,
+      "status": "Active"
+    });
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == true) {
+      setState(() {
+        _controller.hideMenu();
+        isDeleting = false;
+      });
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        borderSide: const BorderSide(
+          color: Colors.green,
+          width: 2,
+        ),
+        width: 280,
+        buttonsBorderRadius: const BorderRadius.all(
+          Radius.circular(2),
+        ),
+        dismissOnTouchOutside: true,
+        dismissOnBackKeyPress: false,
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        title: 'Listing Deleted',
+        desc: responseData['message'],
+        showCloseIcon: true,
+        btnOkOnPress: () {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
+            return const ActiveListing();
           }));
         },
       ).show();
