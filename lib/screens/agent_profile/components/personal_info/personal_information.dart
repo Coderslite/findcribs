@@ -61,7 +61,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   bool isExpandedEmail = false;
   bool isUploading = false;
 
-  CroppedFile? croppedFile;
+  CroppedFile? _croppedFile;
   File? file;
   @override
   Widget build(BuildContext context) {
@@ -1043,7 +1043,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       );
       if (croppedFile != null) {
         setState(() {
-          croppedFile = croppedFile;
+          _croppedFile = croppedFile;
           handleUpdateImage();
         });
       }
@@ -1061,7 +1061,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
     request.headers['Authorization'] = "$token";
 
     final httpImage =
-        await http.MultipartFile.fromPath('profile_pic', croppedFile!.path);
+        await http.MultipartFile.fromPath('profile_pic', _croppedFile!.path);
     request.files.add(httpImage);
     var response = await request.send();
 
