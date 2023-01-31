@@ -19,7 +19,7 @@ const mobileTextSmallFont =
 
 // SizedBox Height
 const mobileSizedBoxHeight = SizedBox(height: 25);
-const mobileSizedBoxHeight2 = SizedBox(height: 10);
+const mobileSizedBoxHeight2 = SizedBox(height: 10); 
 
 const mobileTopHeight = SizedBox(height: 35);
 
@@ -28,8 +28,8 @@ const kFontFamily = 'RedHatDisplay';
 
 // const baseUrl = 'https://findcribs.ng/user';
 
-const baseUrl = 'http://18.233.168.44:5001/user';
-const socketUrl = 'http://18.233.168.44:5001';
+const baseUrl = 'http://18.233.168.44:5000/user';
+const socketUrl = 'http://18.233.168.44:5000';
 
 const avataImg =
     'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg';
