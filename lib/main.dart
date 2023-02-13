@@ -136,15 +136,21 @@ void showFlutterNotification(RemoteMessage message) async {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
+void onDidReceiveLocalNotification(
+    int id, String? title, String? body, String? payload) async {
+  // display a dialog with the notification details, tap ok to go to another page
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  AndroidInitializationSettings initializationSettingsAndroid =
-      const AndroidInitializationSettings('ic_launcher');
+  AndroidInitializationSettings initializationSettingsAndroid = const AndroidInitializationSettings('ic_launcher');
+
+  final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
   final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, macOS: null, iOS: null);
+      android: initializationSettingsAndroid, macOS: null, iOS: initializationSettingsDarwin);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   await Firebase.initializeApp();
