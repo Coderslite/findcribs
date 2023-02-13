@@ -4,16 +4,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:badges/badges.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/controller/connectivity_controller.dart';
 import 'package:findcribs/models/chat_list_model.dart';
+import 'package:findcribs/screens/agent_profile/components/personal_info/personal_information.dart';
 import 'package:findcribs/screens/agent_profile/profile.dart';
 import 'package:findcribs/screens/chat_screen/chat_screen.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_page.dart';
 import 'package:findcribs/screens/homepage/homepage_screen.dart';
 import 'package:findcribs/screens/listing_process/get_started.dart';
-import 'package:findcribs/screens/listing_process/listing/listing.dart';
+import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
+import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:findcribs/screens/story/story_list.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -54,8 +57,6 @@ class _HomePageRootState extends State<HomePageRoot> {
   final tooltipController = JustTheController();
   bool isToolTip = false;
 
-  late Socket socket;
-  List online = [];
   List<ChatMessageModel> filteredMessageByTime = [];
   late Future<List<ChatMessageModel>> getChat;
   List<ChatMessageModel> messageList = [];
@@ -91,7 +92,6 @@ class _HomePageRootState extends State<HomePageRoot> {
     // Fluttertoast.showToast(msg: message.notification!.title.toString());
 
     handleGetProfile();
-    handleConnect();
     subscription = KeyboardVisibilityController().onChange.listen((event) {
       handleKeyboardDetect(event);
     });
@@ -109,10 +109,8 @@ class _HomePageRootState extends State<HomePageRoot> {
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       getAllChatController.handleGetMessage();
       showFlutterNotification(event);
-      setState(() {
-        notificationMsg =
-            "${event.notification!.title} ${event.notification!.body} I am coming from background";
-      });
+      print(event.messageType);
+      print("foreground");
     });
   }
 
@@ -121,128 +119,49 @@ class _HomePageRootState extends State<HomePageRoot> {
     setState(() {
       userProfile = getUserProfile();
       userProfile.then((value) {
-        if (value.agent == null) {
-          setState(() {
-            myId = value.id;
-            isAgent = false;
-            prefs.setBool('isAgent', false);
-            getAllChatController.handleGetMessage();
-          });
+        if (value.phoneNumber == null) {
+          AwesomeDialog(
+            context: Get.context!,
+            dialogType: DialogType.warning,
+            borderSide: const BorderSide(
+              color: Colors.yellow,
+              width: 2,
+            ),
+            width: 280,
+            buttonsBorderRadius: const BorderRadius.all(
+              Radius.circular(2),
+            ),
+            dismissOnTouchOutside: false,
+            dismissOnBackKeyPress: false,
+            headerAnimationLoop: false,
+            animType: AnimType.bottomSlide,
+            desc: 'you haven\'t updated your phone number',
+            showCloseIcon: true,
+            btnOkText: "Update now",
+            btnOkOnPress: () {
+              print("update button clicked");
+              Get.off(PersonalInformationScreen());
+            },
+          ).show();
         } else {
-          setState(() {
-            myId = value.id;
-            isAgent = true;
-            prefs.setBool('isAgent', true);
-            getAllChatController.handleGetMessage();
-          });
+          if (value.agent == null) {
+            setState(() {
+              myId = value.id;
+              isAgent = false;
+              prefs.setBool('isAgent', false);
+              getAllChatController.handleGetMessage();
+            });
+          } else {
+            setState(() {
+              myId = value.id;
+              isAgent = true;
+              prefs.setBool('isAgent', true);
+              getAllChatController.handleGetMessage();
+            });
+          }
         }
       });
     });
-  }
-
-  handleConnect() async {
-    var prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString("token");
-    print(token);
-
-    socket = IO.io(
-        'http://18.233.168.44:5000',
-        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-            .setExtraHeaders({'Authorization': "$token"}) // optional
-            .build());
-    socket.connect();
-    socket.onConnect((data) {
-      print("connected");
-      handleStatusDetector();
-      setState(() {
-        getAllChatController.handleGetMessage();
-      });
-    });
-    // handleStatusDetector();
-
-    socket.onDisconnect((data) => print("disconnected"));
-    socket.on(
-      "ERROR",
-      (data) {
-        var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
-        print(data);
-      },
-    );
-    // socket check typing status
-    // if (messageController.text)
-    socket.on("START_TYPING", (data) {
-      // print(data);
-      var statusData = jsonDecode(data);
-      print(statusData);
-    });
-    socket.on("STOP_TYPING", (data) {
-      var statusData = jsonDecode(data);
-      print(statusData);
-
-      // if (widget.chatId == statusData['chatid']) {
-      //   if (mounted) {
-      //     setState(() {
-      //       isTyping = false;
-      //     });
-      //   }
-      // }
-    });
-    socket.on("MESSAGE", (data) {
-      setState(() {
-        setState(() {
-          getAllChatController.handleGetMessage();
-        });
-      });
-    });
-    socket.on("MESSAGE_SENT", (data) {
-      print("message sent successfully");
-      setState(() {
-        getAllChatController.handleGetMessage();
-      });
-    });
-
-    socket.on("MESSAGES", (data) {
-      setState(() {
-        setState(() {
-          getAllChatController.handleGetMessage();
-        });
-      });
-    });
-  }
-
-  handleOnline(data) {
-    var userOnline = jsonDecode(data);
-    bool check = online.contains(userOnline['id']);
-    if (check == false) {
-      if (mounted) {
-        setState(() {
-          online.add(userOnline['id']);
-          print(online);
-        });
-      }
-    }
-  }
-
-  handleOffline(data) {
-    var userOnline = jsonDecode(data);
-    setState(() {
-      online.remove(userOnline['id']);
-    });
-  }
-
-  handleStatusDetector() {
-    socket.on("ONLINE", (data) {
-      handleOnline(data);
-
-      // print(online);
-      // print(data);
-    });
-    // socket.on("OFFLINE", (data) {
-    //   // print("offline");
-    //   handleOffline(data);
-    //   print(data);
-    // });
   }
 
   bool willPop = false;
@@ -386,7 +305,7 @@ class _HomePageRootState extends State<HomePageRoot> {
               dialogStyle: Platform.isIOS
                   ? UpgradeDialogStyle.cupertino
                   : UpgradeDialogStyle.material,
-              durationUntilAlertAgain: const Duration(days: 1),
+              durationUntilAlertAgain: const Duration(minutes: 1),
             ),
             child: SafeArea(
               child: isLoading
@@ -557,7 +476,7 @@ class _HomePageRootState extends State<HomePageRoot> {
       var responseData = jsonResponse['data']['profile'];
       if (responseData['agent'] != null) {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return ListPropertyScreen1(tab: 0);
+          return SelectListingType();
         }));
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:findcribs/controller/get_chat_controller.dart';
+import 'package:findcribs/controller/socket_controller.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
 import 'package:findcribs/service/user_profile_service.dart';
@@ -147,139 +148,16 @@ class _ChatListState extends State<ChatList> {
   bool isLoading = true;
   List isTyping = [];
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
+  SocketController socketController = Get.put(SocketController());
 
   @override
   void initState() {
-    handleConnect();
     // handleGetMessages();
     handleGetUserProfile();
     handleGetUserProfile();
     getAllChatController.handleGetMessage();
     // handleStatusDetector();
     super.initState();
-  }
-
-  handleConnect() async {
-    var prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString("token");
-    // ignore: avoid_print
-    print(token);
-
-    socket = IO.io(
-        'http://18.233.168.44:5000',
-        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-            .setExtraHeaders({'Authorization': "$token"}) // optional
-            .build());
-    socket.connect();
-    socket.onConnect((data) {
-      print("connected");
-      handleStatusDetector();
-    });
-    // handleStatusDetector();
-
-    socket.onDisconnect((data) => print("disconnected"));
-    socket.on(
-      "ERROR",
-      (data) {
-        var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
-        print(data);
-      },
-    );
-    // socket check typing status
-    // if (messageController.text)
-    socket.on("START_TYPING", (data) {
-      // print(data);
-      var statusData = jsonDecode(data);
-      print(statusData);
-    });
-    socket.on("STOP_TYPING", (data) {
-      var statusData = jsonDecode(data);
-      print(statusData);
-
-      // if (widget.chatId == statusData['chatid']) {
-      //   if (mounted) {
-      //     setState(() {
-      //       isTyping = false;
-      //     });
-      //   }
-      // }
-    });
-    socket.on("MESSAGE_SENT", (data) {
-      print("message sent successfully");
-      setState(() {
-        getAllChatController.handleGetMessage();
-      });
-    });
-
-    socket.on("MESSAGES", (data) {
-      setState(() {
-        getAllChatController.handleGetMessage();
-      });
-
-      // handleFilteredLatestMessage();
-      print("handling messages event");
-    });
-    socket.on("MESSAGE", (data) {
-      print("got a message" + data);
-      setState(() {
-        getAllChatController.handleGetMessage();
-      });
-
-      var messageId = jsonDecode(data);
-      print(messageId['messageId']);
-      // socket.emit("DELIVERED", {
-      //   "messageId": messageId['messageId'],
-      // });
-      // socket.emit("READ", {"messageId": messageId['messageId']});
-    });
-
-    // socket.on("DELIVERED", (data) {
-    //   // var chatData = jsonDecode(data);
-    //   print("delivered");
-    //   print(data);
-    // });
-    // socket.on("READ", (data) {
-    //   // var chatData = jsonDecode(data);
-    //   print("read");
-    //   print(data);
-    // });
-  }
-
-  handleOnline(data) {
-    var userOnline = jsonDecode(data);
-    bool check = online.contains(userOnline['id']);
-    if (check == false) {
-      if (mounted) {
-        setState(() {
-          online.add(userOnline['id']);
-          print(online);
-        });
-      }
-    }
-  }
-
-  handleOffline(data) {
-    var userOnline = jsonDecode(data);
-    if (mounted) {
-      setState(() {
-        online.remove(userOnline['id']);
-      });
-    }
-  }
-
-  handleStatusDetector() {
-    socket.on("ONLINE", (data) {
-      handleOnline(data);
-
-      // print(online);
-      // print(data);
-    });
-    // socket.on("OFFLINE", (data) {
-    //   // print("offline");
-    //   handleOffline(data);
-    //   print(data);
-    // });
   }
 
   // handleGetMessages() async {
@@ -459,120 +337,145 @@ class _ChatListState extends State<ChatList> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: CachedNetworkImage(
-                                            fit: BoxFit.cover,
-                                            width: 60,
-                                            height: 60,
-                                            imageUrl: receiverImage,
-                                            progressIndicatorBuilder:
-                                                (context, url, progress) {
-                                              return JumpingDotsProgressIndicator();
-                                            }),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                  child: Obx(
+                                    () => Row(
+                                      children: [
+                                        Stack(
                                           children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                            ClipOval(
+                                              child: CachedNetworkImage(
+                                                  fit: BoxFit.cover,
+                                                  width: 60,
+                                                  height: 60,
+                                                  imageUrl: receiverImage,
+                                                  progressIndicatorBuilder:
+                                                      (context, url, progress) {
+                                                    return JumpingDotsProgressIndicator();
+                                                  }),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              left: 0,
+                                              child: CircleAvatar(
+                                                radius: 7,
+                                                backgroundColor: socketController
+                                                            .online
+                                                            .contains(
+                                                                receiverId) ==
+                                                        true
+                                                    ? const Color(0xFF168912)
+                                                    : Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          child: Obx(
+                                            () => Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  getAllChatController.allAvailableChats[index].users![0]
-                                                              ['id'] !=
-                                                          id
-                                                      ? getAllChatController.allAvailableChats[index].users![0]
-                                                              ['first_name'] +
-                                                          " " +
-                                                          getAllChatController
-                                                                  .allAvailableChats[
-                                                                      index]
-                                                                  .users![0]
-                                                              ['last_name']
-                                                      : getAllChatController
-                                                                  .allAvailableChats[
-                                                                      index]
-                                                                  .users![1]
-                                                              ['first_name'] +
-                                                          " " +
-                                                          getAllChatController
-                                                              .allAvailableChats[index]
-                                                              .users![1]['last_name'],
-                                                  style: const TextStyle(
-                                                      color: Color(0xFF263238),
-                                                      fontSize: 14),
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
+                                                Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    filteredUnreadMessage
-                                                            .isEmpty
-                                                        ? Container()
-                                                        : CircleAvatar(
-                                                            backgroundColor:
-                                                                Colors.red,
-                                                            radius: 10,
-                                                            child: Text(
-                                                              filteredUnreadMessage
-                                                                  .length
-                                                                  .toString(),
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 8,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                    Row(
+                                                    Text(
+                                                      getAllChatController.allAvailableChats[index].users![0]['id'] != id
+                                                          ? getAllChatController
+                                                                      .allAvailableChats[index].users![0][
+                                                                  'first_name'] +
+                                                              " " +
+                                                              getAllChatController
+                                                                      .allAvailableChats[index].users![0]
+                                                                  ['last_name']
+                                                          : getAllChatController
+                                                                      .allAvailableChats[
+                                                                          index]
+                                                                      .users![1][
+                                                                  'first_name'] +
+                                                              " " +
+                                                              getAllChatController
+                                                                  .allAvailableChats[index]
+                                                                  .users![1]['last_name'],
+                                                      style: const TextStyle(
+                                                          color:
+                                                              Color(0xFF263238),
+                                                          fontSize: 14),
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment.end,
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
-                                                        const Icon(
-                                                          Icons.check,
-                                                          size: 12,
+                                                        filteredUnreadMessage
+                                                                .isEmpty
+                                                            ? Container()
+                                                            : CircleAvatar(
+                                                                backgroundColor:
+                                                                    Colors.red,
+                                                                radius: 10,
+                                                                child: Text(
+                                                                  filteredUnreadMessage
+                                                                      .length
+                                                                      .toString(),
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize: 8,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons.check,
+                                                              size: 12,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Text(lastChatTime
+                                                                .toString()),
+                                                          ],
                                                         ),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(lastChatTime
-                                                            .toString()),
                                                       ],
                                                     ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                            Text(
-                                              isTyping.contains(
-                                                      getAllChatController
+                                                Text(
+                                                  socketController
+                                                              .isTypingChatId.toString() ==
+                                                          getAllChatController
+                                                              .allAvailableChats[
+                                                                  index]
+                                                              .id
+                                                              .toString()
+                                                      ? "Typing"
+                                                      : getAllChatController
                                                           .allAvailableChats[
                                                               index]
-                                                          .id)
-                                                  ? "Typing"
-                                                  : getAllChatController
-                                                      .allAvailableChats[index]
-                                                      .messages!
-                                                      .last['message']
-                                                      .toString(),
-                                              style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFA5A5A5)),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                                          .messages!
+                                                          .last['message']
+                                                          .toString(),
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: Color(0xFFA5A5A5)),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

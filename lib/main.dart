@@ -33,7 +33,6 @@ import 'screens/homepage/home_root.dart';
 import 'screens/story/story_camera.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 // import 'authentication_screen/sign_up_page.dart';
 // =======
 // import 'package:flutter/services.dart';
@@ -91,7 +90,27 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-void showFlutterNotification(RemoteMessage message) {
+void showFlutterNotification(RemoteMessage message) async {
+  channel = const AndroidNotificationChannel(
+    'com.findcribs', // id
+    'FindCribs Notification Permission', // title
+    description: 'Please turn on notification on the app', // description
+    importance: Importance.high,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  isFlutterLocalNotificationsInitialized = true;
+
+  print(message.messageType);
 
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
@@ -234,26 +253,6 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         id = value.id!;
       });
-    });
-  }
-
-  handleOnline(data) {
-    var userOnline = jsonDecode(data);
-    bool check = online.contains(userOnline['id']);
-    if (check == false) {
-      if (mounted) {
-        setState(() {
-          online.add(userOnline['id']);
-          print(online);
-        });
-      }
-    }
-  }
-
-  handleOffline(data) {
-    var userOnline = jsonDecode(data);
-    setState(() {
-      online.remove(userOnline['id']);
     });
   }
 

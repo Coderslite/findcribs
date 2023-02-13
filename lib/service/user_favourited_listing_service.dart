@@ -17,7 +17,6 @@ Future<List<UserFavouritedListingModel>> getUserFavouritedListing() async {
   var userData = jsonDecode(response.body);
   if (userData['status'] == true) {
     List favouritedProperty = userData['data']['listingLikes'];
-
     return favouritedProperty
         .map((e) => UserFavouritedListingModel.fromJson(e))
         .toList();

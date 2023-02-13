@@ -4,6 +4,19 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>UILocalNotification</key>
+	<string>Grant access to push notification</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>sms</string>
+	<string>tel</string>
+	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Grant access to photo library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Grant access to camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Grant access to microphone</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

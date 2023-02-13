@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -23,8 +22,8 @@ class BusinessVerificationController extends GetxController {
     final httpImage = await http.MultipartFile.fromPath('document', file.path);
     request.files.add(httpImage);
     var response = await request.send();
-    final respStr = await response.stream.bytesToString();
-    var msg = jsonDecode(respStr);
+    // final respStr = await response.stream.bytesToString();
+    // var msg = jsonDecode(respStr);
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading.value = false;
       AwesomeDialog(
@@ -52,7 +51,6 @@ class BusinessVerificationController extends GetxController {
       ).show();
       // print("successfully sent");
     } else {
-      print(msg);
       isLoading.value = false;
       AwesomeDialog(
         context: Get.context!,

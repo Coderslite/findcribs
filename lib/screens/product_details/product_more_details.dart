@@ -954,8 +954,9 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                           FontWeight.w400),
                                                 ),
                                                 Text(
-                                                  property.cautionFee
-                                                      .toString(),
+                                                  property.currency == "Naira"
+                                                      ? "NG${property.cautionFee}"
+                                                      : "\$${property.cautionFee}",
                                                   style: const TextStyle(
                                                       fontFamily:
                                                           'RedHatDisplay',
@@ -1008,8 +1009,9 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                           FontWeight.w400),
                                                 ),
                                                 Text(
-                                                  property.serviceCharge
-                                                      .toString(),
+                                                  property.currency == "Naira"
+                                                      ? "NG${property.serviceCharge}"
+                                                      : "\$${property.serviceCharge}",
                                                   style: const TextStyle(
                                                       fontFamily:
                                                           'RedHatDisplay',

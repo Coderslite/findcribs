@@ -37,7 +37,6 @@ class SaleListingController extends GetxController {
   var newfiles = [].obs;
   var facilities = [].obs;
 
-
   var legalFeeIndex = 0.obs;
   var agencyFeeIndex = 0.obs;
   final ImagePicker _picker = ImagePicker();
@@ -84,5 +83,6 @@ class SaleListingController extends GetxController {
 
     legalFeeIndex.value = 0;
     agencyFeeIndex.value = 0;
+    Get.delete<SaleListingController>();
   }
 }

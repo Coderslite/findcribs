@@ -43,7 +43,7 @@ class _Rent2State extends State<Rent2> with SingleTickerProviderStateMixin {
     super.initState();
   }
 
-    @override
+  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
@@ -186,7 +186,7 @@ class _Rent2State extends State<Rent2> with SingleTickerProviderStateMixin {
                       Rent2Stepper(
                         propertyAddress: widget.propertyAddress,
                         houseType: widget.houseType,
-                       propertyCategory: widget.propertyCategory,
+                        propertyCategory: widget.propertyCategory,
                         bedroom: widget.bedroom,
                         bathrooom: widget.bathrooom,
                         livingroom: widget.livingroom,

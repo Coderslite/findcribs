@@ -101,11 +101,13 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
         _currentPage--;
       }
 
-      _controller.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeInOutCubic,
-      );
+      if (_controller.hasClients) {
+        _controller.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOutCubic,
+        );
+      }
     });
 
     userFavouritedListingController.handleCheckLike(widget.id);
@@ -170,7 +172,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                       },
                       child: SizedBox(
                         height: property.propertyCategory == 'Estate Market'
-                            ? MediaQuery.of(context).size.height / 1.4
+                            ? MediaQuery.of(context).size.height / 1.6
                             : MediaQuery.of(context).size.height / 1.5,
                         width: MediaQuery.of(context).size.width,
                         child: property.images!.isEmpty
@@ -530,7 +532,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                         bottom: 20.0,
                         top: property.propertyCategory == 'Estate Market'
                             ? 0.0
-                            : 30.0),
+                            : 20.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

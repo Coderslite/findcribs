@@ -54,6 +54,7 @@ class _SinglePropertyState extends State<SingleProperty> {
   List<UserFavouritedListingModel> filteredFavouritePropertyList = [];
   List<UserFavouritedListingModel> firstFavouritePropertyList = [];
   late Future<List<UserFavouritedListingModel>> favouritePropertyList;
+  ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
   bool isLiked = false;
 
@@ -129,21 +130,40 @@ class _SinglePropertyState extends State<SingleProperty> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.image!.isEmpty
-                                ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
-                                : widget.image![0]['url'],
-                            fit: BoxFit.cover,
-                            width: 1000,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    JumpingDotsProgressIndicator(
-                              fontSize: 20.0,
-                              color: Colors.blue,
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
+                          child: ValueListenableBuilder(
+                              valueListenable: _networklHasErrorNotifier,
+                              builder:
+                                  (BuildContext context, int count, child) {
+                                print("rebuild");
+                                return CachedNetworkImage(
+                                  errorWidget: (context, url, error) {
+                                    return InkWell(
+                                        onTap: () {
+                                          print("clicked");
+                                          setState(() {
+                                            _networklHasErrorNotifier.value++;
+                                          });
+                                        },
+                                        child: Center(child: Text("Retry")));
+                                  },
+                                  // imageBuilder: (context, imageProvider) {
+                                  //   return Center(
+                                  //     child: CircularProgressIndicator(),
+                                  //   );
+                                  // },
+                                  imageUrl: widget.image!.isEmpty
+                                      ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
+                                      : widget.image![0]['url'],
+                                  fit: BoxFit.cover,
+                                  width: 1000,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          JumpingDotsProgressIndicator(
+                                    fontSize: 20.0,
+                                    color: Colors.blue,
+                                  ),
+                                );
+                              }),
                         ),
                         // child: Image.network(
 

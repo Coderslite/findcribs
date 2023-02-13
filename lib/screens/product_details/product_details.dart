@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-
 class ProductDetails extends StatefulWidget {
   final int? id;
   const ProductDetails({Key? key, required this.id}) : super(key: key);
@@ -27,23 +26,24 @@ class _ProductDetailsState extends State<ProductDetails> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
-      if (_currentPage == 3) {
-        end = true;
-      } else if (_currentPage == 0) {
-        end = false;
-      }
+      if (_controller.hasClients) {
+        if (_currentPage == 3) {
+          end = true;
+        } else if (_currentPage == 0) {
+          end = false;
+        }
 
-      if (end == false) {
-        _currentPage++;
-      } else {
-        _currentPage--;
+        if (end == false) {
+          _currentPage++;
+        } else {
+          _currentPage--;
+        }
+        _controller.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOutCubic,
+        );
       }
-
-      _controller.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeInOutCubic,
-      );
     });
   }
 
