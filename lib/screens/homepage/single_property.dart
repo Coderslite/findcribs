@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controller/get_property_listing_controller.dart';
+import '../../controller/get_single_property_listing.dart';
 import '../../models/house_detail_model.dart';
 import '../../models/user_favourite_listing.dart';
 import '../../service/user_favourited_listing_service.dart';
@@ -27,6 +29,7 @@ class SingleProperty extends StatefulWidget {
   final String? price;
   final bool? isPromoted;
   final String propertyName;
+  final String comingFrom;
 
   const SingleProperty({
     Key? key,
@@ -41,6 +44,7 @@ class SingleProperty extends StatefulWidget {
     required this.price,
     this.isPromoted,
     required this.propertyName,
+    required this.comingFrom,
   }) : super(key: key);
 
   @override
@@ -54,8 +58,11 @@ class _SinglePropertyState extends State<SingleProperty> {
   List<UserFavouritedListingModel> filteredFavouritePropertyList = [];
   List<UserFavouritedListingModel> firstFavouritePropertyList = [];
   late Future<List<UserFavouritedListingModel>> favouritePropertyList;
-  ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
+  GetSinglePropertyController getSinglePropertyController =
+      Get.put(GetSinglePropertyController());
+  GetPropertyListingController getPropertyListingController =
+      Get.put(GetPropertyListingController());
   bool isLiked = false;
 
   handleGetLikedProperties() {
@@ -78,7 +85,7 @@ class _SinglePropertyState extends State<SingleProperty> {
           firstFavouritePropertyList.where((element) {
         return element.listingId.toString().contains(value);
       }).toList();
-      print("filter" + filteredFavouritePropertyList.toString());
+      print("filter$filteredFavouritePropertyList");
     });
     if (filteredFavouritePropertyList.isEmpty) {
       setState(() {
@@ -115,8 +122,14 @@ class _SinglePropertyState extends State<SingleProperty> {
               Column(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    onTap: () async {
+                      getSinglePropertyController.propertyId.value =
+                          widget.id.toString();
+                      getSinglePropertyController.isLoading.value = true;
+
+                      print(widget.id);
+                      await Navigator.push(context,
+                          MaterialPageRoute(builder: (_) {
                         return ProductDetails(
                           id: widget.id,
                         );
@@ -125,46 +138,34 @@ class _SinglePropertyState extends State<SingleProperty> {
                     child: Stack(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 166,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ValueListenableBuilder(
-                              valueListenable: _networklHasErrorNotifier,
-                              builder:
-                                  (BuildContext context, int count, child) {
-                                print("rebuild");
-                                return CachedNetworkImage(
-                                  errorWidget: (context, url, error) {
-                                    return InkWell(
-                                        onTap: () {
-                                          print("clicked");
-                                          setState(() {
-                                            _networklHasErrorNotifier.value++;
-                                          });
-                                        },
-                                        child: Center(child: Text("Retry")));
-                                  },
-                                  // imageBuilder: (context, imageProvider) {
-                                  //   return Center(
-                                  //     child: CircularProgressIndicator(),
-                                  //   );
-                                  // },
-                                  imageUrl: widget.image!.isEmpty
-                                      ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
-                                      : widget.image![0]['url'],
-                                  fit: BoxFit.cover,
-                                  width: 1000,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          JumpingDotsProgressIndicator(
-                                    fontSize: 20.0,
-                                    color: Colors.blue,
-                                  ),
-                                );
-                              }),
-                        ),
+                            width: MediaQuery.of(context).size.width,
+                            height: 166,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: CachedNetworkImage(
+                              errorWidget: (context, url, error) {
+                                return InkWell(
+                                    onTap: () {},
+                                    child: const Center(child: Text("Retry")));
+                              },
+                              // imageBuilder: (context, imageProvider) {
+                              //   return Center(
+                              //     child: CircularProgressIndicator(),
+                              //   );
+                              // },
+                              imageUrl: widget.image!.isEmpty
+                                  ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
+                                  : widget.image![0]['url'],
+                              fit: BoxFit.cover,
+                              width: 1000,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      JumpingDotsProgressIndicator(
+                                fontSize: 20.0,
+                                color: Colors.blue,
+                              ),
+                            )),
                         // child: Image.network(
 
                         //   widget.image1,
@@ -253,7 +254,7 @@ class _SinglePropertyState extends State<SingleProperty> {
                           ),
                           widget.propertyCategory != 'Estate Market'
                               ? Text(
-                                  widget.bedroom.toString() + " bedroom",
+                                  "${widget.bedroom} bedroom",
                                   style: const TextStyle(
                                     fontFamily: 'RedHatDisplay',
                                     fontSize: 10,

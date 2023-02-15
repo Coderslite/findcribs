@@ -220,7 +220,8 @@ class _SalesScreenState extends State<SalesScreen> {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (_) {
                                           return ProductDetails(
-                                              id: filteredRentList[index].id);
+                                            id: filteredRentList[index].id,
+                                          );
                                         }));
                                       },
                                       child: CachedNetworkImage(
@@ -276,7 +277,8 @@ class _SalesScreenState extends State<SalesScreen> {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (_) {
                                           return ProductDetails(
-                                              id: filteredSaleList[index].id);
+                                            id: filteredSaleList[index].id,
+                                          );
                                         }));
                                       },
                                       child: CachedNetworkImage(

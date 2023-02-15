@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'package:findcribs/models/user_favourite_listing.dart';
-import 'package:findcribs/service/user_favourited_listing_service.dart';
 import 'package:flutter/material.dart';
 import 'package:findcribs/widgets/property_listings.dart';
 import 'package:get/get.dart';

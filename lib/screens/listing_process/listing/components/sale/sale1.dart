@@ -2,7 +2,6 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/controller/sale_listing_controller.dart';
-import 'package:findcribs/screens/listing_process/listing/components/sale/sale2.dart';
 import 'package:findcribs/screens/listing_process/listing/components/sale/sale2_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -1383,10 +1382,21 @@ class _Sale1State extends State<Sale1> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             children: [
-              const Text(
-                "Sale Listing",
-                style: TextStyle(fontSize: 20),
-              ),
+                  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
+                      "Sale Listing",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  const  Text("")
+                  ],
+                ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

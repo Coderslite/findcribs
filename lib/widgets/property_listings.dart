@@ -6,7 +6,6 @@ import 'package:progress_indicators/progress_indicators.dart';
 
 import '../screens/product_details/product_details.dart';
 
-
 // ignore: camel_case_types
 class Property_Listings extends StatefulWidget {
   final int? id;
@@ -23,7 +22,8 @@ class Property_Listings extends StatefulWidget {
       this.bedroom,
       this.propertyAddress,
       this.propertyType,
-      this.price, required this.propertyState})
+      this.price,
+      required this.propertyState})
       : super(key: key);
 
   @override
@@ -41,7 +41,9 @@ class _Property_ListingsState extends State<Property_Listings> {
     return InkWell(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return ProductDetails(id: widget.id);
+          return ProductDetails(
+            id: widget.id,
+          );
         }));
       },
       child: Container(

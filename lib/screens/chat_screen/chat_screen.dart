@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print, duplicate_ignore
 
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -12,11 +11,9 @@ import 'package:findcribs/service/user_profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:socket_io_client/socket_io_client.dart';
 // ignore: library_prefixes
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../controller/connectivity_controller.dart';

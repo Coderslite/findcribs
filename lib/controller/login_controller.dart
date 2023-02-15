@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:findcribs/controller/moment_socket_controller.dart';
-import 'package:findcribs/controller/socket_controller.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_up_page.dart';

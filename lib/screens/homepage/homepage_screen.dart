@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
 import 'dart:io';
 
 // import 'package:badges/badges.dart';
@@ -15,7 +14,6 @@ import 'package:findcribs/util/social_login.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/models/notification_model.dart';
 import 'package:findcribs/models/story_list_model.dart';
 import 'package:findcribs/screens/homepage/each_story.dart';
@@ -29,7 +27,6 @@ import 'package:findcribs/screens/listing_screen/terrace_screen.dart';
 import 'package:findcribs/screens/notification_screen/notification_screen.dart';
 import 'package:findcribs/screens/search_screen/search.dart';
 import 'package:findcribs/screens/story_screen/story_base_screen.dart';
-import 'package:findcribs/service/property_list_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +34,10 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../service/get_all_story_list.dart';
+import '../../controller/get_property_listing_controller.dart';
 import '../../service/notification_all_service.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 // ignore: library_prefixes
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../service/search_property.dart';
 import '../favourite_screen/all_agent/all_agent.dart';
 import '../notification_screen/get_all_notificaton_controller.dart';
 
@@ -57,20 +51,8 @@ class HomepageScreen extends StatefulWidget {
 }
 
 class _HomepageScreenState extends State<HomepageScreen> {
-  late Future<List<HouseListModel>> propertyList;
-  List<HouseListModel> filteredList = [];
-  List<HouseListModel> firstList = [];
-  String category = 'All';
-  int page = 1;
-  bool _hasNextPage = true;
-  late ScrollController _controller;
-
-  // Used to display loading indicators when _loadMore function is running
-  bool _isLoadMoreRunning = false;
-  // late Future<List<FavouriteStoryListModel>> storyList;
-  bool isLoading = true;
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-
+  String category = 'All';
   late Future<List<StoryListModel>> storyList;
   List<StoryListModel> firstStoryList = [];
   List<StoryListModel> filteredStoryList = [];
@@ -78,6 +60,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
   late Future<List<NotificationModel>> notificationList;
   List<NotificationModel> filteredNotificationList = [];
   List<NotificationModel> filteredUnreadNotificationList = [];
+  late ScrollController controller;
 
   handleGetNotification() {
     notificationList = getAllNotification();
@@ -91,90 +74,15 @@ class _HomepageScreenState extends State<HomepageScreen> {
     });
   }
 
-  handleGetProperties(int page) {
-    setState(() {
-      isLoading = true;
-    });
-    propertyList = getPropertyList(
-      page,
-    );
-    // storyList = getFavouriteStoryList();
-    propertyList.then((value) {
-      // print(value);
-      if (value.isEmpty) {
-        setState(() {
-          isLoading = false;
-          _hasNextPage = false;
-          _isLoadMoreRunning = false;
-        });
-      } else {
-        setState(() {
-          firstList = value;
-          isLoading = false;
-          for (int s = 0; s < value.length; s++) {
-            filteredList.add(value[s]);
-          }
-        });
-      }
-    });
-  }
-
-  void _loadMore() async {
-    if (_hasNextPage == true &&
-        isLoading == false &&
-        _isLoadMoreRunning == false &&
-        _controller.position.extentAfter < 600) {
-      setState(() {
-        // Display a progress indicator at the bottom
-        _isLoadMoreRunning = true;
-        page += 1;
-      });
-      propertyList = getPropertyList(
-        page,
-      );
-      // storyList = getFavouriteStoryList();
-      propertyList.then((value) {
-        // print(value);
-        if (value.isEmpty) {
-          setState(() {
-            isLoading = false;
-            _hasNextPage = false;
-            _isLoadMoreRunning = true;
-          });
-        } else {
-          setState(() {
-            firstList = value;
-            isLoading = false;
-            for (int s = 0; s < value.length; s++) {
-              filteredList.add(value[s]);
-            }
-          });
-        }
-      });
-    } else {
-      print("Nothing is loading");
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-    }
-  }
-
   _scrollListener() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the bottom";
-        _loadMore();
-      });
+    if (controller.offset >= controller.position.maxScrollExtent &&
+        !controller.position.outOfRange) {
+           getPropertyListingController.loadMore();
+
     }
-    if (_controller.offset <= _controller.position.minScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the top";
-      });
-    }
-    double maxScroll = _controller.position.maxScrollExtent;
-    double currentScroll = _controller.position.pixels;
+
+    double maxScroll = controller.position.maxScrollExtent;
+    double currentScroll = controller.position.pixels;
     double delta = 200.0; // or something else..
     if (maxScroll - currentScroll <= delta) {
       // whatever you determine here
@@ -182,132 +90,21 @@ class _HomepageScreenState extends State<HomepageScreen> {
     }
   }
 
-  handleFilterProperty() {
-    setState(() {
-      isLoading = true;
-    });
-    propertyList = getPropertyList(page);
-    propertyList.then((value) {
-      if (category == 'All') {
-        setState(() {
-          firstList = value;
-          isLoading = false;
-          filteredList = firstList;
-        });
-      } else {
-        firstList = value
-            .where((element) =>
-                element.propertyType!.toLowerCase() == category.toLowerCase())
-            .toList();
-
-        filteredList = firstList;
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
-  }
-
-  handleGetMoreSearchedProperties() {
-    propertyList = getSearchedProperty('', '', category, page);
-
-    propertyList.then((value) {
-      print(value);
-      print(category);
-      if (value.isEmpty) {
-        setState(() {
-          isLoading = false;
-          _hasNextPage = false;
-          _isLoadMoreRunning = false;
-        });
-      } else {
-        setState(() {
-          firstList = value
-              .where((element) =>
-                  element.propertyType!.toLowerCase() == category.toLowerCase())
-              .toList();
-
-          for (int s = 0; s < firstList.length; s++) {
-            filteredList.add(value[s]);
-          }
-        });
-      }
-    });
-  }
-
-  void _loadMoreSearched() async {
-    if (_hasNextPage == true &&
-        isLoading == false &&
-        _isLoadMoreRunning == false &&
-        _controller.position.extentAfter < 600) {
-      setState(() {
-        // Display a progress indicator at the bottom
-        _isLoadMoreRunning = true;
-        page += 1;
-      });
-      propertyList = getSearchedProperty('', '', category, page);
-      propertyList.then((value) {
-        // print(value);
-        if (value.isEmpty) {
-          setState(() {
-            _hasNextPage = false;
-            _isLoadMoreRunning = false;
-          });
-        } else {
-          setState(() {
-            firstList = value
-                .where((element) =>
-                    element.propertyType!.toLowerCase() ==
-                    category.toLowerCase())
-                .toList();
-
-            for (int s = 0; s < firstList.length; s++) {
-              filteredList.add(value[s]);
-            }
-          });
-        }
-      });
-    } else {
-      // print("Nothing is loading");
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-    }
-  }
-
-  _searchedScrollListener() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the bottom";
-        _loadMoreSearched();
-      });
-    }
-    if (_controller.offset <= _controller.position.minScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the top";
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    // handleGetNotification();
-    handleGetProperties(page);
-    // handleGetStory();
-    // _controller = ScrollController()..addListener(_loadMore);
-    _controller = ScrollController();
-    _controller.addListener(
-        category == 'All' ? _scrollListener : _searchedScrollListener);
+    // // handleGetNotification();
+    // handleGetProperties(page);
+    // // handleGetStory();
+    // // _controller = ScrollController()..addListener(_loadMore);
+    controller = ScrollController();
+    controller.addListener(_scrollListener);
     // _controller.addListener();
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_loadMore);
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -324,8 +121,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
       Get.put(GetAllNotificationController());
   MomentSocketController momentSocketController =
       Get.put(MomentSocketController());
+
+  GetPropertyListingController getPropertyListingController =
+      Get.put(GetPropertyListingController());
   @override
   Widget build(BuildContext context) {
+    print("rebuild homescreen widget");
     return Scaffold(
       // bottomNavigationBar:
       body: Obx(
@@ -356,7 +157,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
                   onRefresh: () async {
                     await Future.delayed(const Duration(seconds: 2));
                     setState(() {
-                      _isLoadMoreRunning = false;
                       // handleGetStory();
                       // handleGetPropertiesReferesh(page);
                       // userFavouritedListingController
@@ -605,752 +405,869 @@ class _HomepageScreenState extends State<HomepageScreen> {
                         height: 20,
                       ),
                       Expanded(
-                        child: ListView(
-                          controller: _controller,
-                          scrollDirection: Axis.vertical,
-                          cacheExtent: 100,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 8.0, bottom: 8.0, left: 20, right: 20),
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // Get.to(ExternalDirScreen());
-                                    },
-                                    child: Row(
-                                      children: const [
-                                        Text(
-                                          "Categories",
-                                          style: TextStyle(
-                                              fontFamily: 'RedHatDisplay',
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            const SizedBox(
-                              height: 20,
-                            ),
-
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  top: 8.0,
-                                  bottom: 8.0,
-                                  left: 0,
-                                ),
-                                child: Row(
+                        child: Obx(
+                          () => ListView(
+                            controller: controller,
+                            scrollDirection: Axis.vertical,
+                            cacheExtent: 100,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0, left: 20, right: 20),
+                                child: Column(
                                   children: [
-                                    Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            showModalBottomSheet<void>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return Container(
-                                                  height: 220,
-
-                                                  // color: Colors.amber,
-
-                                                  decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0x00e5e5e5),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      border: Border.all(
-                                                        color: const Color(
-                                                            0xFFE6E6E6),
-                                                      )),
-
-                                                  child: Center(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 15.0),
-                                                          child: Container(
-                                                            width: 80,
-                                                            height: 5,
-                                                            decoration: BoxDecoration(
-                                                                color: const Color(
-                                                                    0xFFE6E6E6),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5)),
-                                                          ),
-                                                        ),
-                                                        FormBuilder(
-                                                          child:
-                                                              FormBuilderRadioGroup(
-                                                            name: 'duplex',
-                                                            wrapDirection:
-                                                                Axis.vertical,
-                                                            orientation:
-                                                                OptionsOrientation
-                                                                    .vertical,
-                                                            onChanged: (e) {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (_) {
-                                                                    return DuplexScreen(
-                                                                      duplexType:
-                                                                          e.toString(),
-                                                                    );
-                                                                  },
-                                                                ),
-                                                              );
-                                                            },
-                                                            controlAffinity:
-                                                                ControlAffinity
-                                                                    .leading,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                              border: OutlineInputBorder(
-                                                                  borderSide:
-                                                                      BorderSide
-                                                                          .none),
-                                                            ),
-                                                            options: [
-                                                              "Detached Duplex",
-                                                              "Semi Duplex",
-                                                              "Duplex Bungalow",
-                                                            ]
-                                                                .map((e) =>
-                                                                    FormBuilderFieldOption(
-                                                                      value: e,
-                                                                      child:
-                                                                          Text(
-                                                                              e),
-                                                                    ))
-                                                                .toList(
-                                                                    growable:
-                                                                        false),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 20),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.5,
-                                            height: 68,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0x00e5e5e5),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                  color:
-                                                      const Color(0xFFE6E6E6),
-                                                )),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  "Duplex",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF455A64),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                          'RedHatDisplay',
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Image.asset(
-                                                    "assets/images/category1.png",
-                                                    scale: 6.5,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            showModalBottomSheet<void>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return Container(
-                                                  height: 280,
-
-                                                  // color: Colors.amber,
-
-                                                  decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0x00e5e5e5),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      border: Border.all(
-                                                        color: const Color(
-                                                            0xFFE6E6E6),
-                                                      )),
-
-                                                  child: Center(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 15.0),
-                                                          child: Container(
-                                                            width: 80,
-                                                            height: 5,
-                                                            decoration: BoxDecoration(
-                                                                color: const Color(
-                                                                    0xFFE6E6E6),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5)),
-                                                          ),
-                                                        ),
-                                                        FormBuilder(
-                                                          child:
-                                                              FormBuilderRadioGroup(
-                                                            name: 'apartment',
-                                                            wrapDirection:
-                                                                Axis.vertical,
-                                                            orientation:
-                                                                OptionsOrientation
-                                                                    .vertical,
-                                                            onChanged: (e) {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (_) {
-                                                                    return ApartmentScreen(
-                                                                      apartmentType:
-                                                                          e.toString(),
-                                                                    );
-                                                                  },
-                                                                ),
-                                                              );
-                                                            },
-                                                            controlAffinity:
-                                                                ControlAffinity
-                                                                    .leading,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                              border: OutlineInputBorder(
-                                                                  borderSide:
-                                                                      BorderSide
-                                                                          .none),
-                                                            ),
-                                                            options: [
-                                                              "Flats",
-                                                              "Shortlet",
-                                                              "Service apartment",
-                                                              "Self-contained"
-                                                            ]
-                                                                .map((e) =>
-                                                                    FormBuilderFieldOption(
-                                                                      value: e,
-                                                                      child:
-                                                                          Text(
-                                                                              e),
-                                                                    ))
-                                                                .toList(
-                                                                    growable:
-                                                                        false),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 20),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.5,
-                                            height: 68,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0x00e5e5e5),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                  color:
-                                                      const Color(0xFFE6E6E6),
-                                                )),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  "Apartments",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF455A64),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                          'RedHatDisplay',
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Image.asset(
-                                                    "assets/images/category3.png",
-                                                    scale: 6.5,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (_) {
-                                              return const TerraceScreen();
-                                            }));
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.5,
-                                            height: 68,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0x00e5e5e5),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                  color:
-                                                      const Color(0xFFE6E6E6),
-                                                )),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  "Terrace",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF455A64),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                          'RedHatDisplay',
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Image.asset(
-                                                    "assets/images/category2.png",
-                                                    scale: 5,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (_) {
-                                              return const ComingSoon();
-                                            }));
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.5,
-                                            height: 68,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0x00e5e5e5),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                  color:
-                                                      const Color(0xFFE6E6E6),
-                                                )),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  "Hotels",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF455A64),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                          'RedHatDisplay',
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Image.asset(
-                                                    "assets/images/category4.png",
-                                                    scale: 5,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (_) {
-                                              return const EstateMarketScreen();
-                                            }));
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.5,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            height: 68,
-                                            decoration: BoxDecoration(
-                                                color: const Color(0x00e5e5e5),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                  color:
-                                                      const Color(0xFFE6E6E6),
-                                                )),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  "Estate Market",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF455A64),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                          'RedHatDisplay',
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Image.asset(
-                                                    "assets/images/estatemarket.png",
-                                                    scale: 1.6,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (_) {
-                                              return const ComingSoon();
-                                            }));
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.5,
-                                            height: 68,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0x00e5e5e5),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                  color:
-                                                      const Color(0xFFE6E6E6),
-                                                )),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  "Land",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF455A64),
-                                                      fontSize: 14,
-                                                      fontFamily:
-                                                          'RedHatDisplay',
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Image.asset(
-                                                    "assets/images/land.png",
-                                                    scale: 15,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(
-                              height: 40,
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 8.0, bottom: 8.0, left: 20, right: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Featured",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: 'RedHatDisplay',
-                                        fontWeight: FontWeight.w700),
-                                  ),
-
-                                  // CustomDropdownButton2(
-
-                                  //   hint: 'Sales',
-
-                                  //   buttonWidth: 100,
-
-                                  //   icon: const Icon(Icons.arrow_downward_outlined),
-
-                                  //   dropdownItems: items,
-
-                                  //   value: selectedValue,
-
-                                  //   onChanged: (value) {
-
-                                  //     setState(() {
-
-                                  //       selectedValue = value;
-
-                                  //     });
-
-                                  //   },
-
-                                  // ),
-
-                                  GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet<void>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Container(
-                                            height: 160,
-
-                                            // color: Colors.amber,
-
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-
-                                            child: Center(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 15.0),
-                                                    child: Container(
-                                                      width: 80,
-                                                      height: 5,
-                                                      decoration: BoxDecoration(
-                                                          color: const Color(
-                                                              0xFFE6E6E6),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5)),
-                                                    ),
-                                                  ),
-                                                  FormBuilder(
-                                                    child:
-                                                        FormBuilderRadioGroup(
-                                                      name: 'sale',
-                                                      initialValue: category,
-                                                      wrapDirection:
-                                                          Axis.horizontal,
-                                                      orientation:
-                                                          OptionsOrientation
-                                                              .horizontal,
-                                                      controlAffinity:
-                                                          ControlAffinity
-                                                              .leading,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        border:
-                                                            OutlineInputBorder(
-                                                                borderSide:
-                                                                    BorderSide
-                                                                        .none),
-                                                      ),
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          category =
-                                                              value.toString();
-                                                          handleFilterProperty();
-                                                        });
-                                                      },
-                                                      options: [
-                                                        "All",
-                                                        "Sale",
-                                                        "Rent",
-                                                      ]
-                                                          .map((e) =>
-                                                              FormBuilderFieldOption(
-                                                                value: e,
-                                                                child: Text(e),
-                                                              ))
-                                                          .toList(
-                                                              growable: false),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      width: 70,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 0.5,
-                                        ),
-                                      ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        // Get.to(ExternalDirScreen());
+                                      },
                                       child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
+                                        children: const [
                                           Text(
-                                            category,
-                                            style: const TextStyle(
+                                            "Categories",
+                                            style: TextStyle(
                                                 fontFamily: 'RedHatDisplay',
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 10),
-                                          ),
-                                          const Icon(
-                                            CupertinoIcons.arrow_up_down,
-
-                                            size: 11,
-
-                                            // color: Color(0XFFE5E5E5),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700),
                                           )
                                         ],
                                       ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    top: 8.0,
+                                    bottom: 8.0,
+                                    left: 0,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet<void>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Container(
+                                                    height: 220,
 
-                            const SizedBox(
-                              height: 20,
-                            ),
+                                                    // color: Colors.amber,
 
-                            // for (int x = 1; x < 5; x++)
+                                                    decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0x00e5e5e5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        border: Border.all(
+                                                          color: const Color(
+                                                              0xFFE6E6E6),
+                                                        )),
 
-                            isLoading
-                                ? Center(
+                                                    child: Center(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 15.0),
+                                                            child: Container(
+                                                              width: 80,
+                                                              height: 5,
+                                                              decoration: BoxDecoration(
+                                                                  color: const Color(
+                                                                      0xFFE6E6E6),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5)),
+                                                            ),
+                                                          ),
+                                                          FormBuilder(
+                                                            child:
+                                                                FormBuilderRadioGroup(
+                                                              name: 'duplex',
+                                                              wrapDirection:
+                                                                  Axis.vertical,
+                                                              orientation:
+                                                                  OptionsOrientation
+                                                                      .vertical,
+                                                              onChanged: (e) {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (_) {
+                                                                      return DuplexScreen(
+                                                                        duplexType:
+                                                                            e.toString(),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              },
+                                                              controlAffinity:
+                                                                  ControlAffinity
+                                                                      .leading,
+                                                              decoration:
+                                                                  const InputDecoration(
+                                                                border: OutlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide
+                                                                            .none),
+                                                              ),
+                                                              options: [
+                                                                "Detached Duplex",
+                                                                "Semi Duplex",
+                                                                "Duplex Bungalow",
+                                                              ]
+                                                                  .map((e) =>
+                                                                      FormBuilderFieldOption(
+                                                                        value:
+                                                                            e,
+                                                                        child:
+                                                                            Text(e),
+                                                                      ))
+                                                                  .toList(
+                                                                      growable:
+                                                                          false),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 20),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.5,
+                                              height: 68,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0x00e5e5e5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFFE6E6E6),
+                                                  )),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text(
+                                                    "Duplex",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xFF455A64),
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            'RedHatDisplay',
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: Image.asset(
+                                                      "assets/images/category1.png",
+                                                      scale: 6.5,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet<void>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Container(
+                                                    height: 280,
+
+                                                    // color: Colors.amber,
+
+                                                    decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0x00e5e5e5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        border: Border.all(
+                                                          color: const Color(
+                                                              0xFFE6E6E6),
+                                                        )),
+
+                                                    child: Center(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 15.0),
+                                                            child: Container(
+                                                              width: 80,
+                                                              height: 5,
+                                                              decoration: BoxDecoration(
+                                                                  color: const Color(
+                                                                      0xFFE6E6E6),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5)),
+                                                            ),
+                                                          ),
+                                                          FormBuilder(
+                                                            child:
+                                                                FormBuilderRadioGroup(
+                                                              name: 'apartment',
+                                                              wrapDirection:
+                                                                  Axis.vertical,
+                                                              orientation:
+                                                                  OptionsOrientation
+                                                                      .vertical,
+                                                              onChanged: (e) {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (_) {
+                                                                      return ApartmentScreen(
+                                                                        apartmentType:
+                                                                            e.toString(),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              },
+                                                              controlAffinity:
+                                                                  ControlAffinity
+                                                                      .leading,
+                                                              decoration:
+                                                                  const InputDecoration(
+                                                                border: OutlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide
+                                                                            .none),
+                                                              ),
+                                                              options: [
+                                                                "Flats",
+                                                                "Shortlet",
+                                                                "Service apartment",
+                                                                "Self-contained"
+                                                              ]
+                                                                  .map((e) =>
+                                                                      FormBuilderFieldOption(
+                                                                        value:
+                                                                            e,
+                                                                        child:
+                                                                            Text(e),
+                                                                      ))
+                                                                  .toList(
+                                                                      growable:
+                                                                          false),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 20),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.5,
+                                              height: 68,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0x00e5e5e5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFFE6E6E6),
+                                                  )),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text(
+                                                    "Apartments",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xFF455A64),
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            'RedHatDisplay',
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: Image.asset(
+                                                      "assets/images/category3.png",
+                                                      scale: 6.5,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
+                                                return const TerraceScreen();
+                                              }));
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.5,
+                                              height: 68,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0x00e5e5e5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFFE6E6E6),
+                                                  )),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text(
+                                                    "Terrace",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xFF455A64),
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            'RedHatDisplay',
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: Image.asset(
+                                                      "assets/images/category2.png",
+                                                      scale: 5,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
+                                                return const ComingSoon();
+                                              }));
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.5,
+                                              height: 68,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0x00e5e5e5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFFE6E6E6),
+                                                  )),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text(
+                                                    "Hotels",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xFF455A64),
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            'RedHatDisplay',
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: Image.asset(
+                                                      "assets/images/category4.png",
+                                                      scale: 5,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
+                                                return const EstateMarketScreen();
+                                              }));
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.5,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              height: 68,
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0x00e5e5e5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFFE6E6E6),
+                                                  )),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text(
+                                                    "Estate Market",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xFF455A64),
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            'RedHatDisplay',
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: Image.asset(
+                                                      "assets/images/estatemarket.png",
+                                                      scale: 1.6,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
+                                                return const ComingSoon();
+                                              }));
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2.5,
+                                              height: 68,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0x00e5e5e5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFFE6E6E6),
+                                                  )),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text(
+                                                    "Land",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xFF455A64),
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            'RedHatDisplay',
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: Image.asset(
+                                                      "assets/images/land.png",
+                                                      scale: 15,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0, left: 20, right: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Featured",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: 'RedHatDisplay',
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet<void>(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Container(
+                                              height: 160,
+
+                                              // color: Colors.amber,
+
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+
+                                              child: Center(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 15.0),
+                                                      child: Container(
+                                                        width: 80,
+                                                        height: 5,
+                                                        decoration: BoxDecoration(
+                                                            color: const Color(
+                                                                0xFFE6E6E6),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                      ),
+                                                    ),
+                                                    FormBuilder(
+                                                      child:
+                                                          FormBuilderRadioGroup(
+                                                        name: 'sale',
+                                                        initialValue: category,
+                                                        wrapDirection:
+                                                            Axis.horizontal,
+                                                        orientation:
+                                                            OptionsOrientation
+                                                                .horizontal,
+                                                        controlAffinity:
+                                                            ControlAffinity
+                                                                .leading,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide
+                                                                          .none),
+                                                        ),
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            category = value
+                                                                .toString();
+                                                          });
+                                                        },
+                                                        options: [
+                                                          "All",
+                                                          "Sale",
+                                                          "Rent",
+                                                        ]
+                                                            .map((e) =>
+                                                                FormBuilderFieldOption(
+                                                                  value: e,
+                                                                  child:
+                                                                      Text(e),
+                                                                ))
+                                                            .toList(
+                                                                growable:
+                                                                    false),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 70,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 0.5,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                              category,
+                                              style: const TextStyle(
+                                                  fontFamily: 'RedHatDisplay',
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 10),
+                                            ),
+                                            const Icon(
+                                              CupertinoIcons.arrow_up_down,
+
+                                              size: 11,
+
+                                              // color: Color(0XFFE5E5E5),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              getPropertyListingController.isLoading.isTrue
+                                  ? Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          CollectionSlideTransition(
+                                            children: const <Widget>[
+                                              CircleAvatar(
+                                                backgroundColor: Colors.blue,
+                                                radius: 6,
+                                              ),
+                                              CircleAvatar(
+                                                backgroundColor: Colors.red,
+                                                radius: 6,
+                                              ),
+                                              CircleAvatar(
+                                                backgroundColor: Colors.yellow,
+                                                radius: 6,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : getPropertyListingController
+                                          .filteredList.isEmpty
+                                      ? Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                  "assets/images/opps.png"),
+                                              const Text(
+                                                "Opps!",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 35),
+                                              ),
+                                              const SizedBox(
+                                                height: 30,
+                                              ),
+                                              const Text("No Item Available"),
+                                            ],
+                                          ),
+                                        )
+                                      : Obx(
+                                          () => ListView.builder(
+                                              physics: const ScrollPhysics(),
+                                              // controller: _controller,
+                                              shrinkWrap: true,
+                                              // reverse: true,
+                                              itemCount:
+                                                  getPropertyListingController
+                                                      .filteredList.length,
+                                              itemBuilder: ((context, index) {
+                                                int price =
+                                                    (getPropertyListingController
+                                                        .filteredList[index]
+                                                        .rentalFee!
+                                                        .toInt()
+                                                    //  +
+                                                    // getPropertyListingController.filteredList[index].agencyFee!.toInt()
+                                                    );
+                                                var formatter =
+                                                    NumberFormat("#,###");
+                                                var formatedPrice =
+                                                    formatter.format(price);
+                                                return SingleProperty(
+                                                  id: getPropertyListingController
+                                                      .filteredList[index].id,
+                                                  image:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .image,
+                                                  designType:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .designType,
+                                                  currency:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .currency,
+                                                  propertyType:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .propertyType,
+                                                  propertyAddress:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .propertyAddress,
+                                                  bedroom:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .bedroom,
+                                                  propertyCategory:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .propertyCategory,
+                                                  price: formatedPrice,
+                                                  isPromoted:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .isPromoted,
+                                                  propertyName:
+                                                      getPropertyListingController
+                                                          .filteredList[index]
+                                                          .propertyName
+                                                          .toString(),
+                                                          comingFrom: 'Homescreen',
+                                                );
+                                              })),
+                                        ),
+                              if (getPropertyListingController
+                                  .isLoadMoreRunning.isTrue)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 80),
+                                  child: Center(
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -1375,100 +1292,10 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                         ),
                                       ],
                                     ),
-                                  )
-                                : filteredList.isEmpty
-                                    ? Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                                "assets/images/opps.png"),
-                                            const Text(
-                                              "Opps!",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 35),
-                                            ),
-                                            const SizedBox(
-                                              height: 30,
-                                            ),
-                                            const Text("No Item Available"),
-                                          ],
-                                        ),
-                                      )
-                                    : ListView.builder(
-                                        physics: const ScrollPhysics(),
-                                        // controller: _controller,
-                                        shrinkWrap: true,
-                                        // reverse: true,
-                                        itemCount: filteredList.length,
-                                        itemBuilder: ((context, index) {
-                                          int price = (filteredList[index]
-                                                  .rentalFee!
-                                                  .toInt()
-                                              //  +
-                                              // filteredList[index].agencyFee!.toInt()
-                                              );
-                                          var formatter = NumberFormat("#,###");
-                                          var formatedPrice =
-                                              formatter.format(price);
-                                          return SingleProperty(
-                                            id: filteredList[index].id,
-                                            image: filteredList[index].image,
-                                            designType:
-                                                filteredList[index].designType,
-                                            currency:
-                                                filteredList[index].currency,
-                                            propertyType: filteredList[index]
-                                                .propertyType,
-                                            propertyAddress: filteredList[index]
-                                                .propertyAddress,
-                                            bedroom:
-                                                filteredList[index].bedroom,
-                                            propertyCategory:
-                                                filteredList[index]
-                                                    .propertyCategory,
-                                            price: formatedPrice,
-                                            isPromoted:
-                                                filteredList[index].isPromoted,
-                                            propertyName: filteredList[index]
-                                                .propertyName
-                                                .toString(),
-                                          );
-                                        })),
-                            // when the _loadMore function is running
-                            if (_isLoadMoreRunning == true)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10, bottom: 40),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CollectionSlideTransition(
-                                        children: const <Widget>[
-                                          CircleAvatar(
-                                            backgroundColor: Colors.blue,
-                                            radius: 6,
-                                          ),
-                                          CircleAvatar(
-                                            backgroundColor: Colors.red,
-                                            radius: 6,
-                                          ),
-                                          CircleAvatar(
-                                            backgroundColor: Colors.yellow,
-                                            radius: 6,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],

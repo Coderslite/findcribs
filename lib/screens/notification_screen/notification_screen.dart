@@ -272,7 +272,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     return filteredNotificationList[index]
                                                 .type ==
                                             'listing'
-                                        ? ProductDetails(
+                                        ?
+                                         ProductDetails(
                                             id: filteredNotificationList[index]
                                                 .refId)
                                         : filteredNotificationList[index]

@@ -258,7 +258,9 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                           return ProductDetails(
                                               id: userFavouritedListingController
                                                   .favouritedListing[index]
-                                                  .listingId);
+                                                  .listingId,
+                                                  );
+
                                         }));
                                       },
                                       child: Container(

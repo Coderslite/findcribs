@@ -14,6 +14,7 @@ class HouseListModel {
   int? rentalFee;
   bool? otherCharges;
   int? cautionFee;
+  int? serviceCharge;
   int? legalFee;
   int? agencyFee;
   String? state;
@@ -32,6 +33,18 @@ class HouseListModel {
   int? viewCount;
   int? likeCount;
   bool? isPromoted;
+  String? agentBusinessName;
+  String? agentCategory;
+  String? agentFirstName;
+  String? agentLastName;
+  String? agentPhoneNUmber;
+  String? profilePic;
+  bool? managedBy;
+  bool? hasDocument;
+  bool? negotiable;
+  String? availability;
+  String? propertyCondition;
+  String? facilities;
   String? propertyName;
 
   HouseListModel({
@@ -50,6 +63,7 @@ class HouseListModel {
     this.rentalFee,
     this.otherCharges,
     this.cautionFee,
+    this.serviceCharge,
     this.legalFee,
     this.agencyFee,
     this.state,
@@ -68,6 +82,18 @@ class HouseListModel {
     this.viewCount,
     this.likeCount,
     this.isPromoted,
+    this.agentBusinessName,
+    this.agentPhoneNUmber,
+    this.agentFirstName,
+    this.agentLastName,
+    this.agentCategory,
+    this.profilePic,
+    this.managedBy,
+    this.hasDocument,
+    this.negotiable,
+    this.availability,
+    this.propertyCondition,
+    this.facilities,
     this.propertyName,
   });
 
@@ -88,6 +114,7 @@ class HouseListModel {
       rentalFee: json['rental_fee'],
       otherCharges: json['other_charges'],
       cautionFee: json['caution_fee'],
+      serviceCharge: json['serviceCharge'],
       legalFee: json['legal_fee'],
       agencyFee: json['agency_fee'],
       state: json['state'],
@@ -106,6 +133,18 @@ class HouseListModel {
       viewCount: json['viewCount'],
       likeCount: json['likeCount'],
       isPromoted: json['isPromoted'],
+      agentBusinessName: json['agent']['business_name'],
+      agentCategory: json['agent']['category'],
+      agentFirstName: json['agent']['user']['first_name'],
+      agentLastName: json['agent']['user']['last_name'],
+      agentPhoneNUmber: json['agent']['phone_number'],
+      profilePic: json['agent']['user']['profile_pic'],
+      managedBy: json['agent']['systemManaged'],
+      hasDocument: json['hasDocuments'],
+      negotiable: json['negotiable'],
+      availability: json['agent']['availability'],
+      propertyCondition: json['property_condition'],
+      facilities: json['facilities'],
       propertyName: json['property_name'],
     );
   }

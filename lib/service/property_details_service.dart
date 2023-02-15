@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/models/house_detail_model.dart';
 import 'package:http/http.dart' as http;
 
-Future<HouseDetailModel> getSingleProperty(int? id) async {
+import '../models/house_list_model.dart';
+
+Future<HouseListModel> getSingleProperty(int? id) async {
   // var token = "be2dc9cdded61704c07c7e67eb8971f5f434e6a6";
 
   final response = await http
@@ -11,7 +12,7 @@ Future<HouseDetailModel> getSingleProperty(int? id) async {
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
 
-    return HouseDetailModel.fromJson(jsonResponse['data']);
+    return HouseListModel.fromJson(jsonResponse['data']);
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.

@@ -15,8 +15,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:socket_io_client/socket_io_client.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart' as launchUrl;
 
@@ -600,7 +598,7 @@ class _ChatItemState extends State<ChatItem> {
                       onTap: () {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) {
-                          return ProductDetails(id: widget.propertyId);
+                          return ProductDetails(id: widget.propertyId,);
                         }));
                       },
                       child: const Text(
@@ -617,7 +615,7 @@ class _ChatItemState extends State<ChatItem> {
                       onTap: () {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) {
-                          return ProductDetails(id: widget.propertyId);
+                          return ProductDetails(id: widget.propertyId,);
                         }));
                       },
                       child: const Text("This property was responded to")),

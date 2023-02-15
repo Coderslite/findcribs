@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent2.dart';
 import 'package:findcribs/screens/listing_process/listing/components/rent/rent2_stepper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -51,8 +51,7 @@ class _Rent1State extends State<Rent1> {
 
   RentListingController rentListingController =
       Get.put(RentListingController());
-final GlobalKey<FormBuilderState> formKey1 =
-      GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> formKey1 = GlobalKey<FormBuilderState>();
   @override
   void dispose() {
     formKey1.currentState?.dispose();
@@ -1404,9 +1403,20 @@ final GlobalKey<FormBuilderState> formKey1 =
           child: Obx(
             () => Column(
               children: [
-             const   Text(
-                  "Rent Listing",
-                  style: TextStyle(fontSize: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
+                      "Rent Listing",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text("")
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -1484,8 +1494,8 @@ final GlobalKey<FormBuilderState> formKey1 =
                                     ''
                                 ? FormBuilderDropdown(
                                     name: 'propertyCategory',
-                                    key:
-                                        rentListingController.propertyCategoryKey,
+                                    key: rentListingController
+                                        .propertyCategoryKey,
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
                                       FormBuilderValidators.required(context),
@@ -1666,7 +1676,8 @@ final GlobalKey<FormBuilderState> formKey1 =
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentBedroomItems.length,
                                   (index) {
@@ -1697,7 +1708,8 @@ final GlobalKey<FormBuilderState> formKey1 =
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentBathroomItems.length,
                                   (index) {
@@ -1728,7 +1740,8 @@ final GlobalKey<FormBuilderState> formKey1 =
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentLivingRoomItems.length,
                                   (index) {
@@ -1759,7 +1772,8 @@ final GlobalKey<FormBuilderState> formKey1 =
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentKitchenItems.length,
                                   (index) {
@@ -1792,9 +1806,11 @@ final GlobalKey<FormBuilderState> formKey1 =
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                         left:
-                                            MediaQuery.of(context).size.width / 5,
+                                            MediaQuery.of(context).size.width /
+                                                5,
                                         right:
-                                            MediaQuery.of(context).size.width / 5,
+                                            MediaQuery.of(context).size.width /
+                                                5,
                                         top: 4.5,
                                         bottom: 4.5,
                                       ),
