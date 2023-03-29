@@ -7,7 +7,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
-import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -541,7 +540,7 @@ class _PropertyManagerRegistrationState
             btnOkOnPress: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (_) {
-                return Rent1();
+                return const Rent1();
               }));
             },
           ).show();

@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:findcribs/controller/initialize_controllers.dart';

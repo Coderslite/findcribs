@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'package:findcribs/controller/sale_listing_controller.dart';
-import 'package:findcribs/screens/listing_process/listing/components/sale/sale3.dart';
 import 'package:findcribs/screens/listing_process/listing/components/sale/sale3_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -221,10 +220,21 @@ class _Sale2StepperState extends State<Sale2Stepper> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                  const Text(
+                          Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
                       "Sale Listing",
                       style: TextStyle(fontSize: 20),
                     ),
+                  const  Text("")
+                  ],
+                ),
                     const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -6,15 +6,12 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
-import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../../controller/rent_listing_controller.dart';
 import '../../../../homepage/home_root.dart';
@@ -75,7 +72,6 @@ class Rent4Stepper extends StatefulWidget {
 }
 
 class _Rent4StepperState extends State<Rent4Stepper> {
-  final ImagePicker _picker = ImagePicker();
   List myImages = [];
   List<File> files = [];
   List<File> newfiles = [];
@@ -103,9 +99,20 @@ class _Rent4StepperState extends State<Rent4Stepper> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                const Text(
-                  "Rent Listing",
-                  style: TextStyle(fontSize: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
+                      "Rent Listing",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    const Text("")
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -264,9 +271,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                           InkWell(
                             onTap: () {
                               // handleGetImage();
-                              setState(() {
-                                getImage();
-                              });
+                              rentListingController.getImage();
                             },
                             child: AnimatedContainer(
                               padding: const EdgeInsets.all(8),
@@ -457,18 +462,18 @@ class _Rent4StepperState extends State<Rent4Stepper> {
   //   }
   // }
 
-  getImage() async {
-    final List<XFile> image = (await _picker.pickMultiImage());
+  // getImage() async {
+  //   final List<XFile> image = (await _picker.pickMultiImage());
 
-    if (mounted) {
-      setState(() {
-        for (var img in image) {
-          newfiles.add(File(img.path));
-          rentListingController.newfiles.add(File(img.path));
-        }
-      });
-    }
-  }
+  //   if (mounted) {
+  //     setState(() {
+  //       for (var img in image) {
+  //         newfiles.add(File(img.path));
+  //         rentListingController.newfiles.add(File(img.path));
+  //       }
+  //     });
+  //   }
+  // }
 
   Future handlePublish() async {
     if (formKey4.currentState!.validate()) {
@@ -572,6 +577,8 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                   : rentListingController.agencyFee.value.toString();
           request.fields['state'] =
               rentListingController.location.value.toString();
+          request.fields['lga'] = rentListingController.lga.value.toString();
+          request.fields['country'] = 'Nigeria';
           request.fields['total_area_of_land'] =
               rentListingController.totalArea.value.toString();
           request.fields['interior_design'] =
@@ -907,6 +914,8 @@ class _Rent4StepperState extends State<Rent4Stepper> {
           request.fields['status'] = 'Saved';
           request.fields['location'] =
               rentListingController.location.toString();
+          request.fields['lga'] = rentListingController.lga.value.toString();
+          request.fields['country'] = 'Nigeria';
           request.fields['negotiable'] =
               rentListingController.negotiable.value == 1 ? '1' : '0';
           request.headers['Authorization'] = "$token";

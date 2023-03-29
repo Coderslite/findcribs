@@ -1,14 +1,19 @@
 import 'dart:async';
 
+import 'package:findcribs/controller/get_single_property_listing.dart';
 import 'package:findcribs/screens/product_details/product_main_details.dart';
 import 'package:findcribs/screens/product_details/product_more_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ProductDetails extends StatefulWidget {
   final int? id;
-  const ProductDetails({Key? key, required this.id}) : super(key: key);
+  const ProductDetails({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -22,9 +27,12 @@ class _ProductDetailsState extends State<ProductDetails> {
   int _currentPage = 0;
   Timer? _timer;
   bool end = false;
+  GetSinglePropertyController getSinglePropertyController =
+      Get.put(GetSinglePropertyController());
   @override
   void initState() {
     super.initState();
+    getSinglePropertyController.handlePropertyClicked(widget.id!);
     _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       if (_controller.hasClients) {
         if (_currentPage == 3) {

@@ -5,9 +5,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RentListingController extends GetxController {
- 
-
-
   final propertyCategoryKey = GlobalKey<FormFieldState>();
 
   var ageRestriction = 0.obs;
@@ -40,6 +37,7 @@ class RentListingController extends GetxController {
   var propertyCategory = ''.obs;
   var propertyType = ''.obs;
   var location = ''.obs;
+  var lga = ''.obs;
   var negotiable = 0.obs;
   var myImages = [].obs;
   var newfiles = [].obs;
@@ -51,7 +49,6 @@ class RentListingController extends GetxController {
 
   getImage() async {
     final List<XFile> image = (await _picker.pickMultiImage());
-
     for (var img in image) {
       newfiles.add(File(img.path));
     }
@@ -88,6 +85,7 @@ class RentListingController extends GetxController {
     propertyCategory.value = '';
     propertyType.value = '';
     location.value = '';
+    lga.value = '';
     negotiable.value = 0;
     myImages.value = [];
     newfiles.value = [];

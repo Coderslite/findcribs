@@ -1,10 +1,6 @@
-import 'package:findcribs/screens/listing_process/agent/agent.dart';
-import 'package:findcribs/screens/listing_process/estate_market/estate_market.dart';
 import 'package:findcribs/screens/listing_process/listing/components/estate_market.dart';
 import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:findcribs/screens/listing_process/listing/components/sale/sale1.dart';
-import 'package:findcribs/screens/listing_process/property_manager/property_manager.dart';
-import 'package:findcribs/screens/listing_process/property_owner/property_owner.dart';
 import 'package:flutter/material.dart';
 
 class SelectListingType extends StatefulWidget {

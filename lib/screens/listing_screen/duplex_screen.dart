@@ -969,37 +969,27 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                           formatter.format(price);
                                       return Column(
                                         children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return ProductDetails(
-                                                  id: filteredList[x].id,
-                                                );
-                                              }));
-                                            },
-                                            child: SingleProperty(
-                                              id: filteredList[x].id,
-                                              image: filteredList[x].image,
-                                              designType:
-                                                  filteredList[x].designType,
-                                              currency:
-                                                  filteredList[x].currency,
-                                              propertyType:
-                                                  filteredList[x].propertyType,
-                                              propertyAddress: filteredList[x]
-                                                  .propertyAddress,
-                                              bedroom: filteredList[x].bedroom,
-                                              propertyCategory: filteredList[x]
-                                                  .propertyCategory,
-                                              price: formatedPrice,
-                                              isPromoted:
-                                                  filteredList[x].isPromoted,
-                                              propertyName: filteredList[x]
-                                                  .propertyName
-                                                  .toString(),
-                                            ),
+                                          SingleProperty(
+                                            comingFrom: 'Terrace',
+                                            id: filteredList[x].id,
+                                            image: filteredList[x].image,
+                                            designType:
+                                                filteredList[x].designType,
+                                            currency:
+                                                filteredList[x].currency,
+                                            propertyType:
+                                                filteredList[x].propertyType,
+                                            propertyAddress: filteredList[x]
+                                                .propertyAddress,
+                                            bedroom: filteredList[x].bedroom,
+                                            propertyCategory: filteredList[x]
+                                                .propertyCategory,
+                                            price: formatedPrice,
+                                            isPromoted:
+                                                filteredList[x].isPromoted,
+                                            propertyName: filteredList[x]
+                                                .propertyName
+                                                .toString(),
                                           ),
                                           const SizedBox(height: 5),
                                         ],

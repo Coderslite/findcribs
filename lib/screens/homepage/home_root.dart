@@ -15,7 +15,6 @@ import 'package:findcribs/screens/chat_screen/chat_screen.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_page.dart';
 import 'package:findcribs/screens/homepage/homepage_screen.dart';
 import 'package:findcribs/screens/listing_process/get_started.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:findcribs/screens/story/story_list.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,8 +27,6 @@ import 'package:http/http.dart' as http;
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:socket_io_client/socket_io_client.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:upgrader/upgrader.dart';
 
 import '../../controller/get_chat_controller.dart';
@@ -140,7 +137,7 @@ class _HomePageRootState extends State<HomePageRoot> {
             btnOkText: "Update now",
             btnOkOnPress: () {
               print("update button clicked");
-              Get.off(PersonalInformationScreen());
+              Get.off(const PersonalInformationScreen());
             },
           ).show();
         } else {
@@ -476,7 +473,7 @@ class _HomePageRootState extends State<HomePageRoot> {
       var responseData = jsonResponse['data']['profile'];
       if (responseData['agent'] != null) {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return SelectListingType();
+          return const SelectListingType();
         }));
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {

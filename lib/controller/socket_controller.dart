@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -35,7 +37,7 @@ class SocketController extends GetxController {
       "ERROR",
       (data) {
         var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
+        print("Error  ${errorMessage['message']}");
         print(data);
       },
     );

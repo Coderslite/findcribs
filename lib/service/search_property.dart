@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:findcribs/components/constants.dart';
@@ -11,7 +13,7 @@ Future<List<HouseListModel>> getSearchedProperty(
   print("$area area");
   print("$search search");
   var response = await http.get(Uri.parse(
-      "$baseUrl/search-listing?state=$state&area=$area&search=$search&page=$page&size=4"));
+      "$baseUrl/search-listing?state=$state&lga=$area&search=$search&page=$page&size=4"));
   var responseData = jsonDecode(response.body);
   if (responseData['status'] == true) {
     List house = responseData['data']['listing'];

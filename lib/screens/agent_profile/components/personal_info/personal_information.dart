@@ -1087,7 +1087,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         dismissOnBackKeyPress: false,
         headerAnimationLoop: false,
         animType: AnimType.bottomSlide,
-        desc: "Images Updated Successfullyg",
+        desc: "Images Updated Successfully",
         showCloseIcon: true,
         btnOkOnPress: () {},
       ).show();

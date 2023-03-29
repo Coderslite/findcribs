@@ -32,6 +32,7 @@ class SaleListingController extends GetxController {
   var propertyCategory = ''.obs;
   var propertyType = ''.obs;
   var location = ''.obs;
+  var lga = ''.obs;
   var negotiable = 0.obs;
   var myImages = [].obs;
   var newfiles = [].obs;
@@ -77,6 +78,7 @@ class SaleListingController extends GetxController {
     propertyCategory.value = '';
     propertyType.value = '';
     location.value = '';
+    lga.value = '';
     negotiable.value = 0;
     myImages.value = [];
     newfiles.value = [];

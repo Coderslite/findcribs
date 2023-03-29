@@ -24,7 +24,6 @@ import '../../components/constants.dart';
 import '../homepage/single_property.dart';
 import '../listing_process/get_started.dart';
 import '../listing_process/listing/components/rent/rent1.dart';
-import '../listing_process/listing/select_listing_type.dart';
 import '../product_details/product_details.dart';
 
 class ApartmentScreen extends StatefulWidget {
@@ -984,37 +983,27 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                           formatter.format(price);
                                       return Column(
                                         children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return ProductDetails(
-                                                  id: filteredList[x].id,
-                                                );
-                                              }));
-                                            },
-                                            child: SingleProperty(
-                                              id: filteredList[x].id,
-                                              image: filteredList[x].image,
-                                              designType:
-                                                  filteredList[x].designType,
-                                              currency:
-                                                  filteredList[x].currency,
-                                              propertyType:
-                                                  filteredList[x].propertyType,
-                                              propertyAddress: filteredList[x]
-                                                  .propertyAddress,
-                                              bedroom: filteredList[x].bedroom,
-                                              propertyCategory: filteredList[x]
-                                                  .propertyCategory,
-                                              price: formatedPrice,
-                                              isPromoted:
-                                                  filteredList[x].isPromoted,
-                                              propertyName: filteredList[x]
-                                                  .propertyName
-                                                  .toString(),
-                                            ),
+                                          SingleProperty(
+                                            comingFrom: 'Apartment',
+                                            id: filteredList[x].id,
+                                            image: filteredList[x].image,
+                                            designType:
+                                                filteredList[x].designType,
+                                            currency:
+                                                filteredList[x].currency,
+                                            propertyType:
+                                                filteredList[x].propertyType,
+                                            propertyAddress: filteredList[x]
+                                                .propertyAddress,
+                                            bedroom: filteredList[x].bedroom,
+                                            propertyCategory: filteredList[x]
+                                                .propertyCategory,
+                                            price: formatedPrice,
+                                            isPromoted:
+                                                filteredList[x].isPromoted,
+                                            propertyName: filteredList[x]
+                                                .propertyName
+                                                .toString(),
                                           ),
                                           const SizedBox(height: 5),
                                         ],
@@ -1119,7 +1108,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       var responseData = jsonResponse['data']['profile'];
       if (responseData['agent'] != null) {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return Rent1();
+          return const Rent1();
         }));
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {

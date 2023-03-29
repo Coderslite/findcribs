@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison, avoid_print
 
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent3.dart';
 import 'package:findcribs/screens/listing_process/listing/components/rent/rent3_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -410,10 +409,21 @@ class _Rent2StepperState extends State<Rent2Stepper> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             children: [
-              const Text(
-                "Rent Listing",
-                style: TextStyle(fontSize: 20),
-              ),
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
+                      "Rent Listing",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text("")
+                  ],
+                ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1251,58 +1261,22 @@ class _Rent2StepperState extends State<Rent2Stepper> {
       if (rentListingController.otherCharges.string == 'Yes') {
         formKey2.currentState!.save();
         var formData = formKey2.currentState!.value;
-        String agencyFee = selecteRentAgencyFee == 0
-            ? '0'
-            : selecteRentAgencyFee == 1
-                ? '5'
-                : selecteRentAgencyFee == 2
-                    ? '10'
-                    : selecteRentAgencyFee == 3
-                        ? '15'
-                        : '20';
 
-        String legalFee = selecteRentLegalFee == 0
-            ? '0'
-            : selecteRentLegalFee == 1
-                ? '5'
-                : selecteRentLegalFee == 2
-                    ? '10'
-                    : selecteRentLegalFee == 3
-                        ? '15'
-                        : '20';
 
         print(formData);
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return Rent3Stepper();
+          return const Rent3Stepper();
         }));
       } else {
         if (rentFeeFormKey.currentState!.validate() &&
             cautionFeeFormKey.currentState!.validate() &&
             serviceChargeFormKey.currentState!.validate()) {
           var formData = formKey2.currentState!.value;
-          String agencyFee = selecteRentAgencyFee == 0
-              ? '0'
-              : selecteRentAgencyFee == 1
-                  ? '5'
-                  : selecteRentAgencyFee == 2
-                      ? '10'
-                      : selecteRentAgencyFee == 3
-                          ? '15'
-                          : '20';
 
-          String legalFee = selecteRentLegalFee == 0
-              ? '0'
-              : selecteRentLegalFee == 1
-                  ? '5'
-                  : selecteRentLegalFee == 2
-                      ? '10'
-                      : selecteRentLegalFee == 3
-                          ? '15'
-                          : '20';
 
           print(formData);
           Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return Rent3Stepper();
+            return const Rent3Stepper();
           }));
         }
       }

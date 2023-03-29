@@ -106,8 +106,8 @@ class _SingleActiveListingState extends State<SingleActiveListing> {
                     children: [
                       Text(
                         widget.currency.toString() == 'Naira'
-                            ? "NG " + widget.formattedPrice.toString()
-                            : "\$ " + widget.formattedPrice.toString(),
+                            ? "NG ${widget.formattedPrice}"
+                            : "\$ ${widget.formattedPrice}",
                         style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w700,

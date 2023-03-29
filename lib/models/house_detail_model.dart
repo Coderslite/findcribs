@@ -41,8 +41,8 @@ class HouseDetailModel {
   bool? negotiable;
   String? availability;
   String? propertyCondition;
+  String? facilities; 
   String? propertyName;
-  String? facilities;
 
   HouseDetailModel({
     this.id,
@@ -81,14 +81,14 @@ class HouseDetailModel {
     this.agentFirstName,
     this.agentLastName,
     this.agentCategory,
-    this.managedBy,
     this.profilePic,
+    this.managedBy,     
     this.hasDocument,
     this.negotiable,
     this.availability,
     this.propertyCondition,
+    this.facilities, 
     this.propertyName,
-    this.facilities,
   });
 
   factory HouseDetailModel.fromJson(Map<String, dynamic> json) {
@@ -135,8 +135,8 @@ class HouseDetailModel {
       negotiable: json['negotiable'],
       availability: json['agent']['availability'],
       propertyCondition: json['property_condition'],
+      facilities: json['facilities'],                     
       propertyName: json['property_name'],
-      facilities: json['facilities'],
     );
   }
 }

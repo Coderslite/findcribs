@@ -4,17 +4,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../components/constants.dart';
 import '../../../../../controller/sale_listing_controller.dart';
 import '../../../../homepage/home_root.dart';
-import '../../select_listing_type.dart';
 
 class Sale4Stepper extends StatefulWidget {
   final String? propertyCategory;
@@ -70,8 +67,6 @@ class Sale4Stepper extends StatefulWidget {
 }
 
 class _Sale4StepperState extends State<Sale4Stepper> {
-  final ImagePicker _picker = ImagePicker();
-
   final _formKey4 = GlobalKey<FormBuilderState>();
   List images = [];
   List<File> files = [];
@@ -100,6 +95,21 @@ class _Sale4StepperState extends State<Sale4Stepper> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
+                      "Sale Listing",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    const Text("")
+                  ],
+                ),
                 const Text(
                   "Sale Listing",
                   style: TextStyle(fontSize: 20),
@@ -185,9 +195,7 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                           InkWell(
                             onTap: () {
                               // handleGetImage();
-                              setState(() {
-                                getImage();
-                              });
+                              saleListingController.getImage();
                             },
                             child: AnimatedContainer(
                               padding: const EdgeInsets.all(8),
@@ -377,18 +385,18 @@ class _Sale4StepperState extends State<Sale4Stepper> {
   //   }
   // }
 
-  getImage() async {
-    final List<XFile> image = (await _picker.pickMultiImage());
+  // getImage() async {
+  //   final List<XFile> image = (await _picker.pickMultiImage());
 
-    if (mounted) {
-      setState(() {
-        for (var img in image) {
-          newfiles.add(File(img.path));
-          saleListingController.newfiles.add(File(img.path));
-        }
-      });
-    }
-  }
+  //   if (mounted) {
+  //     setState(() {
+  //       for (var img in image) {
+  //         newfiles.add(File(img.path));
+  //         saleListingController.newfiles.add(File(img.path));
+  //       }
+  //     });
+  //   }
+  // }
 
   Future handlePublish() async {
     if (_formKey4.currentState!.validate()) {
@@ -503,8 +511,10 @@ class _Sale4StepperState extends State<Sale4Stepper> {
               saleListingController.propertyCategory.value.toString();
           request.fields['property_type'] = "sale";
           request.fields['status'] = 'Active';
-          request.fields['location'] =
+          request.fields['state'] =
               saleListingController.location.value.toString();
+          request.fields['lga'] = saleListingController.lga.value.toString();
+          request.fields['country'] = 'Nigeria';
           request.fields['negotiable'] =
               saleListingController.negotiable.value == 1 ? '1' : '0';
           request.fields['hasDocuments'] =
@@ -779,6 +789,8 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                   : '${saleListingController.saleCommission.value}'.toString();
           request.fields['state'] =
               saleListingController.location.value.toString();
+          request.fields['lga'] = saleListingController.lga.value.toString();
+          request.fields['country'] = 'Nigeria';
           request.fields['total_area_of_land'] =
               saleListingController.totalArea.value.toString();
           request.fields['interior_design'] = 'Furnished';
