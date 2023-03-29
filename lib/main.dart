@@ -29,6 +29,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:system_settings/system_settings.dart';
 
+import 'firebase_options.dart';
 import 'screens/homepage/home_root.dart';
 import 'screens/story/story_camera.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -153,7 +154,9 @@ Future<void> main() async {
       android: initializationSettingsAndroid, macOS: null, iOS: initializationSettingsDarwin);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   if (!kIsWeb) {
     await setupFlutterNotifications();

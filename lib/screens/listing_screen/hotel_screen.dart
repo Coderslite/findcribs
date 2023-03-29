@@ -212,70 +212,70 @@ class _HotelScreenState extends State<HotelScreen> {
                                 left: 20, right: 20, top: 20),
                             height: 250,
                             child: Column(children: [
-                              OutlinedButton(
-                                onPressed: () {},
-                                child: SizedBox(
-                                  height: mobileHeight * .08,
-                                  width: mobileWidth * 99,
-                                  child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'lib/assets/icons/goog_le.png',
-                                          height: 23,
-                                          width: 30,
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 8),
-                                          child: Text(
-                                            'Continue with Google',
-                                            style: TextStyle(
-                                                color: mobileTextColor,
-                                                fontFamily:
-                                                    'RedHatDisplayLight',
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        )
-                                      ]),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              OutlinedButton(
-                                onPressed: () {},
-                                child: SizedBox(
-                                  height: mobileHeight * .08,
-                                  width: mobileWidth * 99,
-                                  child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'lib/assets/icons/fb.png',
-                                          height: 25,
-                                          width: 30,
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 8),
-                                          child: Text(
-                                            'Continue with Facebook',
-                                            style: TextStyle(
-                                                color: mobileTextColor,
-                                                fontFamily:
-                                                    'RedHatDisplayLight',
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        )
-                                      ]),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                              // OutlinedButton(
+                              //   onPressed: () {},
+                              //   child: SizedBox(
+                              //     height: mobileHeight * .08,
+                              //     width: mobileWidth * 99,
+                              //     child: Row(
+                              //         mainAxisSize: MainAxisSize.min,
+                              //         mainAxisAlignment:
+                              //             MainAxisAlignment.center,
+                              //         children: [
+                              //           Image.asset(
+                              //             'lib/assets/icons/goog_le.png',
+                              //             height: 23,
+                              //             width: 30,
+                              //           ),
+                              //           const Padding(
+                              //             padding: EdgeInsets.only(left: 8),
+                              //             child: Text(
+                              //               'Continue with ',
+                              //               style: TextStyle(
+                              //                   color: mobileTextColor,
+                              //                   fontFamily:
+                              //                       'RedHatDisplayLight',
+                              //                   fontWeight: FontWeight.w600),
+                              //             ),
+                              //           )
+                              //         ]),
+                              //   ),
+                              // ),
+                              // const SizedBox(
+                              //   height: 20,
+                              // ),
+                              // OutlinedButton(
+                              //   onPressed: () {},
+                              //   child: SizedBox(
+                              //     height: mobileHeight * .08,
+                              //     width: mobileWidth * 99,
+                              //     child: Row(
+                              //         mainAxisSize: MainAxisSize.min,
+                              //         mainAxisAlignment:
+                              //             MainAxisAlignment.center,
+                              //         children: [
+                              //           Image.asset(
+                              //             'lib/assets/icons/fb.png',
+                              //             height: 25,
+                              //             width: 30,
+                              //           ),
+                              //           const Padding(
+                              //             padding: EdgeInsets.only(left: 8),
+                              //             child: Text(
+                              //               'Continue with Facebook',
+                              //               style: TextStyle(
+                              //                   color: mobileTextColor,
+                              //                   fontFamily:
+                              //                       'RedHatDisplayLight',
+                              //                   fontWeight: FontWeight.w600),
+                              //             ),
+                              //           )
+                              //         ]),
+                              //   ),
+                              // ),
+                              // const SizedBox(
+                              //   height: 20,
+                              // ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

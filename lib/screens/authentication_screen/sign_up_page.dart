@@ -24,9 +24,9 @@ class EmailScreen extends StatefulWidget {
 }
 
 class _EmailScreenState extends State<EmailScreen> {
-  // final GoogleSignIn _googleSignIn = GoogleSignIn(
+  // final SignIn _SignIn = SignIn(
   //   serverClientId:
-  //       '82498358652-u740omqt5f4lc9cvhfdsarhqd8b293ck.apps.googleusercontent.com',
+  //       '82498358652-u740omqt5f4lc9cvhfdsarhqd8b293ck.apps.usercontent.com',
   // );
 
   bool isLoading = false;
@@ -115,64 +115,64 @@ class _EmailScreenState extends State<EmailScreen> {
                   ),
                 ),
                 mobileSizedBoxHeight,
-                Row(children: [
-                  Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 10.0, right: 15.0),
-                        child: const Divider(
-                          thickness: 0.2,
-                          color: mobileTextSmallColor,
-                          // height: 5,
-                        )),
-                  ),
-                  const Text(
-                    "Or",
-                    style: TextStyle(
-                        fontFamily: 'RedHatDisplayLight',
-                        color: mobileTextSmallColor),
-                  ),
-                  Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 15.0, right: 10.0),
-                        child: const Divider(
-                          thickness: 0.2,
-                          color: mobileTextSmallColor,
-                          // height: 5,
-                        )),
-                  ),
-                ]),
+                // Row(children: [
+                //   Expanded(
+                //     child: Container(
+                //         margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                //         child: const Divider(
+                //           thickness: 0.2,
+                //           color: mobileTextSmallColor,
+                //           // height: 5,
+                //         )),
+                //   ),
+                //   const Text(
+                //     "Or",
+                //     style: TextStyle(
+                //         fontFamily: 'RedHatDisplayLight',
+                //         color: mobileTextSmallColor),
+                //   ),
+                //   Expanded(
+                //     child: Container(
+                //         margin: const EdgeInsets.only(left: 15.0, right: 10.0),
+                //         child: const Divider(
+                //           thickness: 0.2,
+                //           color: mobileTextSmallColor,
+                //           // height: 5,
+                //         )),
+                //   ),
+                // ]),
                 mobileSizedBoxHeight,
-                OutlinedButton(
-                  onPressed: () {
-                    loginController.handleGoogleSignin();
-                  },
-                  child: SizedBox(
-                    height: mobileHeight * .08,
-                    width: mobileWidth * 99,
-                    child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'lib/assets/icons/goog_le.png',
-                            height: 23,
-                            width: 30,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: loginController.isLoading.isTrue
-                                ? JumpingDotsProgressIndicator()
-                                : const Text(
-                                    'Continue with Google',
-                                    style: TextStyle(
-                                        color: mobileTextColor,
-                                        fontFamily: 'RedHatDisplayLight',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                          )
-                        ]),
-                  ),
-                ),
+                // OutlinedButton(
+                //   onPressed: () {
+                //     loginController.handleSignin();
+                //   },
+                //   child: SizedBox(
+                //     height: mobileHeight * .08,
+                //     width: mobileWidth * 99,
+                //     child: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           Image.asset(
+                //             'lib/assets/icons/goog_le.png',
+                //             height: 23,
+                //             width: 30,
+                //           ),
+                //           Padding(
+                //             padding: const EdgeInsets.only(left: 8),
+                //             child: loginController.isLoading.isTrue
+                //                 ? JumpingDotsProgressIndicator()
+                //                 : const Text(
+                //                     'Continue with ',
+                //                     style: TextStyle(
+                //                         color: mobileTextColor,
+                //                         fontFamily: 'RedHatDisplayLight',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //           )
+                //         ]),
+                //   ),
+                // ),
                 // mobileSizedBoxHeight2,
                 // OutlinedButton(
                 //   onPressed: () {
