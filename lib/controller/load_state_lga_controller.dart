@@ -31,7 +31,7 @@ class LoadStateLgaController extends GetxController {
             estateListingController.location.toLowerCase().toString())
         .toList();
     lga.value = lga[0]['lgas'];
-    estateListingController.lga.value = lga[0];
+    estateListingController.lga.value = '';
     print(lga[0]);
   }
 
@@ -42,7 +42,7 @@ class LoadStateLgaController extends GetxController {
             rentListingController.location.toLowerCase().toString())
         .toList();
     lga.value = lga[0]['lgas'];
-    rentListingController.lga.value = lga[0];
+    rentListingController.lga.value = '';
     print(lga[0]);
   }
 
@@ -53,7 +53,7 @@ class LoadStateLgaController extends GetxController {
             saleListingController.location.toLowerCase().toString())
         .toList();
     lga.value = lga[0]['lgas'];
-    saleListingController.lga.value = lga[0];
+    saleListingController.lga.value = '';
     print(lga[0]);
   }
 

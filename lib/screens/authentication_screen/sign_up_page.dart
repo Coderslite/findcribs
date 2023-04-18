@@ -235,22 +235,24 @@ class _EmailScreenState extends State<EmailScreen> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
-                                    navigateIndex: 0,
-                                  )));
-                    },
-                    child: const Text('Skip',
-                        style: TextStyle(
-                            fontFamily: 'RedHatDisplay',
-                            color: mobileButtonColor)),
-                  ),
-                ),
+                // Center(
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Navigator.pushReplacement(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => HomePageRoot(
+                //                     navigateIndex: 0,
+                //                   )));
+                //     },
+                //     child: const Text('Skip',
+                //         style: TextStyle(
+                //             fontFamily: 'RedHatDisplay',
+                //             color: mobileButtonColor
+                //         )
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

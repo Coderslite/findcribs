@@ -30,16 +30,19 @@ class GetAllChatController extends GetxController {
               .compareTo(b.lastMessage!['createdAt']);
         },
       );
+      handleGetUnreadMessages();
     });
 
-    // allAvailableChats.sort(
-    //   (a, b) {
-    //     return a.lastMessage!['createdAt']
-    //         .compareTo(b.lastMessage!['createdAt']);
-    //   },
-    // );
-
     isLoading.value = false;
+  }
+
+  handleGetUnreadMessages() {
+    filteredUnreadMessage.value = [];
+    for (int x = 0; x < allAvailableChats.length; x++) {
+      if (allAvailableChats[x].count['messages'] > 0) {
+        filteredUnreadMessage.add(allAvailableChats[x]);
+      }
+    }
   }
 
   handleSearchChat(String value, int id) {

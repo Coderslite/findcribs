@@ -165,6 +165,13 @@ class _Search_ScreenState extends State<Search_Screen> {
   }
 
   @override
+  void dispose() {
+    searchListingController.location.value = '';
+    searchListingController.lga.value = '';
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
@@ -597,8 +604,12 @@ class _Search_ScreenState extends State<Search_Screen> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                searchListingController.lga.value =
-                                    loadStateLgaController.lga[index];
+                                setState(() {
+                                  searchListingController.lga.value =
+                                      loadStateLgaController.lga[index];
+                                  area = loadStateLgaController.lga[index]
+                                      .toString();
+                                });
                                 Navigator.pop(context);
                               },
                               child: ListTile(

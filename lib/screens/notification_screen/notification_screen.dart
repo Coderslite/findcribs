@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
-import 'package:findcribs/screens/notification_screen/get_all_notificaton_controller.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
 import 'package:findcribs/service/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../controller/get_notification_controller.dart';
 import '../../models/notification_model.dart';
 import 'package:http/http.dart' as http;
 

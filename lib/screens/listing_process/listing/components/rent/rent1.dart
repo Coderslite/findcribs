@@ -9,6 +9,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 
 import '../../../../../controller/rent_listing_controller.dart';
+import '../../../../homepage/home_root.dart';
 
 class Rent1 extends StatefulWidget {
   const Rent1({Key? key}) : super(key: key);
@@ -1408,7 +1409,7 @@ class _Rent1State extends State<Rent1> {
                   children: [
                     InkWell(
                         onTap: () {
-                          Navigator.pop(context);
+                          Get.to(const HomePageRoot(navigateIndex: 0));
                         },
                         child: const Icon(Icons.arrow_back_ios)),
                     const Text(

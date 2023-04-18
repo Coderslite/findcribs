@@ -67,23 +67,45 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     propertyList = getPropertyListCategory(widget.apartmentType, page);
     propertyList.then((value) {
       filteredList = [];
+      setState(() {
+        isLoading = true;
+        propertyList = filterPropertyCategory(
+            filterApartmentController.propertyType.string == 'All'
+                ? ""
+                : filterApartmentController.propertyType.string,
+            minPrice == 0 ? "" : minPrice.toString(),
+            maxPrice == 0 ? "" : maxPrice.toString(),
+            widget.apartmentType,
+            _livingroomSize.toInt() == 0 ? "" : _livingroomSize.toString(),
+            _bathroomSize.toInt() == 0 ? "" : _bathroomSize.toString(),
+            _bedroomSize.toInt() == 0 ? "" : _bedroomSize.toString(),
+            _kitchenSize.toInt() == 0 ? "" : _kitchenSize.toString(),
+            filterApartmentController.state.toString() == 'Nigeria'
+                ? ''
+                : filterApartmentController.state.toString(),
+            page);
+        propertyList.then((value) {
+          filteredList = [];
 
-      // print(value);
-      if (value.isEmpty) {
-        setState(() {
-          isLoading = false;
-          _hasNextPage = false;
-          _isLoadMoreRunning = false;
-        });
-      } else {
-        setState(() {
-          firstList = value;
-          isLoading = false;
-          for (int s = 0; s < value.length; s++) {
-            filteredList.add(value[s]);
+          // print(value);
+          if (value.isEmpty) {
+            print("empty");
+            setState(() {
+              isLoading = false;
+              _hasNextPage = false;
+              _isLoadMoreRunning = false;
+            });
+          } else {
+            setState(() {
+              firstList = value;
+              isLoading = false;
+              for (int s = 0; s < value.length; s++) {
+                filteredList.add(value[s]);
+              }
+            });
           }
         });
-      }
+      });
     });
   }
 
@@ -140,162 +162,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     }
   }
 
-  handleFilter() {
-    print("filter");
-    print(filterApartmentController.propertyType);
-    setState(() {
-      isLoading = true;
-      propertyList = filterPropertyCategory(
-          filterApartmentController.propertyType.string == 'All'
-              ? ""
-              : filterApartmentController.propertyType.string,
-          minPrice == 0 ? "" : minPrice.toString(),
-          maxPrice == 0 ? "" : maxPrice.toString(),
-          widget.apartmentType,
-          _livingroomSize.toInt() == 0 ? "" : _livingroomSize.toString(),
-          _bathroomSize.toInt() == 0 ? "" : _bathroomSize.toString(),
-          _bedroomSize.toInt() == 0 ? "" : _bedroomSize.toString(),
-          _kitchenSize.toInt() == 0 ? "" : _kitchenSize.toString(),
-          filterApartmentController.state.toString() == 'Nigeria'
-              ? ''
-              : filterApartmentController.state.toString(),
-          page);
-      propertyList.then((value) {
-        filteredList = [];
-
-        // print(value);
-        if (value.isEmpty) {
-          print("empty");
-          setState(() {
-            isLoading = false;
-            _hasNextPage = false;
-            _isLoadMoreRunning = false;
-          });
-        } else {
-          setState(() {
-            firstList = value;
-            isLoading = false;
-            for (int s = 0; s < value.length; s++) {
-              filteredList.add(value[s]);
-            }
-          });
-        }
-      });
-    });
-  }
-
-  handleGetMoreSearchedProperties() {
-    propertyList = filterPropertyCategory(
-        filterApartmentController.propertyType.string == 'All'
-            ? ""
-            : filterApartmentController.propertyType.string,
-        minPrice == 0 ? "" : minPrice.toString(),
-        maxPrice == 0 ? "" : maxPrice.toString(),
-        widget.apartmentType,
-        _livingroomSize.toInt() == 0 ? "" : _livingroomSize.toString(),
-        _bathroomSize.toInt() == 0 ? "" : _bathroomSize.toString(),
-        _bedroomSize.toInt() == 0 ? "" : _bedroomSize.toString(),
-        _kitchenSize.toInt() == 0 ? "" : _kitchenSize.toString(),
-        filterApartmentController.state.toString() == 'Nigeria'
-            ? ''
-            : filterApartmentController.state.toString(),
-        page);
-    propertyList.then((value) {
-      // print(value);
-      if (value.isEmpty) {
-        setState(() {
-          isLoading = false;
-          _hasNextPage = false;
-          _isLoadMoreRunning = false;
-        });
-      } else {
-        setState(() {
-          firstList = value;
-          isLoading = false;
-          for (int s = 0; s < value.length; s++) {
-            filteredList.add(value[s]);
-          }
-        });
-      }
-    });
-  }
-
-  void _loadMoreSearched() async {
-    if (_hasNextPage == true &&
-        isLoading == false &&
-        _isLoadMoreRunning == false &&
-        _controller.position.extentAfter < 600) {
-      setState(() {
-        // Display a progress indicator at the bottom
-        _isLoadMoreRunning = true;
-        page += 1;
-      });
-      propertyList = filterPropertyCategory(
-          filterApartmentController.propertyType.string == 'All'
-              ? ""
-              : filterApartmentController.propertyType.string,
-          minPrice == 0 ? "" : minPrice.toString(),
-          maxPrice == 0 ? "" : maxPrice.toString(),
-          widget.apartmentType,
-          _livingroomSize.toInt() == 0 ? "" : _livingroomSize.toString(),
-          _bathroomSize.toInt() == 0 ? "" : _bathroomSize.toString(),
-          _bedroomSize.toInt() == 0 ? "" : _bedroomSize.toString(),
-          _kitchenSize.toInt() == 0 ? "" : _kitchenSize.toString(),
-          filterApartmentController.state.toString() == 'Nigeria'
-              ? ''
-              : filterApartmentController.state.toString(),
-          page);
-      propertyList.then((value) {
-        // print(value);
-        if (value.isEmpty) {
-          setState(() {
-            isLoading = false;
-            _hasNextPage = false;
-            _isLoadMoreRunning = true;
-          });
-        } else {
-          setState(() {
-            firstList = value;
-            isLoading = false;
-            for (int s = 0; s < value.length; s++) {
-              filteredList.add(value[s]);
-            }
-          });
-        }
-      });
-    } else {
-      // print("Nothing is loading");
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-    }
-  }
-
-  _searchedScrollListener() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the bottom";
-        _loadMoreSearched();
-      });
-    }
-    if (_controller.offset <= _controller.position.minScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the top";
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     handleGetProperties();
     _controller = ScrollController();
-    _controller.addListener(
-        filterApartmentController.propertyType.string == "All"
-            ? _scrollListener
-            : _searchedScrollListener);
+    _controller.addListener(_scrollListener);
   }
 
   @override
@@ -425,7 +297,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                             eachPropertyType[
                                                                 index];
                                                         print("object");
-                                                        handleFilter();
+                                                        handleGetProperties();
                                                       });
                                                       Navigator.pop(context);
                                                     },
@@ -522,7 +394,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                     onChanged: (dynamic value) {
                                                       setState(() {
                                                         _bedroomSize = value;
-                                                        handleFilter();
+                                                        handleGetProperties();
                                                       });
                                                     },
                                                   ),
@@ -540,7 +412,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                     onChanged: (dynamic value) {
                                                       setState(() {
                                                         _bathroomSize = value;
-                                                        handleFilter();
+                                                        handleGetProperties();
                                                       });
                                                     },
                                                   ),
@@ -559,7 +431,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                     onChanged: (dynamic value) {
                                                       setState(() {
                                                         _livingroomSize = value;
-                                                        handleFilter();
+                                                        handleGetProperties();
                                                       });
                                                     },
                                                   ),
@@ -577,7 +449,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                     onChanged: (dynamic value) {
                                                       setState(() {
                                                         _kitchenSize = value;
-                                                        handleFilter();
+                                                        handleGetProperties();
                                                       });
                                                     },
                                                   ),
@@ -702,12 +574,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                                         .isEmpty) {
                                                                       minPrice =
                                                                           0;
-                                                                      // handleFilter();
+                                                                      //handleGetProperties();
                                                                     } else {
                                                                       minPrice =
                                                                           int.parse(
                                                                               value.toString());
-                                                                      // handleFilter();
+                                                                      //handleGetProperties();
                                                                     }
                                                                   },
                                                                 );
@@ -739,12 +611,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                                         .isEmpty) {
                                                                       maxPrice =
                                                                           0;
-                                                                      // handleFilter();
+                                                                      //handleGetProperties();
                                                                     } else {
                                                                       maxPrice =
                                                                           int.parse(
                                                                               value.toString());
-                                                                      // handleFilter();
+                                                                      //handleGetProperties();
                                                                     }
                                                                   },
                                                                 );
@@ -765,7 +637,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                             mobileWidth * 0.69,
                                                         child: ElevatedButton(
                                                           onPressed: () {
-                                                            handleFilter();
+                                                            handleGetProperties();
 
                                                             Navigator.pop(
                                                                 context);
@@ -868,7 +740,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                                                 .state.value =
                                                             eachState[index];
                                                       });
-                                                      handleFilter();
+                                                      handleGetProperties();
                                                       Navigator.pop(context);
                                                     },
                                                     child: ListTile(
@@ -989,12 +861,11 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                             image: filteredList[x].image,
                                             designType:
                                                 filteredList[x].designType,
-                                            currency:
-                                                filteredList[x].currency,
+                                            currency: filteredList[x].currency,
                                             propertyType:
                                                 filteredList[x].propertyType,
-                                            propertyAddress: filteredList[x]
-                                                .propertyAddress,
+                                            propertyAddress:
+                                                filteredList[x].propertyAddress,
                                             bedroom: filteredList[x].bedroom,
                                             propertyCategory: filteredList[x]
                                                 .propertyCategory,

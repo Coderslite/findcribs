@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:findcribs/controller/user_favorited_agent_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
@@ -8,18 +7,14 @@ import 'package:findcribs/models/user_favourite_listing.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_agent.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_listings.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
-import 'package:findcribs/service/favourited_agent_service.dart';
 import 'package:findcribs/service/user_favourited_listing_service.dart';
 import 'package:findcribs/widgets/agent_listings.dart';
 import 'package:flutter/material.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_indicators/progress_indicators.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../controller/connectivity_controller.dart';
-import '../../models/user_favourite_agent.dart';
 import '../../widgets/property_listings.dart';
 import '../homepage/home_root.dart';
 
@@ -34,16 +29,11 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
   List<UserFavouritedListingModel> filteredFavouritePropertyList = [];
   List<UserFavouritedListingModel> firstFavouritePropertyList = [];
   late Future<List<UserFavouritedListingModel>> favouritePropertyList;
-  late Future<List<UserFavouriteAgentModel>> agentList;
-  List<UserFavouriteAgentModel> firstAgentList = [];
-  List<UserFavouriteAgentModel> filteredAgentList = [];
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
   @override
   void initState() {
     super.initState();
-    // handleGetFavouriteListing();
-    handleGetFavouriteAgent();
   }
 
   handleGetFavouriteListing() {
@@ -58,17 +48,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
     });
   }
 
-  handleGetFavouriteAgent() {
-    agentList = getMyFavouriteAgentList();
-    agentList.then((value) {
-      // print(value);
-      if (mounted) {
-        setState(() {
-          firstAgentList = filteredAgentList = value;
-        });
-      }
-    });
-  }
+
 
   ConnectivityController connectivityController =
       Get.put(ConnectivityController());
@@ -203,20 +183,12 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                             style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(86, 25),
                                 primary: mobileButtonColor),
-                            child: VisibilityDetector(
-                              key: UniqueKey(),
-                              onVisibilityChanged: (info) {
-                                userFavouritedListingController
-                                    .handleGetFavouritedListing();
-                                // handleGetFavouriteAgent();
-                              },
-                              child: const Text(
-                                'View All',
-                                style: TextStyle(
-                                    fontFamily: 'RedHatDisplay',
-                                    color: mobileButtonTextColor,
-                                    fontSize: 12),
-                              ),
+                            child: const Text(
+                              'View All',
+                              style: TextStyle(
+                                  fontFamily: 'RedHatDisplay',
+                                  color: mobileButtonTextColor,
+                                  fontSize: 12),
                             ),
                           )
                         ],

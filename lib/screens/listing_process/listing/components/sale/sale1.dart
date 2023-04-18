@@ -8,6 +8,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 
+import '../../../../homepage/home_root.dart';
+
 class Sale1 extends StatefulWidget {
   const Sale1({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class Sale1 extends StatefulWidget {
 }
 
 class _Sale1State extends State<Sale1> {
-   final _formKey1 = GlobalKey<FormBuilderState>();
+  final _formKey1 = GlobalKey<FormBuilderState>();
   bool hide = true;
 
   int? selecteRentBedroom;
@@ -1382,21 +1384,21 @@ class _Sale1State extends State<Sale1> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             children: [
-                  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(Icons.arrow_back_ios)),
-                    const Text(
-                      "Sale Listing",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  const  Text("")
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Get.to(const HomePageRoot(navigateIndex: 0));
+                      },
+                      child: const Icon(Icons.arrow_back_ios)),
+                  const Text(
+                    "Sale Listing",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const Text("")
+                ],
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1640,7 +1642,7 @@ class _Sale1State extends State<Sale1> {
                                       ),
                                     ),
                                   ),
-      
+
                             const SizedBox(
                               height: 20,
                             ),
@@ -1653,8 +1655,8 @@ class _Sale1State extends State<Sale1> {
                                       FormBuilderValidators.required(context),
                                     ]),
                                     onChanged: (value) {
-                                      saleListingController.interiorDesign.value =
-                                          value.toString();
+                                      saleListingController.interiorDesign
+                                          .value = value.toString();
                                     },
                                     items: [
                                       "Furnished",
@@ -1682,8 +1684,8 @@ class _Sale1State extends State<Sale1> {
                                     initialValue: saleListingController
                                         .interiorDesign.value,
                                     onChanged: (value) {
-                                      saleListingController.interiorDesign.value =
-                                          value.toString();
+                                      saleListingController.interiorDesign
+                                          .value = value.toString();
                                     },
                                     items: [
                                       "Furnished",
@@ -1716,7 +1718,8 @@ class _Sale1State extends State<Sale1> {
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentBedroomItems.length,
                                   (index) {
@@ -1747,7 +1750,8 @@ class _Sale1State extends State<Sale1> {
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentBathroomItems.length,
                                   (index) {
@@ -1778,7 +1782,8 @@ class _Sale1State extends State<Sale1> {
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentLivingRoomItems.length,
                                   (index) {
@@ -1809,7 +1814,8 @@ class _Sale1State extends State<Sale1> {
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   rentKitchenItems.length,
                                   (index) {
@@ -1842,9 +1848,11 @@ class _Sale1State extends State<Sale1> {
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                         left:
-                                            MediaQuery.of(context).size.width / 5,
+                                            MediaQuery.of(context).size.width /
+                                                5,
                                         right:
-                                            MediaQuery.of(context).size.width / 5,
+                                            MediaQuery.of(context).size.width /
+                                                5,
                                         top: 4.5,
                                         bottom: 4.5,
                                       ),

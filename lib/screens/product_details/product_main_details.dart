@@ -18,18 +18,23 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../controller/get_chat_controller.dart';
 import '../../controller/get_single_property_listing.dart';
+import '../../controller/property_view_controller.dart';
+import '../../controller/share_link_controller.dart';
 import '../../controller/user_favourited_listing_controller.dart';
 import '../../models/house_list_model.dart';
 import '../../models/user_favourite_listing.dart';
 import '../../service/user_favourited_listing_service.dart';
 import '../../util/social_login.dart';
+import '../homepage/home_root.dart';
 
 // ignore: must_be_immutable
 class ProductMainDetails extends StatefulWidget {
+  final bool isDeepLinking;
   ProductMainDetails({
     Key? key,
     required this.panelOpened,
     this.id,
+    required this.isDeepLinking,
   }) : super(key: key);
   final bool panelOpened;
   int? id;
@@ -47,6 +52,9 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
   GetSinglePropertyController getSinglePropertyController =
       Get.put(GetSinglePropertyController());
+  ShareLinkController shareLinkController = Get.put(ShareLinkController());
+  PropertyViewController propertyViewController =
+      Get.put(PropertyViewController());
 
   final _controller = PageController(
     initialPage: 0,
@@ -91,7 +99,9 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
   @override
   void initState() {
     super.initState();
+    propertyViewController.handlePropertyView(widget.id!);
     handleGetLikedProperties();
+
     _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       if (_currentPage == images.length - 1) {
         end = true;
@@ -121,6 +131,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
   @override
   void dispose() {
     _controller.dispose();
+    shareLinkController.shareLink == '';
     getAllChatController.handleGetMessage();
 
     super.dispose();
@@ -137,6 +148,14 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
       } else {
         var property = getSinglePropertyController.singleProperty[0];
         int price = (property.rentalFee!.toInt());
+        shareLinkController.handleGenerateLink(
+            widget.id.toString(),
+            property.image[0]['url'].toString(),
+            property.propertyCategory == 'Estate Market'
+                ? property.propertyName.toString()
+                : property.propertyCategory.toString(),
+            property.description.toString());
+
         images = property.image!;
 
         var formatter = NumberFormat("#,###");
@@ -349,8 +368,8 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                       .handleLike(widget.id);
                             },
                             child: Container(
-                              width: 25,
-                              height: 25,
+                              width: 30,
+                              height: 30,
                               decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Color(0XFFF0F7F8)),
@@ -363,23 +382,34 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                       size: 16, color: Color(0XFF304059)),
                             ),
                           ),
-                          // const SizedBox(
-                          //   width: 20,
-                          // ),
-                          // Container(
-                          //   width: 25,
-                          //   height: 25,
-                          //   decoration: const BoxDecoration(
-                          //       shape: BoxShape.circle,
-                          //       color: Color(0XFFF0F7F8)),
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.all(5.0),
-                          //     child: SvgPicture.asset(
-                          //       "assets/svgs/share.svg",
-                          //       color: const Color(0XFF304059),
-                          //     ),
-                          //   ),
-                          // ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              shareLinkController.handleShareLink(
+                                  widget.id.toString(),
+                                  images[0],
+                                  property.propertyCategory == 'Estate Market'
+                                      ? property.propertyName.toString()
+                                      : property.propertyCategory.toString(),
+                                  property.description);
+                            },
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0XFFF0F7F8)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: SvgPicture.asset(
+                                  "assets/svgs/share.svg",
+                                  color: const Color(0XFF304059),
+                                ),
+                              ),
+                            ),
+                          ),
                           // const SizedBox(
                           //   width: 20,
                           // ),
@@ -419,8 +449,8 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                       .handleLike(widget.id);
                             },
                             child: Container(
-                              width: 25,
-                              height: 25,
+                              width: 30,
+                              height: 30,
                               decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Color(0XFFF0F7F8)),
@@ -433,23 +463,34 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                       size: 16, color: Color(0XFF304059)),
                             ),
                           ),
-                          // const SizedBox(
-                          //   height: 20,
-                          // ),
-                          // Container(
-                          //   width: 25,
-                          //   height: 25,
-                          //   decoration: const BoxDecoration(
-                          //       shape: BoxShape.circle,
-                          //       color: Color(0XFFF0F7F8)),
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.all(5.0),
-                          //     child: SvgPicture.asset(
-                          //       "assets/svgs/share.svg",
-                          //       color: const Color(0XFF304059),
-                          //     ),
-                          //   ),
-                          // ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              shareLinkController.handleShareLink(
+                                  widget.id.toString(),
+                                  images[0].toString(),
+                                  property.propertyCategory == 'Estate Market'
+                                      ? property.propertyName.toString()
+                                      : property.propertyCategory.toString(),
+                                  property.description.toString());
+                            },
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0XFFF0F7F8)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: SvgPicture.asset(
+                                  "assets/svgs/share.svg",
+                                  color: const Color(0XFF304059),
+                                ),
+                              ),
+                            ),
+                          ),
                           // const SizedBox(
                           //   height: 20,
                           // ),
@@ -475,11 +516,12 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                 left: 20,
                 child: GestureDetector(
                   onTap: () {
-                    // Navigator.pushReplacement(context,
-                    //     MaterialPageRoute(builder: (_) {
-                    //   return HomePageRoot(navigateIndex: 0);
-                    // }));
-                    Navigator.pop(context);
+                    widget.isDeepLinking.toString() == 'true'
+                        ? Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (_) {
+                            return HomePageRoot(navigateIndex: 0);
+                          }))
+                        : Navigator.pop(context);
                   },
                   child: Container(
                     width: 40,

@@ -8,6 +8,7 @@ import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/back_arrow.dart';
@@ -34,35 +35,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
   var passwordController2 = TextEditingController();
   bool isMatch = false;
 
-  //A function that validate user entered password
-  bool validatePassword(String pass) {
-    String _password = pass.trim();
-    if (_password.isEmpty) {
-      setState(() {
-        password_strength = 0;
-      });
-    } else if (_password.length < 6) {
-      setState(() {
-        password_strength = 1 / 4;
-      });
-    } else if (_password.length < 10) {
-      setState(() {
-        password_strength = 2 / 4;
-      });
-    } else {
-      if (pass_valid.hasMatch(_password)) {
-        setState(() {
-          password_strength = 4 / 4;
-        });
-        return true;
-      } else {
-        setState(() {
-          password_strength = 3 / 4;
-        });
-        return false;
-      }
-    }
-    return false;
+  @override
+  void dispose() {
+    isLoading = false;
+    super.dispose();
   }
 
   @override
@@ -111,27 +87,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 TextFormField(
                   controller: passwordController1,
                   obscureText: isVisible1,
-                  // validator: FormBuilderValidators.compose(
-                  //   [
-                  //     FormBuilderValidators.minLength(context, 8),
-                  //   ],
-                  // ),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.minLength(context, 6),
+                    ],
+                  ),
                   onChanged: (value) {
                     _formKey.currentState!.validate();
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter password";
-                    } else {
-                      //call function to check password
-                      bool result = validatePassword(value);
-                      if (result) {
-                        // create account event
-                        return null;
-                      } else {
-                        return " Password should contain Capital, small letter & Number & Special";
-                      }
-                    }
                   },
                   decoration: InputDecoration(
                       // hintText: 'Enter Email Address',
@@ -174,33 +136,25 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 TextFormField(
                   controller: passwordController2,
                   obscureText: isVisible2,
-                  validator: (value) {
-                    if (passwordController1.text != value) {
-                      setState(() {
-                        isMatch = false;
-                      });
-                      return "Password do not match";
-                    } else if (password_strength != 1) {
-                      setState(() {
-                        isMatch = false;
-                      });
-                      return " Password should contain Capital, small letter & Number & Special";
-                    } else {
+                  onChanged: (value) {
+                    _formKey.currentState!.validate();
+                    if (passwordController1.text == passwordController2.text) {
                       setState(() {
                         isMatch = true;
                       });
+                    } else {
+                      setState(() {
+                        isMatch = false;
+                      });
                     }
-                    return null;
                   },
-                  onChanged: (value) {
-                    _formKey.currentState!.validate();
-                  },
-
-                  // validator: FormBuilderValidators.compose(
-                  //   [
-                  //     FormBuilderValidators.minLength(context, 8),
-                  //   ],
-                  // ),
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.minLength(context, 6),
+                      FormBuilderValidators.equal(
+                          context, passwordController1.text),
+                    ],
+                  ),
                   decoration: InputDecoration(
                       // hintText: 'Enter Email Address',
                       suffixIcon: InkWell(
@@ -310,26 +264,25 @@ class _PasswordScreenState extends State<PasswordScreen> {
               email: email, password1: password1, password2: password2);
         }));
       } else {
-            AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        desc: 'Password do not match.',
-        showCloseIcon: true,
-        btnOkOnPress: () {},
-      ).show();
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: 'Password do not match.',
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
       }
     }
   }

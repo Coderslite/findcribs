@@ -9,10 +9,12 @@ import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ProductDetails extends StatefulWidget {
+  final bool? isDeepLinking;
   final int? id;
   const ProductDetails({
     Key? key,
     required this.id,
+    this.isDeepLinking,
   }) : super(key: key);
 
   @override
@@ -112,7 +114,12 @@ class _ProductDetailsState extends State<ProductDetails> {
         //// product more details ends ////
 
         /// product main details start ///
-        body: ProductMainDetails(panelOpened: panelOpened, id: widget.id),
+        body: ProductMainDetails(
+          panelOpened: panelOpened,
+          id: widget.id,
+          isDeepLinking:
+              widget.isDeepLinking.toString() == 'true' ? true : false,
+        ),
         //// product main details ends ////
       ),
     );

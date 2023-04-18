@@ -2,15 +2,17 @@ import 'package:findcribs/controller/connectivity_controller.dart';
 import 'package:findcribs/controller/delete_story_controller.dart';
 import 'package:findcribs/controller/estate_listing_controller.dart';
 import 'package:findcribs/controller/get_chat_controller.dart';
+import 'package:findcribs/controller/get_my_story_controller.dart';
+import 'package:findcribs/controller/get_notification_controller.dart';
 import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/controller/get_property_listing_controller.dart';
+import 'package:findcribs/controller/home_root_controller.dart';
 import 'package:findcribs/controller/login_controller.dart';
 import 'package:findcribs/controller/rent_listing_controller.dart';
 import 'package:findcribs/controller/sale_listing_controller.dart';
 import 'package:findcribs/controller/story_list_controller.dart';
 import 'package:findcribs/controller/user_favorited_agent_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
-import 'package:findcribs/screens/notification_screen/get_all_notificaton_controller.dart';
 import 'package:get/get.dart';
 
 import 'load_state_lga_controller.dart';
@@ -33,5 +35,7 @@ class HomeBindings implements Bindings {
     Get.put(EstateListingController());
     Get.put(GetPropertyListingController());
     Get.put(LoadStateLgaController());
+    Get.put(HomeRootController());
+    Get.put(GetMyStoryController());
   }
 }
