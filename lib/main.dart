@@ -162,42 +162,43 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   var notificationPermission = await Permission.notification.isGranted;
-  if (notificationPermission == false) {
-    Fluttertoast.showToast(msg: "Notification Permission Required")
-        .then((value) => SystemSettings.appNotifications());
-  }
-
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  messaging.requestPermission().then((value) async {
-    messaging.setForegroundNotificationPresentationOptions(
-      alert: true, // Required to display a heads up notification
-      badge: true,
-      sound: true,
-    );
-    var prefs = await SharedPreferences.getInstance();
-
-    messaging.getToken().then((token) {
-      prefs.setString('fcmToken', token.toString());
-      print(
-        "token$token",
+  if (notificationPermission == false) {
+    messaging.requestPermission().then((value) async {
+      messaging.setForegroundNotificationPresentationOptions(
+        alert: true, // Required to display a heads up notification
+        badge: true,
+        sound: true,
       );
-    });
+      var prefs = await SharedPreferences.getInstance();
 
-    cameras = await availableCameras();
-    final appState = prefs.getString('action');
-    final email = prefs.getString('email');
-    final token = prefs.getString('token');
-    print(token);
-    print(email);
-    runApp(MyApp(
-      appState: appState.toString(),
-      email: email.toString(),
-    ));
-  }).onError((error, stackTrace) {
-    Fluttertoast.showToast(msg: "Notification Permission Required")
-        .then((value) => SystemSettings.appNotifications());
-  });
+      messaging.getToken().then((token) {
+        prefs.setString('fcmToken', token.toString());
+        print(
+          "token$token",
+        );
+      });
+
+      cameras = await availableCameras();
+      final appState = prefs.getString('action');
+      final email = prefs.getString('email');
+      final token = prefs.getString('token');
+      print(token);
+      print(email);
+      runApp(MyApp(
+        appState: appState.toString(),
+        email: email.toString(),
+      ));
+    }).onError((error, stackTrace) {
+      Fluttertoast.showToast(msg: "Notification Permission Required")
+          .then((value) => SystemSettings.appNotifications());
+    });
+  }
+
+
+
+
 }
 
 class MyApp extends StatefulWidget {
