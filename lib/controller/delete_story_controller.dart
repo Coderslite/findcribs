@@ -6,7 +6,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'get_my_story_controller.dart';
+
 class DeleteStoryController extends GetxController {
+  GetMyStoryController getMyStoryController = Get.put(GetMyStoryController());
   var toBeDeletedStory = [].obs;
   var isLoading = false.obs;
   var isSuccess = false.obs;
@@ -41,6 +44,7 @@ class DeleteStoryController extends GetxController {
     if (responseData['status'] == true) {
       isLoading.value = false;
       idDeleting.value = 0;
+      getMyStoryController.handleGetStoryList();
       Get.off(const StoryList());
     } else {
       isLoading.value = false;

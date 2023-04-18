@@ -9,8 +9,10 @@ import 'package:findcribs/models/user_profile_information_model.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/onboarding.dart';
+import 'package:findcribs/screens/product_details/product_details.dart';
 import 'package:findcribs/service/get_chat_service.dart';
 import 'package:findcribs/service/user_profile_service.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -217,14 +219,44 @@ class _MyAppState extends State<MyApp> {
   ScrollController listScrollController = ScrollController();
   bool isTyping = false;
   String isTypingChatId = '';
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+  String link = 'https://findcribs.page.link/properties';
+  String? propertyId;
 
   @override
   void initState() {
     online = [];
-    handleGetMessages();
-    // handleConnect();
-    handleGetUserProfile();
+    checkDynamicLink();
+    initDynamicLinks();
     super.initState();
+  }
+
+  checkDynamicLink() async {
+    final PendingDynamicLinkData? initialLink =
+        await FirebaseDynamicLinks.instance.getDynamicLink(Uri.parse(link));
+    final Uri? uri = initialLink?.link;
+    final queryParams = uri?.queryParameters;
+    setState(() {
+      propertyId = queryParams?['propertyId'].toString();
+    });
+    print("propertyId");
+    print(propertyId);
+    print(uri);
+  }
+
+  Future<void> initDynamicLinks() async {
+    dynamicLinks.onLink.listen((dynamicLinkData) {
+      print(dynamicLinkData);
+      final Uri uri = dynamicLinkData.link;
+      final queryParams = uri.queryParameters;
+      final int propertyId = int.parse(queryParams['propertyId'].toString());
+      Future.delayed(const Duration(seconds: 1)).then((value) {
+        Get.to(ProductDetails(id: propertyId));
+      });
+    }).onError((error) {
+      print('onLink error');
+      print(error.message);
+    });
   }
 
   handleScroll() {
@@ -232,26 +264,6 @@ class _MyAppState extends State<MyApp> {
       final position = listScrollController.position.maxScrollExtent;
       listScrollController.jumpTo(position);
     }
-  }
-
-  handleGetMessages() async {
-    getChat = getMessageList();
-    getChat.then((value) {
-      setState(() {
-        handleScroll();
-        messageList = value;
-        // myMessage.add(messages);
-      });
-    });
-  }
-
-  handleGetUserProfile() async {
-    userProfile = getUserProfile();
-    userProfile.then((value) {
-      setState(() {
-        id = value.id!;
-      });
-    });
   }
 
   @override
@@ -290,17 +302,24 @@ class _MyAppState extends State<MyApp> {
         duration: 3000,
         splashIconSize: double.maxFinite,
         splash: 'assets/images/splash_screen.gif',
-        nextScreen: widget.appState == 'Verify'
-            ? VerifyEmailScreen(
-                email: widget.email,
+        nextScreen: propertyId.toString() != 'null'
+            ? ProductDetails(
+                id: int.parse(
+                  propertyId.toString(),
+                ),
+                isDeepLinking: true,
               )
-            : widget.appState == 'LoggedIn'
-                ? HomePageRoot(
-                    navigateIndex: 0,
+            : widget.appState == 'Verify'
+                ? VerifyEmailScreen(
+                    email: widget.email,
                   )
-                : widget.appState == 'Login'
-                    ? const LoginScreen()
-                    : const OnboardingScreen(),
+                : widget.appState == 'LoggedIn'
+                    ? const HomePageRoot(
+                        navigateIndex: 0,
+                      )
+                    : widget.appState == 'Login'
+                        ? const LoginScreen()
+                        : const OnboardingScreen(),
         backgroundColor: const Color(0xFF0070B9),
         centered: true,
       ),

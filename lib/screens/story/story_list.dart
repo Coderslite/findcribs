@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:findcribs/controller/get_my_story_controller.dart';
 import 'package:findcribs/screens/story/single_story.dart';
 import 'package:findcribs/screens/story/story_camera.dart';
 import 'package:findcribs/service/get_user_story_list.dart';
@@ -36,29 +37,15 @@ class _StoryListState extends State<StoryList> {
   bool isAttached = false;
   bool isShowing = false;
   bool firstClick = true;
-  late Future<List<StoryModel>> myStoryList;
-  List<StoryModel> filteredStoryList = [];
-  bool isLoading = true;
   List toBeDeleteStory = [];
-
-  handleGetStoryList() {
-    myStoryList = getUserStoryList();
-    myStoryList.then((value) {
-      setState(() {
-        filteredStoryList = value;
-        isLoading = false;
-      });
-    });
-  }
 
   DeleteStoryController deleteStoryController =
       Get.put(DeleteStoryController());
 
+  GetMyStoryController getMyStoryController = Get.put(GetMyStoryController());
+
   @override
   void initState() {
-    // ignore: todo
-    // TODO: implement initState
-    handleGetStoryList();
     menuItems = [
       ItemModel('Delete', Icons.delete),
     ];
@@ -248,239 +235,246 @@ class _StoryListState extends State<StoryList> {
                   ))),
         ),
       ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20.0,
-                    left: 20,
-                    right: 20,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13),
-                            color: const Color(0XFFF0F7F8),
-                          ),
-                          child: SvgPicture.asset(
-                            "assets/svgs/arrow_back.svg",
+      body: Obx(
+        () => getMyStoryController.isLoading.isTrue
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SafeArea(
+                child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20.0,
+                      left: 20,
+                      right: 20,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(13),
+                              color: const Color(0XFFF0F7F8),
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/svgs/arrow_back.svg",
+                            ),
                           ),
                         ),
-                      ),
-                      const Text(
-                        "Story",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      deleteStoryController.toBeDeletedStory.isEmpty
-                          ? Container(
-                              height: 60,
-                            )
-                          : CustomPopupMenu(
-                              menuBuilder: () => ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Container(
-                                  color: const Color(0xFFE5E5E5),
-                                  child: IntrinsicWidth(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: menuItems
-                                          .map(
-                                            (item) => GestureDetector(
-                                              behavior:
-                                                  HitTestBehavior.translucent,
-                                              onTap: () {
-                                                // print("onTap");
-                                                _controller.hideMenu();
-                                                setState(() {
-                                                  deleteStoryController
-                                                      .handleDeleteMoment();
-                                                });
-                                              },
-                                              child: Container(
-                                                height: 40,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Icon(
-                                                      item.icon,
-                                                      size: 15,
-                                                      color: const Color(
-                                                          0XFFC62E3D),
-                                                    ),
-                                                    Expanded(
-                                                      child: Container(
-                                                        margin: const EdgeInsets
-                                                            .only(left: 10),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 10),
-                                                        child: Text(
-                                                          item.title,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Color(
-                                                                0XFFC62E3D),
-                                                            fontSize: 12,
+                        const Text(
+                          "Story",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        deleteStoryController.toBeDeletedStory.isEmpty
+                            ? Container(
+                                height: 60,
+                              )
+                            : CustomPopupMenu(
+                                menuBuilder: () => ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Container(
+                                    color: const Color(0xFFE5E5E5),
+                                    child: IntrinsicWidth(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: menuItems
+                                            .map(
+                                              (item) => GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.translucent,
+                                                onTap: () {
+                                                  // print("onTap");
+                                                  _controller.hideMenu();
+                                                  setState(() {
+                                                    deleteStoryController
+                                                        .handleDeleteMoment();
+                                                  });
+                                                },
+                                                child: Container(
+                                                  height: 40,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20),
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        item.icon,
+                                                        size: 15,
+                                                        color: const Color(
+                                                            0XFFC62E3D),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 10),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 10),
+                                                          child: Text(
+                                                            item.title,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: Color(
+                                                                  0XFFC62E3D),
+                                                              fontSize: 12,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          )
-                                          .toList(),
+                                            )
+                                            .toList(),
+                                      ),
                                     ),
                                   ),
                                 ),
+                                pressType: PressType.singleClick,
+                                verticalMargin: -10,
+                                controller: _controller,
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Image.asset(
+                                      "assets/images/vertical_line.png"),
+                                ),
                               ),
-                              pressType: PressType.singleClick,
-                              verticalMargin: -10,
-                              controller: _controller,
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Image.asset(
-                                    "assets/images/vertical_line.png"),
-                              ),
-                            ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                    child: filteredStoryList.isEmpty
-                        ? Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset("assets/images/opps.png"),
-                                const Text(
-                                  "Opps!",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 35),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text("You have not posted"),
-                                const Text("any story yet"),
-                                // Material(
-                                //   child: MaterialButton(
-                                //     onPressed: () {},
-                                //     child: Text("Post a story"),
-                                //   ),
-                                // )
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: const Color(0XFF0072BA)),
-                                  onPressed: () {},
-                                  child: const Text("Post a story"),
-                                ),
-                              ],
-                            ),
-                          )
-                        : GridView.builder(
-                            shrinkWrap: true,
-                            itemCount: filteredStoryList.length,
-                            physics: const ScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    childAspectRatio: 0.6,
-                                    maxCrossAxisExtent: 140,
-                                    crossAxisSpacing: 1,
-                                    mainAxisSpacing: 1),
-                            itemBuilder: (context, index) {
-                              String fileExtension = p.extension(File(
-                                      filteredStoryList[index]
-                                          .mediaUrl
-                                          .toString())
-                                  .path);
-                              var listingId = filteredStoryList[index].id;
-                              // print(fileExtension);
-                              return GestureDetector(
-                                onLongPress: () {
-                                  setState(() {
-                                    deleteStoryController.toBeDeletedStory
-                                            .contains(listingId)
-                                        ? null
-                                        : deleteStoryController
-                                            .handleAddDeleteStory(listingId!);
-                                  });
-                                },
-                                onTap: () {
-                                  setState(() {
-                                    deleteStoryController
-                                            .toBeDeletedStory.isEmpty
-                                        ? null
-                                        : deleteStoryController
-                                            .handleAddDeleteStory(listingId!);
-                                  });
-                                },
-                                child: Stack(
-                                  children: [
-                                    SingleStory(
-                                        storyId:
-                                            int.parse(listingId.toString()),
-                                        type: fileExtension,
-                                        mediaUrl: filteredStoryList[index]
-                                            .mediaUrl
-                                            .toString()),
-                                    deleteStoryController
-                                            .toBeDeletedStory.isEmpty
-                                        ? Container()
-                                        : deleteStoryController.toBeDeletedStory
-                                                .contains(listingId)
-                                            ? Positioned(
-                                                top: 0,
-                                                left: 0,
-                                                child: Container(
-                                                  color:
-                                                      const Color(0XFF0072BA),
-                                                  child: const Icon(
-                                                    Icons.check_box_outlined,
-                                                    color: Colors.white,
-                                                  ),
-                                                ))
-                                            : Positioned(
-                                                top: 0,
-                                                left: 0,
-                                                child: Container(
-                                                  color:
-                                                      const Color(0XFF0072BA),
-                                                  child: const Icon(
-                                                    Icons
-                                                        .check_box_outline_blank_outlined,
-                                                    color: Colors.white,
-                                                  ),
-                                                )),
-                                  ],
-                                ),
-                              );
-                            }))
-              ],
-            )),
+                  Expanded(
+                      child: getMyStoryController.myStoryList.isEmpty
+                          ? Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset("assets/images/opps.png"),
+                                  const Text(
+                                    "Opps!",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 35),
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  const Text("You have not posted"),
+                                  const Text("any story yet"),
+                                  // Material(
+                                  //   child: MaterialButton(
+                                  //     onPressed: () {},
+                                  //     child: Text("Post a story"),
+                                  //   ),
+                                  // )
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0XFF0072BA)),
+                                    onPressed: () {},
+                                    child: const Text("Post a story"),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              itemCount:
+                                  getMyStoryController.myStoryList.length,
+                              physics: const ScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      childAspectRatio: 0.6,
+                                      maxCrossAxisExtent: 140,
+                                      crossAxisSpacing: 1,
+                                      mainAxisSpacing: 1),
+                              itemBuilder: (context, index) {
+                                String fileExtension = p.extension(File(
+                                        getMyStoryController
+                                            .myStoryList[index].mediaUrl
+                                            .toString())
+                                    .path);
+                                var listingId =
+                                    getMyStoryController.myStoryList[index].id;
+                                // print(fileExtension);
+                                return GestureDetector(
+                                  onLongPress: () {
+                                    setState(() {
+                                      deleteStoryController.toBeDeletedStory
+                                              .contains(listingId)
+                                          ? null
+                                          : deleteStoryController
+                                              .handleAddDeleteStory(listingId!);
+                                    });
+                                  },
+                                  onTap: () {
+                                    setState(() {
+                                      deleteStoryController
+                                              .toBeDeletedStory.isEmpty
+                                          ? null
+                                          : deleteStoryController
+                                              .handleAddDeleteStory(listingId!);
+                                    });
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      SingleStory(
+                                          storyId:
+                                              int.parse(listingId.toString()),
+                                          type: fileExtension,
+                                          mediaUrl: getMyStoryController
+                                              .myStoryList[index].mediaUrl
+                                              .toString()),
+                                      deleteStoryController
+                                              .toBeDeletedStory.isEmpty
+                                          ? Container()
+                                          : deleteStoryController
+                                                  .toBeDeletedStory
+                                                  .contains(listingId)
+                                              ? Positioned(
+                                                  top: 0,
+                                                  left: 0,
+                                                  child: Container(
+                                                    color:
+                                                        const Color(0XFF0072BA),
+                                                    child: const Icon(
+                                                      Icons.check_box_outlined,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ))
+                                              : Positioned(
+                                                  top: 0,
+                                                  left: 0,
+                                                  child: Container(
+                                                    color:
+                                                        const Color(0XFF0072BA),
+                                                    child: const Icon(
+                                                      Icons
+                                                          .check_box_outline_blank_outlined,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )),
+                                    ],
+                                  ),
+                                );
+                              }))
+                ],
+              )),
+      ),
     );
   }
 

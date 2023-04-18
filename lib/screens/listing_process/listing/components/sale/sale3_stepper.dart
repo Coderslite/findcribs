@@ -374,6 +374,9 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.water.value =
                                         value.toString();
                                   },
+                                  validator: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(context),
+                                  ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -402,6 +405,9 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.water.value =
                                         value.toString();
                                   },
+                                  validator: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(context),
+                                  ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -433,6 +439,9 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.electricity.value =
                                         value.toString();
                                   },
+                                  validator: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(context),
+                                  ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -461,6 +470,9 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.electricity.value =
                                         value.toString();
                                   },
+                                  validator: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(context),
+                                  ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -644,7 +656,50 @@ class _Sale3StepperState extends State<Sale3Stepper> {
           showCloseIcon: true,
           btnOkOnPress: () {},
         ).show();
-      } else {
+      } 
+      else if (saleListingController.location.string == '') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: "Please select state",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
+      } else if (saleListingController.lga.string == '') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: "Please select LGA",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
+      } 
+      
+      else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return const Sale4Stepper();
         }));

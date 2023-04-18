@@ -13,24 +13,12 @@ class FavouriteAgentScreen extends StatefulWidget {
 }
 
 class _FavouriteAgentScreenState extends State<FavouriteAgentScreen> {
-  late Future<List<UserFavouriteAgentModel>> agentList;
-  List<UserFavouriteAgentModel> filteredList = [];
-  List<UserFavouriteAgentModel> firstList = [];
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    // agentList = getMyFavouriteAgentList();
-    // // storyList = getFavouriteStoryList();
-    // agentList.then((value) {
-    //   // print(value);
-    //   setState(() {
-    //     isLoading = false;
-    //     firstList = filteredList = value;
-    //   });
-    // });
   }
 
   UserFavoritedAgentController userFavoritedAgentController =

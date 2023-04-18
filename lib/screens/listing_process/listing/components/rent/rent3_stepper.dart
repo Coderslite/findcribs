@@ -5,6 +5,7 @@ import 'package:findcribs/screens/listing_process/listing/components/rent/rent4_
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -93,7 +94,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                       "Rent Listing",
                       style: TextStyle(fontSize: 20),
                     ),
-                  const  Text("")
+                    const Text("")
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -378,6 +379,9 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(context),
+                                    ]),
                                   )
                                 : FormBuilderDropdown(
                                     name: 'space',
@@ -403,6 +407,9 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(context),
+                                    ]),
                                   ),
                             const SizedBox(
                               height: 20,
@@ -431,6 +438,9 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(context),
+                                    ]),
                                   )
                                 : FormBuilderDropdown(
                                     name: 'water',
@@ -456,6 +466,9 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(context),
+                                    ]),
                                   ),
                             const SizedBox(
                               height: 20,
@@ -484,6 +497,9 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(context),
+                                    ]),
                                   )
                                 : FormBuilderDropdown(
                                     name: 'electricity',
@@ -509,6 +525,9 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(context),
+                                    ]),
                                   ),
                             const SizedBox(
                               height: 20,
@@ -689,7 +708,50 @@ class _Rent3StepperState extends State<Rent3Stepper> {
           showCloseIcon: true,
           btnOkOnPress: () {},
         ).show();
-      } else {
+      }
+       else if (rentListingController.location.string == '') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: "Please select state",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
+      } else if (rentListingController.lga.string == '') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: "Please select lga",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
+      } 
+      
+      else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return const Rent4Stepper();
         }));

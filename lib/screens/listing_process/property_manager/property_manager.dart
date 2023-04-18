@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get.dart';
 // import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -18,8 +19,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 
+import '../../../controller/get_profile_controller.dart';
 import '../../../models/user_profile_information_model.dart';
 import '../../../service/user_profile_service.dart';
+import '../listing/select_listing_type.dart';
 
 class PropertyManagerRegistration extends StatefulWidget {
   const PropertyManagerRegistration({Key? key}) : super(key: key);
@@ -40,14 +43,11 @@ class _PropertyManagerRegistrationState
   File? file;
   CroppedFile? cropFile;
   List? availability;
+  GetProfileController getProfileController = Get.put(GetProfileController());
 
-  handleGetUserInfo() {
-    userProfile = getUserProfile();
-  }
 
   @override
   void initState() {
-    handleGetUserInfo();
     super.initState();
   }
 
@@ -91,14 +91,7 @@ class _PropertyManagerRegistrationState
         ),
       ),
       body: SafeArea(
-          child: FutureBuilder<UserProfile>(
-              future: userProfile,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Text("something went wrong");
-                }
-                if (snapshot.hasData) {
-                  return SingleChildScrollView(
+          child:  SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
@@ -153,7 +146,7 @@ class _PropertyManagerRegistrationState
                                     FormBuilderValidators.required(context),
                                   ]),
                                   initialValue:
-                                      "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
+                                    "${getProfileController.firstName.string + getProfileController.lastName.string} ",
                                   enabled: false,
                                   decoration: const InputDecoration(
                                     contentPadding: EdgeInsets.all(20),
@@ -380,11 +373,9 @@ class _PropertyManagerRegistrationState
                         ],
                       ),
                     ),
-                  );
-                }
-                return const Center(child: CircularProgressIndicator());
-              })),
-    );
+                  )
+             
+    ));
   }
 
   void handleSave() {
@@ -451,9 +442,9 @@ class _PropertyManagerRegistrationState
       if (availability == null || availability!.isEmpty) {
         AwesomeDialog(
           context: context,
-          dialogType: DialogType.success,
+          dialogType: DialogType.error,
           borderSide: const BorderSide(
-            color: Colors.green,
+            color: Colors.red,
             width: 2,
           ),
           width: 280,
@@ -472,9 +463,9 @@ class _PropertyManagerRegistrationState
       } else if (file == null) {
         AwesomeDialog(
           context: context,
-          dialogType: DialogType.success,
+          dialogType: DialogType.error,
           borderSide: const BorderSide(
-            color: Colors.green,
+            color: Colors.red,
             width: 2,
           ),
           width: 280,
@@ -516,6 +507,7 @@ class _PropertyManagerRegistrationState
           // var responseData = await response.stream.toBytes();
           // var result = String.fromCharCodes(responseData);
           // print(result);
+          getProfileController.handleGetProfile();
           setState(() {
             isLoading = false;
           });
@@ -538,10 +530,7 @@ class _PropertyManagerRegistrationState
             desc: "You are now a registered Property Manager on FindCribs.",
             showCloseIcon: true,
             btnOkOnPress: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) {
-                return const Rent1();
-              }));
+              Get.off(const SelectListingType());
             },
           ).show();
         } else if (response.statusCode == 500) {

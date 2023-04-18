@@ -10,9 +10,7 @@ class UserFavoritedAgentController extends GetxController {
 
   handleGetAllAgents() async {
     agentList = getMyFavouriteAgentList();
-    // storyList = getFavouriteStoryList();
     agentList.then((value) {
-      // print(value);
       isLoading.value = false;
       allAgents.value = value;
     });

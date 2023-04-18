@@ -10,6 +10,8 @@ import 'package:path/path.dart' as p;
 import 'package:photo_view/photo_view.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
+import 'each_video_story.dart';
+
 class StoryBaseScreen extends StatefulWidget {
   final List moment;
   final String profileImg;
@@ -116,7 +118,8 @@ class _StoryBaseScreenState extends State<StoryBaseScreen> {
                               NetworkImage(widget.moment[index]['mediaUrl']));
                     } else {
                       return Container();
-                      //  EachVideoStory(
+                      // print(widget.moment[index]['mediaUrl']);
+                      // return EachVideoStory(
                       //     mediaUrl: widget.moment[index]['mediaUrl']);
                     }
                   }
@@ -234,7 +237,8 @@ class _StoryBaseScreenState extends State<StoryBaseScreen> {
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(10),
                           height: 60,
-                          decoration: const BoxDecoration(color: Colors.black38),
+                          decoration:
+                              const BoxDecoration(color: Colors.black38),
                           child: Center(
                             child: Text(
                               widget.moment[_currentIndex]['caption'],

@@ -1,15 +1,14 @@
 // ignore_for_file: library_prefixes, avoid_print
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:badges/badges.dart';
-import 'package:findcribs/components/constants.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:findcribs/controller/connectivity_controller.dart';
+import 'package:findcribs/controller/get_profile_controller.dart';
+import 'package:findcribs/controller/home_root_controller.dart';
 import 'package:findcribs/models/chat_list_model.dart';
-import 'package:findcribs/screens/agent_profile/components/personal_info/personal_information.dart';
 import 'package:findcribs/screens/agent_profile/profile.dart';
 import 'package:findcribs/screens/chat_screen/chat_screen.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_page.dart';
@@ -23,22 +22,20 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../controller/get_chat_controller.dart';
 import '../../main.dart';
 import '../../models/user_profile_information_model.dart';
-import '../../service/user_profile_service.dart';
 import '../../util/social_login.dart';
+import '../agent_profile/components/personal_info/personal_information.dart';
 
 // ignore: must_be_immutable
 class HomePageRoot extends StatefulWidget {
-  int navigateIndex;
-  HomePageRoot({
+  final int navigateIndex;
+  const HomePageRoot({
     Key? key,
     required this.navigateIndex,
   }) : super(key: key);
@@ -48,18 +45,15 @@ class HomePageRoot extends StatefulWidget {
 }
 
 class _HomePageRootState extends State<HomePageRoot> {
-  int pageIndex = 0;
   bool isLoading = false;
 //  navigateIndex == null ? int pageIndex = 0:pageIndex = navigateIndex;
   final tooltipController = JustTheController();
-  bool isToolTip = false;
 
   List<ChatMessageModel> filteredMessageByTime = [];
   late Future<List<ChatMessageModel>> getChat;
   List<ChatMessageModel> messageList = [];
   int unreadMessages = 0;
   late Future<UserProfile> userProfile;
-  bool isAgent = false;
   late StreamSubscription<bool> subscription;
 
   int? myId;
@@ -68,6 +62,8 @@ class _HomePageRootState extends State<HomePageRoot> {
 
   String notificationMsg = "Waiting for notifications";
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
+  GetProfileController getProfileController = Get.put(GetProfileController());
+  HomeRootController homeRootController = Get.put(HomeRootController());
   bool isShowFloatButton = true;
 
   handleKeyboardDetect(bool event) async {
@@ -86,9 +82,6 @@ class _HomePageRootState extends State<HomePageRoot> {
 
   @override
   void initState() {
-    // Fluttertoast.showToast(msg: message.notification!.title.toString());
-
-    handleGetProfile();
     subscription = KeyboardVisibilityController().onChange.listen((event) {
       handleKeyboardDetect(event);
     });
@@ -109,56 +102,37 @@ class _HomePageRootState extends State<HomePageRoot> {
       print(event.messageType);
       print("foreground");
     });
+
+    Timer(const Duration(seconds: 5), () {
+      handleCheckNumber();
+    });
   }
 
-  handleGetProfile() async {
-    var prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userProfile = getUserProfile();
-      userProfile.then((value) {
-        if (value.phoneNumber == null) {
-          AwesomeDialog(
-            context: Get.context!,
-            dialogType: DialogType.warning,
-            borderSide: const BorderSide(
-              color: Colors.yellow,
-              width: 2,
-            ),
-            width: 280,
-            buttonsBorderRadius: const BorderRadius.all(
-              Radius.circular(2),
-            ),
-            dismissOnTouchOutside: false,
-            dismissOnBackKeyPress: false,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            desc: 'you haven\'t updated your phone number',
-            showCloseIcon: true,
-            btnOkText: "Update now",
-            btnOkOnPress: () {
-              print("update button clicked");
-              Get.off(const PersonalInformationScreen());
-            },
-          ).show();
-        } else {
-          if (value.agent == null) {
-            setState(() {
-              myId = value.id;
-              isAgent = false;
-              prefs.setBool('isAgent', false);
-              getAllChatController.handleGetMessage();
-            });
-          } else {
-            setState(() {
-              myId = value.id;
-              isAgent = true;
-              prefs.setBool('isAgent', true);
-              getAllChatController.handleGetMessage();
-            });
-          }
-        }
-      });
-    });
+  handleCheckNumber() {
+    if (getProfileController.phoneNumber.string == 'null' &&
+        getProfileController.isLoading.isFalse) {
+      AwesomeDialog(
+        context: Get.context!,
+        dialogType: DialogType.warning,
+        borderSide: const BorderSide(
+          color: Colors.yellow,
+          width: 2,
+        ),
+        width: 280,
+        buttonsBorderRadius: const BorderRadius.all(
+          Radius.circular(2),
+        ),
+        dismissOnTouchOutside: false,
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        desc: 'You haven\'t updated your phone number',
+        showCloseIcon: true,
+        btnOkText: "Update now",
+        btnOkOnPress: () {
+          Get.off(const PersonalInformationScreen());
+        },
+      ).show();
+    } else {}
   }
 
   bool willPop = false;
@@ -171,6 +145,8 @@ class _HomePageRootState extends State<HomePageRoot> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    // handleCheckNumber();
+
     return WillPopScope(
       onWillPop: () async {
         if (willPop) {
@@ -184,156 +160,130 @@ class _HomePageRootState extends State<HomePageRoot> {
           return false;
         }
       },
-      child: Scaffold(
-          floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: isShowFloatButton == false
-              ? Container()
-              : JustTheTooltip(
-                  controller: tooltipController,
-                  isModal: true,
-                  borderRadius: BorderRadius.circular(20),
-                  curve: Curves.easeInOutCirc,
-                  tailBaseWidth: 20,
-                  tailLength: 10,
-                  // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
-                  content: SizedBox(
-                    height: 100,
-                    width: 170,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isToolTip = false;
-                            });
-                            tooltipController.hideTooltip().then((value) {
-                              handleGetStarted();
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset("assets/images/list_property.png"),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text("List a property")
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isToolTip = false;
-                            });
-                            tooltipController.hideTooltip().then((v) =>
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) {
-                                  return const StoryList();
-                                })));
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 40,
-                                margin: const EdgeInsets.only(left: 20),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color(0XFF0072BA),
-                                      width: 2,
-                                    )),
-                                child: const Icon(
-                                  Icons.play_arrow,
-                                  color: Color(0XFF0072BA),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text("Post a story"),
-                              Expanded(child: Container())
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      final token = prefs.getString('token');
-                      final isagent = prefs.getBool('isAgent');
-                      token == null
-                          ? showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const SocialLogin();
-                              })
-                          : isagent == true || isAgent == true
-                              ? isToolTip
-                                  ? tooltipController.hideTooltip()
-                                  : tooltipController.showTooltip()
-                              : handleGetStarted();
-                    },
-                    child: const Material(
-                      color: Color(0XFF0072BA),
-                      shape: CircleBorder(),
-                      elevation: 4.0,
-                      child: Padding(
-                        padding: EdgeInsets.all(18.0),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-          bottomNavigationBar: getFooter(size),
-          body: UpgradeAlert(
-            upgrader: Upgrader(
-              canDismissDialog: true,
-              dialogStyle: Platform.isIOS
-                  ? UpgradeDialogStyle.cupertino
-                  : UpgradeDialogStyle.material,
-              durationUntilAlertAgain: const Duration(minutes: 1),
-            ),
-            child: SafeArea(
-              child: isLoading
-                  ? Center(
+      child: Obx(
+        () => Scaffold(
+            floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: isShowFloatButton == false
+                ? Container()
+                : JustTheTooltip(
+                    controller: tooltipController,
+                    isModal: true,
+                    borderRadius: BorderRadius.circular(20),
+                    curve: Curves.easeInOutCirc,
+                    tailBaseWidth: 20,
+                    tailLength: 10,
+                    // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
+                    content: SizedBox(
+                      height: 100,
+                      width: 170,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CollectionSlideTransition(
-                            children: const <Widget>[
-                              CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                radius: 12,
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.red,
-                                radius: 12,
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.yellow,
-                                radius: 12,
-                              ),
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              homeRootController.isToolTip.value = false;
+                              tooltipController.hideTooltip().then((value) {
+                                handleGetStarted();
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/list_property.png"),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text("List a property")
+                              ],
+                            ),
                           ),
-                          FadingText('Loading...'),
+                          GestureDetector(
+                            onTap: () {
+                              homeRootController.isToolTip.value = false;
+                              tooltipController.hideTooltip().then((v) =>
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return const StoryList();
+                                  })));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  margin: const EdgeInsets.only(left: 20),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: const Color(0XFF0072BA),
+                                        width: 2,
+                                      )),
+                                  child: const Icon(
+                                    Icons.play_arrow,
+                                    color: Color(0XFF0072BA),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text("Post a story"),
+                                Expanded(child: Container())
+                              ],
+                            ),
+                          )
                         ],
                       ),
-                    )
-                  : getBody(),
-            ),
-          )),
+                    ),
+                    child: GestureDetector(
+                      onTap: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        final token = prefs.getString('token');
+                        token == null
+                            ? showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const SocialLogin();
+                                })
+                            : getProfileController.agent.string != 'null'
+                                ? homeRootController.isToolTip.isTrue
+                                    ? tooltipController.hideTooltip()
+                                    : tooltipController.showTooltip()
+                                : handleGetStarted();
+                        ;
+                      },
+                      child: const Material(
+                        color: Color(0XFF0072BA),
+                        shape: CircleBorder(),
+                        elevation: 4.0,
+                        child: Padding(
+                          padding: EdgeInsets.all(18.0),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+            bottomNavigationBar: getFooter(size),
+            body: UpgradeAlert(
+              upgrader: Upgrader(
+                canDismissDialog: false,
+                showIgnore: false,
+                showLater: false,
+                dialogStyle: Platform.isIOS
+                    ? UpgradeDialogStyle.cupertino
+                    : UpgradeDialogStyle.material,
+                durationUntilAlertAgain: const Duration(minutes: 1),
+              ),
+              child: SafeArea(
+                child: getBody(),
+              ),
+            )),
+      ),
     );
   }
 
@@ -348,27 +298,29 @@ class _HomePageRootState extends State<HomePageRoot> {
       // const ProfileScreen(),
       const ProfileScreen(),
     ];
-    return IndexedStack(
-      index: widget.navigateIndex,
-      children: pages,
+    return Obx(
+      () => IndexedStack(
+        index: homeRootController.index.toInt(),
+        children: pages,
+      ),
     );
   }
 
   getFooter(size) {
     List bottomItems = [
-      widget.navigateIndex == 0
+      homeRootController.index.toInt() == 0
           ? "assets/svgs/home_active.svg"
           : "assets/svgs/home.svg",
-      widget.navigateIndex == 1
+      homeRootController.index.toInt() == 1
           ? "assets/svgs/love_active.svg"
           : "assets/svgs/love.svg",
-      widget.navigateIndex == 2
+      homeRootController.index.toInt() == 2
           ? "assets/svgs/blank.svg"
           : "assets/svgs/blank.svg",
-      widget.navigateIndex == 3
+      homeRootController.index.toInt() == 3
           ? "assets/svgs/chat_active.svg"
           : "assets/svgs/chat2.svg",
-      widget.navigateIndex == 4
+      homeRootController.index.toInt() == 4
           ? "assets/svgs/account_icon.svg"
           : "assets/svgs/account.svg",
     ];
@@ -401,7 +353,7 @@ class _HomePageRootState extends State<HomePageRoot> {
                 (index) {
                   return InkWell(
                     onTap: () {
-                      selectedTab(index);
+                      homeRootController.selectedTab(index);
                     },
                     child: index == 3
                         ? getAllChatController.filteredUnreadMessage.isEmpty
@@ -414,7 +366,7 @@ class _HomePageRootState extends State<HomePageRoot> {
                               )
                             : SizedBox(
                                 width: size.width / 7,
-                                child: Badge(
+                                child:badges. Badge(
                                   badgeContent: Text(getAllChatController
                                       .filteredUnreadMessage.length
                                       .toString()),
@@ -441,52 +393,11 @@ class _HomePageRootState extends State<HomePageRoot> {
     );
   }
 
-  selectedTab(index) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    token == null && index > 0
-        ? showModalBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return const SocialLogin();
-            })
-        : setState(() {
-            widget.navigateIndex = index;
-          });
-  }
-
   handleGetStarted() async {
-    setState(() {
-      isLoading = true;
-    });
-    final prefs = await SharedPreferences.getInstance();
-
-    var token = prefs.getString('token');
-    var response = await http.get(Uri.parse("$baseUrl/profile"), headers: {
-      "Authorization": "$token",
-    });
-    var jsonResponse = jsonDecode(response.body);
-    if (jsonResponse['status'] == true) {
-      setState(() {
-        isLoading = false;
-      });
-      var responseData = jsonResponse['data']['profile'];
-      if (responseData['agent'] != null) {
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return const SelectListingType();
-        }));
-      } else {
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return const GetStarted();
-        }));
-      }
+    if (getProfileController.agent.string != 'null') {
+      Get.to(const SelectListingType());
     } else {
-      setState(() {
-        isLoading = false;
-      });
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception(response.statusCode);
+      Get.to(const GetStarted());
     }
   }
 }

@@ -1,9 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
-
-// import 'package:badges/badges.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:findcribs/controller/connectivity_controller.dart';
@@ -13,8 +11,6 @@ import 'package:findcribs/controller/user_favourited_listing_controller.dart';
 import 'package:findcribs/util/social_login.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
-
-import 'package:findcribs/models/notification_model.dart';
 import 'package:findcribs/models/story_list_model.dart';
 import 'package:findcribs/screens/homepage/each_story.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
@@ -34,12 +30,11 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controller/get_notification_controller.dart';
 import '../../controller/get_property_listing_controller.dart';
-import '../../service/notification_all_service.dart';
 // ignore: library_prefixes
 
 import '../favourite_screen/all_agent/all_agent.dart';
-import '../notification_screen/get_all_notificaton_controller.dart';
 
 class HomepageScreen extends StatefulWidget {
   const HomepageScreen({
@@ -56,29 +51,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
   late Future<List<StoryListModel>> storyList;
   List<StoryListModel> firstStoryList = [];
   List<StoryListModel> filteredStoryList = [];
-
-  late Future<List<NotificationModel>> notificationList;
-  List<NotificationModel> filteredNotificationList = [];
-  List<NotificationModel> filteredUnreadNotificationList = [];
   late ScrollController controller;
-
-  handleGetNotification() {
-    notificationList = getAllNotification();
-    notificationList.then((value) {
-      setState(() {
-        filteredNotificationList = value;
-        filteredUnreadNotificationList = filteredNotificationList
-            .where((element) => element.isRead == false)
-            .toList();
-      });
-    });
-  }
 
   _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent &&
         !controller.position.outOfRange) {
-           getPropertyListingController.loadMore();
-
+      getPropertyListingController.loadMore();
     }
 
     double maxScroll = controller.position.maxScrollExtent;
@@ -93,10 +71,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
   @override
   void initState() {
     super.initState();
-    // // handleGetNotification();
-    // handleGetProperties(page);
-    // // handleGetStory();
-    // // _controller = ScrollController()..addListener(_loadMore);
     controller = ScrollController();
     controller.addListener(_scrollListener);
     // _controller.addListener();
@@ -135,7 +109,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
             ? Center(
                 child: GestureDetector(
                 onTap: () {
-                  Get.to(HomePageRoot(navigateIndex: 0));
+                  Get.to(const HomePageRoot(
+                    navigateIndex: 0,
+                  ));
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -156,17 +132,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                 child: RefreshIndicator(
                   onRefresh: () async {
                     await Future.delayed(const Duration(seconds: 2));
-                    setState(() {
-                      // handleGetStory();
-                      // handleGetPropertiesReferesh(page);
-                      // userFavouritedListingController
-                      //     .handleGetFavouritedListing();
-                      // getAllNotificationController.handleGetNotification();
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) {
-                        return HomePageRoot(navigateIndex: 0);
-                      }));
-                    });
+                    Get.off(HomePageRoot(
+                      navigateIndex: 0,
+                    ));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +184,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                             .allNotificationList.isEmpty
                                         ? const Icon(
                                             Icons.notifications_none_outlined)
-                                        : Badge(
+                                        :
+                                      badges.   Badge(
                                             toAnimate: false,
                                             animationDuration: const Duration(
                                                 milliseconds: 500),
@@ -230,9 +199,11 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                             ),
                                             elevation: 1,
                                             position:
-                                                BadgePosition.topEnd(top: -20),
+                                               badges. BadgePosition.topEnd(top: -20),
                                             child: const Icon(Icons
-                                                .notifications_none_outlined))),
+                                                .notifications_none_outlined))
+                                                
+                                                ),
                               ],
                             )
                           ],
@@ -1258,7 +1229,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                           .filteredList[index]
                                                           .propertyName
                                                           .toString(),
-                                                          comingFrom: 'Homescreen',
+                                                  comingFrom: 'Homescreen',
                                                 );
                                               })),
                                         ),

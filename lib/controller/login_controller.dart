@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_up_page.dart';
@@ -12,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/constants.dart';
 import 'package:http/http.dart' as http;
+
+GetProfileController getProfileController = Get.put(GetProfileController());
 
 class LoginController extends GetxController {
   var isLoading = false.obs;
@@ -55,7 +58,7 @@ class LoginController extends GetxController {
       prefs.setString('email', email.toString());
 
       prefs.setString('action', 'LoggedIn');
-      Get.off(HomePageRoot(navigateIndex: 0));
+      Get.off(const HomePageRoot(navigateIndex: 0));
       // return ;
     } else {
       isLoading.value = false;
@@ -129,7 +132,7 @@ class LoginController extends GetxController {
       var token = jsonData['token'];
       prefs.setString('token', token);
       prefs.setString('action', 'LoggedIn');
-      Get.off(HomePageRoot(navigateIndex: 0));
+      Get.off(const HomePageRoot(navigateIndex: 0));
     } else {
       isLoading.value = false;
 
@@ -186,6 +189,9 @@ class LoginController extends GetxController {
     prefs.remove('token');
     prefs.remove('email');
     _googleSignIn.signOut().then((value) => Get.off(const LoginScreen()));
+    getProfileController.agent.value = 'null';
+    Get.deleteAll();
+    // Get.reset();
   }
 
   handleGoogleLogout() async {

@@ -13,7 +13,8 @@ class GetProfileController extends GetxController {
   var isVerified = ''.obs;
   var agent = ''.obs;
   var isLoading = true.obs;
-
+  var myId = ''.obs;
+  var phoneNumber = ''.obs;
   handleGetProfile() {
     userProfile = getUserProfile();
     userProfile.then((value) {
@@ -22,8 +23,10 @@ class GetProfileController extends GetxController {
       category.value = value.category.toString();
       firstName.value = value.firstName.toString();
       lastName.value = value.lastName.toString();
-      isVerified.value = value.agent!['is_verified'].toString();
       agent.value = value.agent.toString();
+      myId.value = value.id.toString();
+      phoneNumber.value = value.phoneNumber.toString();
+      isVerified.value = value.agent!['is_verified'].toString();
     });
   }
 

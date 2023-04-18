@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print, duplicate_ignore
 
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:findcribs/controller/get_chat_controller.dart';
+import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/controller/socket_controller.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
@@ -28,25 +28,14 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  int? id;
-
   ConnectivityController connectivityController =
       Get.put(ConnectivityController());
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
   late Future<UserProfile> userProfile;
-
-  handleGetUserProfile() async {
-    userProfile = getUserProfile();
-    userProfile.then((value) {
-      setState(() {
-        id = value.id!;
-      });
-    });
-  }
+  GetProfileController getProfileController = Get.put(GetProfileController());
 
   @override
   void initState() {
-    handleGetUserProfile();
     super.initState();
   }
 
@@ -105,8 +94,8 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontWeight: FontWeight.w200,
                               color: Color(0xFF7C7C7C))),
                       onChanged: (value) {
-                        getAllChatController.handleSearchChat(
-                            value, int.parse(id.toString()));
+                        getAllChatController.handleSearchChat(value,
+                            int.parse(getProfileController.myId.toString()));
                       },
                       scrollPadding: const EdgeInsets.all(0),
                     ),
@@ -136,7 +125,6 @@ class _ChatListState extends State<ChatList> {
   late Future<List<ChatMessageModel>> getChat;
   List<ChatMessageModel> messageList = [];
   late Future<UserProfile> userProfile;
-  int? id;
   late Socket socket;
   List online = [];
   List filteredUnreadMessage = [];
@@ -146,51 +134,12 @@ class _ChatListState extends State<ChatList> {
   List isTyping = [];
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
   SocketController socketController = Get.put(SocketController());
+  GetProfileController getProfileController = Get.put(GetProfileController());
 
   @override
   void initState() {
-    // handleGetMessages();
-    handleGetUserProfile();
-    handleGetUserProfile();
     getAllChatController.handleGetMessage();
-    // handleStatusDetector();
     super.initState();
-  }
-
-  // handleGetMessages() async {
-  //   setState(() {
-  //     getChat = getMessageList();
-  //     getChat.then((value) {
-  //       if (mounted) {
-  //         setState(() {
-  //           // value.where((element) => false)
-  //           messageList = filteredMessageByTime = value;
-  //           handleFilteredLatestMessage();
-  //           isLoading = false;
-  //         });
-  //       }
-  //     });
-  //   });
-  // }
-
-  // handleFilteredLatestMessage() {
-  //   setState(() {
-  //     filteredMessageByTime.sort(
-  //       (a, b) {
-  //         return a.lastMessage!['createdAt']
-  //             .compareTo(b.lastMessage!['createdAt']);
-  //       },
-  //     );
-  //   });
-  // }
-
-  handleGetUserProfile() async {
-    userProfile = getUserProfile();
-    userProfile.then((value) {
-      setState(() {
-        id = value.id!;
-      });
-    });
   }
 
   @override
@@ -260,28 +209,30 @@ class _ChatListState extends State<ChatList> {
                       itemBuilder: (context, index) {
                         int receiverId = getAllChatController
                                     .allAvailableChats[index].users![1]['id'] !=
-                                id
+                                int.parse(getProfileController.myId
+                                    .toString()
+                                    .toString())
                             ? getAllChatController
                                 .allAvailableChats[index].users![1]['id']
                             : getAllChatController
                                 .allAvailableChats[index].users![0]['id'];
                         String receiverFirstName = getAllChatController
                                     .allAvailableChats[index].users![1]['id'] !=
-                                id
+                                int.parse(getProfileController.myId.toString())
                             ? getAllChatController.allAvailableChats[index]
                                 .users![1]['first_name']
                             : getAllChatController.allAvailableChats[index]
                                 .users![0]['first_name'];
                         String receiverLastName = getAllChatController
                                     .allAvailableChats[index].users![1]['id'] !=
-                                id
+                                int.parse(getProfileController.myId.toString())
                             ? getAllChatController
                                 .allAvailableChats[index].users![1]['last_name']
                             : getAllChatController.allAvailableChats[index]
                                 .users![0]['last_name'];
                         String receiverImage = getAllChatController
                                     .allAvailableChats[index].users![0]['id'] !=
-                                id
+                                int.parse(getProfileController.myId.toString())
                             ? getAllChatController.allAvailableChats[index]
                                     .users![0]['profile_pic'] ??
                                 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
@@ -307,10 +258,6 @@ class _ChatListState extends State<ChatList> {
                           return element['status'] == 'read' &&
                               element['senderId'] == receiverId;
                         }).toList();
-                        // print("filtered message" +
-                        //     filteredReadMessage.toString());
-
-                        print("receiverId " + receiverId.toString());
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -381,18 +328,21 @@ class _ChatListState extends State<ChatList> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      getAllChatController.allAvailableChats[index].users![0]['id'] != id
-                                                          ? getAllChatController
-                                                                      .allAvailableChats[index].users![0][
-                                                                  'first_name'] +
+                                                      getAllChatController
+                                                                  .allAvailableChats[
+                                                                      index]
+                                                                  .users![0]
+                                                                      ['id']
+                                                                  .toString() !=
+                                                              getProfileController
+                                                                  .myId
+                                                                  .toString()
+                                                          ? getAllChatController.allAvailableChats[index].users![0]['first_name'] +
                                                               " " +
-                                                              getAllChatController
-                                                                      .allAvailableChats[index].users![0]
+                                                              getAllChatController.allAvailableChats[index].users![0]
                                                                   ['last_name']
                                                           : getAllChatController
-                                                                      .allAvailableChats[
-                                                                          index]
-                                                                      .users![1][
+                                                                      .allAvailableChats[index].users![1][
                                                                   'first_name'] +
                                                               " " +
                                                               getAllChatController
@@ -450,7 +400,8 @@ class _ChatListState extends State<ChatList> {
                                                 ),
                                                 Text(
                                                   socketController
-                                                              .isTypingChatId.toString() ==
+                                                              .isTypingChatId
+                                                              .toString() ==
                                                           getAllChatController
                                                               .allAvailableChats[
                                                                   index]

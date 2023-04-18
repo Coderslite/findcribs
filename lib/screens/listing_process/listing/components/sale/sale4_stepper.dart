@@ -110,10 +110,6 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                     const Text("")
                   ],
                 ),
-                const Text(
-                  "Sale Listing",
-                  style: TextStyle(fontSize: 20),
-                ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -6,11 +6,11 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get.dart';
 // import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -18,8 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 
-import '../../../models/user_profile_information_model.dart';
-import '../../../service/user_profile_service.dart';
+import '../../../controller/get_profile_controller.dart';
+import '../listing/select_listing_type.dart';
 
 class EstateMarketRegistration extends StatefulWidget {
   const EstateMarketRegistration({Key? key}) : super(key: key);
@@ -41,14 +41,10 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
   List? availability;
   CroppedFile? cropFile;
 
-  late Future<UserProfile> userProfile;
-  handleGetUserInfo() {
-    userProfile = getUserProfile();
-  }
+  GetProfileController getProfileController = Get.put(GetProfileController());
 
   @override
   void initState() {
-    handleGetUserInfo();
     // ignore: todo
     // TODO: implement initState
     super.initState();
@@ -230,357 +226,332 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
         ),
       ),
       body: SafeArea(
-        child: FutureBuilder<UserProfile>(
-            future: userProfile,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Text("something went wrong");
-              }
-              if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(13),
-                                  color: const Color(0XFFF0F7F8),
+          child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(13),
+                        color: const Color(0XFFF0F7F8),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/svgs/arrow_back.svg",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              FormBuilder(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Kindly provide us brief information about you",
+                      style: TextStyle(
+                        fontFamily: "RedHatDisplay",
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      "Full Name",
+                      style: TextStyle(
+                          fontFamily: "RedHatDisplay",
+                          color: Color(0XFF5A5A5A)),
+                    ),
+                    FormBuilderTextField(
+                      name: 'fullName',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context),
+                      ]),
+                      initialValue:
+                          "${getProfileController.firstName.string + getProfileController.lastName.string} ",
+                      enabled: false,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(20),
+                        fillColor: Color(0XFFE6E6E6),
+                        filled: true,
+                        border: InputBorder.none,
+                        hintText: "E.g Abraham Great",
+                        hintStyle: TextStyle(
+                          fontSize: 12,
+                          color: Color(0XFF8A8A8A),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      "Business Name(Public)",
+                      style: TextStyle(
+                          fontFamily: "RedHatDisplay",
+                          color: Color(0XFF5A5A5A)),
+                    ),
+                    FormBuilderTextField(
+                      name: 'businessName',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context),
+                      ]),
+                      onChanged: (value) {
+                        businessName = value.toString();
+                        validateBusinessName(value.toString());
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Create a business name",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    isChecking
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CollectionSlideTransition(
+                                  children: const <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: Colors.blue,
+                                      radius: 6,
+                                    ),
+                                    CircleAvatar(
+                                      backgroundColor: Colors.red,
+                                      radius: 6,
+                                    ),
+                                    CircleAvatar(
+                                      backgroundColor: Colors.yellow,
+                                      radius: 6,
+                                    ),
+                                  ],
                                 ),
-                                child: SvgPicture.asset(
-                                  "assets/svgs/arrow_back.svg",
-                                ),
-                              ),
+                              ],
                             ),
+                          )
+                        : Text(message),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      "About Business",
+                      style: TextStyle(
+                          fontFamily: "RedHatDisplay",
+                          color: Color(0XFF5A5A5A)),
+                    ),
+                    FormBuilderTextField(
+                      name: 'about',
+                      minLines: 3,
+                      maxLines: 5,
+                      // maxLength: 300,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context),
+                      ]),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      "Phone Number",
+                      style: TextStyle(
+                          fontFamily: "RedHatDisplay",
+                          color: Color(0XFF5A5A5A)),
+                    ),
+                    FormBuilderTextField(
+                      name: 'phone',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.minLength(context, 11),
+                        FormBuilderValidators.maxLength(context, 11),
+                      ]),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text("How many working staffs are in the company ?"),
+                    // SfSlider(
+                    //   min: 0.0,
+                    //   max: 100.0,
+                    //   value: _value,
+                    //   interval: 20,
+                    //   stepSize: 1,
+                    //   showTicks: true,
+                    //   showLabels: true,
+                    //   enableTooltip: true,
+                    //   minorTicksPerInterval: 10,
+                    //   onChanged: (dynamic value) {
+                    //     setState(() {
+                    //       _value = value;
+                    //     });
+                    //   },
+                    // ),
+                    // const SizedBox(
+                    //   height: 30,
+                    // ),
+                    Container(
+                      height: 32,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          // style: BorderStyle.none,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(
+                          companySize.length,
+                          (index) {
+                            return InkWell(
+                              onTap: () {
+                                selectedCompanySize(index);
+                              },
+                              child: SizedBox(
+                                width: size.width / 4.5,
+                                child: companySize[index],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      "Upload Photo",
+                      style: TextStyle(
+                          fontFamily: "RedHatDisplay",
+                          color: Color(0XFF5A5A5A)),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        handleGetImage();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset("assets/images/file.png"),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                cropFile == null
+                                    ? const Text("select photo")
+                                    : const Text("image Available now"),
+                              ],
+                            ),
+                            cropFile == null
+                                ? Image.asset("assets/images/avatar.png")
+                                : SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: ClipOval(
+                                        child: Image.file(
+                                      File(cropFile!.path.toString()),
+                                      fit: BoxFit.cover,
+                                    )),
+                                  )
                           ],
                         ),
-                        const SizedBox(
-                          height: 30,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Booking Tour Availability (?)",
+                          style: TextStyle(
+                              fontFamily: "RedHatDisplay",
+                              color: Color(0XFF5A5A5A)),
                         ),
-                        FormBuilder(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Kindly provide us brief information about you",
-                                style: TextStyle(
-                                  fontFamily: "RedHatDisplay",
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                "Full Name",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
-                              ),
-                              FormBuilderTextField(
-                                name: 'fullName',
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
-                                ]),
-                                initialValue:
-                                    "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
-                                enabled: false,
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  fillColor: Color(0XFFE6E6E6),
-                                  filled: true,
-                                  border: InputBorder.none,
-                                  hintText: "E.g Abraham Great",
-                                  hintStyle: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0XFF8A8A8A),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                "Business Name(Public)",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
-                              ),
-                              FormBuilderTextField(
-                                name: 'businessName',
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
-                                ]),
-                                onChanged: (value) {
-                                  businessName = value.toString();
-                                  validateBusinessName(value.toString());
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Create a business name",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              isChecking
-                                  ? Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          CollectionSlideTransition(
-                                            children: const <Widget>[
-                                              CircleAvatar(
-                                                backgroundColor: Colors.blue,
-                                                radius: 6,
-                                              ),
-                                              CircleAvatar(
-                                                backgroundColor: Colors.red,
-                                                radius: 6,
-                                              ),
-                                              CircleAvatar(
-                                                backgroundColor: Colors.yellow,
-                                                radius: 6,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : Text(message),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                "About Business",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
-                              ),
-                              FormBuilderTextField(
-                                name: 'about',
-                                minLines: 3,
-                                maxLines: 5,
-                                // maxLength: 300,
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
-                                ]),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                "Phone Number",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
-                              ),
-                              FormBuilderTextField(
-                                name: 'phone',
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
-                                  FormBuilderValidators.minLength(context, 11),
-                                  FormBuilderValidators.maxLength(context, 11),
-                                ]),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(),
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                  "How many working staffs are in the company ?"),
-                              // SfSlider(
-                              //   min: 0.0,
-                              //   max: 100.0,
-                              //   value: _value,
-                              //   interval: 20,
-                              //   stepSize: 1,
-                              //   showTicks: true,
-                              //   showLabels: true,
-                              //   enableTooltip: true,
-                              //   minorTicksPerInterval: 10,
-                              //   onChanged: (dynamic value) {
-                              //     setState(() {
-                              //       _value = value;
-                              //     });
-                              //   },
-                              // ),
-                              // const SizedBox(
-                              //   height: 30,
-                              // ),
-                              Container(
-                                height: 32,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                    // style: BorderStyle.none,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: List.generate(
-                                    companySize.length,
-                                    (index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          selectedCompanySize(index);
-                                        },
-                                        child: SizedBox(
-                                          width: size.width / 4.5,
-                                          child: companySize[index],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                "Upload Photo",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  handleGetImage();
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Image.asset("assets/images/file.png"),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          cropFile == null
-                                              ? const Text("select photo")
-                                              : const Text(
-                                                  "image Available now"),
-                                        ],
-                                      ),
-                                      cropFile == null
-                                          ? Image.asset(
-                                              "assets/images/avatar.png")
-                                          : SizedBox(
-                                              width: 40,
-                                              height: 40,
-                                              child: ClipOval(
-                                                  child: Image.file(
-                                                File(cropFile!.path.toString()),
-                                                fit: BoxFit.cover,
-                                              )),
-                                            )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Booking Tour Availability (?)",
-                                    style: TextStyle(
-                                        fontFamily: "RedHatDisplay",
-                                        color: Color(0XFF5A5A5A)),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 68.0),
-                                    child: MultiSelectDialogField(
-                                      // selectedColor: const Color(0XFF0072BA),
-                                      dialogWidth:
-                                          MediaQuery.of(context).size.width,
-                                      buttonIcon: const Icon(
-                                        Icons.check_box,
-                                        color: Color(0XFF0072BA),
-                                        size: 15,
-                                      ),
-                                      listType: MultiSelectListType.CHIP,
-                                      buttonText: const Text(
-                                        "Select availability",
-                                        // style: TextStyle(fontWeight: FontWeight.w100),
-                                      ),
-                                      searchable: true,
-                                      items: [
-                                        "Monday",
-                                        "Tuesday",
-                                        "Wednesday",
-                                        "Thursday",
-                                        "Friday",
-                                        "Saturday",
-                                        "Sunday",
-                                      ]
-                                          .map((e) => MultiSelectItem(e, e))
-                                          .toList(),
-                                      onConfirm: (List<String> selected) {
-                                        availability = selected;
-                                      },
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border: Border.all(
-                                            color: Colors.grey,
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 68.0),
+                          child: MultiSelectDialogField(
+                            // selectedColor: const Color(0XFF0072BA),
+                            dialogWidth: MediaQuery.of(context).size.width,
+                            buttonIcon: const Icon(
+                              Icons.check_box,
+                              color: Color(0XFF0072BA),
+                              size: 15,
+                            ),
+                            listType: MultiSelectListType.CHIP,
+                            buttonText: const Text(
+                              "Select availability",
+                              // style: TextStyle(fontWeight: FontWeight.w100),
+                            ),
+                            searchable: true,
+                            items: [
+                              "Monday",
+                              "Tuesday",
+                              "Wednesday",
+                              "Thursday",
+                              "Friday",
+                              "Saturday",
+                              "Sunday",
+                            ].map((e) => MultiSelectItem(e, e)).toList(),
+                            onConfirm: (List<String> selected) {
+                              availability = selected;
+                            },
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                )),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                );
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }),
-      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      )),
     );
   }
 
@@ -655,9 +626,9 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
       if (availability == null || availability!.isEmpty) {
         AwesomeDialog(
           context: context,
-          dialogType: DialogType.success,
+          dialogType: DialogType.error,
           borderSide: const BorderSide(
-            color: Colors.green,
+            color: Colors.red,
             width: 2,
           ),
           width: 280,
@@ -676,9 +647,9 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
       } else if (file == null) {
         AwesomeDialog(
           context: context,
-          dialogType: DialogType.success,
+          dialogType: DialogType.error,
           borderSide: const BorderSide(
-            color: Colors.green,
+            color: Colors.red,
             width: 2,
           ),
           width: 280,
@@ -729,9 +700,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
         final respStr = await response.stream.bytesToString();
         print(respStr);
         if (response.statusCode == 201) {
-          // var responseData = await response.stream.toBytes();
-          // var result = String.fromCharCodes(responseData);
-          // print(result);
+          getProfileController.handleGetProfile();
           setState(() {
             isLoading = false;
           });
@@ -754,10 +723,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
             desc: "You are now a registered Real Estate Company on FindCribs.",
             showCloseIcon: true,
             btnOkOnPress: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) {
-                return Rent1();
-              }));
+              Get.off(const SelectListingType());
             },
           ).show();
         } else if (response.statusCode == 500) {

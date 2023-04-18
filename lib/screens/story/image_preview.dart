@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:findcribs/components/constants.dart';
+import 'package:findcribs/controller/get_my_story_controller.dart';
 import 'package:findcribs/screens/story/story_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,6 +26,7 @@ class ImagePreview extends StatefulWidget {
 class _ImagePreviewState extends State<ImagePreview> {
   bool isUploading = false;
   var textController = TextEditingController();
+  GetMyStoryController getMyStoryController = Get.put(GetMyStoryController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -112,9 +115,8 @@ class _ImagePreviewState extends State<ImagePreview> {
         isUploading = false;
       });
       Fluttertoast.showToast(msg: "Upload successful");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-        return const StoryList();
-      }));
+      getMyStoryController.handleGetStoryList();
+      Get.off(const StoryList());
     } else {
       setState(() {
         isUploading = false;

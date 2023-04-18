@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:findcribs/controller/get_chat_controller.dart';
+import 'package:findcribs/controller/get_single_property_listing.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/message_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
@@ -561,6 +562,8 @@ class _ChatItemState extends State<ChatItem> {
   Color color = const Color(0xFFFFFFFF);
 
   Color bkg = const Color(0xFF0072BA);
+  GetSinglePropertyController getSinglePropertyController =
+      Get.put(GetSinglePropertyController());
 
   @override
   void initState() {
@@ -596,10 +599,9 @@ class _ChatItemState extends State<ChatItem> {
                   ? Container()
                   : GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) {
-                          return ProductDetails(id: widget.propertyId,);
-                        }));
+                        Get.to(ProductDetails(
+                          id: widget.propertyId,
+                        ));
                       },
                       child: const Text(
                         "You responded to this item",
@@ -613,10 +615,9 @@ class _ChatItemState extends State<ChatItem> {
                   ? Container()
                   : InkWell(
                       onTap: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) {
-                          return ProductDetails(id: widget.propertyId,);
-                        }));
+                        Get.to(ProductDetails(
+                          id: widget.propertyId,
+                        ));
                       },
                       child: const Text("This property was responded to")),
           Column(

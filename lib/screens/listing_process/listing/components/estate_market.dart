@@ -76,7 +76,7 @@ class _EstateMarketState extends State<EstateMarket> {
                     children: [
                       InkWell(
                           onTap: () {
-                            Navigator.pop(context);
+                            Get.to(const HomePageRoot(navigateIndex: 0));
                           },
                           child: const Icon(Icons.arrow_back_ios)),
                       const Text(
@@ -1279,6 +1279,46 @@ class _EstateMarketState extends State<EstateMarket> {
           desc: "You can only upload a maximum of 5 images",
           showCloseIcon: true,
           btnCancelOnPress: () {},
+        ).show();
+      } else if (estateListingController.location.string == '') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: "Please select state",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
+      } else if (estateListingController.lga.string == '') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: "Please select LGA",
+          showCloseIcon: true,
+          btnOkOnPress: () {},
         ).show();
       } else {
         try {
