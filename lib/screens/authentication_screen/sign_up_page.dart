@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, duplicate_ignore
+// ignore_for_file: avoid_print, duplicate_ignore, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -20,10 +20,10 @@ class EmailScreen extends StatefulWidget {
   const EmailScreen({Key? key}) : super(key: key);
 
   @override
-  _EmailScreenState createState() => _EmailScreenState();
+  EmailScreenState createState() => EmailScreenState();
 }
 
-class _EmailScreenState extends State<EmailScreen> {
+class EmailScreenState extends State<EmailScreen> {
   // final GoogleSignIn _googleSignIn = GoogleSignIn(
   //   serverClientId:
   //       '82498358652-u740omqt5f4lc9cvhfdsarhqd8b293ck.apps.googleusercontent.com',
@@ -99,8 +99,7 @@ class _EmailScreenState extends State<EmailScreen> {
                       registerUser(emailController.text);
                     },
                     style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(500, 60),
-                        primary: mobileButtonColor),
+                        fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                     child: isLoading
                         ? const CircularProgressIndicator()
                         : const Text(
@@ -241,7 +240,7 @@ class _EmailScreenState extends State<EmailScreen> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
+                              builder: (context) => const HomePageRoot(
                                     navigateIndex: 0,
                                   )));
                     },

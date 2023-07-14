@@ -1,15 +1,12 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:findcribs/models/house_detail_model.dart';
 import 'package:findcribs/screens/product_details/photo_view_preview.dart';
-import 'package:findcribs/service/property_details_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -94,7 +91,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
   }
 
   int _currentPage = 0;
-  Timer? _timer;
+  Timer? timer;
 
   @override
   void initState() {
@@ -102,7 +99,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
     propertyViewController.handlePropertyView(widget.id!);
     handleGetLikedProperties();
 
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+    timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       if (_currentPage == images.length - 1) {
         end = true;
       } else if (_currentPage == 0) {
@@ -518,7 +515,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                     widget.isDeepLinking.toString() == 'true'
                         ? Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (_) {
-                            return HomePageRoot(navigateIndex: 0);
+                            return const HomePageRoot(navigateIndex: 0);
                           }))
                         : Navigator.pop(context);
                   },

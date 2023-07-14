@@ -15,10 +15,11 @@ Future<List<HouseListModel>> filterPropertyCategory(
     String? bedroom,
     String? kitchen,
     String? state,
+    String? lga,
     int page) async {
   var response = await http.get(
     Uri.parse(
-        "$baseUrl/search-listing-category?type=$propertyType&minPrice=$minPrice&maxPrice=$maxPrice&category=$category&livingroom=$livingRoom&bathroom=$bathroom&bedroom=$bedroom&kitchen=$kitchen&state=$state&page$page"),
+        "$baseUrl/search-listing?type=$propertyType&minPrice=$minPrice&maxPrice=$maxPrice&search=$category&livingroom=$livingRoom&bathroom=$bathroom&bedroom=$bedroom&kitchen=$kitchen&state=$state&lga=$lga&page$page"),
   );
   var responseData = jsonDecode(response.body);
   if (responseData['status'] == true) {

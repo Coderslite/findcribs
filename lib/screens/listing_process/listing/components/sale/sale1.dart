@@ -353,7 +353,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -368,7 +368,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -686,7 +686,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -701,7 +701,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1019,7 +1019,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -1034,7 +1034,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1354,7 +1354,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -1369,7 +1369,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1968,7 +1968,7 @@ class _Sale1State extends State<Sale1> {
         ).show();
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return Sale2Stepper();
+          return const Sale2Stepper();
         }));
       }
     }
@@ -1993,7 +1993,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentBedroom = index;
       saleListingController.bedroom.value = bedroom.toString();
@@ -2022,7 +2022,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentBathroom = index;
       saleListingController.bathroomIndex.value = index;
@@ -2049,7 +2049,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentLivingroom = index;
       saleListingController.livingRoomIndex.value = index;
@@ -2076,7 +2076,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentKitchen = index;
       saleListingController.kitchen.value = kitchenRoom.toString();

@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, avoid_print
+// ignore_for_file: deprecated_member_use, avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:convert';
@@ -44,6 +44,7 @@ class _EstateMarketState extends State<EstateMarket> {
   LoadStateLgaController loadStateLgaController =
       Get.put(LoadStateLgaController());
   final GlobalKey<FormBuilderState> _lgaForm = GlobalKey<FormBuilderState>();
+  final _estateFeeFormKey = GlobalKey<FormBuilderState>();
 
   @override
   void initState() {
@@ -214,78 +215,72 @@ class _EstateMarketState extends State<EstateMarket> {
                   ),
                   const Text("Price"),
                   estateListingController.price.value == ''
-                      ? FormBuilderTextField(
-                          name: 'price',
-                          // maxLength: 300,
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            if (value!.isEmpty) {
-                              setState(() {
+                      ? FormBuilder(
+                          key: _estateFeeFormKey,
+                          child: FormBuilderTextField(
+                            name: 'price',
+                            // maxLength: 300,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              if (value!.isEmpty) {
                                 estateListingController.price.value =
                                     0.toString();
-                              });
-                            }
-                            setState(() {
-                              if (value!.length <= 1) {
-                                if (value == ',' || value == '.') {
-                                  setState(() {
-                                    estateListingController.price.value =
-                                        0.toString();
-                                  });
-                                }
-                              } else {
-                                value = value!.replaceAll(",", "");
-                                value = value!.replaceAll(".", "");
-                                estateListingController.price.value =
-                                    value.toString();
+                              } else if (_estateFeeFormKey.currentState!
+                                  .validate()) {
+                                setState(() {
+                                  estateListingController.price.value =
+                                      value.toString();
+                                });
                               }
-                            });
-                          },
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
-                          ]),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
+                            },
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context),
+                              FormBuilderValidators.numeric(context),
+                              FormBuilderValidators.integer(context),
+                              forRent == true
+                                  ? FormBuilderValidators.min(context, 2000)
+                                  : FormBuilderValidators.min(context, 10000),
+                            ]),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(),
+                              ),
                             ),
                           ),
                         )
-                      : FormBuilderTextField(
-                          name: 'price',
-                          // maxLength: 300,
-                          onChanged: (value) {
-                            if (value!.isEmpty) {
-                              setState(() {
+                      : FormBuilder(
+                          key: _estateFeeFormKey,
+                          child: FormBuilderTextField(
+                            name: 'price',
+                            // maxLength: 300,
+                            onChanged: (value) {
+                              if (value!.isEmpty) {
                                 estateListingController.price.value =
                                     0.toString();
-                              });
-                            }
-                            setState(() {
-                              if (value!.length <= 1) {
-                                if (value == ',' || value == '.') {
-                                  setState(() {
-                                    estateListingController.price.value =
-                                        0.toString();
-                                  });
-                                }
-                              } else {
-                                value = value!.replaceAll(",", "");
-                                value = value!.replaceAll(".", "");
-                                estateListingController.price.value =
-                                    value.toString();
+                              } else if (_estateFeeFormKey.currentState!
+                                  .validate()) {
+                                setState(() {
+                                  saleListingController.saleFee.value =
+                                      value.toString();
+                                });
                               }
-                            });
-                          },
-                          keyboardType: TextInputType.number,
-                          initialValue: estateListingController.price.value,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
-                          ]),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
+                            },
+                            keyboardType: TextInputType.number,
+                            initialValue: estateListingController.price.value,
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context),
+                              FormBuilderValidators.numeric(context),
+                              FormBuilderValidators.integer(context),
+                              forRent == true
+                                  ? FormBuilderValidators.min(context, 2000)
+                                  : FormBuilderValidators.min(context, 10000),
+                            ]),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(),
+                              ),
                             ),
                           ),
                         ),
@@ -409,13 +404,13 @@ class _EstateMarketState extends State<EstateMarket> {
                     () => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Location (State)"),
-                        estateListingController.location.value == ''
+                        const Text("state (State)"),
+                        estateListingController.state.value == ''
                             ? FormBuilderDropdown(
-                                name: 'location',
+                                name: 'state',
                                 isExpanded: true,
                                 onChanged: (value) {
-                                  estateListingController.location.value =
+                                  estateListingController.state.value =
                                       value.toString();
                                   loadStateLgaController.handleEstateFetchLga();
                                 },
@@ -437,9 +432,9 @@ class _EstateMarketState extends State<EstateMarket> {
                                 name: 'State',
                                 isExpanded: true,
                                 initialValue:
-                                    estateListingController.location.value,
+                                    estateListingController.state.value,
                                 onChanged: (value) {
-                                  estateListingController.location.value =
+                                  estateListingController.state.value =
                                       value.toString();
                                   loadStateLgaController.handleEstateFetchLga();
                                 },
@@ -465,7 +460,7 @@ class _EstateMarketState extends State<EstateMarket> {
                   ),
                   Obx(
                     () => Visibility(
-                      visible: estateListingController.location.string == ''
+                      visible: estateListingController.state.string == ''
                           ? false
                           : true,
                       child: Column(
@@ -488,7 +483,7 @@ class _EstateMarketState extends State<EstateMarket> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(estateListingController.lga.string),
-                                      Icon(
+                                      const Icon(
                                         CupertinoIcons.arrowtriangle_down_fill,
                                         size: 12,
                                       )
@@ -1038,7 +1033,7 @@ class _EstateMarketState extends State<EstateMarket> {
           request.fields['legal_fee'] = '0';
           request.fields['covered_by_property'] = '0';
           request.fields['agency_fee'] = '0';
-          request.fields['state'] = estateListingController.location.value;
+          request.fields['state'] = estateListingController.state.value;
           request.fields['lga'] = estateListingController.lga.value;
           request.fields['country'] = 'Nigeria';
           request.fields['total_area_of_land'] = '0';
@@ -1098,7 +1093,7 @@ class _EstateMarketState extends State<EstateMarket> {
                 btnOk: ElevatedButton(
                   onPressed: () {
                     estateListingController.handleResetInformation();
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",
@@ -1280,7 +1275,7 @@ class _EstateMarketState extends State<EstateMarket> {
           showCloseIcon: true,
           btnCancelOnPress: () {},
         ).show();
-      } else if (estateListingController.location.string == '') {
+      } else if (estateListingController.state.string == '') {
         AwesomeDialog(
           context: context,
           dialogType: DialogType.error,
@@ -1353,7 +1348,7 @@ class _EstateMarketState extends State<EstateMarket> {
           request.fields['legal_fee'] = '0';
           request.fields['covered_by_property'] = '0';
           request.fields['agency_fee'] = '0';
-          request.fields['state'] = estateListingController.location.value;
+          request.fields['state'] = estateListingController.state.value;
           request.fields['lga'] = estateListingController.lga.value;
           request.fields['country'] = 'Nigeria';
           request.fields['total_area_of_land'] = '0';
@@ -1412,7 +1407,7 @@ class _EstateMarketState extends State<EstateMarket> {
                 btnOk: ElevatedButton(
                   onPressed: () {
                     estateListingController.handleResetInformation();
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",

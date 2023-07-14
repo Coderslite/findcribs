@@ -195,12 +195,12 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text("Location (State)"),
-                                  rentListingController.location.value == ''
+                                  rentListingController.state.value == ''
                                       ? FormBuilderDropdown(
                                           name: 'location',
                                           isExpanded: true,
                                           onChanged: (value) {
-                                            rentListingController.location
+                                            rentListingController.state
                                                 .value = value.toString();
                                             loadStateLgaController
                                                 .handleRentFetchLga();
@@ -225,9 +225,9 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                           name: 'State',
                                           isExpanded: true,
                                           initialValue: rentListingController
-                                              .location.value,
+                                              .state.value,
                                           onChanged: (value) {
-                                            rentListingController.location
+                                            rentListingController.state
                                                 .value = value.toString();
                                             loadStateLgaController
                                                 .handleRentFetchLga();
@@ -257,7 +257,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                             Obx(
                               () => Visibility(
                                 visible:
-                                    rentListingController.location.string == ''
+                                    rentListingController.state.string == ''
                                         ? false
                                         : true,
                                 child: Column(
@@ -284,7 +284,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                               children: [
                                                 Text(rentListingController
                                                     .lga.string),
-                                                Icon(
+                                                const Icon(
                                                   CupertinoIcons
                                                       .arrowtriangle_down_fill,
                                                   size: 12,
@@ -708,8 +708,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
           showCloseIcon: true,
           btnOkOnPress: () {},
         ).show();
-      }
-       else if (rentListingController.location.string == '') {
+      } else if (rentListingController.state.string == '') {
         AwesomeDialog(
           context: context,
           dialogType: DialogType.error,
@@ -749,9 +748,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
           showCloseIcon: true,
           btnOkOnPress: () {},
         ).show();
-      } 
-      
-      else {
+      } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return const Rent4Stepper();
         }));

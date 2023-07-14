@@ -40,14 +40,14 @@ class VerifiedScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => HomePageRoot(
+                      builder: (_) => const HomePageRoot(
                         navigateIndex: 0,
                       ),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(500, 60), primary: mobileButtonColor),
+                    fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                 child: const Text(
                   //  Connect EndPoint
 

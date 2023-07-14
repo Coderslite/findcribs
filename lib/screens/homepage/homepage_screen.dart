@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:badges/badges.dart' as badges;
@@ -8,8 +8,10 @@ import 'package:findcribs/controller/connectivity_controller.dart';
 import 'package:findcribs/controller/moment_socket_controller.dart';
 import 'package:findcribs/controller/story_list_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
+import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/util/social_login.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:path/path.dart' as p;
 import 'package:findcribs/models/story_list_model.dart';
 import 'package:findcribs/screens/homepage/each_story.dart';
@@ -34,6 +36,9 @@ import '../../controller/get_notification_controller.dart';
 import '../../controller/get_property_listing_controller.dart';
 // ignore: library_prefixes
 
+import '../../service/property_by_category.dart';
+import '../../service/property_list_all_service.dart';
+import '../../widgets/loading_widget.dart';
 import '../favourite_screen/all_agent/all_agent.dart';
 
 class HomepageScreen extends StatefulWidget {
@@ -47,37 +52,29 @@ class HomepageScreen extends StatefulWidget {
 
 class _HomepageScreenState extends State<HomepageScreen> {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-  String category = 'All';
   late Future<List<StoryListModel>> storyList;
   List<StoryListModel> firstStoryList = [];
   List<StoryListModel> filteredStoryList = [];
   late ScrollController controller;
 
-  _scrollListener() {
-    if (controller.offset >= controller.position.maxScrollExtent &&
-        !controller.position.outOfRange) {
-      getPropertyListingController.loadMore();
-    }
+  HouseByCategoryController houseController =
+      Get.put(HouseByCategoryController());
 
-    double maxScroll = controller.position.maxScrollExtent;
-    double currentScroll = controller.position.pixels;
-    double delta = 200.0; // or something else..
-    if (maxScroll - currentScroll <= delta) {
-      // whatever you determine here
-      //.. load more
-    }
+  handleFilter() {
+    houseController.isFiltering.value = true;
+    houseController.categoryPagingController.itemList!.clear();
+    houseController.fetchPosts(0);
   }
 
   @override
   void initState() {
     super.initState();
-    controller = ScrollController();
-    controller.addListener(_scrollListener);
     // _controller.addListener();
   }
 
   @override
   void dispose() {
+    houseController.handleReset();
     controller.dispose();
     super.dispose();
   }
@@ -96,8 +93,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
   MomentSocketController momentSocketController =
       Get.put(MomentSocketController());
 
-  GetPropertyListingController getPropertyListingController =
-      Get.put(GetPropertyListingController());
   @override
   Widget build(BuildContext context) {
     print("rebuild homescreen widget");
@@ -131,8 +126,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                 ),
                 child: RefreshIndicator(
                   onRefresh: () async {
+                    houseController.fetchPosts(0);
                     await Future.delayed(const Duration(seconds: 2));
-                    Get.off(HomePageRoot(
+                    Get.off(const HomePageRoot(
                       navigateIndex: 0,
                     ));
                   },
@@ -184,8 +180,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                             .allNotificationList.isEmpty
                                         ? const Icon(
                                             Icons.notifications_none_outlined)
-                                        :
-                                      badges.   Badge(
+                                        : badges.Badge(
                                             toAnimate: false,
                                             animationDuration: const Duration(
                                                 milliseconds: 500),
@@ -199,11 +194,10 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                             ),
                                             elevation: 1,
                                             position:
-                                               badges. BadgePosition.topEnd(top: -20),
+                                                badges.BadgePosition.topEnd(
+                                                    top: -20),
                                             child: const Icon(Icons
-                                                .notifications_none_outlined))
-                                                
-                                                ),
+                                                .notifications_none_outlined))),
                               ],
                             )
                           ],
@@ -376,899 +370,763 @@ class _HomepageScreenState extends State<HomepageScreen> {
                         height: 20,
                       ),
                       Expanded(
-                        child: Obx(
-                          () => ListView(
-                            controller: controller,
-                            scrollDirection: Axis.vertical,
-                            cacheExtent: 100,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0, left: 20, right: 20),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        // Get.to(ExternalDirScreen());
-                                      },
-                                      child: Row(
-                                        children: const [
-                                          Text(
-                                            "Categories",
-                                            style: TextStyle(
-                                                fontFamily: 'RedHatDisplay',
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                    top: 8.0,
-                                    bottom: 8.0,
-                                    left: 0,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              showModalBottomSheet<void>(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Container(
-                                                    height: 220,
+                        // height: 300,
+                        child: houseController.isFiltering.isTrue
+                            ? loadingWidget()
+                            : PagedListView<int, HouseListModel>(
+                                pagingController:
+                                    houseController.categoryPagingController,
+                                // physics: NeverScrollableScrollPhysics(),
 
-                                                    // color: Colors.amber,
-
-                                                    decoration: BoxDecoration(
-                                                        color: const Color(
-                                                            0x00e5e5e5),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        border: Border.all(
-                                                          color: const Color(
-                                                              0xFFE6E6E6),
-                                                        )),
-
-                                                    child: Center(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 15.0),
-                                                            child: Container(
-                                                              width: 80,
-                                                              height: 5,
-                                                              decoration: BoxDecoration(
-                                                                  color: const Color(
-                                                                      0xFFE6E6E6),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              5)),
-                                                            ),
-                                                          ),
-                                                          FormBuilder(
-                                                            child:
-                                                                FormBuilderRadioGroup(
-                                                              name: 'duplex',
-                                                              wrapDirection:
-                                                                  Axis.vertical,
-                                                              orientation:
-                                                                  OptionsOrientation
-                                                                      .vertical,
-                                                              onChanged: (e) {
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (_) {
-                                                                      return DuplexScreen(
-                                                                        duplexType:
-                                                                            e.toString(),
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                );
-                                                              },
-                                                              controlAffinity:
-                                                                  ControlAffinity
-                                                                      .leading,
-                                                              decoration:
-                                                                  const InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide
-                                                                            .none),
-                                                              ),
-                                                              options: [
-                                                                "Detached Duplex",
-                                                                "Semi Duplex",
-                                                                "Duplex Bungalow",
-                                                              ]
-                                                                  .map((e) =>
-                                                                      FormBuilderFieldOption(
-                                                                        value:
-                                                                            e,
-                                                                        child:
-                                                                            Text(e),
-                                                                      ))
-                                                                  .toList(
-                                                                      growable:
-                                                                          false),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 20),
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.5,
-                                              height: 68,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0x00e5e5e5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  border: Border.all(
-                                                    color:
-                                                        const Color(0xFFE6E6E6),
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    "Duplex",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF455A64),
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            'RedHatDisplay',
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      "assets/images/category1.png",
-                                                      scale: 6.5,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              showModalBottomSheet<void>(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Container(
-                                                    height: 280,
-
-                                                    // color: Colors.amber,
-
-                                                    decoration: BoxDecoration(
-                                                        color: const Color(
-                                                            0x00e5e5e5),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        border: Border.all(
-                                                          color: const Color(
-                                                              0xFFE6E6E6),
-                                                        )),
-
-                                                    child: Center(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 15.0),
-                                                            child: Container(
-                                                              width: 80,
-                                                              height: 5,
-                                                              decoration: BoxDecoration(
-                                                                  color: const Color(
-                                                                      0xFFE6E6E6),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              5)),
-                                                            ),
-                                                          ),
-                                                          FormBuilder(
-                                                            child:
-                                                                FormBuilderRadioGroup(
-                                                              name: 'apartment',
-                                                              wrapDirection:
-                                                                  Axis.vertical,
-                                                              orientation:
-                                                                  OptionsOrientation
-                                                                      .vertical,
-                                                              onChanged: (e) {
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (_) {
-                                                                      return ApartmentScreen(
-                                                                        apartmentType:
-                                                                            e.toString(),
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                );
-                                                              },
-                                                              controlAffinity:
-                                                                  ControlAffinity
-                                                                      .leading,
-                                                              decoration:
-                                                                  const InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide
-                                                                            .none),
-                                                              ),
-                                                              options: [
-                                                                "Flats",
-                                                                "Shortlet",
-                                                                "Service apartment",
-                                                                "Self-contained"
-                                                              ]
-                                                                  .map((e) =>
-                                                                      FormBuilderFieldOption(
-                                                                        value:
-                                                                            e,
-                                                                        child:
-                                                                            Text(e),
-                                                                      ))
-                                                                  .toList(
-                                                                      growable:
-                                                                          false),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 20),
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.5,
-                                              height: 68,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0x00e5e5e5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  border: Border.all(
-                                                    color:
-                                                        const Color(0xFFE6E6E6),
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    "Apartments",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF455A64),
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            'RedHatDisplay',
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      "assets/images/category3.png",
-                                                      scale: 6.5,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return const TerraceScreen();
-                                              }));
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.5,
-                                              height: 68,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0x00e5e5e5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  border: Border.all(
-                                                    color:
-                                                        const Color(0xFFE6E6E6),
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    "Terrace",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF455A64),
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            'RedHatDisplay',
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      "assets/images/category2.png",
-                                                      scale: 5,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return const ComingSoon();
-                                              }));
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.5,
-                                              height: 68,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0x00e5e5e5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  border: Border.all(
-                                                    color:
-                                                        const Color(0xFFE6E6E6),
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    "Hotels",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF455A64),
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            'RedHatDisplay',
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      "assets/images/category4.png",
-                                                      scale: 5,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return const EstateMarketScreen();
-                                              }));
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.5,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              height: 68,
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0x00e5e5e5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  border: Border.all(
-                                                    color:
-                                                        const Color(0xFFE6E6E6),
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    "Estate Market",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF455A64),
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            'RedHatDisplay',
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      "assets/images/estatemarket.png",
-                                                      scale: 1.6,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return const ComingSoon();
-                                              }));
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2.5,
-                                              height: 68,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0x00e5e5e5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  border: Border.all(
-                                                    color:
-                                                        const Color(0xFFE6E6E6),
-                                                  )),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    "Land",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF455A64),
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            'RedHatDisplay',
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      "assets/images/land.png",
-                                                      scale: 15,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0, left: 20, right: 20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Featured",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'RedHatDisplay',
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        showModalBottomSheet<void>(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return Container(
-                                              height: 160,
-
-                                              // color: Colors.amber,
-
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-
-                                              child: Center(
+                                builderDelegate:
+                                    PagedChildBuilderDelegate<HouseListModel>(
+                                  animateTransitions: true,
+                                  itemBuilder: (context, post, index) {
+                                    return Column(
+                                      children: [
+                                        index == 0
+                                            ? SizedBox(
+                                                height: 310,
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              top: 15.0),
-                                                      child: Container(
-                                                        width: 80,
-                                                        height: 5,
-                                                        decoration: BoxDecoration(
-                                                            color: const Color(
-                                                                0xFFE6E6E6),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5)),
+                                                              top: 8.0,
+                                                              bottom: 8.0,
+                                                              left: 20,
+                                                              right: 20),
+                                                      child: Column(
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              // Get.to(ExternalDirScreen());
+                                                            },
+                                                            child: Row(
+                                                              children: const [
+                                                                Text(
+                                                                  "Categories",
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'RedHatDisplay',
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                    FormBuilder(
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 170,
                                                       child:
-                                                          FormBuilderRadioGroup(
-                                                        name: 'sale',
-                                                        initialValue: category,
-                                                        wrapDirection:
+                                                          SingleChildScrollView(
+                                                        scrollDirection:
                                                             Axis.horizontal,
-                                                        orientation:
-                                                            OptionsOrientation
-                                                                .horizontal,
-                                                        controlAffinity:
-                                                            ControlAffinity
-                                                                .leading,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                                  borderSide:
-                                                                      BorderSide
-                                                                          .none),
+                                                        child: Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            top: 8.0,
+                                                            bottom: 8.0,
+                                                            left: 0,
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Column(
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      showModalBottomSheet<
+                                                                          void>(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext
+                                                                                context) {
+                                                                          return Container(
+                                                                            height:
+                                                                                220,
+
+                                                                            // color: Colors.amber,
+
+                                                                            decoration: BoxDecoration(
+                                                                                color: const Color(0x00e5e5e5),
+                                                                                borderRadius: BorderRadius.circular(12),
+                                                                                border: Border.all(
+                                                                                  color: const Color(0xFFE6E6E6),
+                                                                                )),
+
+                                                                            child:
+                                                                                Center(
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.only(top: 15.0),
+                                                                                    child: Container(
+                                                                                      width: 80,
+                                                                                      height: 5,
+                                                                                      decoration: BoxDecoration(color: const Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(5)),
+                                                                                    ),
+                                                                                  ),
+                                                                                  FormBuilder(
+                                                                                    child: FormBuilderRadioGroup(
+                                                                                      name: 'duplex',
+                                                                                      wrapDirection: Axis.vertical,
+                                                                                      orientation: OptionsOrientation.vertical,
+                                                                                      onChanged: (e) {
+                                                                                        Navigator.push(
+                                                                                          context,
+                                                                                          MaterialPageRoute(
+                                                                                            builder: (_) {
+                                                                                              return DuplexScreen(
+                                                                                                duplexType: e.toString(),
+                                                                                              );
+                                                                                            },
+                                                                                          ),
+                                                                                        );
+                                                                                      },
+                                                                                      controlAffinity: ControlAffinity.leading,
+                                                                                      decoration: const InputDecoration(
+                                                                                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                                                                                      ),
+                                                                                      options: [
+                                                                                        "Detached Duplex",
+                                                                                        "Semi Duplex",
+                                                                                        "Duplex Bungalow",
+                                                                                      ]
+                                                                                          .map((e) => FormBuilderFieldOption(
+                                                                                                value: e,
+                                                                                                child: Text(e),
+                                                                                              ))
+                                                                                          .toList(growable: false),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      margin: const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              20),
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2.5,
+                                                                      height:
+                                                                          68,
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                      decoration: BoxDecoration(
+                                                                          color: const Color(0x00e5e5e5),
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          border: Border.all(
+                                                                            color:
+                                                                                const Color(0xFFE6E6E6),
+                                                                          )),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          const Text(
+                                                                            "Duplex",
+                                                                            style: TextStyle(
+                                                                                color: Color(0xFF455A64),
+                                                                                fontSize: 14,
+                                                                                fontFamily: 'RedHatDisplay',
+                                                                                fontWeight: FontWeight.w400),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                40,
+                                                                            width:
+                                                                                40,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/category1.png",
+                                                                              scale: 6.5,
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      showModalBottomSheet<
+                                                                          void>(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext
+                                                                                context) {
+                                                                          return Container(
+                                                                            height:
+                                                                                280,
+
+                                                                            // color: Colors.amber,
+
+                                                                            decoration: BoxDecoration(
+                                                                                color: const Color(0x00e5e5e5),
+                                                                                borderRadius: BorderRadius.circular(12),
+                                                                                border: Border.all(
+                                                                                  color: const Color(0xFFE6E6E6),
+                                                                                )),
+
+                                                                            child:
+                                                                                Center(
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.only(top: 15.0),
+                                                                                    child: Container(
+                                                                                      width: 80,
+                                                                                      height: 5,
+                                                                                      decoration: BoxDecoration(color: const Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(5)),
+                                                                                    ),
+                                                                                  ),
+                                                                                  FormBuilder(
+                                                                                    child: FormBuilderRadioGroup(
+                                                                                      name: 'apartment',
+                                                                                      wrapDirection: Axis.vertical,
+                                                                                      orientation: OptionsOrientation.vertical,
+                                                                                      onChanged: (e) {
+                                                                                        Navigator.push(
+                                                                                          context,
+                                                                                          MaterialPageRoute(
+                                                                                            builder: (_) {
+                                                                                              return ApartmentScreen(
+                                                                                                apartmentType: e.toString(),
+                                                                                              );
+                                                                                            },
+                                                                                          ),
+                                                                                        );
+                                                                                      },
+                                                                                      controlAffinity: ControlAffinity.leading,
+                                                                                      decoration: const InputDecoration(
+                                                                                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                                                                                      ),
+                                                                                      options: [
+                                                                                        "Flats",
+                                                                                        "Shortlet",
+                                                                                        "Service apartment",
+                                                                                        "Self-contained"
+                                                                                      ]
+                                                                                          .map((e) => FormBuilderFieldOption(
+                                                                                                value: e,
+                                                                                                child: Text(e),
+                                                                                              ))
+                                                                                          .toList(growable: false),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      margin: const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              20),
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2.5,
+                                                                      height:
+                                                                          68,
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                      decoration: BoxDecoration(
+                                                                          color: const Color(0x00e5e5e5),
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          border: Border.all(
+                                                                            color:
+                                                                                const Color(0xFFE6E6E6),
+                                                                          )),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          const Text(
+                                                                            "Apartments",
+                                                                            style: TextStyle(
+                                                                                color: Color(0xFF455A64),
+                                                                                fontSize: 14,
+                                                                                fontFamily: 'RedHatDisplay',
+                                                                                fontWeight: FontWeight.w400),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                40,
+                                                                            width:
+                                                                                40,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/category3.png",
+                                                                              scale: 6.5,
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              Column(
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder:
+                                                                              (_) {
+                                                                        return const TerraceScreen();
+                                                                      }));
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2.5,
+                                                                      height:
+                                                                          68,
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                      decoration: BoxDecoration(
+                                                                          color: const Color(0x00e5e5e5),
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          border: Border.all(
+                                                                            color:
+                                                                                const Color(0xFFE6E6E6),
+                                                                          )),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          const Text(
+                                                                            "Terrace",
+                                                                            style: TextStyle(
+                                                                                color: Color(0xFF455A64),
+                                                                                fontSize: 14,
+                                                                                fontFamily: 'RedHatDisplay',
+                                                                                fontWeight: FontWeight.w400),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                40,
+                                                                            width:
+                                                                                40,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/category2.png",
+                                                                              scale: 5,
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder:
+                                                                              (_) {
+                                                                        return const ComingSoon();
+                                                                      }));
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2.5,
+                                                                      height:
+                                                                          68,
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                      decoration: BoxDecoration(
+                                                                          color: const Color(0x00e5e5e5),
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          border: Border.all(
+                                                                            color:
+                                                                                const Color(0xFFE6E6E6),
+                                                                          )),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          const Text(
+                                                                            "Hotels",
+                                                                            style: TextStyle(
+                                                                                color: Color(0xFF455A64),
+                                                                                fontSize: 14,
+                                                                                fontFamily: 'RedHatDisplay',
+                                                                                fontWeight: FontWeight.w400),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                40,
+                                                                            width:
+                                                                                40,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/category4.png",
+                                                                              scale: 5,
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              Column(
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder:
+                                                                              (_) {
+                                                                        return const EstateMarketScreen();
+                                                                      }));
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2.5,
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                      height:
+                                                                          68,
+                                                                      decoration: BoxDecoration(
+                                                                          color: const Color(0x00e5e5e5),
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          border: Border.all(
+                                                                            color:
+                                                                                const Color(0xFFE6E6E6),
+                                                                          )),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          const Text(
+                                                                            "Estate Market",
+                                                                            style: TextStyle(
+                                                                                color: Color(0xFF455A64),
+                                                                                fontSize: 14,
+                                                                                fontFamily: 'RedHatDisplay',
+                                                                                fontWeight: FontWeight.w400),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                40,
+                                                                            width:
+                                                                                40,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/estatemarket.png",
+                                                                              scale: 1.6,
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder:
+                                                                              (_) {
+                                                                        return const ComingSoon();
+                                                                      }));
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2.5,
+                                                                      height:
+                                                                          68,
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                      decoration: BoxDecoration(
+                                                                          color: const Color(0x00e5e5e5),
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          border: Border.all(
+                                                                            color:
+                                                                                const Color(0xFFE6E6E6),
+                                                                          )),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          const Text(
+                                                                            "Land",
+                                                                            style: TextStyle(
+                                                                                color: Color(0xFF455A64),
+                                                                                fontSize: 14,
+                                                                                fontFamily: 'RedHatDisplay',
+                                                                                fontWeight: FontWeight.w400),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                40,
+                                                                            width:
+                                                                                40,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/land.png",
+                                                                              scale: 15,
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              )
+                                                            ],
+                                                          ),
                                                         ),
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            category = value
-                                                                .toString();
-                                                          });
-                                                        },
-                                                        options: [
-                                                          "All",
-                                                          "Sale",
-                                                          "Rent",
-                                                        ]
-                                                            .map((e) =>
-                                                                FormBuilderFieldOption(
-                                                                  value: e,
-                                                                  child:
-                                                                      Text(e),
-                                                                ))
-                                                            .toList(
-                                                                growable:
-                                                                    false),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20,
+                                                              right: 20),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          const Text(
+                                                            "Featured",
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontFamily:
+                                                                    'RedHatDisplay',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              showModalBottomSheet<
+                                                                  void>(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return Container(
+                                                                    height: 160,
+
+                                                                    // color: Colors.amber,
+
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10)),
+
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(top: 15.0),
+                                                                            child:
+                                                                                Container(
+                                                                              width: 80,
+                                                                              height: 5,
+                                                                              decoration: BoxDecoration(color: const Color(0xFFE6E6E6), borderRadius: BorderRadius.circular(5)),
+                                                                            ),
+                                                                          ),
+                                                                          FormBuilder(
+                                                                            child:
+                                                                                FormBuilderRadioGroup(
+                                                                              name: 'sale',
+                                                                              initialValue: houseController.propertyType.value,
+                                                                              wrapDirection: Axis.horizontal,
+                                                                              orientation: OptionsOrientation.horizontal,
+                                                                              controlAffinity: ControlAffinity.leading,
+                                                                              decoration: const InputDecoration(
+                                                                                border: OutlineInputBorder(borderSide: BorderSide.none),
+                                                                              ),
+                                                                              onChanged: (value) {
+                                                                                setState(() {
+                                                                                  houseController.propertyType.value = value.toString();
+                                                                                  handleFilter();
+                                                                                });
+                                                                              },
+                                                                              options: [
+                                                                                "All",
+                                                                                "Sale",
+                                                                                "Rent",
+                                                                              ]
+                                                                                  .map((e) => FormBuilderFieldOption(
+                                                                                        value: e,
+                                                                                        child: Text(e),
+                                                                                      ))
+                                                                                  .toList(growable: false),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              width: 70,
+                                                              height: 30,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100),
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 0.5,
+                                                                ),
+                                                              ),
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                children: [
+                                                                  Text(
+                                                                    houseController
+                                                                        .propertyType
+                                                                        .value,
+                                                                    style: const TextStyle(
+                                                                        fontFamily:
+                                                                            'RedHatDisplay',
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        fontSize:
+                                                                            10),
+                                                                  ),
+                                                                  const Icon(
+                                                                    CupertinoIcons
+                                                                        .arrow_up_down,
+
+                                                                    size: 11,
+
+                                                                    // color: Color(0XFFE5E5E5),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: Container(
-                                        width: 70,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          border: Border.all(
-                                            color: Colors.black,
-                                            width: 0.5,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              category,
-                                              style: const TextStyle(
-                                                  fontFamily: 'RedHatDisplay',
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 10),
-                                            ),
-                                            const Icon(
-                                              CupertinoIcons.arrow_up_down,
-
-                                              size: 11,
-
-                                              // color: Color(0XFFE5E5E5),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              getPropertyListingController.isLoading.isTrue
-                                  ? Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          CollectionSlideTransition(
-                                            children: const <Widget>[
-                                              CircleAvatar(
-                                                backgroundColor: Colors.blue,
-                                                radius: 6,
-                                              ),
-                                              CircleAvatar(
-                                                backgroundColor: Colors.red,
-                                                radius: 6,
-                                              ),
-                                              CircleAvatar(
-                                                backgroundColor: Colors.yellow,
-                                                radius: 6,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : getPropertyListingController
-                                          .filteredList.isEmpty
-                                      ? Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                  "assets/images/opps.png"),
-                                              const Text(
-                                                "Opps!",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 35),
-                                              ),
-                                              const SizedBox(
-                                                height: 30,
-                                              ),
-                                              const Text("No Item Available"),
-                                            ],
-                                          ),
-                                        )
-                                      : Obx(
-                                          () => ListView.builder(
-                                              physics: const ScrollPhysics(),
-                                              // controller: _controller,
-                                              shrinkWrap: true,
-                                              // reverse: true,
-                                              itemCount:
-                                                  getPropertyListingController
-                                                      .filteredList.length,
-                                              itemBuilder: ((context, index) {
-                                                int price =
-                                                    (getPropertyListingController
-                                                        .filteredList[index]
-                                                        .rentalFee!
-                                                        .toInt()
-                                                    //  +
-                                                    // getPropertyListingController.filteredList[index].agencyFee!.toInt()
-                                                    );
-                                                var formatter =
-                                                    NumberFormat("#,###");
-                                                var formatedPrice =
-                                                    formatter.format(price);
-                                                return SingleProperty(
-                                                  id: getPropertyListingController
-                                                      .filteredList[index].id,
-                                                  image:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .image,
-                                                  designType:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .designType,
-                                                  currency:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .currency,
-                                                  propertyType:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .propertyType,
-                                                  propertyAddress:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .propertyAddress,
-                                                  bedroom:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .bedroom,
-                                                  propertyCategory:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .propertyCategory,
-                                                  price: formatedPrice,
-                                                  isPromoted:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .isPromoted,
-                                                  propertyName:
-                                                      getPropertyListingController
-                                                          .filteredList[index]
-                                                          .propertyName
-                                                          .toString(),
-                                                  comingFrom: 'Homescreen',
-                                                );
-                                              })),
-                                        ),
-                              if (getPropertyListingController
-                                  .isLoadMoreRunning.isTrue)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 80),
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        CollectionSlideTransition(
-                                          children: const <Widget>[
-                                            CircleAvatar(
-                                              backgroundColor: Colors.blue,
-                                              radius: 6,
-                                            ),
-                                            CircleAvatar(
-                                              backgroundColor: Colors.red,
-                                              radius: 6,
-                                            ),
-                                            CircleAvatar(
-                                              backgroundColor: Colors.yellow,
-                                              radius: 6,
-                                            ),
-                                          ],
-                                        ),
+                                              )
+                                            : Container(),
+                                        SingleProperty(
+                                            id: post.id,
+                                            image: post.image,
+                                            designType: post.designType,
+                                            currency: post.currency,
+                                            propertyType: post.propertyType,
+                                            propertyAddress:
+                                                post.propertyAddress,
+                                            bedroom: post.bedroom,
+                                            propertyCategory:
+                                                post.propertyCategory,
+                                            price: post.rentalFee.toString(),
+                                            propertyName:
+                                                post.propertyName.toString(),
+                                            comingFrom: 'Homescreen')
                                       ],
-                                    ),
-                                  ),
+                                    );
+                                  },
+                                  noItemsFoundIndicatorBuilder: (context) =>
+                                      Text('No posts found.'),
                                 ),
-                            ],
-                          ),
-                        ),
-                      ),
+                              ),
+                      )
                     ],
                   ),
                 ),

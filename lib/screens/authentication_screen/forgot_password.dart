@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -13,10 +15,10 @@ class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+  ForgotPasswordScreenState createState() => ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormBuilderState>();
   int sendCount = 0;
@@ -74,8 +76,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     handleVerifyOtp();
                   },
                   style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(500, 60),
-                      primary: mobileButtonColor),
+                      fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                   child: isLoading
                       ? const CircularProgressIndicator()
                       : const Text(

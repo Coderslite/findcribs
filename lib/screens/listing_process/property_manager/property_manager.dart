@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -21,7 +20,6 @@ import 'package:image_cropper/image_cropper.dart';
 
 import '../../../controller/get_profile_controller.dart';
 import '../../../models/user_profile_information_model.dart';
-import '../../../service/user_profile_service.dart';
 import '../listing/select_listing_type.dart';
 
 class PropertyManagerRegistration extends StatefulWidget {

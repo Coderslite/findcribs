@@ -78,7 +78,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
-                      "assets/images/" + images[index],
+                      "assets/images/${images[index]}",
                     ),
                     fit: BoxFit.cover,
                   ),

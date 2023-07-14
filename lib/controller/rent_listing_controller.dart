@@ -36,7 +36,7 @@ class RentListingController extends GetxController {
   var description = ''.obs;
   var propertyCategory = ''.obs;
   var propertyType = ''.obs;
-  var location = ''.obs;
+  var state= ''.obs;
   var lga = ''.obs;
   var negotiable = 0.obs;
   var myImages = [].obs;
@@ -84,7 +84,7 @@ class RentListingController extends GetxController {
     description.value = '';
     propertyCategory.value = '';
     propertyType.value = '';
-    location.value = '';
+    state.value = '';
     lga.value = '';
     negotiable.value = 0;
     myImages.value = [];

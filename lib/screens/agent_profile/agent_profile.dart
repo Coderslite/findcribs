@@ -1,4 +1,4 @@
-// ignore_for_file: library_prefixes, duplicate_ignore, avoid_print, deprecated_member_use
+// ignore_for_file: library_prefixes, duplicate_ignore, avoid_print, deprecated_member_use, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -32,10 +32,10 @@ class AgentProfileScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AgentProfileScreenState createState() => _AgentProfileScreenState();
+  AgentProfileScreenState createState() => AgentProfileScreenState();
 }
 
-class _AgentProfileScreenState extends State<AgentProfileScreen> {
+class AgentProfileScreenState extends State<AgentProfileScreen> {
   late Future<UserProfile> userProfile;
   late Map userData;
 
@@ -67,7 +67,7 @@ class _AgentProfileScreenState extends State<AgentProfileScreen> {
       "ERROR",
       (data) {
         var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
+        print("Error ${errorMessage['message']}");
         print(data);
       },
     );

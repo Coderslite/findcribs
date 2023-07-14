@@ -1,3 +1,5 @@
+// ignore_for_file: library_prefixes, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart' as launchUrl;
@@ -52,7 +54,6 @@ class _HelpScreenState extends State<HelpScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  // ignore: deprecated_member_use
                   launchUrl.launch("tel:07026195346");
                 },
                 child: Container(

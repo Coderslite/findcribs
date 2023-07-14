@@ -67,7 +67,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
             ? Center(
                 child: GestureDetector(
                 onTap: () {
-                  Get.to(HomePageRoot(navigateIndex: 1));
+                  Get.to(const HomePageRoot(navigateIndex: 1));
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -107,8 +107,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                           const FavouriteAgentScreen()));
                             },
                             style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(86, 25),
-                                primary: mobileButtonColor),
+                                fixedSize: const Size(86, 25), backgroundColor: mobileButtonColor),
                             child: const Text(
                               'View All',
                               style: TextStyle(
@@ -181,8 +180,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                           const FavouriteListingScreen()));
                             },
                             style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(86, 25),
-                                primary: mobileButtonColor),
+                                fixedSize: const Size(86, 25), backgroundColor: mobileButtonColor),
                             child: const Text(
                               'View All',
                               style: TextStyle(

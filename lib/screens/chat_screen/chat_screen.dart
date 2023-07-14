@@ -7,7 +7,6 @@ import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/controller/socket_controller.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
-import 'package:findcribs/service/user_profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -48,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ? Center(
                 child: GestureDetector(
                 onTap: () {
-                  Get.to(HomePageRoot(navigateIndex: 0));
+                  Get.to(const HomePageRoot(navigateIndex: 0));
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -208,14 +207,18 @@ class _ChatListState extends State<ChatList> {
                       itemCount: getAllChatController.allAvailableChats.length,
                       itemBuilder: (context, index) {
                         int receiverId = getAllChatController
-                                    .allAvailableChats[index].users![1]['id'] !=
-                                int.parse(getProfileController.myId
-                                    .toString()
-                                    .toString())
-                            ? getAllChatController
-                                .allAvailableChats[index].users![1]['id']
-                            : getAllChatController
-                                .allAvailableChats[index].users![0]['id'];
+                                    .allAvailableChats[index].users![1]['id']
+                                    .toString() ==
+                                'null'
+                            ? '0'
+                            : getAllChatController.allAvailableChats[index]
+                                        .users![1]['id'] !=
+                                    int.parse(
+                                        getProfileController.myId.toString())
+                                ? getAllChatController
+                                    .allAvailableChats[index].users![1]['id']
+                                : getAllChatController
+                                    .allAvailableChats[index].users![0]['id'];
                         String receiverFirstName = getAllChatController
                                     .allAvailableChats[index].users![1]['id'] !=
                                 int.parse(getProfileController.myId.toString())

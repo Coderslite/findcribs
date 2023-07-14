@@ -1,4 +1,4 @@
-// ignore_for_file: library_prefixes, avoid_print
+// ignore_for_file: library_prefixes, avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:io';
@@ -165,109 +165,107 @@ class _HomePageRootState extends State<HomePageRoot> {
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: isShowFloatButton == false
-                ? Container()
-                : JustTheTooltip(
-                    controller: tooltipController,
-                    isModal: true,
-                    borderRadius: BorderRadius.circular(20),
-                    curve: Curves.easeInOutCirc,
-                    tailBaseWidth: 20,
-                    tailLength: 10,
-                    // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
-                    content: SizedBox(
-                      height: 100,
-                      width: 170,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+            floatingActionButton: JustTheTooltip(
+              controller: tooltipController,
+              isModal: true,
+              borderRadius: BorderRadius.circular(20),
+              curve: Curves.easeInOutCirc,
+              tailBaseWidth: 20,
+              tailLength: 10,
+              // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
+              content: SizedBox(
+                height: 100,
+                width: 170,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        homeRootController.isToolTip.value = false;
+                        tooltipController.hideTooltip().then((value) {
+                          handleGetStarted();
+                        });
+                      },
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              homeRootController.isToolTip.value = false;
-                              tooltipController.hideTooltip().then((value) {
-                                handleGetStarted();
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset("assets/images/list_property.png"),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("List a property")
-                              ],
-                            ),
+                          Image.asset("assets/images/list_property.png"),
+                          const SizedBox(
+                            width: 10,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              homeRootController.isToolTip.value = false;
-                              tooltipController.hideTooltip().then((v) =>
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return const StoryList();
-                                  })));
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  height: 40,
-                                  margin: const EdgeInsets.only(left: 20),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: const Color(0XFF0072BA),
-                                        width: 2,
-                                      )),
-                                  child: const Icon(
-                                    Icons.play_arrow,
-                                    color: Color(0XFF0072BA),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("Post a story"),
-                                Expanded(child: Container())
-                              ],
-                            ),
-                          )
+                          const Text("List a property")
                         ],
                       ),
                     ),
-                    child: GestureDetector(
-                      onTap: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        final token = prefs.getString('token');
-                        token == null
-                            ? showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const SocialLogin();
-                                })
-                            : getProfileController.agent.string != 'null'
-                                ? homeRootController.isToolTip.isTrue
-                                    ? tooltipController.hideTooltip()
-                                    : tooltipController.showTooltip()
-                                : handleGetStarted();
-                        ;
+                    GestureDetector(
+                      onTap: () {
+                        homeRootController.isToolTip.value = false;
+                        tooltipController.hideTooltip().then((v) =>
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) {
+                              return const StoryList();
+                            })));
                       },
-                      child: const Material(
-                        color: Color(0XFF0072BA),
-                        shape: CircleBorder(),
-                        elevation: 4.0,
-                        child: Padding(
-                          padding: EdgeInsets.all(18.0),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 40,
+                            margin: const EdgeInsets.only(left: 20),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0XFF0072BA),
+                                  width: 2,
+                                )),
+                            child: const Icon(
+                              Icons.play_arrow,
+                              color: Color(0XFF0072BA),
+                            ),
                           ),
-                        ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Text("Post a story"),
+                          Expanded(child: Container())
+                        ],
                       ),
+                    )
+                  ],
+                ),
+              ),
+              child: GestureDetector(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  final token = prefs.getString('token');
+                  token == null
+                      ? showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const SocialLogin();
+                          })
+                      : getProfileController.agent.string == 'null' ||
+                              getProfileController.agent.string == '{}'
+                          ? handleGetStarted()
+                          : homeRootController.isToolTip.isTrue
+                              ? tooltipController.hideTooltip()
+                              : tooltipController.showTooltip();
+                },
+                child: const Material(
+                  color: Color(0XFF0072BA),
+                  shape: CircleBorder(),
+                  elevation: 4.0,
+                  child: Padding(
+                    padding: EdgeInsets.all(18.0),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
                     ),
                   ),
+                ),
+              ),
+            ),
             bottomNavigationBar: getFooter(size),
             body: UpgradeAlert(
               upgrader: Upgrader(
@@ -366,7 +364,7 @@ class _HomePageRootState extends State<HomePageRoot> {
                               )
                             : SizedBox(
                                 width: size.width / 7,
-                                child:badges. Badge(
+                                child: badges.Badge(
                                   badgeContent: Text(getAllChatController
                                       .filteredUnreadMessage.length
                                       .toString()),
@@ -394,10 +392,12 @@ class _HomePageRootState extends State<HomePageRoot> {
   }
 
   handleGetStarted() async {
-    if (getProfileController.agent.string != 'null') {
-      Get.to(const SelectListingType());
-    } else {
+    print("handling get started");
+    if (getProfileController.agent.string == 'null' ||
+        getProfileController.agent.string == '{}') {
       Get.to(const GetStarted());
+    } else {
+      Get.to(const SelectListingType());
     }
   }
 }

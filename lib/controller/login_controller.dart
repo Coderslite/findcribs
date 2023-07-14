@@ -189,7 +189,7 @@ class LoginController extends GetxController {
     prefs.remove('token');
     prefs.remove('email');
     _googleSignIn.signOut().then((value) => Get.off(const LoginScreen()));
-    getProfileController.agent.value = 'null';
+    getProfileController.agent.value = {};
     Get.deleteAll();
     // Get.reset();
   }

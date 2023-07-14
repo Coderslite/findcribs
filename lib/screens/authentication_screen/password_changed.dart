@@ -37,7 +37,7 @@ class PasswordChangedScreen extends StatelessWidget {
                   //Navigate to homepage acct verified Page
                 },
                 style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(500, 60), primary: mobileButtonColor),
+                    fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                 child: const Text(
                   //  Connect EndPoint
 

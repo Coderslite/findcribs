@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/components/constants.dart';
@@ -17,10 +19,10 @@ class VerifyEmailScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _VerifyEmailScreenState createState() => _VerifyEmailScreenState();
+  VerifyEmailScreenState createState() => VerifyEmailScreenState();
 }
 
-class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+class VerifyEmailScreenState extends State<VerifyEmailScreen> {
   var formKey = GlobalKey<FormBuilderState>();
   bool isLoading = false;
   bool resendingOtp = false;
@@ -84,8 +86,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         handleVerify();
                       },
                       style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(500, 60),
-                          primary: mobileButtonColor),
+                          fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(
@@ -192,10 +193,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         prefs.setString('action', 'LoggedIn');
 
         prefs.setString('token', token);
-        // ignore: use_build_context_synchronously
         Navigator.of(context).popUntil((route) => route.isFirst);
-
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
           return const VerifiedScreen();
         }));
@@ -241,7 +239,6 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         btnOkOnPress: () {},
       ).show();
     } else {
-      print(userDetails['message']);
       setState(() {
         resendingOtp = false;
       });

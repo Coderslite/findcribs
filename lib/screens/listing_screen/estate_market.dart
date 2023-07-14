@@ -9,7 +9,6 @@ import '../../models/house_list_model.dart';
 import '../../service/property_list_categoty_service.dart';
 import '../../service/search_property.dart';
 import '../homepage/single_property.dart';
-import '../product_details/product_details.dart';
 
 class EstateMarketScreen extends StatefulWidget {
   const EstateMarketScreen({Key? key}) : super(key: key);
@@ -469,9 +468,7 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                                                         .styleFrom(
                                                             fixedSize:
                                                                 const Size(
-                                                                    500, 60),
-                                                            primary:
-                                                                mobileButtonColor),
+                                                                    500, 60), backgroundColor: mobileButtonColor),
                                                     child: isLoading
                                                         ? const CircularProgressIndicator()
                                                         : const Text(

@@ -30,7 +30,6 @@ class _Sale3StepperState extends State<Sale3Stepper> {
       Get.put(SaleListingController());
   LoadStateLgaController loadStateLgaController =
       Get.put(LoadStateLgaController());
-  final _lgaForm = GlobalKey<FormBuilderState>();
 
   // @override
   // void dispose() {
@@ -156,13 +155,13 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                             () => Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Location (State)"),
-                                saleListingController.location.value == ''
+                                const Text("state (State)"),
+                                saleListingController.state.value == ''
                                     ? FormBuilderDropdown(
-                                        name: 'location',
+                                        name: 'state',
                                         isExpanded: true,
                                         onChanged: (value) {
-                                          saleListingController.location.value =
+                                          saleListingController.state.value =
                                               value.toString();
                                           loadStateLgaController
                                               .handleSaleFetchLga();
@@ -187,9 +186,9 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                         name: 'State',
                                         isExpanded: true,
                                         initialValue: saleListingController
-                                            .location.value,
+                                            .state.value,
                                         onChanged: (value) {
-                                          saleListingController.location.value =
+                                          saleListingController.state.value =
                                               value.toString();
                                           loadStateLgaController
                                               .handleSaleFetchLga();
@@ -219,7 +218,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                           Obx(
                             () => Visibility(
                               visible:
-                                  saleListingController.location.string == ''
+                                  saleListingController.state.string == ''
                                       ? false
                                       : true,
                               child: Column(
@@ -244,7 +243,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                             children: [
                                               Text(saleListingController
                                                   .lga.string),
-                                              Icon(
+                                              const Icon(
                                                 CupertinoIcons
                                                     .arrowtriangle_down_fill,
                                                 size: 12,
@@ -657,7 +656,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
           btnOkOnPress: () {},
         ).show();
       } 
-      else if (saleListingController.location.string == '') {
+      else if (saleListingController.state.string == '') {
         AwesomeDialog(
           context: context,
           dialogType: DialogType.error,

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:convert';
@@ -576,7 +576,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                   ? '0'
                   : rentListingController.agencyFee.value.toString();
           request.fields['state'] =
-              rentListingController.location.value.toString();
+              rentListingController.state.value.toString();
           request.fields['lga'] = rentListingController.lga.value.toString();
           request.fields['country'] = 'Nigeria';
           request.fields['total_area_of_land'] =
@@ -601,7 +601,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
           request.fields['property_type'] = "rent";
           request.fields['status'] = 'Active';
           request.fields['location'] =
-              rentListingController.location.toString();
+              rentListingController.state.toString();
           request.fields['negotiable'] =
               rentListingController.negotiable.value == 1 ? '1' : '0';
           request.headers['Authorization'] = "$token";
@@ -653,7 +653,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                 desc: "You can check your profile page to edit few info!",
                 btnOk: ElevatedButton(
                   onPressed: () {
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",
@@ -890,7 +890,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                   ? '0'
                   : rentListingController.agencyFee.value.toString();
           request.fields['state'] =
-              rentListingController.location.value.toString();
+              rentListingController.state.value.toString();
           request.fields['total_area_of_land'] =
               rentListingController.totalArea.value.toString();
           request.fields['interior_design'] =
@@ -913,7 +913,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
           request.fields['property_type'] = "rent";
           request.fields['status'] = 'Saved';
           request.fields['location'] =
-              rentListingController.location.toString();
+              rentListingController.state.toString();
           request.fields['lga'] = rentListingController.lga.value.toString();
           request.fields['country'] = 'Nigeria';
           request.fields['negotiable'] =
@@ -971,7 +971,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                 btnOk: ElevatedButton(
                   onPressed: () {
                     rentListingController.handleResetInformation();
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",

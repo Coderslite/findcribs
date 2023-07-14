@@ -262,11 +262,12 @@ class _BusinessVerificationScreenState
                                     // Connect EndPoint
                                     onPressed: () {
                                       businessVerificationController
-                                          .handleVerifyAgent(File(file!.path.toString()), id!);
+                                          .handleVerifyAgent(
+                                              File(file!.path.toString()), id!);
                                     },
                                     style: ElevatedButton.styleFrom(
                                         fixedSize: const Size(500, 60),
-                                        primary: mobileButtonColor),
+                                        backgroundColor: mobileButtonColor),
                                     child: businessVerificationController
                                             .isLoading.isTrue
                                         ? const CircularProgressIndicator()

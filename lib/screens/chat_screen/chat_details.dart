@@ -7,6 +7,7 @@ import 'package:findcribs/controller/get_single_property_listing.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/message_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
+import 'package:findcribs/screens/agent_profile/agent_profile.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
 import 'package:findcribs/service/get_chat_service.dart';
 import 'package:findcribs/service/user_profile_service.dart';
@@ -204,7 +205,7 @@ class _ChatDetailsState extends State<ChatDetails> {
       print("handling messages event");
     });
     socket.on("MESSAGE", (data) {
-      print("got a message" + data);
+      print("got a message $data");
       if (mounted) {
         handleGetMessages();
 
@@ -287,9 +288,16 @@ class _ChatDetailsState extends State<ChatDetails> {
                 ),
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(widget.receiverImage),
+                    InkWell(
+                      onTap: () {
+                        Get.to(AgentProfileScreen(
+                          id: widget.receiverId,
+                        ));
+                      },
+                      child: CircleAvatar(
+                        radius: 25,
+                        backgroundImage: NetworkImage(widget.receiverImage),
+                      ),
                     ),
                     const SizedBox(
                       width: 10,

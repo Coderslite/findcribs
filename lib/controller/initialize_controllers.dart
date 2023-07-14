@@ -33,7 +33,6 @@ class HomeBindings implements Bindings {
     Get.put(RentListingController());
     Get.put(SaleListingController());
     Get.put(EstateListingController());
-    Get.put(GetPropertyListingController());
     Get.put(LoadStateLgaController());
     Get.put(HomeRootController());
     Get.put(GetMyStoryController());

@@ -20,10 +20,10 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  ProfileScreenState createState() => ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class ProfileScreenState extends State<ProfileScreen> {
   GetProfileController getProfileController = Get.put(GetProfileController());
   LoginController loginController = Get.put(LoginController());
 
@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ? Center(
                     child: GestureDetector(
                     onTap: () {
-                      Get.to(HomePageRoot(navigateIndex: 0));
+                      Get.to(const HomePageRoot(navigateIndex: 0));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -123,9 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                           Text(
-                            getProfileController.firstName.toString() +
-                                " " +
-                                getProfileController.lastName.toString(),
+                            "${getProfileController.firstName} ${getProfileController.lastName}",
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 26),
                           ),
@@ -133,9 +131,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 5,
                           ),
                           Text(
-                            getProfileController.category.value == 'null'
+                            getProfileController.agent.string == 'null' ||
+                                    getProfileController.agent.string == '{}'
                                 ? "Not Identified"
-                                : getProfileController.category.value,
+                                : getProfileController.agent['category']
+                                    .toString(),
                             style: const TextStyle(color: Colors.grey),
                           ),
                           const SizedBox(
@@ -197,7 +197,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          getProfileController.category.value == 'null'
+                          getProfileController.agent.toString() == 'null' ||
+                                  getProfileController.agent.string == '{}'
                               ? Container()
                               : InkWell(
                                   onTap: () {

@@ -8,10 +8,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import '../../components/constants.dart';
 import '../../controller/load_state_lga_controller.dart';
+import '../../service/property_by_category.dart';
 
 // ignore: camel_case_types
 class Search_Screen extends StatefulWidget {
@@ -23,151 +25,33 @@ class Search_Screen extends StatefulWidget {
 
 // ignore: camel_case_types
 class _Search_ScreenState extends State<Search_Screen> {
-  late Future<List<HouseListModel>> propertyList;
-  // late Future<List<FavouriteStoryListModel>> storyList;
-  List<HouseListModel> filteredList = [];
-  List<HouseListModel> firstList = [];
-  List<HouseListModel> searchfilteredList = [];
-  List<HouseListModel> firstSearchList = [];
-  String searchingText = '';
-  final textController = TextEditingController();
-  bool isLoading = false;
-  bool isSearching = false;
-  bool visible = true;
-  String state = 'Nigeria';
-  String area = '';
-  String searchValue = '';
-
-  int page = 1;
-  bool _hasNextPage = true;
-  late ScrollController _controller;
-  String currency = 'Naira';
-
-  // Used to display loading indicators when _loadMore function is running
-  bool _isLoadMoreRunning = false;
-  bool isSearched = false;
-  var searchListingController = Get.put(SearchListingController());
+  TextEditingController textController = TextEditingController();
   LoadStateLgaController loadStateLgaController =
       Get.put(LoadStateLgaController());
-  GetPropertyListingController getPropertyListingController =
-      Get.put(GetPropertyListingController());
+  HouseByCategoryController houseController =
+      Get.put(HouseByCategoryController());
+
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
+  int currentPropertyTypeIndex = 0;
+  int currentStateIndex = 100;
+
+  handleFilter() {
+    houseController.categoryPagingController.itemList!.clear();
+    houseController.fetchPosts(0);
+  }
+
   @override
   void initState() {
-    _controller = ScrollController();
-
-    _controller.addListener(_searchedScrollListener);
-
+    houseController.isFiltering.value = true;
+    houseController.fetchPosts(0);
     super.initState();
-  }
-
-  handleGetMoreSearchedProperties() {
-    propertyList = getSearchedProperty(state != 'Nigeria' ? state : '',
-        area != '' ? area : '', searchValue != '' ? searchValue : '', page);
-    propertyList.then((value) {
-      // print(value);
-      if (value.isEmpty) {
-        setState(() {
-          isLoading = false;
-          _hasNextPage = false;
-          _isLoadMoreRunning = false;
-        });
-      } else {
-        setState(() {
-          firstList = value;
-          isLoading = false;
-          for (int s = 0; s < value.length; s++) {
-            filteredList.add(value[s]);
-          }
-        });
-      }
-    });
-  }
-
-  void _loadMoreSearched() async {
-    if (_hasNextPage == true &&
-        isSearching == false &&
-        _isLoadMoreRunning == false &&
-        _controller.position.extentAfter < 600) {
-      setState(() {
-        // Display a progress indicator at the bottom
-        _isLoadMoreRunning = true;
-        page += 1;
-      });
-      propertyList = getSearchedProperty(state != 'Nigeria' ? state : '',
-          area != '' ? area : '', searchValue != '' ? searchValue : '', page);
-      propertyList.then((value) {
-        // print(value);
-        if (value.isEmpty) {
-          setState(() {
-            isSearching = false;
-            _hasNextPage = false;
-            _isLoadMoreRunning = true;
-          });
-        } else {
-          setState(() {
-            firstList = value;
-            isSearching = false;
-            for (int s = 0; s < value.length; s++) {
-              filteredList.add(value[s]);
-            }
-          });
-        }
-      });
-    } else {
-      // print("Nothing is loading");
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-    }
-  }
-
-  _searchedScrollListener() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the bottom";
-        _loadMoreSearched();
-      });
-    }
-    if (_controller.offset <= _controller.position.minScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the top";
-      });
-    }
-  }
-
-  handleSearchProperty(bool isBottomSheet) {
-    isBottomSheet ? Navigator.pop(context) : () {};
-    setState(() {
-      filteredList = [];
-      getPropertyListingController.searchedPropertyList.value = [];
-      isSearching = true;
-      visible = false;
-    });
-
-    propertyList = getSearchedProperty(
-        searchListingController.location.string,
-        searchListingController.lga.string,
-        searchValue != '' ? searchValue : '',
-        page);
-
-    propertyList.then((value) {
-      setState(() {
-        for (int s = 0; s < value.length; s++) {
-          filteredList.add(value[s]);
-          getPropertyListingController.searchedPropertyList.add(value[s]);
-        }
-        searchfilteredList = filteredList;
-        isSearching = false;
-      });
-    });
   }
 
   @override
   void dispose() {
-    searchListingController.location.value = '';
-    searchListingController.lga.value = '';
+    houseController.categoryPagingController.itemList!.clear();
+    houseController.handleReset();
     super.dispose();
   }
 
@@ -267,6 +151,11 @@ class _Search_ScreenState extends State<Search_Screen> {
                                                             name: 'location',
                                                             isExpanded: true,
                                                             onChanged: (value) {
+                                                              houseController
+                                                                      .state
+                                                                      .value =
+                                                                  value
+                                                                      .toString();
                                                               searchListingController
                                                                       .location
                                                                       .value =
@@ -274,6 +163,9 @@ class _Search_ScreenState extends State<Search_Screen> {
                                                                       .toString();
                                                               loadStateLgaController
                                                                   .handleSearchFetchLga();
+                                                              houseController
+                                                                  .lga
+                                                                  .value = '';
                                                             },
                                                             items:
                                                                 loadStateLgaController
@@ -306,10 +198,15 @@ class _Search_ScreenState extends State<Search_Screen> {
                                                             name: 'State',
                                                             isExpanded: true,
                                                             initialValue:
-                                                                searchListingController
-                                                                    .location
+                                                                houseController
+                                                                    .state
                                                                     .value,
                                                             onChanged: (value) {
+                                                              houseController
+                                                                      .state
+                                                                      .value =
+                                                                  value
+                                                                      .toString();
                                                               searchListingController
                                                                       .location
                                                                       .value =
@@ -317,6 +214,9 @@ class _Search_ScreenState extends State<Search_Screen> {
                                                                       .toString();
                                                               loadStateLgaController
                                                                   .handleSearchFetchLga();
+                                                              houseController
+                                                                  .lga
+                                                                  .value = '';
                                                             },
                                                             items:
                                                                 loadStateLgaController
@@ -353,13 +253,11 @@ class _Search_ScreenState extends State<Search_Screen> {
                                               ),
                                               Obx(
                                                 () => Visibility(
-                                                  visible:
-                                                      searchListingController
-                                                                  .location
-                                                                  .string ==
-                                                              ''
-                                                          ? false
-                                                          : true,
+                                                  visible: houseController
+                                                              .state.string ==
+                                                          ''
+                                                      ? false
+                                                      : true,
                                                   child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -391,10 +289,10 @@ class _Search_ScreenState extends State<Search_Screen> {
                                                                     MainAxisAlignment
                                                                         .spaceBetween,
                                                                 children: [
-                                                                  Text(searchListingController
+                                                                  Text(houseController
                                                                       .lga
                                                                       .string),
-                                                                  Icon(
+                                                                  const Icon(
                                                                     CupertinoIcons
                                                                         .arrowtriangle_down_fill,
                                                                     size: 12,
@@ -418,27 +316,25 @@ class _Search_ScreenState extends State<Search_Screen> {
                                                 child: ElevatedButton(
                                                   // Connect EndPoint
                                                   onPressed: () {
-                                                    handleSearchProperty(true);
+                                                    handleFilter();
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                           fixedSize: const Size(
                                                               500, 60),
-                                                          primary:
+                                                          backgroundColor:
                                                               mobileButtonColor),
-                                                  child: isLoading
-                                                      ? const CircularProgressIndicator()
-                                                      : const Text(
-                                                          //  Connect EndPoint
+                                                  child: const Text(
+                                                    //  Connect EndPoint
 
-                                                          'Filter',
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'RedHatDisplay',
-                                                              color:
-                                                                  mobileButtonTextColor,
-                                                              fontSize: 20),
-                                                        ),
+                                                    'Filter',
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'RedHatDisplay',
+                                                        color:
+                                                            mobileButtonTextColor,
+                                                        fontSize: 20),
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -458,120 +354,41 @@ class _Search_ScreenState extends State<Search_Screen> {
                     ),
                   ),
                   hintText: "Search Property by type or name"),
+              onFieldSubmitted: (value) {
+                handleFilter();
+              },
               onChanged: (value) {
                 setState(() {
-                  if (searchValue.isEmpty) {
-                    searchValue = '';
-                  } else {
-                    searchValue = value;
-                  }
+                  houseController.category.value = value.toString();
                 });
-              },
-              onFieldSubmitted: (value) {
-                setState(() {
-                  searchValue = value;
-                });
-                handleSearchProperty(false);
               },
               scrollPadding: const EdgeInsets.all(0),
             ),
           ),
-
-          // Container(
-          //   margin: const EdgeInsets.only(left: 15),
-          //   child: SingleChildScrollView(
-          //     scrollDirection: Axis.horizontal,
-          //     child: Row(
-          //       children: [
-          //         _buildOptions(context,
-          //             label: "Sale", options: ['Sale', "Not Sale"]),
-          //         const SizedBox(
-          //           width: 10,
-          //         ),
-          //         _buildOptions(context,
-          //             label: "Type", options: ['Type', "Not Type"]),
-          //         const SizedBox(
-          //           width: 10,
-          //         ),
-          //         _buildOptions(context,
-          //             label: "Sort", options: ['Sort', "Not Sort"]),
-          //         const SizedBox(
-          //           width: 10,
-          //         ),
-          //         _buildOptions(context,
-          //             label: "Price", options: ['Price', "Not Price"]),
-          //         const SizedBox(
-          //           width: 10,
-          //         ),
-          //         _buildOptions(context,
-          //             label: "Location", options: ['Location', "Not Location"]),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Expanded(
-              child: isLoading == true || isSearching == true
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : searchfilteredList.isEmpty
-                      ? const Center(child: Text("No result"))
-                      : ListView.builder(
-                          controller: _controller,
-                          shrinkWrap: true,
-                          itemCount: searchfilteredList.length,
-                          itemBuilder: ((context, index) {
-                            int price =
-                                (searchfilteredList[index].rentalFee!.toInt());
-                            var formatter = NumberFormat("#,###");
-                            var formatedPrice = formatter.format(price);
-                            return SingleProperty(
-                              comingFrom: 'Search',
-                              id: searchfilteredList[index].id,
-                              image: searchfilteredList[index].image,
-                              designType: searchfilteredList[index].designType,
-                              currency: searchfilteredList[index].currency,
-                              propertyType:
-                                  searchfilteredList[index].propertyType,
-                              propertyAddress:
-                                  searchfilteredList[index].propertyAddress,
-                              bedroom: searchfilteredList[index].bedroom,
-                              propertyCategory:
-                                  searchfilteredList[index].propertyCategory,
-                              price: formatedPrice,
-                              propertyName: searchfilteredList[index]
-                                  .propertyName
-                                  .toString(),
-                            );
-                          }))),
-          if (_isLoadMoreRunning == true)
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 40),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CollectionSlideTransition(
-                      children: const <Widget>[
-                        CircleAvatar(
-                          backgroundColor: Colors.blue,
-                          radius: 6,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.red,
-                          radius: 6,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.yellow,
-                          radius: 6,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+            child: PagedListView<int, HouseListModel>(
+              pagingController: houseController.categoryPagingController,
+              // physics: NeverScrollableScrollPhysics(),
+              builderDelegate: PagedChildBuilderDelegate<HouseListModel>(
+                itemBuilder: (context, post, index) {
+                  return SingleProperty(
+                      id: post.id,
+                      image: post.image,
+                      designType: post.designType,
+                      currency: post.currency,
+                      propertyType: post.propertyType,
+                      propertyAddress: post.propertyAddress,
+                      bedroom: post.bedroom,
+                      propertyCategory: post.propertyCategory,
+                      price: post.rentalFee.toString(),
+                      propertyName: post.propertyName.toString(),
+                      comingFrom: 'Homescreen');
+                },
+                noItemsFoundIndicatorBuilder: (context) =>
+                    const Center(child: Text('No property found.')),
               ),
             ),
+          )
         ]));
   }
 
@@ -605,10 +422,8 @@ class _Search_ScreenState extends State<Search_Screen> {
                             return InkWell(
                               onTap: () {
                                 setState(() {
-                                  searchListingController.lga.value =
+                                  houseController.lga.value =
                                       loadStateLgaController.lga[index];
-                                  area = loadStateLgaController.lga[index]
-                                      .toString();
                                 });
                                 Navigator.pop(context);
                               },

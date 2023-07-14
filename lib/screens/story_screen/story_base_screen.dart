@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, depend_on_referenced_packages
 
 import 'dart:io';
 
@@ -10,7 +10,6 @@ import 'package:path/path.dart' as p;
 import 'package:photo_view/photo_view.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
-import 'each_video_story.dart';
 
 class StoryBaseScreen extends StatefulWidget {
   final List moment;

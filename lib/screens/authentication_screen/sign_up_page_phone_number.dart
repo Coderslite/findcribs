@@ -22,10 +22,10 @@ class SignUpPhoneNumber extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SignUpPhoneNumberState createState() => _SignUpPhoneNumberState();
+  SignUpPhoneNumberState createState() => SignUpPhoneNumberState();
 }
 
-class _SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
+class SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool isLoading = false;
   var phoneController = TextEditingController();
@@ -118,8 +118,7 @@ class _SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
                   
                       },
                       style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(500, 60),
-                          primary: mobileButtonColor),
+                          fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(

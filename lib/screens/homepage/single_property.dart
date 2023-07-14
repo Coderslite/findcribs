@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
+import 'package:findcribs/service/property_list_all_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,8 +62,8 @@ class _SinglePropertyState extends State<SingleProperty> {
 
   GetSinglePropertyController getSinglePropertyController =
       Get.put(GetSinglePropertyController());
-  GetPropertyListingController getPropertyListingController =
-      Get.put(GetPropertyListingController());
+  HouseListingController houseListingController =
+      Get.put(HouseListingController());
   bool isLiked = false;
 
   handleGetLikedProperties() {

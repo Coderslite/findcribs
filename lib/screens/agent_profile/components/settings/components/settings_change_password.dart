@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -38,21 +38,21 @@ class _ChangePasswordSettingsState extends State<ChangePasswordSettings> {
 
   //A function that validate user entered password
   bool validatePassword(String pass) {
-    String _password = pass.trim();
-    if (_password.isEmpty) {
+    String password = pass.trim();
+    if (password.isEmpty) {
       setState(() {
         password_strength = 0;
       });
-    } else if (_password.length < 6) {
+    } else if (password.length < 6) {
       setState(() {
         password_strength = 1 / 4;
       });
-    } else if (_password.length < 10) {
+    } else if (password.length < 10) {
       setState(() {
         password_strength = 2 / 4;
       });
     } else {
-      if (pass_valid.hasMatch(_password)) {
+      if (pass_valid.hasMatch(password)) {
         setState(() {
           password_strength = 4 / 4;
         });
@@ -270,9 +270,7 @@ class _ChangePasswordSettingsState extends State<ChangePasswordSettings> {
                               !isMatch ? null : handleChangePassword();
                             },
                             style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(500, 60),
-                                primary:
-                                    !isMatch ? Colors.grey : mobileButtonColor),
+                                fixedSize: const Size(500, 60), backgroundColor: !isMatch ? Colors.grey : mobileButtonColor),
                             child: isLoading
                                 ? const CircularProgressIndicator()
                                 : const Text(

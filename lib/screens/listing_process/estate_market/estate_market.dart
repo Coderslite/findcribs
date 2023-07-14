@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -579,7 +579,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
 
   Future<void> _cropImage() async {
     if (file != null) {
-      var _croppedFile = await ImageCropper().cropImage(
+      var croppedFile = await ImageCropper().cropImage(
         sourcePath: file!.path,
         compressFormat: ImageCompressFormat.jpg,
         compressQuality: 100,
@@ -609,9 +609,9 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
           ),
         ],
       );
-      if (_croppedFile != null) {
+      if (croppedFile != null) {
         setState(() {
-          cropFile = _croppedFile;
+          cropFile = croppedFile;
         });
       }
     }

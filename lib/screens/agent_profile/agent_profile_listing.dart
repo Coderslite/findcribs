@@ -20,10 +20,10 @@ class SalesScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SalesScreenState createState() => _SalesScreenState();
+  SalesScreenState createState() => SalesScreenState();
 }
 
-class _SalesScreenState extends State<SalesScreen> {
+class SalesScreenState extends State<SalesScreen> {
   late Future<List<HouseListModel>> propertyList;
   List<HouseListModel> filteredRentList = [];
   List<HouseListModel> filteredSaleList = [];

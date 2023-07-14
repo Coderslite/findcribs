@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 
 import '../../../components/constants.dart';
 import '../../../controller/user_favorited_agent_controller.dart';
+import '../../../models/search_agent_model.dart';
+import '../../../service/search_agent_service.dart';
 
 class AllAgent extends StatefulWidget {
   const AllAgent({Key? key}) : super(key: key);
@@ -23,7 +25,10 @@ class AllAgent extends StatefulWidget {
 
 class _AllAgentState extends State<AllAgent> {
   late Future<List<UserUnFavouritedAgentModel>> allAgentList;
+  late Future<List<SearchAgentModel>> searchedAgentModel;
   List<UserUnFavouritedAgentModel>? allAgents = [];
+  List<SearchAgentModel>? searchedAgentList = [];
+  String searchQuery = '';
 
   bool isLoading = true;
   List<int> isChecked = [];
@@ -31,6 +36,20 @@ class _AllAgentState extends State<AllAgent> {
   void initState() {
     handleGetAgents();
     super.initState();
+  }
+
+  handleSearchAgent(String query) {
+    setState(() {
+      isLoading = true;
+    });
+    searchedAgentModel = searchAgent(query);
+    searchedAgentModel.then((value) {
+      print(value);
+      setState(() {
+        searchedAgentList = value;
+        isLoading = false;
+      });
+    });
   }
 
   handleGetAgents() async {
@@ -78,7 +97,7 @@ class _AllAgentState extends State<AllAgent> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
+                              builder: (context) => const HomePageRoot(
                                     navigateIndex: 0,
                                   )));
                     },
@@ -138,7 +157,12 @@ class _AllAgentState extends State<AllAgent> {
                       hintStyle: const TextStyle(
                           fontWeight: FontWeight.w200,
                           color: Color(0xFF7C7C7C))),
-                  onChanged: (va) {},
+                  onFieldSubmitted: (val) {
+                    handleSearchAgent(val);
+                    setState(() {
+                      searchQuery = val;
+                    });
+                  },
                   scrollPadding: const EdgeInsets.all(0),
                 ),
                 const SizedBox(
@@ -170,110 +194,235 @@ class _AllAgentState extends State<AllAgent> {
                               ],
                             ),
                           )
-                        : allAgents!.isEmpty
-                            ? const Text("empty")
-                            : GridView.builder(
-                                shrinkWrap: true,
-                                itemCount: allAgents!.length < 12
-                                    ? allAgents!.length
-                                    : 12,
-                                physics: const ScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 150,
-                                        crossAxisSpacing: 5,
-                                        mainAxisExtent: 150,
-                                        mainAxisSpacing: 2),
-                                itemBuilder: (context, index) => isChecked
-                                        .contains(allAgents![index].id)
-                                    ? Container()
-                                    : Stack(
-                                        children: [
-                                          GestureDetector(
-                                            onLongPress: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return AgentProfileScreen(
-                                                  id: allAgents![index].id,
-                                                );
-                                              }));
-                                            },
-                                            onTap: () {
-                                              setState(() {
-                                                isChecked.add(int.parse(
-                                                    allAgents![index]
-                                                        .id
-                                                        .toString()));
+                        : searchQuery.isNotEmpty
+                            ? searchedAgentList!.isEmpty
+                                ? Text(
+                                    "No result found for the keyword $searchQuery")
+                                : GridView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: searchedAgentList!.length < 12
+                                        ? searchedAgentList!.length
+                                        : 12,
+                                    physics: const ScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 150,
+                                            crossAxisSpacing: 5,
+                                            mainAxisExtent: 150,
+                                            mainAxisSpacing: 2),
+                                    itemBuilder: (context, index) => isChecked
+                                            .contains(
+                                                searchedAgentList![index].id)
+                                        ? Container()
+                                        : Stack(
+                                            children: [
+                                              GestureDetector(
+                                                onLongPress: () {
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(
+                                                          builder: (_) {
+                                                    return AgentProfileScreen(
+                                                      id: searchedAgentList![
+                                                              index]
+                                                          .id,
+                                                    );
+                                                  }));
+                                                },
+                                                onTap: () {
+                                                  setState(() {
+                                                    isChecked.add(int.parse(
+                                                        searchedAgentList![
+                                                                index]
+                                                            .id
+                                                            .toString()));
 
-                                                handleFavouriteAgent(int.parse(
-                                                    allAgents![index]
-                                                        .id
-                                                        .toString()));
-                                              });
-                                            },
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      allAgents![index]
-                                                                  .profilePic ==
-                                                              null
-                                                          ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
-                                                          : allAgents![index]
-                                                              .profilePic
-                                                              .toString()),
-                                                  radius: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      8,
-                                                ),
-                                                Text(
-                                                  allAgents![index]
-                                                      .businessName
-                                                      .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                // isFavourite
-                                                //     ? const CircularProgressIndicator()
-                                                //     : ElevatedButton(
-                                                //         style: ElevatedButton.styleFrom(
-                                                //             primary: mobileButtonColor),
-                                                //         onPressed: () {
-                                                //           handleFavouriteAgent(widget.id);
-                                                //         },
-                                                //         child: const Text("Favourite"),
-                                                //       ),
-                                              ],
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: isChecked.contains(
-                                                    allAgents![index].id)
-                                                ? const CircleAvatar(
-                                                    radius: 10,
-                                                    backgroundColor:
-                                                        Color(0XFF263238),
-                                                    child: Icon(
-                                                      Icons.check,
-                                                      size: 12,
+                                                    handleFavouriteAgent(
+                                                        int.parse(
+                                                            searchedAgentList![
+                                                                    index]
+                                                                .id
+                                                                .toString()));
+                                                  });
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    CircleAvatar(
+                                                      backgroundImage: NetworkImage(
+                                                          searchedAgentList![
+                                                                          index]
+                                                                      .profilePic ==
+                                                                  null
+                                                              ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                                              : searchedAgentList![
+                                                                      index]
+                                                                  .profilePic
+                                                                  .toString()),
+                                                      radius:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              8,
                                                     ),
-                                                  )
-                                                : Container(),
+                                                    Text(
+                                                      searchedAgentList![index]
+                                                          .businessName
+                                                          .toString(),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    // isFavourite
+                                                    //     ? const CircularProgressIndicator()
+                                                    //     : ElevatedButton(
+                                                    //         style: ElevatedButton.styleFrom(
+                                                    //             primary: mobileButtonColor),
+                                                    //         onPressed: () {
+                                                    //           handleFavouriteAgent(widget.id);
+                                                    //         },
+                                                    //         child: const Text("Favourite"),
+                                                    //       ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: isChecked.contains(
+                                                        searchedAgentList![
+                                                                index]
+                                                            .id)
+                                                    ? const CircleAvatar(
+                                                        radius: 10,
+                                                        backgroundColor:
+                                                            Color(0XFF263238),
+                                                        child: Icon(
+                                                          Icons.check,
+                                                          size: 12,
+                                                        ),
+                                                      )
+                                                    : Container(),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                              )),
+                                  )
+                            : allAgents!.isEmpty
+                                ? const Text("empty")
+                                : GridView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: allAgents!.length < 12
+                                        ? allAgents!.length
+                                        : 12,
+                                    physics: const ScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 150,
+                                            crossAxisSpacing: 5,
+                                            mainAxisExtent: 150,
+                                            mainAxisSpacing: 2),
+                                    itemBuilder: (context, index) => isChecked
+                                            .contains(allAgents![index].id)
+                                        ? Container()
+                                        : Stack(
+                                            children: [
+                                              GestureDetector(
+                                                onLongPress: () {
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(
+                                                          builder: (_) {
+                                                    return AgentProfileScreen(
+                                                      id: allAgents![index].id,
+                                                    );
+                                                  }));
+                                                },
+                                                onTap: () {
+                                                  setState(() {
+                                                    isChecked.add(int.parse(
+                                                        allAgents![index]
+                                                            .id
+                                                            .toString()));
+
+                                                    handleFavouriteAgent(
+                                                        int.parse(
+                                                            allAgents![index]
+                                                                .id
+                                                                .toString()));
+                                                  });
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    CircleAvatar(
+                                                      backgroundImage:
+                                                          NetworkImage(allAgents![
+                                                                          index]
+                                                                      .profilePic ==
+                                                                  null
+                                                              ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                                              : allAgents![
+                                                                      index]
+                                                                  .profilePic
+                                                                  .toString()),
+                                                      radius:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              8,
+                                                    ),
+                                                    Text(
+                                                      allAgents![index]
+                                                          .businessName
+                                                          .toString(),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    // isFavourite
+                                                    //     ? const CircularProgressIndicator()
+                                                    //     : ElevatedButton(
+                                                    //         style: ElevatedButton.styleFrom(
+                                                    //             primary: mobileButtonColor),
+                                                    //         onPressed: () {
+                                                    //           handleFavouriteAgent(widget.id);
+                                                    //         },
+                                                    //         child: const Text("Favourite"),
+                                                    //       ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: isChecked.contains(
+                                                        allAgents![index].id)
+                                                    ? const CircleAvatar(
+                                                        radius: 10,
+                                                        backgroundColor:
+                                                            Color(0XFF263238),
+                                                        child: Icon(
+                                                          Icons.check,
+                                                          size: 12,
+                                                        ),
+                                                      )
+                                                    : Container(),
+                                              ),
+                                            ],
+                                          ),
+                                  )),
               ],
             ),
           ),
@@ -296,10 +445,7 @@ class _AllAgentState extends State<AllAgent> {
     if (responseJson['status'] == true) {
       // print(responseJson['message']);
 
-      setState(() {
-        handleGetAgents();
-      });
-      // Fluttertoast.showToast(msg: responseJson['message']);
+      searchQuery.isEmpty ? handleGetAgents() : handleSearchAgent(searchQuery);
     } else {
       // print(responseJson['message']);
 

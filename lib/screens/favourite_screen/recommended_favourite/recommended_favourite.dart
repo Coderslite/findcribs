@@ -70,7 +70,7 @@ class _RecommendedFavouriteState extends State<RecommendedFavourite> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
+                              builder: (context) => const HomePageRoot(
                                     navigateIndex: 0,
                                   )));
                     },

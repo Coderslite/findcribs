@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'dart:convert';
 
 // import 'package:find_cribs/favourite_screen/favourite_agent.dart';
@@ -28,10 +30,10 @@ class NameScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _NameScreenState createState() => _NameScreenState();
+  NameScreenState createState() => NameScreenState();
 }
 
-class _NameScreenState extends State<NameScreen> {
+class NameScreenState extends State<NameScreen> {
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
@@ -122,8 +124,7 @@ class _NameScreenState extends State<NameScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(500, 60),
-                          primary: mobileButtonColor),
+                          fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(
@@ -175,7 +176,7 @@ class _NameScreenState extends State<NameScreen> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
+                              builder: (context) => const HomePageRoot(
                                     navigateIndex: 0,
                                   )));
                     },

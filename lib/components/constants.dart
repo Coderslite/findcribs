@@ -19,7 +19,7 @@ const mobileTextSmallFont =
 
 // SizedBox Height
 const mobileSizedBoxHeight = SizedBox(height: 25);
-const mobileSizedBoxHeight2 = SizedBox(height: 10); 
+const mobileSizedBoxHeight2 = SizedBox(height: 10);
 
 const mobileTopHeight = SizedBox(height: 35);
 

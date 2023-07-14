@@ -18,10 +18,10 @@ class PasswordScreen extends StatefulWidget {
   const PasswordScreen({Key? key, required this.email}) : super(key: key);
 
   @override
-  _PasswordScreenState createState() => _PasswordScreenState();
+  PasswordScreenState createState() => PasswordScreenState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class PasswordScreenState extends State<PasswordScreen> {
   // regular expression to check if string
   // ignore: non_constant_identifier_names
   RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
@@ -71,8 +71,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
                 mobileSizedBoxHeight,
                 const Text(
-                  'Ensure your password is at least 10 '
-                  'characters mixed with letters, numbers & special character',
+                  'Ensure your password is atleast 6 characters',
                   style: TextStyle(color: mobileTextSmallColor, fontSize: 14),
                 ),
                 mobileSizedBoxHeight,
@@ -182,7 +181,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                           fixedSize: const Size(500, 60),
-                          primary: !isMatch ? Colors.grey : mobileButtonColor),
+                          backgroundColor:
+                              !isMatch ? Colors.grey : mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(
@@ -234,7 +234,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
+                              builder: (context) => const HomePageRoot(
                                     navigateIndex: 0,
                                   )));
                     },

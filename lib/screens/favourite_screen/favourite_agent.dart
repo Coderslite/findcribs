@@ -1,5 +1,4 @@
 import 'package:findcribs/controller/user_favorited_agent_controller.dart';
-import 'package:findcribs/models/user_favourite_agent.dart';
 import 'package:findcribs/widgets/agent_listings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

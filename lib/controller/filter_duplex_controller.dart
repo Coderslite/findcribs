@@ -4,6 +4,7 @@ class FilterDuplexController extends GetxController {
   var propertyType = 'All'.obs;
   var duplexType = 'Detached Duplex'.obs;
   var state = "Nigeria".obs;
+  var lga = "".obs;
   var area = "".obs;
 
   var sortPropertyBathroom = 0.0.obs;

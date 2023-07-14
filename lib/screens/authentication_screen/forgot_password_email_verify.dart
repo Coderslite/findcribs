@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -13,11 +15,11 @@ class ForgetPasswordEmailVerifyScreen extends StatefulWidget {
   const ForgetPasswordEmailVerifyScreen({Key? key}) : super(key: key);
 
   @override
-  _ForgetPasswordEmailVerifyScreenState createState() =>
-      _ForgetPasswordEmailVerifyScreenState();
+  ForgetPasswordEmailVerifyScreenState createState() =>
+      ForgetPasswordEmailVerifyScreenState();
 }
 
-class _ForgetPasswordEmailVerifyScreenState
+class ForgetPasswordEmailVerifyScreenState
     extends State<ForgetPasswordEmailVerifyScreen> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormBuilderState>();
@@ -74,8 +76,7 @@ class _ForgetPasswordEmailVerifyScreenState
                       handleRequestForgetPassword();
                     },
                     style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(500, 60),
-                        primary: mobileButtonColor),
+                        fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                     child: isLoading
                         ? const CircularProgressIndicator()
                         : const Text(

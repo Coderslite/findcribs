@@ -279,8 +279,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         : filteredNotificationList[index]
                                                     .type ==
                                                 'chat'
-                                            ? HomePageRoot(navigateIndex: 3)
-                                            : HomePageRoot(navigateIndex: 0);
+                                            ? const HomePageRoot(navigateIndex: 3)
+                                            : const HomePageRoot(navigateIndex: 0);
                                   })).then((value) => handleNotificationRead(
                                       filteredNotificationList[index].id));
                                 },

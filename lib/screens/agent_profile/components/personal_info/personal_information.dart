@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -69,7 +71,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-          return HomePageRoot(navigateIndex: 4);
+          return const HomePageRoot(navigateIndex: 4);
         }));
         return true;
       },
