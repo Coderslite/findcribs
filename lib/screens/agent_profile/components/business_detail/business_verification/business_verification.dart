@@ -115,7 +115,7 @@ class _BusinessVerificationScreenState
                                     Text(
                                       "Business Verification",
                                       style: TextStyle(
-                                          fontFamily: "RedHatDisplay",
+                                          
                                           fontSize: size.width / 22),
                                     ),
                                     const Text("            "),

@@ -57,7 +57,7 @@ class _FavouriteListingScreenState extends State<FavouriteListingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,7 +119,7 @@ class _FavouriteListingScreenState extends State<FavouriteListingScreen> {
                           });
                         },
                         child: const Icon(Icons.cancel_outlined)),
-                    fillColor: const Color(0xFFF9F9F9),
+                    // fillColor: const Color(0xFFF9F9F9),
                     filled: true,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),

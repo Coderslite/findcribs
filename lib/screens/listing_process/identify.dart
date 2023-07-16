@@ -3,6 +3,7 @@ import 'package:findcribs/screens/listing_process/estate_market/estate_market.da
 import 'package:findcribs/screens/listing_process/property_manager/property_manager.dart';
 import 'package:findcribs/screens/listing_process/property_owner/property_owner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class Identify extends StatefulWidget {
   const Identify({Key? key}) : super(key: key);
@@ -70,7 +71,6 @@ class _IdentifyState extends State<Identify> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontFamily: "RedHatDisplay",
                     ),
                   ),
                 ),
@@ -80,212 +80,247 @@ class _IdentifyState extends State<Identify> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Center(
-            child: Text(
-              "What can we identify you as?",
-              style: TextStyle(fontSize: 18, fontFamily: "RedHatDisplay"),
-            ),
-          ),
-          const SizedBox(
-            height: 70,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      agent = !agent;
-                      propertyManager = false;
-                      propertyOwner = false;
-                      estateMarket = false;
-                    });
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            width: 0.8,
-                            color: const Color(0XFFE9E9E9),
-                          ),
-                        ),
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        child: Column(
-                          children: [
-                            Image.asset("assets/images/agent.png",
-                                scale: MediaQuery.of(context).size.width / 100),
-                            const Text(
-                              "Agent",
-                              style: TextStyle(
-                                  fontSize: 14, fontFamily: "RedHatDisplay"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      agent
-                          ? const Positioned(
-                              child: Icon(
-                              Icons.check_box,
-                              color: Color(0XFF0072BA),
-                            ))
-                          : Container(),
-                    ],
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    left: 30,
+                    top: 40,
+                  ),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0XFFF0F7F8),
+                    borderRadius: BorderRadius.circular(13),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset("assets/svgs/arrow_back.svg"),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      agent = false;
-                      propertyManager = false;
-                      propertyOwner = false;
-                      estateMarket = !estateMarket;
-                    });
-                  },
-                  child: Stack(
+              ),
+            ],
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Center(
+                  child: Text(
+                    "What can we identify you as?",
+                    style: TextStyle(fontSize: 18, fontFamily: "RedHatDisplay"),
+                  ),
+                ),
+                const SizedBox(
+                  height: 70,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            width: 0.8,
-                            color: const Color(0XFFE9E9E9),
-                          ),
-                        ),
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        child: Column(
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            agent = !agent;
+                            propertyManager = false;
+                            propertyOwner = false;
+                            estateMarket = false;
+                          });
+                        },
+                        child: Stack(
                           children: [
-                            Image.asset("assets/images/real-estate.png",
-                                scale: MediaQuery.of(context).size.width / 100),
-                            const Text(
-                              "Real Estate Company",
-                              style: TextStyle(
-                                fontFamily: "RedHatDisplay",
-                                fontSize: 14,
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  width: 0.8,
+                                  color: const Color(0XFFE9E9E9),
+                                ),
+                              ),
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: Column(
+                                children: [
+                                  Image.asset("assets/images/agent.png",
+                                      scale: MediaQuery.of(context).size.width /
+                                          100),
+                                  const Text(
+                                    "Agent",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "RedHatDisplay"),
+                                  ),
+                                ],
                               ),
                             ),
+                            agent
+                                ? const Positioned(
+                                    child: Icon(
+                                    Icons.check_box,
+                                    color: Color(0XFF0072BA),
+                                  ))
+                                : Container(),
                           ],
                         ),
                       ),
-                      estateMarket
-                          ? const Positioned(
-                              child: Icon(
-                              Icons.check_box,
-                              color: Color(0XFF0072BA),
-                            ))
-                          : Container(),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            agent = false;
+                            propertyManager = false;
+                            propertyOwner = false;
+                            estateMarket = !estateMarket;
+                          });
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  width: 0.8,
+                                  color: const Color(0XFFE9E9E9),
+                                ),
+                              ),
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: Column(
+                                children: [
+                                  Image.asset("assets/images/real-estate.png",
+                                      scale: MediaQuery.of(context).size.width /
+                                          100),
+                                  const Text(
+                                    "Real Estate Company",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            estateMarket
+                                ? const Positioned(
+                                    child: Icon(
+                                    Icons.check_box,
+                                    color: Color(0XFF0072BA),
+                                  ))
+                                : Container(),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 30,
+                    left: 30,
+                    right: 30,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            agent = false;
+                            propertyManager = !propertyManager;
+                            propertyOwner = false;
+                            estateMarket = false;
+                          });
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  width: 0.8,
+                                  color: const Color(0XFFE9E9E9),
+                                ),
+                              ),
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                      "assets/images/property-manager.png",
+                                      scale: MediaQuery.of(context).size.width /
+                                          100),
+                                  const Text(
+                                    "Property Manager",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            propertyManager
+                                ? const Positioned(
+                                    child: Icon(
+                                    Icons.check_box,
+                                    color: Color(0XFF0072BA),
+                                  ))
+                                : Container(),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            agent = false;
+                            propertyManager = false;
+                            propertyOwner = !propertyOwner;
+                            estateMarket = false;
+                          });
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  width: 0.8,
+                                  color: const Color(0XFFE9E9E9),
+                                ),
+                              ),
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                      "assets/images/property-owner.png",
+                                      scale: MediaQuery.of(context).size.width /
+                                          100),
+                                  const Text(
+                                    "Property Owner",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            propertyOwner
+                                ? const Positioned(
+                                    child: Icon(
+                                    Icons.check_box,
+                                    color: Color(0XFF0072BA),
+                                  ))
+                                : Container(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 30,
-              left: 30,
-              right: 30,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      agent = false;
-                      propertyManager = !propertyManager;
-                      propertyOwner = false;
-                      estateMarket = false;
-                    });
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            width: 0.8,
-                            color: const Color(0XFFE9E9E9),
-                          ),
-                        ),
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        child: Column(
-                          children: [
-                            Image.asset("assets/images/property-manager.png",
-                                scale: MediaQuery.of(context).size.width / 100),
-                            const Text(
-                              "Property Manager",
-                              style: TextStyle(
-                                fontFamily: "RedHatDisplay",
-                                fontSize: 14,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      propertyManager
-                          ? const Positioned(
-                              child: Icon(
-                              Icons.check_box,
-                              color: Color(0XFF0072BA),
-                            ))
-                          : Container(),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      agent = false;
-                      propertyManager = false;
-                      propertyOwner = !propertyOwner;
-                      estateMarket = false;
-                    });
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            width: 0.8,
-                            color: const Color(0XFFE9E9E9),
-                          ),
-                        ),
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        child: Column(
-                          children: [
-                            Image.asset("assets/images/property-owner.png",
-                                scale: MediaQuery.of(context).size.width / 100),
-                            const Text(
-                              "Property Owner",
-                              style: TextStyle(
-                                fontFamily: "RedHatDisplay",
-                                fontSize: 14,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      propertyOwner
-                          ? const Positioned(
-                              child: Icon(
-                              Icons.check_box,
-                              color: Color(0XFF0072BA),
-                            ))
-                          : Container(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );

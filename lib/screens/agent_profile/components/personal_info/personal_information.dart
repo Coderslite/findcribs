@@ -114,9 +114,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               ),
                               Text(
                                 "Personal Detaiils",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    fontSize: size.width / 22),
+                                style: TextStyle(fontSize: size.width / 22),
                               ),
                               const Text("            "),
                             ],
@@ -211,7 +209,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                         children: [
                                           Text(userData.firstName.toString(),
                                               style: TextStyle(
-                                                fontFamily: "RedHatDisplay",
                                                 fontSize: size.width / 26,
                                                 fontWeight: FontWeight.bold,
                                               )),
@@ -337,7 +334,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                         children: [
                                           Text(userData.lastName.toString(),
                                               style: TextStyle(
-                                                fontFamily: "RedHatDisplay",
                                                 fontSize: size.width / 26,
                                                 fontWeight: FontWeight.bold,
                                               )),
@@ -465,7 +461,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           //                   child: Text(
                           //                     "22, oyo efam street, calabar",
                           //                     style: TextStyle(
-                          //                       fontFamily: "RedHatDisplay",
+                          //
                           //                       fontSize: size.width / 26,
                           //                       fontWeight: FontWeight.bold,
                           //                       overflow: TextOverflow.ellipsis,
@@ -580,7 +576,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                               userData.phoneNumber ??
                                                   "Enter your mobile number",
                                               style: TextStyle(
-                                                fontFamily: "RedHatDisplay",
                                                 fontSize: size.width / 25,
                                                 fontWeight: FontWeight.bold,
                                               )),
@@ -696,7 +691,6 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                       children: [
                                         Text(userData.email.toString(),
                                             style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
                                               fontSize: size.width / 25,
                                               fontWeight: FontWeight.bold,
                                             )),

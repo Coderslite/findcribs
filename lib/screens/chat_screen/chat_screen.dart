@@ -16,6 +16,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../controller/connectivity_controller.dart';
+import '../../util/colors.dart';
 import '../homepage/home_root.dart';
 import 'chat_details.dart';
 
@@ -66,11 +67,16 @@ class _ChatScreenState extends State<ChatScreen> {
                   const SizedBox(
                     height: 36,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(20.0),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
                     child: Text(
                       "Chats",
-                      style: TextStyle(fontSize: 36, color: Color(0xFF263238)),
+                      style: TextStyle(
+                        fontSize: 36,
+                        color: context.isDarkMode
+                            ? white
+                            : const Color(0xFF263238),
+                      ),
                     ),
                   ),
                   Container(
@@ -78,7 +84,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextFormField(
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: const Color(0xFFF9F9F9),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none),
@@ -89,9 +94,11 @@ class _ChatScreenState extends State<ChatScreen> {
                             color: Color(0xFFB1B1B1),
                           ),
                           hintText: "Search for chats & messages",
-                          hintStyle: const TextStyle(
+                          hintStyle: TextStyle(
                               fontWeight: FontWeight.w200,
-                              color: Color(0xFF7C7C7C))),
+                              color: context.isDarkMode
+                                  ? white
+                                  : Color(0xFF7C7C7C))),
                       onChanged: (value) {
                         getAllChatController.handleSearchChat(value,
                             int.parse(getProfileController.myId.toString()));
@@ -351,9 +358,8 @@ class _ChatListState extends State<ChatList> {
                                                               getAllChatController
                                                                   .allAvailableChats[index]
                                                                   .users![1]['last_name'],
-                                                      style: const TextStyle(
-                                                          color:
-                                                              Color(0xFF263238),
+                                                      style: TextStyle(
+                                                          // color: grey,
                                                           fontSize: 14),
                                                     ),
                                                     Column(

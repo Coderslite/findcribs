@@ -36,8 +36,10 @@ import '../../controller/get_notification_controller.dart';
 import '../../controller/get_property_listing_controller.dart';
 // ignore: library_prefixes
 
+import '../../service/all_property_listing.dart';
 import '../../service/property_by_category.dart';
 import '../../service/property_list_all_service.dart';
+import '../../util/colors.dart';
 import '../../widgets/loading_widget.dart';
 import '../favourite_screen/all_agent/all_agent.dart';
 
@@ -57,8 +59,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
   List<StoryListModel> filteredStoryList = [];
   late ScrollController controller;
 
-  HouseByCategoryController houseController =
-      Get.put(HouseByCategoryController());
+  AllPropertyListingController houseController =
+      Get.put(AllPropertyListingController());
 
   handleFilter() {
     houseController.isFiltering.value = true;
@@ -68,6 +70,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   @override
   void initState() {
+    print("homescreen init");
+    houseController.fetchPosts(0);
     super.initState();
     // _controller.addListener();
   }
@@ -98,6 +102,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
     print("rebuild homescreen widget");
     return Scaffold(
       // bottomNavigationBar:
+      // backgroundColor: context.isDarkMode ? black : white,
       body: Obx(
         // ignore: unrelated_type_equality_checks
         () => connectivityController.connectionStatus == ConnectivityResult.none
@@ -126,11 +131,15 @@ class _HomepageScreenState extends State<HomepageScreen> {
                 ),
                 child: RefreshIndicator(
                   onRefresh: () async {
+                    houseController.isFiltering.value = true;
+                    houseController.handleReset();
+                    houseController.categoryPagingController.itemList!.clear();
                     houseController.fetchPosts(0);
+                    houseController.handleReset();
                     await Future.delayed(const Duration(seconds: 2));
-                    Get.off(const HomePageRoot(
-                      navigateIndex: 0,
-                    ));
+                    // Get.off(const HomePageRoot(
+                    //   navigateIndex: 0,
+                    // ));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,6 +391,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                     PagedChildBuilderDelegate<HouseListModel>(
                                   animateTransitions: true,
                                   itemBuilder: (context, post, index) {
+                                    int price = (post.rentalFee!.toInt());
+                                    var formatter = NumberFormat("#,###");
+                                    var formatedPrice = formatter.format(price);
                                     return Column(
                                       children: [
                                         index == 0
@@ -540,17 +552,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           borderRadius: BorderRadius.circular(12),
                                                                           border: Border.all(
                                                                             color:
-                                                                                const Color(0xFFE6E6E6),
+                                                                                grey,
                                                                           )),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          const Text(
+                                                                          Text(
                                                                             "Duplex",
                                                                             style: TextStyle(
-                                                                                color: Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -671,17 +683,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           borderRadius: BorderRadius.circular(12),
                                                                           border: Border.all(
                                                                             color:
-                                                                                const Color(0xFFE6E6E6),
+                                                                                grey,
                                                                           )),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          const Text(
+                                                                          Text(
                                                                             "Apartments",
                                                                             style: TextStyle(
-                                                                                color: Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -735,17 +747,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           borderRadius: BorderRadius.circular(12),
                                                                           border: Border.all(
                                                                             color:
-                                                                                const Color(0xFFE6E6E6),
+                                                                                grey,
                                                                           )),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          const Text(
+                                                                          Text(
                                                                             "Terrace",
                                                                             style: TextStyle(
-                                                                                color: Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -795,17 +807,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           borderRadius: BorderRadius.circular(12),
                                                                           border: Border.all(
                                                                             color:
-                                                                                const Color(0xFFE6E6E6),
+                                                                                grey,
                                                                           )),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          const Text(
+                                                                          Text(
                                                                             "Hotels",
                                                                             style: TextStyle(
-                                                                                color: Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -859,17 +871,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           borderRadius: BorderRadius.circular(12),
                                                                           border: Border.all(
                                                                             color:
-                                                                                const Color(0xFFE6E6E6),
+                                                                                grey,
                                                                           )),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          const Text(
+                                                                          Text(
                                                                             "Estate Market",
                                                                             style: TextStyle(
-                                                                                color: Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -919,17 +931,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           borderRadius: BorderRadius.circular(12),
                                                                           border: Border.all(
                                                                             color:
-                                                                                const Color(0xFFE6E6E6),
+                                                                                grey,
                                                                           )),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          const Text(
+                                                                          Text(
                                                                             "Land",
                                                                             style: TextStyle(
-                                                                                color: Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -1059,8 +1071,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                             100),
                                                                 border:
                                                                     Border.all(
-                                                                  color: Colors
-                                                                      .black,
+                                                                  color: grey,
                                                                   width: 0.5,
                                                                 ),
                                                               ),
@@ -1105,6 +1116,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                               )
                                             : Container(),
                                         SingleProperty(
+                                            state: post.state!,
+                                            isPromoted: post.isPromoted,
                                             id: post.id,
                                             image: post.image,
                                             designType: post.designType,
@@ -1115,7 +1128,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                             bedroom: post.bedroom,
                                             propertyCategory:
                                                 post.propertyCategory,
-                                            price: post.rentalFee.toString(),
+                                            price: formatedPrice,
                                             propertyName:
                                                 post.propertyName.toString(),
                                             comingFrom: 'Homescreen')

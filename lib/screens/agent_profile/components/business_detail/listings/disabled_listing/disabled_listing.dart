@@ -3,6 +3,7 @@ import 'package:findcribs/screens/agent_profile/components/business_detail/listi
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/disabled_listing/category/disabled_listing_for_sale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../listings.dart';
 
@@ -29,7 +30,7 @@ class _DisabledListingState extends State<DisabledListing>
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-            onWillPop: () async {
+      onWillPop: () async {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
           return const UserListing();
         }));
@@ -49,22 +50,21 @@ class _DisabledListingState extends State<DisabledListing>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (_) {
-                            return const UserListing();
-                          }));
+                          Navigator.pop(context);
                         },
                         child: Container(
-                          width: 20,
-                          height: 20,
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13),
                             color: const Color(0XFFF0F7F8),
+                            borderRadius: BorderRadius.circular(13),
                           ),
-                          child: SvgPicture.asset(
-                            "assets/svgs/arrow_back.svg",
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child:
+                                SvgPicture.asset("assets/svgs/arrow_back.svg"),
                           ),
                         ),
                       ),
@@ -87,8 +87,9 @@ class _DisabledListingState extends State<DisabledListing>
                       controller: _tabController,
                       // physics: const NeverScrollableScrollPhysics(),
                       // isScrollable: false,
-                      unselectedLabelColor: Colors.black,
+                      // unselectedLabelColor: Colors.black,
                       // indicatorSize: TabBarIndicatorSize.label,
+                      unselectedLabelColor: context.iconColor,
                       indicator: BoxDecoration(
                           color: const Color(0xFF0072BA),
                           borderRadius: BorderRadius.circular(30)),
@@ -105,7 +106,8 @@ class _DisabledListingState extends State<DisabledListing>
                               "For Rent",
                               style: TextStyle(
                                 // color: Colors.black,
-                                fontSize: MediaQuery.of(context).size.width / 33,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 33,
                               ),
                             ),
                           ),
@@ -124,7 +126,8 @@ class _DisabledListingState extends State<DisabledListing>
                             child: Text(
                               "For Sale",
                               style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width / 33,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 33,
                               ),
                             ),
                           ),
@@ -143,7 +146,8 @@ class _DisabledListingState extends State<DisabledListing>
                             child: Text(
                               "Estate Market",
                               style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width / 33,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 33,
                               ),
                             ),
                           ),

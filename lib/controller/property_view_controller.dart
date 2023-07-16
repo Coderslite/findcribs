@@ -8,10 +8,11 @@ class PropertyViewController extends GetxController {
   handlePropertyView(int propertyId) async {
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-
-       await http
-          .post(Uri.parse("$baseUrl/listing/$propertyId/view"), headers: {
-        "authorization": "$token",
-      });
+    await http.post(Uri.parse("$baseUrl/listing/$propertyId/view"), headers: {
+      "authorization": "$token",
+    }).then((value) {
+      print("property viewed");
+      print(value.body);
+    });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
+import 'package:findcribs/util/colors.dart';
 import 'package:flutter/material.dart';
 
 class VerifiedScreen extends StatelessWidget {
@@ -8,7 +9,7 @@ class VerifiedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mobileBackgroundColor,
+      // backgroundColor: mobileBackgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,7 +23,7 @@ class VerifiedScreen extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontFamily: 'RedHatDisplay',
-                color: mobileTextSmallColor,
+                color: grey,
                 fontSize: 16,
               ),
             ),
@@ -47,7 +48,8 @@ class VerifiedScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
+                    fixedSize: const Size(500, 60),
+                    backgroundColor: mobileButtonColor),
                 child: const Text(
                   //  Connect EndPoint
 

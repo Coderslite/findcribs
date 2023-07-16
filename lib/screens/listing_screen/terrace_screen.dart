@@ -1,27 +1,20 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, prefer_const_constructors
 
-import 'dart:convert';
-
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_indicators/progress_indicators.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../components/constants.dart';
-import 'package:http/http.dart' as http;
 
 import '../../controller/load_state_lga_controller.dart';
 import '../../models/house_list_model.dart';
 import '../../service/property_by_category.dart';
 import '../../widgets/loading_widget.dart';
 import '../homepage/single_property.dart';
-import '../listing_process/get_started.dart';
 
 class TerraceScreen extends StatefulWidget {
   const TerraceScreen({Key? key}) : super(key: key);
@@ -49,8 +42,12 @@ class _TerraceScreenState extends State<TerraceScreen> {
 
   @override
   void initState() {
-    houseController.category.value = 'terrace';
-    houseController.fetchPosts(0);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      houseController.category.value = 'terrace';
+      houseController.fetchPosts(0);
+      houseController.isFiltering.value = true;
+      houseController.categoryPagingController.itemList!.clear();
+    });
     super.initState();
   }
 
@@ -128,8 +125,9 @@ class _TerraceScreenState extends State<TerraceScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 4,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20))),
@@ -210,8 +208,9 @@ class _TerraceScreenState extends State<TerraceScreen> {
                                       height:
                                           MediaQuery.of(context).size.height /
                                               2,
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white,
+                                      decoration: BoxDecoration(
+                                          color: context
+                                              .theme.scaffoldBackgroundColor,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(20),
                                               topRight: Radius.circular(20))),
@@ -362,8 +361,9 @@ class _TerraceScreenState extends State<TerraceScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 4,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20))),
@@ -565,8 +565,9 @@ class _TerraceScreenState extends State<TerraceScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 1.8,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20))),
@@ -652,8 +653,9 @@ class _TerraceScreenState extends State<TerraceScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 1.8,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20))),
@@ -736,18 +738,23 @@ class _TerraceScreenState extends State<TerraceScreen> {
                       builderDelegate:
                           PagedChildBuilderDelegate<HouseListModel>(
                         itemBuilder: (context, post, index) {
+                          int price = (post.rentalFee!.toInt());
+                          var formatter = NumberFormat("#,###");
+                          var formatedPrice = formatter.format(price);
                           return SingleProperty(
-                              id: post.id,
-                              image: post.image,
-                              designType: post.designType,
-                              currency: post.currency,
-                              propertyType: post.propertyType,
-                              propertyAddress: post.propertyAddress,
-                              bedroom: post.bedroom,
-                              propertyCategory: post.propertyCategory,
-                              price: post.rentalFee.toString(),
-                              propertyName: post.propertyName.toString(),
-                              comingFrom: 'Homescreen');
+                            id: post.id,
+                            image: post.image,
+                            designType: post.designType,
+                            currency: post.currency,
+                            propertyType: post.propertyType,
+                            propertyAddress: post.propertyAddress,
+                            bedroom: post.bedroom,
+                            propertyCategory: post.propertyCategory,
+                            price: formatedPrice,
+                            propertyName: post.propertyName.toString(),
+                            comingFrom: 'Homescreen',
+                            state: post.state!,
+                          );
                         },
                         noItemsFoundIndicatorBuilder: (context) =>
                             const Center(child: Text('No property found.')),

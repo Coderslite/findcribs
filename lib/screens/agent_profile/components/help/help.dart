@@ -44,7 +44,7 @@ class _HelpScreenState extends State<HelpScreen> {
                   Text(
                     "Get Help",
                     style: TextStyle(
-                        fontFamily: "RedHatDisplay", fontSize: size.width / 22),
+                         fontSize: size.width / 22),
                   ),
                   const Text("           "),
                 ],
@@ -80,7 +80,7 @@ class _HelpScreenState extends State<HelpScreen> {
                           children: [
                             Text("Call Us",
                                 style: TextStyle(
-                                  fontFamily: "RedHatDisplay",
+                                  
                                   fontSize: size.width / 26,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -124,7 +124,7 @@ class _HelpScreenState extends State<HelpScreen> {
               //           children: [
               //             Text("Chat with us",
               //                 style: TextStyle(
-              //                   fontFamily: "RedHatDisplay",
+              //                   
               //                   fontSize: size.width / 26,
               //                   fontWeight: FontWeight.bold,
               //                 )),
@@ -171,7 +171,7 @@ class _HelpScreenState extends State<HelpScreen> {
                           children: [
                             Text("Send an Email",
                                 style: TextStyle(
-                                  fontFamily: "RedHatDisplay",
+                                  
                                   fontSize: size.width / 26,
                                   fontWeight: FontWeight.bold,
                                 )),

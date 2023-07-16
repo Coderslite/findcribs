@@ -14,6 +14,7 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:path/path.dart' as p;
 
 import '../../controller/delete_story_controller.dart';
+import '../../util/colors.dart';
 
 class ItemModel {
   String title;
@@ -212,7 +213,7 @@ class _StoryListState extends State<StoryList> {
                   ),
                 ],
               )),
-          backgroundColor: const Color(0xFFE5E5E5),
+          // backgroundColor: const Color(0xFFE5E5E5),
           child: GestureDetector(
               onTap: () {
                 setState(() {
@@ -225,12 +226,14 @@ class _StoryListState extends State<StoryList> {
                   isShowing = !isShowing;
                 });
               },
-              child: const CircleAvatar(
-                  radius: 35,
+              child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: blue,
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Icon(
                       Icons.add,
+                      color: context.iconColor,
                     ),
                   ))),
         ),
@@ -384,7 +387,8 @@ class _StoryListState extends State<StoryList> {
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0XFF0072BA)),
+                                        backgroundColor:
+                                            const Color(0XFF0072BA)),
                                     onPressed: () {},
                                     child: const Text("Post a story"),
                                   ),

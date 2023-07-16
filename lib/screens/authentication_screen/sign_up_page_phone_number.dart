@@ -1,5 +1,5 @@
-
 import 'package:findcribs/components/constants.dart';
+import 'package:findcribs/util/colors.dart';
 import 'package:findcribs/widgets/back_arrow.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
     // Mobile Width & Height
     double mobileWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: mobileBackgroundColor,
+      // backgroundColor: mobileBackgroundColor,
       body: SingleChildScrollView(
         child: FormBuilder(
           key: _formKey,
@@ -50,7 +50,7 @@ class SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
                   child: Text(
                     "Phone Number",
                     style: TextStyle(
-                        color: mobileTextColor,
+                        // color: mobileTextColor,
                         fontFamily: 'RedHatDisplay',
                         fontSize: 36,
                         fontWeight: FontWeight.w700),
@@ -59,7 +59,7 @@ class SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
                 mobileSizedBoxHeight,
                 const Text(
                   'Enter your mobile number',
-                  style: TextStyle(color: mobileTextSmallColor, fontSize: 14),
+                  style: TextStyle(color: grey, fontSize: 14),
                 ),
                 // mobileSizedBoxHeight,
                 // mobileSizedBoxHeight,
@@ -115,10 +115,10 @@ class SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
                         //         const VerifyEmailScreen(),
                         //   ),
                         // );
-                  
                       },
                       style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
+                          fixedSize: const Size(500, 60),
+                          backgroundColor: mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(
@@ -160,5 +160,4 @@ class SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
       ),
     );
   }
-
 }

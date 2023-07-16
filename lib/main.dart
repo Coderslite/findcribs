@@ -2,6 +2,7 @@
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:camera/camera.dart';
+import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/controller/initialize_controllers.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/message_model.dart';
@@ -10,6 +11,7 @@ import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/onboarding.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
+import 'package:findcribs/util/colors.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +29,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:system_settings/system_settings.dart';
 
+import 'controller/theme_controller.dart';
 import 'screens/homepage/home_root.dart';
 import 'screens/story/story_camera.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -42,6 +45,7 @@ import 'package:permission_handler/permission_handler.dart';
 late AndroidNotificationChannel channel;
 
 bool isFlutterLocalNotificationsInitialized = false;
+ThemeController themeController = Get.put(ThemeController());
 
 Future<void> setupFlutterNotifications() async {
   if (isFlutterLocalNotificationsInitialized) {}
@@ -66,26 +70,8 @@ Future<void> setupFlutterNotifications() async {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // await Firebase.initializeApp();
-  // print('Handling a background message ${message.messageId}');
-  RemoteNotification? notification = message.notification;
-  AndroidNotification? android = message.notification?.android;
-  if (notification != null && android != null && !kIsWeb) {
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: android.smallIcon,
-          colorized: true,
-        ),
-      ),
-    );
-  }
+  await Firebase.initializeApp();
+  showFlutterNotification(message);
 }
 
 void showFlutterNotification(RemoteMessage message) async {
@@ -131,11 +117,13 @@ void showFlutterNotification(RemoteMessage message) async {
   }
 }
 
-/// Initialize the [FlutterLocalNotificationsPlugin] package.
-late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   AndroidInitializationSettings initializationSettingsAndroid =
@@ -145,7 +133,6 @@ Future<void> main() async {
       android: initializationSettingsAndroid, macOS: null, iOS: null);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  await Firebase.initializeApp();
 
   if (!kIsWeb) {
     await setupFlutterNotifications();
@@ -276,50 +263,70 @@ class _MyAppState extends State<MyApp> {
         //color set to transperent
       ),
     );
-    return GetMaterialApp(
-      initialBinding: HomeBindings(),
-      localizationsDelegates: const [
-        FormBuilderLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('es', ''),
-        Locale('fa', ''),
-        Locale('fr', ''),
-        Locale('ja', ''),
-        Locale('pt', ''),
-        Locale('sk', ''),
-        Locale('pl', ''),
-      ],
-      debugShowCheckedModeBanner: false,
-      title: 'FindCribs',
-      theme: ThemeData(fontFamily: 'RedHatDisplay'),
-      home: AnimatedSplashScreen(
-        duration: 3000,
-        splashIconSize: double.maxFinite,
-        splash: 'assets/images/splash_screen.gif',
-        nextScreen: propertyId.toString() != 'null'
-            ? ProductDetails(
-                id: int.parse(
-                  propertyId.toString(),
-                ),
-                isDeepLinking: true,
-              )
-            : widget.appState == 'Verify'
-                ? VerifyEmailScreen(
-                    email: widget.email,
-                  )
-                : widget.appState == 'LoggedIn'
-                    ? const HomePageRoot(
-                        navigateIndex: 0,
-                      )
-                    : widget.appState == 'Login'
-                        ? const LoginScreen()
-                        : const OnboardingScreen(),
-        backgroundColor: const Color(0xFF0070B9),
-        centered: true,
+    return Obx(
+      () => GetMaterialApp(
+        theme: ThemeData.light().copyWith(
+          // Customize light theme here
+          scaffoldBackgroundColor: mobileBackgroundColor,
+          textTheme: ThemeData.dark()
+              .textTheme
+              .apply(fontFamily: "RedHatDisplay", bodyColor: black),
+        ),
+        darkTheme: ThemeData.dark().copyWith(
+          // Customize dark theme here
+          scaffoldBackgroundColor: black,
+          bottomNavigationBarTheme:
+              BottomNavigationBarThemeData(backgroundColor: black),
+          bottomSheetTheme: BottomSheetThemeData(backgroundColor: black),
+          textTheme: ThemeData.dark()
+              .textTheme
+              .apply(fontFamily: "RedHatDisplay", bodyColor: white),
+        ),
+        themeMode: themeController.themeMode.value,
+        initialBinding: HomeBindings(),
+        localizationsDelegates: const [
+          FormBuilderLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', ''),
+          Locale('es', ''),
+          Locale('fa', ''),
+          Locale('fr', ''),
+          Locale('ja', ''),
+          Locale('pt', ''),
+          Locale('sk', ''),
+          Locale('pl', ''),
+        ],
+        debugShowCheckedModeBanner: false,
+        title: 'FindCribs',
+        // theme: ThemeData(fontFamily: 'RedHatDisplay'),
+        home: AnimatedSplashScreen(
+          duration: 3000,
+          splashIconSize: double.maxFinite,
+          splash: 'assets/images/splash_screen.gif',
+          nextScreen: propertyId.toString() != 'null'
+              ? ProductDetails(
+                  id: int.parse(
+                    propertyId.toString(),
+                  ),
+                  isDeepLinking: true,
+                )
+              : widget.appState == 'Verify'
+                  ? VerifyEmailScreen(
+                      email: widget.email,
+                    )
+                  : widget.appState == 'LoggedIn'
+                      ? const HomePageRoot(
+                          navigateIndex: 0,
+                        )
+                      : widget.appState == 'Login'
+                          ? const LoginScreen()
+                          : const OnboardingScreen(),
+          backgroundColor: const Color(0xFF0070B9),
+          centered: true,
+        ),
       ),
     );
 // >>>>>>> main

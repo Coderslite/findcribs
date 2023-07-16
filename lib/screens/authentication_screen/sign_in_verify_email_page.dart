@@ -5,6 +5,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/authentication_screen/sign_up_page.dart';
 import 'package:findcribs/screens/authentication_screen/verified.dart';
+import 'package:findcribs/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -32,7 +33,7 @@ class VerifyEmailScreenState extends State<VerifyEmailScreen> {
     // Mobile Width & Height
     double mobileWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: mobileBackgroundColor,
+      // backgroundColor: mobileBackgroundColor,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.only(left: 25, right: 25),
@@ -48,7 +49,7 @@ class VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   child: Text(
                     "Verify Account",
                     style: TextStyle(
-                        color: mobileTextColor,
+                        // color: mobileTextColor,
                         fontFamily: 'RedHatDisplay',
                         fontSize: 36,
                         fontWeight: FontWeight.w700),
@@ -57,7 +58,7 @@ class VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 mobileSizedBoxHeight,
                 const Text(
                   'A code has been sent to your registered email address',
-                  style: TextStyle(color: mobileTextSmallColor, fontSize: 14),
+                  style: TextStyle(color: grey, fontSize: 14),
                 ),
                 // mobileSizedBoxHeight,
                 // mobileSizedBoxHeight,
@@ -86,7 +87,8 @@ class VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         handleVerify();
                       },
                       style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
+                          fixedSize: const Size(500, 60),
+                          backgroundColor: mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(

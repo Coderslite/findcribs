@@ -277,76 +277,76 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  handleSave();
+                          SizedBox(
+                            width: 500,
+                            child: Material(
+                              color: const Color(0XFF0072BA),
+                              borderRadius: BorderRadius.circular(5),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  handlePublish();
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                        color: const Color(0XFF0072BA),
-                                      )),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.width /
-                                          35,
-                                      bottom:
-                                          MediaQuery.of(context).size.width /
-                                              35,
-                                      left: MediaQuery.of(context).size.width /
-                                          11,
-                                      right: MediaQuery.of(context).size.width /
-                                          11,
-                                    ),
-                                    child: isSaving
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            "Save",
-                                            style: TextStyle(
-                                              color: Color(0XFF0072BA),
-                                              fontSize: 20,
-                                            ),
-                                          ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.width / 35,
+                                    bottom:
+                                        MediaQuery.of(context).size.width / 35,
+                                    left: MediaQuery.of(context).size.width / 9,
+                                    right:
+                                        MediaQuery.of(context).size.width / 9,
                                   ),
+                                  child: isLoading
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          "Publish",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                          ),
+                                        ),
                                 ),
                               ),
-                              Material(
-                                color: const Color(0XFF0072BA),
-                                borderRadius: BorderRadius.circular(5),
-                                child: MaterialButton(
-                                  onPressed: () {
-                                    handlePublish();
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.width /
-                                          35,
-                                      bottom:
-                                          MediaQuery.of(context).size.width /
-                                              35,
-                                      left:
-                                          MediaQuery.of(context).size.width / 9,
-                                      right:
-                                          MediaQuery.of(context).size.width / 9,
-                                    ),
-                                    child: isLoading
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            "Publish",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     InkWell(
+                          //       onTap: () {
+                          //         handleSave();
+                          //       },
+                          //       child: Container(
+                          //         decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.circular(5),
+                          //             border: Border.all(
+                          //               color: const Color(0XFF0072BA),
+                          //             )),
+                          //         child: Padding(
+                          //           padding: EdgeInsets.only(
+                          //             top: MediaQuery.of(context).size.width /
+                          //                 35,
+                          //             bottom:
+                          //                 MediaQuery.of(context).size.width /
+                          //                     35,
+                          //             left: MediaQuery.of(context).size.width /
+                          //                 11,
+                          //             right: MediaQuery.of(context).size.width /
+                          //                 11,
+                          //           ),
+                          //           child: isSaving
+                          //               ? const CircularProgressIndicator()
+                          //               : const Text(
+                          //                   "Save",
+                          //                   style: TextStyle(
+                          //                     color: Color(0XFF0072BA),
+                          //                     fontSize: 20,
+                          //                   ),
+                          //                 ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //    ],
+                          // ),
                         ],
                       ),
                     ),

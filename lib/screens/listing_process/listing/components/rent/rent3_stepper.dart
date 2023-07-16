@@ -200,8 +200,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                           name: 'location',
                                           isExpanded: true,
                                           onChanged: (value) {
-                                            rentListingController.state
-                                                .value = value.toString();
+                                            rentListingController.state.value =
+                                                value.toString();
                                             loadStateLgaController
                                                 .handleRentFetchLga();
                                           },
@@ -213,6 +213,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                                   option['state'].toString()),
                                             );
                                           }).toList(),
+                                          style: TextStyle(
+                                            color: context
+                                                .textTheme.bodyMedium!.color,
+                                            fontFamily: "RedHatDisplay",
+                                          ),
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(
                                               borderRadius:
@@ -224,14 +229,19 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       : FormBuilderDropdown(
                                           name: 'State',
                                           isExpanded: true,
-                                          initialValue: rentListingController
-                                              .state.value,
+                                          initialValue:
+                                              rentListingController.state.value,
                                           onChanged: (value) {
-                                            rentListingController.state
-                                                .value = value.toString();
+                                            rentListingController.state.value =
+                                                value.toString();
                                             loadStateLgaController
                                                 .handleRentFetchLga();
                                           },
+                                          style: TextStyle(
+                                            color: context
+                                                .textTheme.bodyMedium!.color,
+                                            fontFamily: "RedHatDisplay",
+                                          ),
                                           items: loadStateLgaController.data
                                               .map((option) {
                                             return DropdownMenuItem(
@@ -309,6 +319,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.interiorDesign
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Furnished",
                                       "Semi-Furnished",
@@ -335,6 +350,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.interiorDesign
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Furnished",
                                       "Semi-Furnished",
@@ -364,6 +384,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.parkingSpace.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -392,6 +417,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.parkingSpace.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -423,6 +453,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.water.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -451,6 +486,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.water.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -482,6 +522,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.electricity.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -510,6 +555,11 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       rentListingController.electricity.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -536,6 +586,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                             MultiSelectDialogField(
                               selectedColor: const Color(0XFF0072BA),
                               searchable: true,
+                              itemsTextStyle:
+                                  TextStyle(color: context.iconColor),
                               dialogWidth: MediaQuery.of(context).size.width,
                               buttonIcon: const Icon(
                                 Icons.check_box,
@@ -648,7 +700,8 @@ class _Rent3StepperState extends State<Rent3Stepper> {
             return Container(
               height: MediaQuery.of(context).size.height * 0.9,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  borderRadius: BorderRadius.circular(20),
+                  color: context.theme.scaffoldBackgroundColor),
               child: Column(
                 children: [
                   Padding(
@@ -672,7 +725,13 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                 Navigator.pop(context);
                               },
                               child: ListTile(
-                                title: Text(loadStateLgaController.lga[index]),
+                                title: Text(
+                                  loadStateLgaController.lga[index],
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
+                                ),
                               ),
                             );
                           })),

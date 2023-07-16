@@ -8,6 +8,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../controller/panel_controller.dart';
+import '../../util/colors.dart';
+
 class ProductDetails extends StatefulWidget {
   final bool? isDeepLinking;
   final int? id;
@@ -22,7 +25,7 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  bool panelOpened = false;
+  MyPanelController pageController = Get.put(MyPanelController());
   final _controller = PageController(
     initialPage: 0,
   );
@@ -34,26 +37,28 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   void initState() {
     super.initState();
-    getSinglePropertyController.handlePropertyClicked(widget.id!);
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
-      if (_controller.hasClients) {
-        if (_currentPage == 3) {
-          end = true;
-        } else if (_currentPage == 0) {
-          end = false;
-        }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getSinglePropertyController.handlePropertyClicked(widget.id!);
+      _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+        if (_controller.hasClients) {
+          if (_currentPage == 3) {
+            end = true;
+          } else if (_currentPage == 0) {
+            end = false;
+          }
 
-        if (end == false) {
-          _currentPage++;
-        } else {
-          _currentPage--;
+          if (end == false) {
+            _currentPage++;
+          } else {
+            _currentPage--;
+          }
+          _controller.animateToPage(
+            _currentPage,
+            duration: const Duration(milliseconds: 1000),
+            curve: Curves.easeInOutCubic,
+          );
         }
-        _controller.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOutCubic,
-        );
-      }
+      });
     });
   }
 
@@ -67,60 +72,73 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SlidingUpPanel(
-        onPanelOpened: () {
-          setState(() {
-            panelOpened = true;
-          });
+      body: WillPopScope(
+        onWillPop: () async {
+          if (pageController.panelOpened == false) {
+            return true;
+          } else {
+            setState(() {
+              pageController.panelOpened = false;
+              pageController.panelController.close();
+            });
+            return false;
+          }
         },
-        onPanelClosed: () {
-          setState(() {
-            panelOpened = false;
-          });
-        },
-        parallaxEnabled: true,
-        minHeight: 70,
-        maxHeight: MediaQuery.of(context).size.height / 1.12,
-        borderRadius: BorderRadius.circular(20),
-        backdropEnabled: true,
-        // boxShadow: [
-        //   BoxShadow(
-        //     blurRadius: 8.0,
-        //     color: Color.fromARGB(14, 0, 0, 0),
-        //   ),
-        // ],
-        collapsed: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              SvgPicture.asset("assets/svgs/arrow_up.svg"),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                "View More",
-                style: TextStyle(
-                  fontFamily: 'RedHatDisplay',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                  color: Color(0XFF8A99B1),
+        child: SlidingUpPanel(
+          controller: pageController.panelController,
+          onPanelOpened: () {
+            setState(() {
+              pageController.panelOpened = true;
+            });
+          },
+          onPanelClosed: () {
+            setState(() {
+              pageController.panelOpened = false;
+            });
+          },
+          parallaxEnabled: false,
+          minHeight: 70,
+          maxHeight: MediaQuery.of(context).size.height / 1.12,
+          borderRadius: BorderRadius.circular(20),
+          // boxShadow: [
+          //   BoxShadow(
+          //     blurRadius: 8.0,
+          //     color: Color.fromARGB(14, 0, 0, 0),
+          //   ),
+          // ],
+          collapsed: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                SvgPicture.asset("assets/svgs/arrow_up.svg"),
+                const SizedBox(
+                  height: 20,
                 ),
-              )
-            ],
+                const Text(
+                  "View More",
+                  style: TextStyle(
+                    fontFamily: 'RedHatDisplay',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    color: Color(0XFF8A99B1),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        //// product more details start ////
-        panel: ProductMoreDetails(id: widget.id),
-        //// product more details ends ////
+          //// product more details start ////
+          panel: ProductMoreDetails(id: widget.id),
+          //// product more details ends ////
 
-        /// product main details start ///
-        body: ProductMainDetails(
-          panelOpened: panelOpened,
-          id: widget.id,
-          isDeepLinking:
-              widget.isDeepLinking.toString() == 'true' ? true : false,
+          /// product main details start ///
+          body: ProductMainDetails(
+            panelOpened: pageController.panelOpened,
+            id: widget.id,
+            isDeepLinking:
+                widget.isDeepLinking.toString() == 'true' ? true : false,
+          ),
+          //// product main details ends ////
         ),
-        //// product main details ends ////
       ),
     );
   }

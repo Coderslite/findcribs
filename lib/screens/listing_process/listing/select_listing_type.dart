@@ -61,7 +61,6 @@ class _SelectListingTypeState extends State<SelectListingType> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontFamily: "RedHatDisplay",
                     ),
                   ),
                 ),
@@ -158,7 +157,6 @@ class _SelectListingTypeState extends State<SelectListingType> {
                             const Text(
                               "For Sale",
                               style: TextStyle(
-                                fontFamily: "RedHatDisplay",
                                 fontSize: 14,
                               ),
                             ),
@@ -213,7 +211,6 @@ class _SelectListingTypeState extends State<SelectListingType> {
                             const Text(
                               "Estate Market",
                               style: TextStyle(
-                                fontFamily: "RedHatDisplay",
                                 fontSize: 14,
                               ),
                             )

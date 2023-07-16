@@ -14,6 +14,7 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../../models/property_option_model.dart';
+import '../../../../../../../util/colors.dart';
 import '../../../../../../listing_process/listing/edit_listing/sale_listing_edit/sale_listing_edit1.dart';
 import '../../disabled_listing/disabled_listing.dart';
 import '../../promotion page/promote_listing.dart';
@@ -130,9 +131,9 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                               ? "NGN ${widget.formattedPrice}"
                               : "\$ ${widget.formattedPrice}",
                           style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF09172D)),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                       CustomPopupMenu(
@@ -141,7 +142,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                           borderRadius: BorderRadius.circular(5),
                           child: Container(
                             key: UniqueKey(),
-                            color: const Color(0xFFFFFFFF),
+                            color: context.theme.scaffoldBackgroundColor,
                             child: IntrinsicWidth(
                               child: widget.status == 'Active'
                                   ? Column(
@@ -391,22 +392,20 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                     widget.propertyAddress.toString(),
                     maxLines: 1,
                     style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF304059)),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   Text(
                     widget.propertyLocation.toString(),
                     style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF8A99B1)),
+                        fontSize: 10, fontWeight: FontWeight.w400, color: grey),
                   ),
                   Container(
                     padding:
                         const EdgeInsets.symmetric(vertical: 7, horizontal: 5),
                     decoration: BoxDecoration(
-                        color: const Color(0xFFF8FEFF),
+                        // color: const Color(0xFFF8FEFF),
                         borderRadius: BorderRadius.circular(7)),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,

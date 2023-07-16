@@ -639,11 +639,13 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                     property.currency == 'Naira'
                                         ? "NGN".toString() + formatedSalesPrice
                                         : "\$$formatedSalesPrice",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 24,
                                       fontFamily: 'RedHatDisplay',
                                       fontWeight: FontWeight.w900,
-                                      color: Color(0XFF09172D),
+                                      color: context.isDarkMode
+                                          ? const Color(0XFF8A99B1)
+                                          : const Color(0XFF09172D),
                                     ),
                                   ),
                                 ],
@@ -780,6 +782,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                           businessName: property
                                                               .agentBusinessName
                                                               .toString(),
+                                                              profilePreview: false,
                                                         );
                                                         // return ViewProperty(
                                                         //   images:
@@ -1068,7 +1071,9 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                       fontSize: 24,
                                       fontFamily: 'RedHatDisplay',
                                       fontWeight: FontWeight.w900,
-                                      color: Color(0XFF09172D),
+                                      // color: context.isDarkMode
+                                      //     ? const Color(0XFF8A99B1)
+                                      //     : const Color(0XFF09172D),
                                     ),
                                   ),
                                   Row(
@@ -1283,6 +1288,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                             child: CachedNetworkImage(
                                               fit: BoxFit.cover,
                                               width: 1000,
+                                              color: context.iconColor,
                                               progressIndicatorBuilder: (context,
                                                       url, downloadProgress) =>
                                                   JumpingDotsProgressIndicator(

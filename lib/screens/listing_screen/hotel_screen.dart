@@ -742,6 +742,10 @@ class _HotelScreenState extends State<HotelScreen> {
                                           propertyName: filteredList[x]
                                               .propertyName
                                               .toString(),
+                                          state:filteredList[x]
+                                              .state
+                                              .toString(),
+
                                         ),
                                         const SizedBox(height: 5),
                                       ],

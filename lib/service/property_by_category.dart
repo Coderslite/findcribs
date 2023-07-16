@@ -48,15 +48,20 @@ class HouseByCategoryController extends GetxController {
     lga.value = '';
   }
 
-  Future<void> fetchPosts(int pageKey) async {
-    var type = propertyType.value == 'All' ? '' : propertyType.toString();
-    var myLivingroom = livingRoom.value == 0.0 ? '' : livingRoom.toInt();
-    var myKitchen = kitchen.value == 0.0 ? '' : kitchen.toInt();
-    var myBathroom = bathroom.value == 0.0 ? '' : bathroom.toInt();
-    var myBedroom = bedroom.value == 0.0 ? '' : bedroom.toInt();
+
+Future<void> fetchPosts(int pageKey) async {
+  var retryCount = 0;
+  var type = propertyType.value == 'All' ? '' : propertyType.toString();
+  var myLivingroom = livingRoom.value == 0.0 ? '' : livingRoom.toInt();
+  var myKitchen = kitchen.value == 0.0 ? '' : kitchen.toInt();
+  var myBathroom = bathroom.value == 0.0 ? '' : bathroom.toInt();
+  var myBedroom = bedroom.value == 0.0 ? '' : bedroom.toInt();
+  
+  while (retryCount < 3) {
     try {
       final response = await _client.get(Uri.parse(
           "$baseUrl/search-listing?type=$type&minPrice=$minPrice&maxPrice=$maxPrice&search=$category&livingroom=$myLivingroom&bathroom=$myBathroom&bedroom=$myBedroom&kitchen=$myKitchen&state=$state&lga=$lga&page=$pageKey&size=$_perPage"));
+      
       if (response.statusCode == 200) {
         isFiltering.value = false;
         final data = jsonDecode(response.body);
@@ -70,11 +75,19 @@ class HouseByCategoryController extends GetxController {
           categoryPagingController.appendLastPage(posts);
         }
         _posts.addAll(posts);
+        
+        // Break the loop if the response was successful
+        break;
       } else {
         throw Exception('Failed to fetch posts');
       }
     } catch (e) {
-      throw Exception('Error: $e');
+      retryCount++;
+      if (retryCount == 3) {
+        throw Exception('Error: Failed to fetch posts after 3 retries');
+      }
     }
   }
+}
+
 }

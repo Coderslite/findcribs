@@ -6,8 +6,13 @@ import 'package:photo_view/photo_view_gallery.dart';
 class PhotoPreview extends StatefulWidget {
   final List? images;
   final String businessName;
+  final bool profilePreview;
 
-  const PhotoPreview({Key? key, this.images, required this.businessName})
+  const PhotoPreview(
+      {Key? key,
+      this.images,
+      required this.businessName,
+      required this.profilePreview})
       : super(key: key);
 
   @override
@@ -25,7 +30,9 @@ class _PhotoPreviewState extends State<PhotoPreview> {
             builder: (context, index) {
               return PhotoViewGalleryPageOptions(
                 imageProvider: NetworkImage(
-                  widget.images![index]['url'],
+                  widget.profilePreview
+                      ? widget.images![index]
+                      : widget.images![index]['url'],
                 ),
                 // Contained = the smallest possible size to fit one dimension of the screen
                 minScale: PhotoViewComputedScale.contained * 0.8,
@@ -39,30 +46,32 @@ class _PhotoPreviewState extends State<PhotoPreview> {
               color: Theme.of(context).canvasColor,
             ),
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height / 2.6,
-            // top: MediaQuery.of(context).size.height / 0.1,
-            left: MediaQuery.of(context).size.width / 7,
-            right: MediaQuery.of(context).size.width / 7,
-            child: Column(
-              children: [
-                Text(
-                  widget.businessName,
-                  style: const TextStyle(
-                    color: Colors.white54,
-                    fontSize: 25,
+          widget.profilePreview
+              ? Container()
+              : Positioned(
+                  bottom: MediaQuery.of(context).size.height / 2.6,
+                  // top: MediaQuery.of(context).size.height / 0.1,
+                  left: MediaQuery.of(context).size.width / 7,
+                  right: MediaQuery.of(context).size.width / 7,
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.businessName,
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 25,
+                        ),
+                      ),
+                      const Text(
+                        "posted on Findcribs.ng",
+                        style: TextStyle(
+                          color: Colors.white54,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Text(
-                  "posted on Findcribs.ng",
-                  style: TextStyle(
-                    color: Colors.white54,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
-            ),
-          ),
           Positioned(
             top: 30,
             left: 20,

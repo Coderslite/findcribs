@@ -76,8 +76,7 @@ class _AttachActiveListingState extends State<AttachActiveListing> {
                   ),
                   Text(
                     "Active Listing",
-                    style: TextStyle(
-                        fontFamily: "RedHatDisplay", fontSize: size.width / 22),
+                    style: TextStyle( fontSize: size.width / 22),
                   ),
                   const Text("            "),
                 ],

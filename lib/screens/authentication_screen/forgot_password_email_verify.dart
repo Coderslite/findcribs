@@ -11,6 +11,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../../util/colors.dart';
+
 class ForgetPasswordEmailVerifyScreen extends StatefulWidget {
   const ForgetPasswordEmailVerifyScreen({Key? key}) : super(key: key);
 
@@ -43,7 +45,6 @@ class ForgetPasswordEmailVerifyScreenState
                   child: Text(
                     "Forgot Password",
                     style: TextStyle(
-                        color: mobileTextColor,
                         fontFamily: 'RedHatDisplay',
                         fontSize: 36,
                         fontWeight: FontWeight.w700),
@@ -53,9 +54,7 @@ class ForgetPasswordEmailVerifyScreenState
                 const Text(
                   'please enter your email address',
                   style: TextStyle(
-                      color: mobileTextSmallColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
+                      color: grey, fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(
                   height: 44,
@@ -76,7 +75,8 @@ class ForgetPasswordEmailVerifyScreenState
                       handleRequestForgetPassword();
                     },
                     style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
+                        fixedSize: const Size(500, 60),
+                        backgroundColor: mobileButtonColor),
                     child: isLoading
                         ? const CircularProgressIndicator()
                         : const Text(
@@ -161,7 +161,6 @@ class ForgetPasswordEmailVerifyScreenState
           ),
           dismissOnTouchOutside: true,
           dismissOnBackKeyPress: false,
-    
           headerAnimationLoop: false,
           animType: AnimType.bottomSlide,
           desc: responseData['message'],

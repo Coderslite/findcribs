@@ -46,8 +46,12 @@ class _DuplexScreenState extends State<DuplexScreen> {
   }
 
   handleInit() {
-    houseController.category.value = widget.duplexType;
-    houseController.fetchPosts(0);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      houseController.category.value = widget.duplexType;
+      houseController.isFiltering.value = true;
+      houseController.categoryPagingController.itemList!.clear();
+      houseController.fetchPosts(0);
+    });
   }
 
   @override
@@ -134,11 +138,15 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 4,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20))),
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(20),
+                                                    topRight:
+                                                        Radius.circular(20))),
                                         child: ListView.builder(
                                             itemCount: eachPropertyType.length,
                                             itemBuilder: (context, index) {
@@ -216,9 +224,10 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                       height:
                                           MediaQuery.of(context).size.height /
                                               2,
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
+                                      decoration: BoxDecoration(
+                                          color: context
+                                              .theme.scaffoldBackgroundColor,
+                                          borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(20),
                                               topRight: Radius.circular(20))),
                                       child: Center(
@@ -368,11 +377,15 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 4,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20))),
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(20),
+                                                    topRight:
+                                                        Radius.circular(20))),
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -571,11 +584,15 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 1.8,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20))),
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(20),
+                                                    topRight:
+                                                        Radius.circular(20))),
                                         child: ListView.builder(
                                             itemCount: loadStateLgaController
                                                 .data.length,
@@ -658,11 +675,15 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                         height:
                                             MediaQuery.of(context).size.height /
                                                 1.8,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20))),
+                                        decoration: BoxDecoration(
+                                            color: context
+                                                .theme.scaffoldBackgroundColor,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(20),
+                                                    topRight:
+                                                        Radius.circular(20))),
                                         child: ListView.builder(
                                             itemCount: loadStateLgaController
                                                 .lga.length,
@@ -736,6 +757,9 @@ class _DuplexScreenState extends State<DuplexScreen> {
                       builderDelegate:
                           PagedChildBuilderDelegate<HouseListModel>(
                         itemBuilder: (context, post, index) {
+                          int price = (post.rentalFee!.toInt());
+                          var formatter = NumberFormat("#,###");
+                          var formatedPrice = formatter.format(price);
                           return SingleProperty(
                               id: post.id,
                               image: post.image,
@@ -745,9 +769,11 @@ class _DuplexScreenState extends State<DuplexScreen> {
                               propertyAddress: post.propertyAddress,
                               bedroom: post.bedroom,
                               propertyCategory: post.propertyCategory,
-                              price: post.rentalFee.toString(),
+                              price: formatedPrice,
                               propertyName: post.propertyName.toString(),
-                              comingFrom: 'Homescreen');
+                              comingFrom: 'Homescreen',
+                                          state: post.state!,
+                              );
                         },
                         noItemsFoundIndicatorBuilder: (context) =>
                             const Center(child: Text('No property found.')),

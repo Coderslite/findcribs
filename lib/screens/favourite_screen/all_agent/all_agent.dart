@@ -15,6 +15,7 @@ import '../../../components/constants.dart';
 import '../../../controller/user_favorited_agent_controller.dart';
 import '../../../models/search_agent_model.dart';
 import '../../../service/search_agent_service.dart';
+import '../../../util/colors.dart';
 
 class AllAgent extends StatefulWidget {
   const AllAgent({Key? key}) : super(key: key);
@@ -143,7 +144,7 @@ class _AllAgentState extends State<AllAgent> {
                 TextFormField(
                   decoration: InputDecoration(
                       filled: true,
-                      fillColor: const Color(0xFFF9F9F9),
+                      // fillColor: const Color(0xFFF9F9F9),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none),
@@ -154,9 +155,10 @@ class _AllAgentState extends State<AllAgent> {
                         color: Color(0xFFB1B1B1),
                       ),
                       hintText: "Search an agent name",
-                      hintStyle: const TextStyle(
+                      hintStyle: TextStyle(
                           fontWeight: FontWeight.w200,
-                          color: Color(0xFF7C7C7C))),
+                          color:
+                              context.isDarkMode ? white : Color(0xFF7C7C7C))),
                   onFieldSubmitted: (val) {
                     handleSearchAgent(val);
                     setState(() {

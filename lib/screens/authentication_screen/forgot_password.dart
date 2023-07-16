@@ -11,6 +11,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../../util/colors.dart';
+
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
 
@@ -39,7 +41,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Text(
                   "Forgot Password",
                   style: TextStyle(
-                      color: mobileTextColor,
+                      // color: mobileTextColor,
                       fontFamily: 'RedHatDisplay',
                       fontSize: 36,
                       fontWeight: FontWeight.w700),
@@ -49,9 +51,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               const Text(
                 'A code has been sent to your registered\nemail address',
                 style: TextStyle(
-                    color: mobileTextSmallColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400),
+                    color: grey, fontSize: 16, fontWeight: FontWeight.w400),
               ),
               const SizedBox(
                 height: 44,
@@ -76,7 +76,8 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     handleVerifyOtp();
                   },
                   style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
+                      fixedSize: const Size(500, 60),
+                      backgroundColor: mobileButtonColor),
                   child: isLoading
                       ? const CircularProgressIndicator()
                       : const Text(

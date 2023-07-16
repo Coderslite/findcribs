@@ -321,6 +321,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.parkingSpace.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -346,6 +351,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.parkingSpace.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -374,6 +384,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.propertyDocument
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -399,6 +414,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.propertyDocument
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -427,6 +447,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.currency.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Naira",
                                       "Dollar",
@@ -452,6 +477,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.currency.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Naira",
                                       "Dollar",
@@ -482,7 +512,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       name: 'salesPrice',
                                       // maxLength: 300,
                                       keyboardType: TextInputType.number,
-
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
                                       validator: FormBuilderValidators.compose([
                                         FormBuilderValidators.required(context),
                                         FormBuilderValidators.numeric(context),
@@ -520,7 +554,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       name: 'salesPrice',
                                       // maxLength: 300,
                                       keyboardType: TextInputType.number,
-
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
                                       validator: FormBuilderValidators.compose([
                                         FormBuilderValidators.required(context),
                                         FormBuilderValidators.numeric(context),
@@ -564,6 +602,10 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                   saleListingController.negotiable.value == 1
                                       ? "Yes"
                                       : "No",
+                              style: TextStyle(
+                                color: context.textTheme.bodyMedium!.color,
+                                fontFamily: "RedHatDisplay",
+                              ),
                               onChanged: (value) {
                                 if (value == 'Yes') {
                                   setState(() {
@@ -609,6 +651,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                         child: Text(option),
                                       );
                                     }).toList(),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     onChanged: (value) {
                                       if (value == 'Yes') {
                                         setState(() {
@@ -645,6 +692,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                         child: Text(option),
                                       );
                                     }).toList(),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     onChanged: (value) {
                                       if (value == 'Yes') {
                                         setState(() {
@@ -801,24 +853,6 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                 ],
                               ),
                             ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     Text("Total Price"),
-                            //     Text(
-                            //       "N" +
-                            //           ((cauFee + serCharge + rentFee) +
-                            //                   (rentFee *
-                            //                       selecteRentLegalFee /
-                            //                       100) +
-                            //                   (rentFee * selecteRentAgencyFee))
-                            //               .toString(),
-                            //       style: TextStyle(
-                            //         color: Color(0XFF0072BA),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -832,6 +866,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     validator: FormBuilderValidators.compose([
                                       FormBuilderValidators.required(context),
                                     ]),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     onChanged: (value) {
                                       saleListingController.description.value =
                                           value.toString();
@@ -851,6 +890,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     validator: FormBuilderValidators.compose([
                                       FormBuilderValidators.required(context),
                                     ]),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     initialValue:
                                         saleListingController.description.value,
                                     onChanged: (value) {

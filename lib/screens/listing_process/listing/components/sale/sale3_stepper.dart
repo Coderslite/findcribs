@@ -166,6 +166,11 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                           loadStateLgaController
                                               .handleSaleFetchLga();
                                         },
+                                        style: TextStyle(
+                                          color: context
+                                              .textTheme.bodyMedium!.color,
+                                          fontFamily: "RedHatDisplay",
+                                        ),
                                         items: loadStateLgaController.data
                                             .map((option) {
                                           return DropdownMenuItem(
@@ -185,14 +190,19 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     : FormBuilderDropdown(
                                         name: 'State',
                                         isExpanded: true,
-                                        initialValue: saleListingController
-                                            .state.value,
+                                        initialValue:
+                                            saleListingController.state.value,
                                         onChanged: (value) {
                                           saleListingController.state.value =
                                               value.toString();
                                           loadStateLgaController
                                               .handleSaleFetchLga();
                                         },
+                                        style: TextStyle(
+                                          color: context
+                                              .textTheme.bodyMedium!.color,
+                                          fontFamily: "RedHatDisplay",
+                                        ),
                                         items: loadStateLgaController.data
                                             .map((option) {
                                           return DropdownMenuItem(
@@ -217,10 +227,9 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                           ),
                           Obx(
                             () => Visibility(
-                              visible:
-                                  saleListingController.state.string == ''
-                                      ? false
-                                      : true,
+                              visible: saleListingController.state.string == ''
+                                  ? false
+                                  : true,
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -276,6 +285,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.totalArea.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -291,6 +304,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     FormBuilderValidators.required(context),
                                     FormBuilderValidators.numeric(context)
                                   ]),
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   initialValue:
                                       saleListingController.totalArea.value,
                                   onChanged: (value) {
@@ -321,6 +338,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.coveredBy.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -342,6 +363,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.coveredBy.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -373,6 +398,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.water.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   validator: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(context),
                                   ]),
@@ -404,6 +433,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.water.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   validator: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(context),
                                   ]),
@@ -438,6 +471,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.electricity.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   validator: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(context),
                                   ]),
@@ -469,6 +506,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     saleListingController.electricity.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   validator: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(context),
                                   ]),
@@ -486,6 +527,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                           MultiSelectDialogField(
                             selectedColor: const Color(0XFF0072BA),
                             dialogWidth: MediaQuery.of(context).size.width,
+                            itemsTextStyle: TextStyle(color: context.iconColor),
                             buttonIcon: const Icon(
                               Icons.check_box,
                               color: Color(0XFF0072BA),
@@ -593,7 +635,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
             return Container(
               height: MediaQuery.of(context).size.height * 0.9,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  borderRadius: BorderRadius.circular(20),
+                  color: context.theme.scaffoldBackgroundColor),
               child: Column(
                 children: [
                   Padding(
@@ -617,7 +660,13 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                 Navigator.pop(context);
                               },
                               child: ListTile(
-                                title: Text(loadStateLgaController.lga[index]),
+                                title: Text(
+                                  loadStateLgaController.lga[index],
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
+                                ),
                               ),
                             );
                           })),
@@ -655,8 +704,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
           showCloseIcon: true,
           btnOkOnPress: () {},
         ).show();
-      } 
-      else if (saleListingController.state.string == '') {
+      } else if (saleListingController.state.string == '') {
         AwesomeDialog(
           context: context,
           dialogType: DialogType.error,
@@ -696,9 +744,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
           showCloseIcon: true,
           btnOkOnPress: () {},
         ).show();
-      } 
-      
-      else {
+      } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return const Sale4Stepper();
         }));

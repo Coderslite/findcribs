@@ -1,13 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../../components/constants.dart';
+import '../../controller/load_state_lga_controller.dart';
 import '../../models/house_list_model.dart';
+import '../../service/property_by_category.dart';
 import '../../service/property_list_categoty_service.dart';
 import '../../service/search_property.dart';
+import '../../widgets/loading_widget.dart';
 import '../homepage/single_property.dart';
 
 class EstateMarketScreen extends StatefulWidget {
@@ -25,204 +31,36 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
   List<HouseListModel> firstSearchList = [];
   String searchingText = '';
   final textController = TextEditingController();
-  bool isLoading = true;
-  bool isSearching = false;
-  bool visible = true;
-  String state = 'Nigeria';
-  String area = '';
-  String searchValue = '';
-  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-  bool isChecking = false;
-  bool isToolTip = false;
-  int page = 1;
-  bool _hasNextPage = true;
-  late ScrollController _controller;
-  String currency = 'Naira';
+  HouseByCategoryController houseController =
+      Get.put(HouseByCategoryController());
+  LoadStateLgaController loadStateLgaController =
+      Get.put(LoadStateLgaController());
 
-  // Used to display loading indicators when _loadMore function is running
-  bool _isLoadMoreRunning = false;
-  bool isSearched = false;
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
+  handleFilter() {
+    houseController.isFiltering.value = true;
+    houseController.categoryPagingController.itemList!.clear();
+    houseController.fetchPosts(0);
+  }
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      houseController.category.value = 'Estate Market';
+      houseController.fetchPosts(0);
+      houseController.isFiltering.value = true;
+      houseController.categoryPagingController.itemList!.clear();
+    });
     super.initState();
-    handleGetProperties();
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    _controller.addListener(_searchedScrollListener);
   }
 
-  handleGetProperties() {
-    propertyList = getPropertyListCategory('Estate Market', page);
-    propertyList.then((value) {
-      // print(value);
-      if (value.isEmpty) {
-        setState(() {
-          isLoading = false;
-          _hasNextPage = false;
-          _isLoadMoreRunning = false;
-        });
-      } else {
-        setState(() {
-          firstList = value;
-          isLoading = false;
-          for (int s = 0; s < value.length; s++) {
-            filteredList.add(value[s]);
-          }
-        });
-      }
-    });
-  }
-
-  void _loadMore() async {
-    if (_hasNextPage == true &&
-        isLoading == false &&
-        _isLoadMoreRunning == false &&
-        _controller.position.extentAfter < 600) {
-      setState(() {
-        // Display a progress indicator at the bottom
-        _isLoadMoreRunning = true;
-        page += 1;
-      });
-      propertyList = getPropertyListCategory('Estate Market', page);
-      propertyList.then((value) {
-        // print(value);
-        if (value.isEmpty) {
-          setState(() {
-            isLoading = false;
-            _hasNextPage = false;
-            _isLoadMoreRunning = true;
-          });
-        } else {
-          setState(() {
-            firstList = value;
-            isLoading = false;
-            for (int s = 0; s < value.length; s++) {
-              filteredList.add(value[s]);
-            }
-          });
-        }
-      });
-    } else {
-      // print("Nothing is loading");
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-    }
-  }
-
-  _scrollListener() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the bottom";
-        _loadMore();
-      });
-    }
-    if (_controller.offset <= _controller.position.minScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the top";
-      });
-    }
-  }
-
-  handleGetMoreSearchedProperties() {
-    propertyList = getSearchedProperty(state != 'Nigeria' ? state : '',
-        area != '' ? area : '', searchValue != '' ? searchValue : '', page);
-    propertyList.then((value) {
-      // print(value);
-      if (value.isEmpty) {
-        setState(() {
-          isLoading = false;
-          _hasNextPage = false;
-          _isLoadMoreRunning = false;
-        });
-      } else {
-        setState(() {
-          firstList = value;
-          isLoading = false;
-          for (int s = 0; s < value.length; s++) {
-            filteredList.add(value[s]);
-          }
-        });
-      }
-    });
-  }
-
-  void _loadMoreSearched() async {
-    if (_hasNextPage == true &&
-        isLoading == false &&
-        _isLoadMoreRunning == false &&
-        _controller.position.extentAfter < 600) {
-      setState(() {
-        // Display a progress indicator at the bottom
-        _isLoadMoreRunning = true;
-        page += 1;
-      });
-      propertyList = getSearchedProperty(state != 'Nigeria' ? state : '',
-          area != '' ? area : '', searchValue != '' ? searchValue : '', page);
-      propertyList.then((value) {
-        // print(value);
-        if (value.isEmpty) {
-          setState(() {
-            isLoading = false;
-            _hasNextPage = false;
-            _isLoadMoreRunning = true;
-          });
-        } else {
-          setState(() {
-            firstList = value;
-            isLoading = false;
-            for (int s = 0; s < value.length; s++) {
-              filteredList.add(value[s]);
-            }
-          });
-        }
-      });
-    } else {
-      // print("Nothing is loading");
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-    }
-  }
-
-  _searchedScrollListener() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the bottom";
-        _loadMoreSearched();
-      });
-    }
-    if (_controller.offset <= _controller.position.minScrollExtent &&
-        !_controller.position.outOfRange) {
-      setState(() {
-        // message = "reach the top";
-      });
-    }
-  }
-
-  handleSearchProperty(bool isBottomSheet) {
-    // Navigator.pop(context);
-    setState(() {
-      isSearching = true;
-      visible = false;
-    });
-
-    propertyList = getSearchedProperty(state != 'Nigeria' ? state : '',
-        area != '' ? area : '', searchValue != '' ? searchValue : '', page);
-    propertyList.then((value) {
-      setState(() {
-        filteredList = [];
-        for (int s = 0; s < value.length; s++) {
-          filteredList.add(value[s]);
-        }
-        isSearching = false;
-        isBottomSheet ? Navigator.pop(context) : () {};
-      });
-    });
+  @override
+  void dispose() {
+    houseController.handleReset();
+    houseController.categoryPagingController.itemList!.clear();
+    houseController.fetchPosts(0);
+    super.dispose();
   }
 
   @override
@@ -261,7 +99,7 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                    color: const Color(0XFFF0F7F8),
+                    // color: const Color(0XFFF0F7F8),
                     borderRadius: BorderRadius.circular(13)),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -274,7 +112,7 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
           Container(
             height: 45,
             decoration: BoxDecoration(
-                color: const Color(0xFFF9F9F9),
+                // color: const Color(0xFFF9F9F9),
                 borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.only(left: 25.0, right: 25.0),
@@ -292,19 +130,12 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                         suffixIconColor: Colors.blue,
                       ),
                       onChanged: (value) {
-                        setState(() {
-                          if (searchValue.isEmpty) {
-                            searchValue = '';
-                          } else {
-                            searchValue = value;
-                          }
-                        });
+                        houseController.category.value = value.toString();
                       },
                       onFieldSubmitted: (value) {
                         setState(() {
-                          searchValue = value;
+                          handleFilter();
                         });
-                        handleSearchProperty(false);
                       },
                     ),
                   ),
@@ -325,10 +156,11 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                                   duration: const Duration(milliseconds: 100),
                                   curve: Curves.decelerate,
                                   child: Container(
-                                    height:
-                                        MediaQuery.of(context).size.height / 2,
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white,
+                                    height: MediaQuery.of(context).size.height /
+                                        1.4,
+                                    decoration: BoxDecoration(
+                                        color: context
+                                            .theme.scaffoldBackgroundColor,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(20),
                                             topRight: Radius.circular(20))),
@@ -347,107 +179,175 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                                                 const SizedBox(
                                                   height: 20,
                                                 ),
-                                                Row(
-                                                  children: const [
-                                                    Text("State"),
-                                                  ],
-                                                ),
-                                                FormBuilderDropdown(
-                                                  name: 'location',
-                                                  initialValue: state,
-                                                  isExpanded: true,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      state = value.toString();
-                                                    });
-                                                  },
-                                                  items: [
-                                                    "Nigeria",
-                                                    "Abia",
-                                                    "Adamawa",
-                                                    "Akwa-ibom",
-                                                    "Anambra",
-                                                    "Bauchi",
-                                                    "Bayelsa",
-                                                    "Benue",
-                                                    "Borno",
-                                                    "Cross River",
-                                                    "Delta",
-                                                    "Ebonyi",
-                                                    "Edo",
-                                                    "Ekiti",
-                                                    "Enugu",
-                                                    "Gombe",
-                                                    "Imo",
-                                                    "Jigawa",
-                                                    "Kaduna",
-                                                    "Kano",
-                                                    "Kastina",
-                                                    "Kebbi",
-                                                    "Kogi",
-                                                    "Kwara",
-                                                    "Lagos",
-                                                    "Nassarawa",
-                                                    "Niger",
-                                                    "Ogun",
-                                                    "Ondo",
-                                                    "Osun",
-                                                    "Oyo",
-                                                    "Plateau",
-                                                    "Rivers",
-                                                    "Sokoto",
-                                                    "Taraba",
-                                                    "Yobe",
-                                                    "Zamfara",
-                                                    "Abuja"
-                                                  ].map((option) {
-                                                    return DropdownMenuItem(
-                                                      value: option,
-                                                      child: Text(option),
-                                                    );
-                                                  }).toList(),
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      borderSide:
-                                                          const BorderSide(),
-                                                    ),
+                                                Obx(
+                                                  () => Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                          "Location (State)"),
+                                                      searchListingController
+                                                                  .location
+                                                                  .value ==
+                                                              ''
+                                                          ? FormBuilderDropdown(
+                                                              name: 'location',
+                                                              isExpanded: true,
+                                                              onChanged:
+                                                                  (value) {
+                                                                houseController
+                                                                        .state
+                                                                        .value =
+                                                                    value
+                                                                        .toString();
+                                                                searchListingController
+                                                                        .location
+                                                                        .value =
+                                                                    value
+                                                                        .toString();
+                                                                loadStateLgaController
+                                                                    .handleSearchFetchLga();
+                                                                houseController
+                                                                    .lga
+                                                                    .value = '';
+                                                              },
+                                                              items: loadStateLgaController
+                                                                  .data
+                                                                  .map(
+                                                                      (option) {
+                                                                return DropdownMenuItem(
+                                                                  value: option[
+                                                                          'state']
+                                                                      .toString(),
+                                                                  child: Text(option[
+                                                                          'state']
+                                                                      .toString()),
+                                                                );
+                                                              }).toList(),
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                  borderSide:
+                                                                      const BorderSide(),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : FormBuilderDropdown(
+                                                              name: 'State',
+                                                              isExpanded: true,
+                                                              initialValue:
+                                                                  houseController
+                                                                      .state
+                                                                      .value,
+                                                              onChanged:
+                                                                  (value) {
+                                                                houseController
+                                                                        .state
+                                                                        .value =
+                                                                    value
+                                                                        .toString();
+                                                                searchListingController
+                                                                        .location
+                                                                        .value =
+                                                                    value
+                                                                        .toString();
+                                                                loadStateLgaController
+                                                                    .handleSearchFetchLga();
+                                                                houseController
+                                                                    .lga
+                                                                    .value = '';
+                                                              },
+                                                              items: loadStateLgaController
+                                                                  .data
+                                                                  .map(
+                                                                      (option) {
+                                                                return DropdownMenuItem(
+                                                                  value: option[
+                                                                          'state']
+                                                                      .toString(),
+                                                                  child: Text(option[
+                                                                          'state']
+                                                                      .toString()),
+                                                                );
+                                                              }).toList(),
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                  borderSide:
+                                                                      const BorderSide(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                    ],
                                                   ),
                                                 ),
                                                 const SizedBox(
                                                   height: 20,
                                                 ),
-                                                Row(
-                                                  children: const [
-                                                    Text("Area"),
-                                                  ],
-                                                ),
-                                                TextFormField(
-                                                  initialValue: area,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      area = value.toString();
-                                                    });
-                                                  },
-                                                  decoration: InputDecoration(
-                                                    hintText:
-                                                        "Enter Your area e.g Ikoyi",
-                                                    filled: true,
-                                                    fillColor:
-                                                        const Color(0xFFF9F9F9),
-                                                    border: OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        borderSide:
-                                                            BorderSide.none),
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 14,
-                                                            horizontal: 15.67),
+                                                Obx(
+                                                  () => Visibility(
+                                                    visible: houseController
+                                                                .state.string ==
+                                                            ''
+                                                        ? false
+                                                        : true,
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          const Text("LGA"),
+                                                          InkWell(
+                                                            onTap: () {
+                                                              showLga();
+                                                            },
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                border:
+                                                                    Border.all(
+                                                                        width:
+                                                                            1),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            7),
+                                                              ),
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        18.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(houseController
+                                                                        .lga
+                                                                        .string),
+                                                                    const Icon(
+                                                                      CupertinoIcons
+                                                                          .arrowtriangle_down_fill,
+                                                                      size: 12,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ]),
                                                   ),
                                                 ),
                                                 const SizedBox(
@@ -461,27 +361,26 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                                                   child: ElevatedButton(
                                                     // Connect EndPoint
                                                     onPressed: () {
-                                                      handleSearchProperty(
-                                                          true);
+                                                      handleFilter();
                                                     },
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                             fixedSize:
                                                                 const Size(
-                                                                    500, 60), backgroundColor: mobileButtonColor),
-                                                    child: isLoading
-                                                        ? const CircularProgressIndicator()
-                                                        : const Text(
-                                                            //  Connect EndPoint
+                                                                    500, 60),
+                                                            backgroundColor:
+                                                                mobileButtonColor),
+                                                    child: const Text(
+                                                      //  Connect EndPoint
 
-                                                            'Filter',
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    'RedHatDisplay',
-                                                                color:
-                                                                    mobileButtonTextColor,
-                                                                fontSize: 20),
-                                                          ),
+                                                      'Filter',
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'RedHatDisplay',
+                                                          color:
+                                                              mobileButtonTextColor,
+                                                          fontSize: 20),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -504,140 +403,91 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
             ),
           ),
           Expanded(
-            child: isLoading || isSearching
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CollectionSlideTransition(
-                          children: const <Widget>[
-                            CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              radius: 12,
-                            ),
-                            CircleAvatar(
-                              backgroundColor: Colors.red,
-                              radius: 12,
-                            ),
-                            CircleAvatar(
-                              backgroundColor: Colors.yellow,
-                              radius: 12,
-                            ),
-                          ],
-                        ),
-                        FadingText('Loading...'),
-                      ],
-                    ),
-                  )
-                : firstList.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset("assets/images/opps.png"),
-                            const Text(
-                              "Opps!",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 35),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            const Text("No Item Available"),
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        controller: _controller,
-                        shrinkWrap: true,
-                        itemCount: filteredList.length,
-                        itemBuilder: (context, x) {
-                          int price = (filteredList[x].rentalFee!.toInt());
+            child: Obx(
+              () => houseController.isFiltering.isTrue
+                  ? loadingWidget()
+                  : PagedListView<int, HouseListModel>(
+                      pagingController:
+                          houseController.categoryPagingController,
+                      // physics: NeverScrollableScrollPhysics(),
+                      builderDelegate:
+                          PagedChildBuilderDelegate<HouseListModel>(
+                        itemBuilder: (context, post, index) {
+                          int price = (post.rentalFee!.toInt());
                           var formatter = NumberFormat("#,###");
                           var formatedPrice = formatter.format(price);
-                          return Column(
-                            children: [
-                              SingleProperty(
-                                comingFrom: 'EstateMarket',
-                                id: filteredList[x].id,
-                                image: filteredList[x].image,
-                                designType: filteredList[x].designType,
-                                currency: filteredList[x].currency,
-                                propertyType: filteredList[x].propertyType,
-                                propertyAddress:
-                                    filteredList[x].propertyAddress,
-                                bedroom: filteredList[x].bedroom,
-                                propertyCategory:
-                                    filteredList[x].propertyCategory,
-                                price: formatedPrice,
-                                isPromoted: filteredList[x].isPromoted,
-                                propertyName:
-                                    filteredList[x].propertyName.toString(),
-                              ),
-                              const SizedBox(height: 5),
-                            ],
-                          );
-                        }),
+                          return SingleProperty(
+                              id: post.id,
+                              image: post.image,
+                              designType: post.designType,
+                              currency: post.currency,
+                              propertyType: post.propertyType,
+                              propertyAddress: post.propertyAddress,
+                              bedroom: post.bedroom,
+                              propertyCategory: post.propertyCategory,
+                              price: formatedPrice,
+                              propertyName: post.propertyName.toString(),
+                              comingFrom: 'Homescreen',
+                                          state: post.state!,
+                              );
+                        },
+                        noItemsFoundIndicatorBuilder: (context) =>
+                            const Center(child: Text('No property found.')),
+                      ),
+                    ),
+            ),
           ),
-          if (_isLoadMoreRunning == true)
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 40),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CollectionSlideTransition(
-                      children: const <Widget>[
-                        CircleAvatar(
-                          backgroundColor: Colors.blue,
-                          radius: 6,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.red,
-                          radius: 6,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.yellow,
-                          radius: 6,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          if (_isLoadMoreRunning == true)
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 40),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CollectionSlideTransition(
-                      children: const <Widget>[
-                        CircleAvatar(
-                          backgroundColor: Colors.blue,
-                          radius: 6,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.red,
-                          radius: 6,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.yellow,
-                          radius: 6,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
         ],
       ),
     ));
+  }
+
+  showLga() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, changeState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: context.theme.scaffoldBackgroundColor,
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: 1,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: context.iconColor!),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      child: ListView.builder(
+                          itemCount: loadStateLgaController.lga.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  houseController.lga.value =
+                                      loadStateLgaController.lga[index];
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: ListTile(
+                                title: Text(loadStateLgaController.lga[index]),
+                              ),
+                            );
+                          })),
+                ],
+              ),
+            );
+          });
+        });
   }
 }

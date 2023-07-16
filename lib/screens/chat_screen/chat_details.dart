@@ -22,6 +22,7 @@ import 'package:url_launcher/url_launcher.dart' as launchUrl;
 
 import '../../controller/socket_controller.dart';
 import '../../service/user_profile_by_id_service.dart';
+import '../../util/colors.dart';
 
 // ignore: library_prefixes
 
@@ -99,7 +100,9 @@ class _ChatDetailsState extends State<ChatDetails> {
     getAllChatController.handleGetMessage();
     handleGetFirstMessages();
     // handleGetUserProfile();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      handleScroll();
+    });
     handleGetProfile();
     handleConnect();
     super.initState();
@@ -120,10 +123,7 @@ class _ChatDetailsState extends State<ChatDetails> {
   }
 
   handleScroll() {
-    if (listScrollController.hasClients) {
-      final position = listScrollController.position.maxScrollExtent;
-      listScrollController.jumpTo(position);
-    }
+    listScrollController.jumpTo(listScrollController.position.maxScrollExtent);
   }
 
   handleGetFirstMessages() async {
@@ -255,7 +255,7 @@ class _ChatDetailsState extends State<ChatDetails> {
           Container(
             padding:
                 const EdgeInsets.only(bottom: 18, top: 54, left: 21, right: 21),
-            color: const Color(0xFFFFFFFF),
+            // color: const Color(0xFFFFFFFF),
             child: Column(
               children: [
                 Row(
@@ -273,7 +273,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                              color: const Color(0xFFF0F7F8),
+                              // color: const Color(0xFFF0F7F8),
                               borderRadius: BorderRadius.circular(8)),
                           child: const Icon(Icons.arrow_back_ios)),
                     ),
@@ -284,7 +284,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                   ],
                 ),
                 const SizedBox(
-                  height: 41,
+                  height: 10,
                 ),
                 Row(
                   children: [
@@ -313,8 +313,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                               children: [
                                 Text(
                                   "${widget.firstName} ${widget.lastName}",
-                                  style: const TextStyle(
-                                      color: Color(0xFF263238), fontSize: 14),
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -365,53 +364,50 @@ class _ChatDetailsState extends State<ChatDetails> {
                   ? const Center(
                       child: Text("Loading...."),
                     )
-                  : SingleChildScrollView(
-                      reverse: true,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: myMessageList.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          controller: listScrollController,
-                          itemBuilder: (context, index) {
-                            // print(myMessage);
-                            // print(data[index]);
-                            // print(widget.receiverId + "-" + "1");
-                            // print("my id" + id.toString());
-                            // print("receiver id" +
-                            //     myMessage[index]['receiverId'].toString());
-                            // print("real receiver id" + widget.receiverId.toString());
-                            var chatDate = myMessageList[index]['createdAt'];
-                            var todayDate = DateTime.parse(chatDate);
-                            var lastChatTime = timeago.format(todayDate);
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: myMessageList.length,
+                      scrollDirection: Axis.vertical,
+                      controller: listScrollController,
+                      itemBuilder: (context, index) {
+                        // print(myMessage);
+                        // print(data[index]);
+                        // print(widget.receiverId + "-" + "1");
+                        // print("my id" + id.toString());
+                        // print("receiver id" +
+                        //     myMessage[index]['receiverId'].toString());
+                        // print("real receiver id" + widget.receiverId.toString());
+                        var chatDate = myMessageList[index]['createdAt'];
+                        var todayDate = DateTime.parse(chatDate);
+                        var lastChatTime = timeago.format(todayDate);
 
-                            return ChatItem(
-                              realReceiverId: widget.receiverId.toString(),
-                              // isMe: chats[index],
-                              myId: id.toString(),
-                              senderId:
-                                  myMessageList[index]['senderId'].toString(),
-                              message:
-                                  myMessageList[index]['message'].toString(),
-                              propertyId: myMessageList[index]['propertyId'],
-                              status: myMessageList[index]['status'],
-                              time: lastChatTime,
-                              // chatID: '2',
-                            );
-                          }),
-                    )),
+                        return ChatItem(
+                          realReceiverId: widget.receiverId.toString(),
+                          // isMe: chats[index],
+                          myId: id.toString(),
+                          senderId: myMessageList[index]['senderId'].toString(),
+                          message: myMessageList[index]['message'].toString(),
+                          propertyId: myMessageList[index]['propertyId'],
+                          status: myMessageList[index]['status'],
+                          time: lastChatTime,
+                          // chatID: '2',
+                        );
+                      })),
 
           Container(
-            color: const Color(0xFFFFFFFF),
+            // color: const Color(0xFFFFFFFF),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
             child: Stack(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset("assets/svgs/attach.svg"),
+                  child: SvgPicture.asset(
+                    "assets/svgs/attach.svg",
+                    color: context.isDarkMode ? white : grey,
+                  ),
                 ),
                 const SizedBox(
-                  width: 20,
+                  width: 30,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -427,7 +423,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                     focusNode: focusNode,
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: const Color(0xFFF7F7F7),
+                        // fillColor: const Color(0xFFF7F7F7),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(50),
                             borderSide: BorderSide.none),
@@ -435,9 +431,11 @@ class _ChatDetailsState extends State<ChatDetails> {
                             vertical: 14, horizontal: 15.67),
                         // suffixIcon: Image.asset("assets/images/emoji.png"),
                         hintText: "Messages...",
-                        hintStyle: const TextStyle(
+                        hintStyle: TextStyle(
                             fontWeight: FontWeight.w200,
-                            color: Color(0xFF7C7C7C))),
+                            color: context.isDarkMode
+                                ? white
+                                : const Color(0xFF7C7C7C))),
                     onChanged: (va) {
                       setState(() {
                         message = va;
@@ -581,7 +579,7 @@ class _ChatItemState extends State<ChatItem> {
     left = widget.realReceiverId != widget.senderId ? 60.0 : 20.0;
     right = widget.realReceiverId != widget.senderId ? 20 : 60;
     color = widget.realReceiverId != widget.senderId
-        ? const Color(0xFFFFFFFF)
+        ? white
         : const Color(0xFF444444);
     bkg = widget.realReceiverId != widget.senderId
         ? const Color(0xFF0072BA)
@@ -590,135 +588,153 @@ class _ChatItemState extends State<ChatItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(9, 12, 12, 17),
-      margin: EdgeInsets.only(top: 10, left: left, right: right),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(13),
-        color: bkg,
-      ),
-      child: Column(
-        crossAxisAlignment: widget.realReceiverId != widget.senderId
-            ? CrossAxisAlignment.end
-            : CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: widget.realReceiverId != widget.senderId
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
-          widget.realReceiverId != widget.senderId
-              ? widget.propertyId == null
-                  ? Container()
-                  : GestureDetector(
-                      onTap: () {
-                        Get.to(ProductDetails(
-                          id: widget.propertyId,
-                        ));
-                      },
-                      child: const Text(
-                        "You responded to this item",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    )
-              : widget.propertyId == null
-                  ? Container()
-                  : InkWell(
-                      onTap: () {
-                        Get.to(ProductDetails(
-                          id: widget.propertyId,
-                        ));
-                      },
-                      child: const Text("This property was responded to")),
-          Column(
-            crossAxisAlignment: widget.realReceiverId != widget.senderId
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: widget.realReceiverId != widget.senderId
-                    ? MainAxisAlignment.end
-                    : MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    child: Text(
-                      widget.message,
-                      style: TextStyle(color: color, fontSize: 13),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  widget.realReceiverId != widget.senderId
-                      ? widget.status == 'pending'
-                          ? JumpingDotsProgressIndicator(color: Colors.white)
-                          : Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Image.asset("assets/images/sender_mark.png"),
-                                widget.status == "sent"
-                                    ? Image.asset(
-                                        "assets/images/sender_mark.png")
-                                    : Positioned(
-                                        top: 2,
-                                        left: 2,
-                                        child: Image.asset(
-                                            "assets/images/sender_mark.png"))
-                              ],
-                            )
-                      : widget.status == 'pending'
-                          ? JumpingDotsProgressIndicator(color: Colors.white)
-                          : Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Image.asset("assets/images/sender_mark.png"),
-                                widget.status == "sent"
-                                    ? Image.asset(
-                                        "assets/images/receiver_mark.png")
-                                    : Positioned(
-                                        top: 2,
-                                        left: 2,
-                                        child: Image.asset(
-                                            "assets/images/receiver_mark.png"),
-                                      )
-                              ],
+          Container(
+            padding: const EdgeInsets.all(15),
+            margin: EdgeInsets.only(
+              top: 10,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              color: bkg,
+            ),
+            child: Column(
+              crossAxisAlignment: widget.realReceiverId != widget.senderId
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
+              children: [
+                widget.realReceiverId != widget.senderId
+                    ? widget.propertyId == null
+                        ? Container()
+                        : GestureDetector(
+                            onTap: () {
+                              Get.to(ProductDetails(
+                                id: widget.propertyId,
+                              ));
+                            },
+                            child: const Text(
+                              "You responded to this item",
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic, fontSize: 14),
                             ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 5.6,
-                    child: Text(
-                      widget.time,
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          color: widget.realReceiverId != widget.senderId
-                              ? const Color(0xFFFFFFFF)
-                              : const Color(0xFF444444),
-                          fontSize: 8),
+                          )
+                    : widget.propertyId == null
+                        ? Container()
+                        : InkWell(
+                            onTap: () {
+                              Get.to(ProductDetails(
+                                id: widget.propertyId,
+                              ));
+                            },
+                            child: const Text(
+                              "This property was responded to",
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: black,
+                                fontSize: 14,
+                              ),
+                            )),
+                Column(
+                  crossAxisAlignment: widget.realReceiverId != widget.senderId
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 1.4),
+                      child: Text(
+                        widget.message,
+                        style: TextStyle(color: color, fontSize: 13),
+                      ),
                     ),
-                  )
-                ],
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     Row(
-              //       children: [
-              //         Image.asset("assets/images/sender_mark.png"),
-              //         const SizedBox(
-              //           width: 5,
-              //         ),
-              //         Text(
-              //           "18pm",
-              //           style:
-              //               TextStyle(color: Color(0xFFFFFFFF), fontSize: 10),
-              //         )
-              //       ],
-              //     )
-              //   ],
-              // )
-            ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        widget.realReceiverId != widget.senderId
+                            ? widget.status == 'pending'
+                                ? JumpingDotsProgressIndicator(
+                                    color: Colors.white)
+                                : Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Image.asset(
+                                          "assets/images/sender_mark.png"),
+                                      widget.status == "sent"
+                                          ? Image.asset(
+                                              "assets/images/sender_mark.png")
+                                          : Positioned(
+                                              top: 2,
+                                              left: 2,
+                                              child: Image.asset(
+                                                  "assets/images/sender_mark.png"))
+                                    ],
+                                  )
+                            : widget.status == 'pending'
+                                ? JumpingDotsProgressIndicator(
+                                    color: Colors.white)
+                                : Stack(
+                                    children: [
+                                      Image.asset(
+                                          "assets/images/sender_mark.png"),
+                                      widget.status == "sent"
+                                          ? Image.asset(
+                                              "assets/images/receiver_mark.png")
+                                          : Positioned(
+                                              top: 2,
+                                              left: 2,
+                                              child: Image.asset(
+                                                  "assets/images/receiver_mark.png"),
+                                            )
+                                    ],
+                                  ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 5.6,
+                          ),
+                          child: Text(
+                            widget.time,
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: widget.realReceiverId != widget.senderId
+                                    ? const Color(0xFFFFFFFF)
+                                    : const Color(0xFF444444),
+                                fontSize: 8),
+                          ),
+                        )
+                      ],
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     Row(
+                    //       children: [
+                    //         Image.asset("assets/images/sender_mark.png"),
+                    //         const SizedBox(
+                    //           width: 5,
+                    //         ),
+                    //         Text(
+                    //           "18pm",
+                    //           style:
+                    //               TextStyle(color: Color(0xFFFFFFFF), fontSize: 10),
+                    //         )
+                    //       ],
+                    //     )
+                    //   ],
+                    // )
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

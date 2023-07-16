@@ -1485,6 +1485,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyCategory
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Detached Duplex",
                                       "Semi Duplex",
@@ -1517,6 +1522,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyCategory
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Detached Duplex",
                                       "Semi Duplex",
@@ -1553,6 +1563,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.designType.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Contemporary",
                                       "Modern",
@@ -1581,6 +1596,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.designType.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Contemporary",
                                       "Modern",
@@ -1615,6 +1635,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyAddress
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(5),
@@ -1635,6 +1660,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyAddress
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(5),
@@ -1658,6 +1688,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.interiorDesign
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Furnished",
                                       "Semi-Furnished",
@@ -1687,6 +1722,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.interiorDesign
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Furnished",
                                       "Semi-Furnished",

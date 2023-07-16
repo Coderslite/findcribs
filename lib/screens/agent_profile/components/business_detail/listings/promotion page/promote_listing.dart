@@ -15,6 +15,8 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../../util/colors.dart';
+
 class PromoteListingScreen extends StatefulWidget {
   final String id;
   final String image;
@@ -48,25 +50,30 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(
+            top: 9,
+            left: 20,
+            right: 20,
+          ),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      width: 20,
-                      height: 20,
+                      width: 40,
+                      height: 40,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(13),
                         color: const Color(0XFFF0F7F8),
+                        borderRadius: BorderRadius.circular(13),
                       ),
-                      child: SvgPicture.asset(
-                        "assets/svgs/arrow_back.svg",
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset("assets/svgs/arrow_back.svg"),
                       ),
                     ),
                   ),
@@ -83,7 +90,7 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
               const Text(
                 "Boost your ads - reach clients faster!",
                 style: TextStyle(
-                  color: Color(0xFF455A64),
+                  color: grey,
                 ),
               ),
               const SizedBox(
@@ -136,9 +143,9 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
                               widget.currency.toString() +
                                   widget.formattedPrice.toString(),
                               style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF09172D)),
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             const SizedBox(
                               height: 7,
@@ -148,7 +155,7 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
                               style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
-                                  color: Color(0xFF304059)),
+                                  color: grey),
                             ),
                             const Text(
                               "Wuse, Abuja",
@@ -161,7 +168,7 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 7, horizontal: 5),
                               decoration: BoxDecoration(
-                                  color: const Color(0xFFF8FEFF),
+                                  // color: const Color(0xFFF8FEFF),
                                   borderRadius: BorderRadius.circular(7)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -397,33 +404,33 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
       setState(() {
         isPromoting = false;
       });
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-          width: 280,
-          buttonsBorderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-          dismissOnTouchOutside: true,
-          dismissOnBackKeyPress: false,
-          onDismissCallback: (type) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Dismissed by $type'),
-              ),
-            );
-          },
-          headerAnimationLoop: false,
-          animType: AnimType.bottomSlide,
-          title: 'Promotion Failed',
-          desc: responseData['message'],
-          showCloseIcon: true,
-          btnOkOnPress: () {},
-        ).show();
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2,
+        ),
+        width: 280,
+        buttonsBorderRadius: const BorderRadius.all(
+          Radius.circular(2),
+        ),
+        dismissOnTouchOutside: true,
+        dismissOnBackKeyPress: false,
+        onDismissCallback: (type) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Dismissed by $type'),
+            ),
+          );
+        },
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        title: 'Promotion Failed',
+        desc: responseData['message'],
+        showCloseIcon: true,
+        btnOkOnPress: () {},
+      ).show();
 
       // print(responseData);
     }

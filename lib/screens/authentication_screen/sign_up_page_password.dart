@@ -11,6 +11,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 
+import '../../util/colors.dart';
 import '../../widgets/back_arrow.dart';
 
 class PasswordScreen extends StatefulWidget {
@@ -47,7 +48,7 @@ class PasswordScreenState extends State<PasswordScreen> {
     double mobileWidth = MediaQuery.of(context).size.width;
     // double mobileHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: mobileBackgroundColor,
+      // backgroundColor: mobileBackgroundColor,
       body: SingleChildScrollView(
         child: FormBuilder(
           key: _formKey,
@@ -63,7 +64,7 @@ class PasswordScreenState extends State<PasswordScreen> {
                   child: Text(
                     "Set Password",
                     style: TextStyle(
-                        color: mobileTextColor,
+                        // color: mobileTextColor,
                         fontFamily: 'RedHatDisplay',
                         fontSize: 36,
                         fontWeight: FontWeight.w700),
@@ -72,13 +73,13 @@ class PasswordScreenState extends State<PasswordScreen> {
                 mobileSizedBoxHeight,
                 const Text(
                   'Ensure your password is atleast 6 characters',
-                  style: TextStyle(color: mobileTextSmallColor, fontSize: 14),
+                  style: TextStyle(color: grey, fontSize: 14),
                 ),
                 mobileSizedBoxHeight,
                 const Text(
                   'Password',
                   style: TextStyle(
-                      color: mobileFormTextColor,
+                      // color: mobileFormTextColor,
                       fontFamily: 'RedHatDisplayLight',
                       fontSize: 12),
                 ),
@@ -108,26 +109,27 @@ class PasswordScreenState extends State<PasswordScreen> {
                       border:
                           const OutlineInputBorder(borderSide: BorderSide())),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: LinearProgressIndicator(
-                    value: password_strength,
-                    backgroundColor: Colors.grey[300],
-                    minHeight: 5,
-                    color: password_strength <= 1 / 4
-                        ? Colors.red
-                        : password_strength == 2 / 4
-                            ? Colors.yellow
-                            : password_strength == 3 / 4
-                                ? Colors.blue
-                                : Colors.green,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(12.0),
+                //   child: LinearProgressIndicator(
+                //     value: password_strength,
+                //     backgroundColor: Colors.grey[300],
+                //     minHeight: 5,
+                //     color: password_strength <= 1 / 4
+                //         ? Colors.red
+                //         : password_strength == 2 / 4
+                //             ? Colors.yellow
+                //             : password_strength == 3 / 4
+                //                 ? Colors.blue
+                //                 : Colors.green,
+                //   ),
+                // ),
+
                 mobileSizedBoxHeight,
                 const Text(
                   'Retype password',
                   style: TextStyle(
-                      color: mobileFormTextColor,
+                      // color: mobileFormTextColor,
                       fontFamily: 'RedHatDisplayLight',
                       fontSize: 12),
                 ),
@@ -151,7 +153,10 @@ class PasswordScreenState extends State<PasswordScreen> {
                     [
                       FormBuilderValidators.minLength(context, 6),
                       FormBuilderValidators.equal(
-                          context, passwordController1.text),
+                        context,
+                        passwordController1.text,
+                        errorText: "Password does not match",
+                      ),
                     ],
                   ),
                   decoration: InputDecoration(

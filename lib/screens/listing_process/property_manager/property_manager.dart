@@ -20,6 +20,7 @@ import 'package:image_cropper/image_cropper.dart';
 
 import '../../../controller/get_profile_controller.dart';
 import '../../../models/user_profile_information_model.dart';
+import '../../../util/colors.dart';
 import '../listing/select_listing_type.dart';
 
 class PropertyManagerRegistration extends StatefulWidget {
@@ -43,7 +44,6 @@ class _PropertyManagerRegistrationState
   List? availability;
   GetProfileController getProfileController = Get.put(GetProfileController());
 
-
   @override
   void initState() {
     super.initState();
@@ -52,328 +52,299 @@ class _PropertyManagerRegistrationState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: Padding(
-        padding: const EdgeInsets.only(
-          bottom: 18.0,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Material(
-              color: const Color(0XFF0072BA),
-              borderRadius: BorderRadius.circular(5),
-              child: MaterialButton(
-                onPressed: () {
-                  // handleSave();
-                  handleRegisterAgent();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 5,
-                    right: MediaQuery.of(context).size.width / 5,
-                    top: 5,
-                    bottom: 5,
-                  ),
-                  child: Text(
-                    isLoading ? "processing..." : "Save & Continue",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: "RedHatDisplay",
+        bottomSheet: Padding(
+          padding: const EdgeInsets.only(
+            bottom: 18.0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Material(
+                color: const Color(0XFF0072BA),
+                borderRadius: BorderRadius.circular(5),
+                child: MaterialButton(
+                  onPressed: () {
+                    // handleSave();
+                    handleRegisterAgent();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width / 5,
+                      right: MediaQuery.of(context).size.width / 5,
+                      top: 5,
+                      bottom: 5,
+                    ),
+                    child: Text(
+                      isLoading ? "processing..." : "Save & Continue",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-      ),
-      body: SafeArea(
-          child:  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(13),
-                                    color: const Color(0XFFF0F7F8),
-                                  ),
-                                  child: SvgPicture.asset(
-                                    "assets/svgs/arrow_back.svg",
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          FormBuilder(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Kindly provide us brief information about you",
-                                  style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text(
-                                  "Full Name",
-                                  style: TextStyle(
-                                      fontFamily: "RedHatDisplay",
-                                      color: Color(0XFF5A5A5A)),
-                                ),
-                                FormBuilderTextField(
-                                  name: 'fullName',
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                  ]),
-                                  initialValue:
-                                    "${getProfileController.firstName.string + getProfileController.lastName.string} ",
-                                  enabled: false,
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    fillColor: Color(0XFFE6E6E6),
-                                    filled: true,
-                                    border: InputBorder.none,
-                                    hintText: "E.g Abraham Great",
-                                    hintStyle: TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0XFF8A8A8A),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text(
-                                  "Business Name(Public)",
-                                  style: TextStyle(
-                                      fontFamily: "RedHatDisplay",
-                                      color: Color(0XFF5A5A5A)),
-                                ),
-                                FormBuilderTextField(
-                                  name: 'businessName',
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                  ]),
-                                  onChanged: (value) {
-                                    businessName = value.toString();
-                                    validateBusinessName(value.toString());
-                                  },
-                                  decoration: InputDecoration(
-                                    hintText: "Create a business name",
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                isChecking
-                                    ? Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            CollectionSlideTransition(
-                                              children: const <Widget>[
-                                                CircleAvatar(
-                                                  backgroundColor: Colors.blue,
-                                                  radius: 6,
-                                                ),
-                                                CircleAvatar(
-                                                  backgroundColor: Colors.red,
-                                                  radius: 6,
-                                                ),
-                                                CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.yellow,
-                                                  radius: 6,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Text(message),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text(
-                                  "About Business",
-                                  style: TextStyle(
-                                      fontFamily: "RedHatDisplay",
-                                      color: Color(0XFF5A5A5A)),
-                                ),
-                                FormBuilderTextField(
-                                  name: 'about',
-                                  minLines: 3,
-                                  maxLines: 5,
-                                  // maxLength: 300,
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                  ]),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text(
-                                  "Phone Number",
-                                  style: TextStyle(
-                                      fontFamily: "RedHatDisplay",
-                                      color: Color(0XFF5A5A5A)),
-                                ),
-                                FormBuilderTextField(
-                                  name: 'phone',
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                    FormBuilderValidators.minLength(
-                                        context, 11),
-                                    FormBuilderValidators.maxLength(
-                                        context, 11),
-                                  ]),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text(
-                                  "Upload Photo",
-                                  style: TextStyle(
-                                      fontFamily: "RedHatDisplay",
-                                      color: Color(0XFF5A5A5A)),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    handleGetImage();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Image.asset(
-                                                "assets/images/file.png"),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            cropFile == null
-                                                ? const Text("select photo")
-                                                : const Text(
-                                                    "image Available now"),
-                                          ],
-                                        ),
-                                        cropFile == null
-                                            ? Image.asset(
-                                                "assets/images/avatar.png")
-                                            : SizedBox(
-                                                width: 40,
-                                                height: 40,
-                                                child: ClipOval(
-                                                    child: Image.file(
-                                                  File(cropFile!.path
-                                                      .toString()),
-                                                  fit: BoxFit.cover,
-                                                )),
-                                              )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                const Text(
-                                  "Booking Tour Availability (?)",
-                                  style: TextStyle(
-                                      fontFamily: "RedHatDisplay",
-                                      color: Color(0XFF5A5A5A)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 68.0),
-                                  child: MultiSelectDialogField(
-                                    // selectedColor: const Color(0XFF0072BA),
-                                    dialogWidth:
-                                        MediaQuery.of(context).size.width,
-                                    buttonIcon: const Icon(
-                                      Icons.check_box,
-                                      color: Color(0XFF0072BA),
-                                      size: 15,
-                                    ),
-                                    listType: MultiSelectListType.CHIP,
-                                    buttonText: const Text(
-                                      "Select availability",
-                                      // style: TextStyle(fontWeight: FontWeight.w100),
-                                    ),
-                                    searchable: true,
-                                    items: [
-                                      "Monday",
-                                      "Tuesday",
-                                      "Wednesday",
-                                      "Thursday",
-                                      "Friday",
-                                      "Saturday",
-                                      "Sunday",
-                                    ]
-                                        .map((e) => MultiSelectItem(e, e))
-                                        .toList(),
-                                    onConfirm: (List<String> selected) {
-                                      availability = selected;
-                                    },
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(13),
+                          color: const Color(0XFFF0F7F8),
+                        ),
+                        child: SvgPicture.asset(
+                          "assets/svgs/arrow_back.svg",
+                        ),
                       ),
                     ),
-                  )
-             
-    ));
+                  ],
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                FormBuilder(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Kindly provide us brief information about you",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        "Full Name",
+                        style: TextStyle(color: grey),
+                      ),
+                      FormBuilderTextField(
+                        name: 'fullName',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context),
+                        ]),
+                        initialValue:
+                            "${getProfileController.firstName.string + getProfileController.lastName.string} ",
+                        enabled: false,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.all(20),
+                          // fillColor: Color(0XFFE6E6E6),
+                          filled: true,
+                          border: InputBorder.none,
+                          hintText: "E.g Abraham Great",
+                          hintStyle: TextStyle(
+                            fontSize: 12,
+                            color: Color(0XFF8A8A8A),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        "Business Name(Public)",
+                        style: TextStyle(color: grey),
+                      ),
+                      FormBuilderTextField(
+                        name: 'businessName',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context),
+                        ]),
+                        onChanged: (value) {
+                          businessName = value.toString();
+                          validateBusinessName(value.toString());
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Create a business name",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      isChecking
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CollectionSlideTransition(
+                                    children: const <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: Colors.blue,
+                                        radius: 6,
+                                      ),
+                                      CircleAvatar(
+                                        backgroundColor: Colors.red,
+                                        radius: 6,
+                                      ),
+                                      CircleAvatar(
+                                        backgroundColor: Colors.yellow,
+                                        radius: 6,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Text(message),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        "About Business",
+                        style: TextStyle(color: grey),
+                      ),
+                      FormBuilderTextField(
+                        name: 'about',
+                        minLines: 3,
+                        maxLines: 5,
+                        // maxLength: 300,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context),
+                        ]),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        "Phone Number",
+                        style: TextStyle(color: grey),
+                      ),
+                      FormBuilderTextField(
+                        name: 'phone',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context),
+                          FormBuilderValidators.minLength(context, 11),
+                          FormBuilderValidators.maxLength(context, 11),
+                        ]),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        "Upload Photo",
+                        style: TextStyle(color: grey),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          handleGetImage();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset("assets/images/file.png"),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  cropFile == null
+                                      ? const Text("select photo")
+                                      : const Text("image Available now"),
+                                ],
+                              ),
+                              cropFile == null
+                                  ? Image.asset("assets/images/avatar.png")
+                                  : SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: ClipOval(
+                                          child: Image.file(
+                                        File(cropFile!.path.toString()),
+                                        fit: BoxFit.cover,
+                                      )),
+                                    )
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        "Booking Tour Availability (?)",
+                        style: TextStyle(color: grey),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 68.0),
+                        child: MultiSelectDialogField(
+                          // selectedColor: const Color(0XFF0072BA),
+                          dialogWidth: MediaQuery.of(context).size.width,
+                          buttonIcon: const Icon(
+                            Icons.check_box,
+                            color: Color(0XFF0072BA),
+                            size: 15,
+                          ),
+                          listType: MultiSelectListType.CHIP,
+                          buttonText: const Text(
+                            "Select availability",
+                            // style: TextStyle(fontWeight: FontWeight.w100),
+                          ),
+                          searchable: true,
+                          items: [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday",
+                            "Sunday",
+                          ].map((e) => MultiSelectItem(e, e)).toList(),
+                          onConfirm: (List<String> selected) {
+                            availability = selected;
+                          },
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.grey,
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )));
   }
 
   void handleSave() {

@@ -48,8 +48,6 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
     });
   }
 
-
-
   ConnectivityController connectivityController =
       Get.put(ConnectivityController());
   UserFavouritedListingController userFavouritedListingController =
@@ -60,7 +58,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Obx(
         // ignore: unrelated_type_equality_checks
         () => connectivityController.connectionStatus == ConnectivityResult.none
@@ -107,7 +105,8 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                           const FavouriteAgentScreen()));
                             },
                             style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(86, 25), backgroundColor: mobileButtonColor),
+                                fixedSize: const Size(86, 25),
+                                backgroundColor: mobileButtonColor),
                             child: const Text(
                               'View All',
                               style: TextStyle(
@@ -180,7 +179,8 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                           const FavouriteListingScreen()));
                             },
                             style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(86, 25), backgroundColor: mobileButtonColor),
+                                fixedSize: const Size(86, 25),
+                                backgroundColor: mobileButtonColor),
                             child: const Text(
                               'View All',
                               style: TextStyle(
@@ -226,11 +226,10 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (_) {
                                           return ProductDetails(
-                                              id: userFavouritedListingController
-                                                  .favouritedListing[index]
-                                                  .listingId,
-                                                  );
-
+                                            id: userFavouritedListingController
+                                                .favouritedListing[index]
+                                                .listingId,
+                                          );
                                         }));
                                       },
                                       child: Container(

@@ -29,6 +29,7 @@ import 'package:upgrader/upgrader.dart';
 import '../../controller/get_chat_controller.dart';
 import '../../main.dart';
 import '../../models/user_profile_information_model.dart';
+import '../../util/colors.dart';
 import '../../util/social_login.dart';
 import '../agent_profile/components/personal_info/personal_information.dart';
 
@@ -162,6 +163,7 @@ class _HomePageRootState extends State<HomePageRoot> {
       },
       child: Obx(
         () => Scaffold(
+            // backgroundColor: context.isDarkMode ? black : white,
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
@@ -216,12 +218,12 @@ class _HomePageRootState extends State<HomePageRoot> {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0XFF0072BA),
+                                  color: blue,
                                   width: 2,
                                 )),
                             child: const Icon(
                               Icons.play_arrow,
-                              color: Color(0XFF0072BA),
+                              color: blue,
                             ),
                           ),
                           const SizedBox(
@@ -253,7 +255,7 @@ class _HomePageRootState extends State<HomePageRoot> {
                               : tooltipController.showTooltip();
                 },
                 child: const Material(
-                  color: Color(0XFF0072BA),
+                  color: blue,
                   shape: CircleBorder(),
                   elevation: 4.0,
                   child: Padding(
@@ -304,31 +306,23 @@ class _HomePageRootState extends State<HomePageRoot> {
     );
   }
 
-  getFooter(size) {
+  getFooter(
+    size,
+  ) {
     List bottomItems = [
-      homeRootController.index.toInt() == 0
-          ? "assets/svgs/home_active.svg"
-          : "assets/svgs/home.svg",
-      homeRootController.index.toInt() == 1
-          ? "assets/svgs/love_active.svg"
-          : "assets/svgs/love.svg",
-      homeRootController.index.toInt() == 2
-          ? "assets/svgs/blank.svg"
-          : "assets/svgs/blank.svg",
-      homeRootController.index.toInt() == 3
-          ? "assets/svgs/chat_active.svg"
-          : "assets/svgs/chat2.svg",
-      homeRootController.index.toInt() == 4
-          ? "assets/svgs/account_icon.svg"
-          : "assets/svgs/account.svg",
+      "assets/svgs/home.svg",
+      "assets/svgs/love.svg",
+      "assets/svgs/blank.svg",
+      "assets/svgs/chat_active.svg",
+      "assets/svgs/account_icon.svg"
     ];
 
     return Container(
       width: double.infinity,
       height: 70,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
+      decoration: BoxDecoration(
+          // color: context.isDarkMode ? black : white,
+          ),
       child: Padding(
         padding: const EdgeInsets.only(
           top: 10,
@@ -360,6 +354,11 @@ class _HomePageRootState extends State<HomePageRoot> {
                                 child: SvgPicture.asset(
                                   bottomItems[index],
                                   width: 25,
+                                  color: index == homeRootController.index.value
+                                      ? blue
+                                      : context.isDarkMode
+                                          ? white
+                                          : lightBlue,
                                 ),
                               )
                             : SizedBox(
@@ -371,6 +370,12 @@ class _HomePageRootState extends State<HomePageRoot> {
                                   child: SvgPicture.asset(
                                     bottomItems[index],
                                     width: 25,
+                                    color:
+                                        index == homeRootController.index.value
+                                            ? blue
+                                            : context.isDarkMode
+                                                ? white
+                                                : lightBlue,
                                   ),
                                 ),
                               )
@@ -379,6 +384,11 @@ class _HomePageRootState extends State<HomePageRoot> {
                             child: SvgPicture.asset(
                               bottomItems[index],
                               width: 25,
+                              color: index == homeRootController.index.value
+                                  ? blue
+                                  : context.isDarkMode
+                                      ? white
+                                      : lightBlue,
                             ),
                           ),
                   );

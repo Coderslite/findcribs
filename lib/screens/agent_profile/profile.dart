@@ -74,9 +74,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Text(
                                 "Profile",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    fontSize: size.width / 22),
+                                style: TextStyle(fontSize: size.width / 22),
                               ),
                             ],
                           ),
@@ -174,7 +172,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         Text("Personal Details",
                                             style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
                                               fontSize: size.width / 26,
                                               fontWeight: FontWeight.bold,
                                             )),
@@ -233,7 +230,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                                             children: [
                                               Text("Business Details",
                                                   style: TextStyle(
-                                                    fontFamily: "RedHatDisplay",
                                                     fontSize: size.width / 26,
                                                     fontWeight: FontWeight.bold,
                                                   )),
@@ -293,7 +289,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         Text("Get Help",
                                             style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
                                               fontSize: size.width / 26,
                                               fontWeight: FontWeight.bold,
                                             )),
@@ -352,7 +347,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         Text("Legal",
                                             style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
                                               fontSize: size.width / 26,
                                               fontWeight: FontWeight.bold,
                                             )),
@@ -410,7 +404,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         Text("Settings",
                                             style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
                                               fontSize: size.width / 26,
                                               fontWeight: FontWeight.bold,
                                             )),
@@ -466,7 +459,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         Text("Logout",
                                             style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
                                               fontSize: size.width / 26,
                                               fontWeight: FontWeight.bold,
                                             )),

@@ -23,7 +23,7 @@ class GetProfileController extends GetxController {
       category.value = value.category.toString();
       firstName.value = value.firstName.toString();
       lastName.value = value.lastName.toString();
-      agent.value = value.agent!;
+      agent.value = value.agent.toString() == 'null' ? {} : value.agent!;
       myId.value = value.id.toString();
       phoneNumber.value = value.phoneNumber.toString();
       isVerified.value = value.agent!['is_verified'].toString();
