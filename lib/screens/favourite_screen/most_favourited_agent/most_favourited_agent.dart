@@ -70,7 +70,7 @@ class _MostFavouritedAgentState extends State<MostFavouritedAgent> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
+                              builder: (context) => const HomePageRoot(
                                     navigateIndex: 0,
                                   )));
                     },

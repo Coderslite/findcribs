@@ -1,3 +1,5 @@
+// ignore_for_file: library_prefixes, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart' as launchUrl;
@@ -42,7 +44,7 @@ class _HelpScreenState extends State<HelpScreen> {
                   Text(
                     "Get Help",
                     style: TextStyle(
-                        fontFamily: "RedHatDisplay", fontSize: size.width / 22),
+                         fontSize: size.width / 22),
                   ),
                   const Text("           "),
                 ],
@@ -52,7 +54,6 @@ class _HelpScreenState extends State<HelpScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  // ignore: deprecated_member_use
                   launchUrl.launch("tel:07026195346");
                 },
                 child: Container(
@@ -79,7 +80,7 @@ class _HelpScreenState extends State<HelpScreen> {
                           children: [
                             Text("Call Us",
                                 style: TextStyle(
-                                  fontFamily: "RedHatDisplay",
+                                  
                                   fontSize: size.width / 26,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -123,7 +124,7 @@ class _HelpScreenState extends State<HelpScreen> {
               //           children: [
               //             Text("Chat with us",
               //                 style: TextStyle(
-              //                   fontFamily: "RedHatDisplay",
+              //                   
               //                   fontSize: size.width / 26,
               //                   fontWeight: FontWeight.bold,
               //                 )),
@@ -170,7 +171,7 @@ class _HelpScreenState extends State<HelpScreen> {
                           children: [
                             Text("Send an Email",
                                 style: TextStyle(
-                                  fontFamily: "RedHatDisplay",
+                                  
                                   fontSize: size.width / 26,
                                   fontWeight: FontWeight.bold,
                                 )),

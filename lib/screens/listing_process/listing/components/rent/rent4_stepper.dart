@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:convert';
@@ -200,6 +200,10 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                                     rentListingController.description.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   validator: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(context),
                                   ]),
@@ -221,6 +225,10 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                                     rentListingController.description.value =
                                         value.toString();
                                   },
+                                  style: TextStyle(
+                                    color: context.textTheme.bodyMedium!.color,
+                                    fontFamily: "RedHatDisplay",
+                                  ),
                                   validator: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(context),
                                   ]),
@@ -244,6 +252,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
+
                             initialValue:
                                 rentListingController.ageRestriction.value == 1
                                     ? "Yes"
@@ -357,77 +366,79 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  handleSave();
+                          SizedBox(
+                            width: 500,
+                            child: Material(
+                              color: const Color(0XFF0072BA),
+                              borderRadius: BorderRadius.circular(5),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  handlePublish();
+                                  // print(newfiles.length);
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                        color: const Color(0XFF0072BA),
-                                      )),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.width /
-                                          35,
-                                      bottom:
-                                          MediaQuery.of(context).size.width /
-                                              35,
-                                      left: MediaQuery.of(context).size.width /
-                                          11,
-                                      right: MediaQuery.of(context).size.width /
-                                          11,
-                                    ),
-                                    child: isSaving
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            "Save",
-                                            style: TextStyle(
-                                              color: Color(0XFF0072BA),
-                                              fontSize: 20,
-                                            ),
-                                          ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.width / 35,
+                                    bottom:
+                                        MediaQuery.of(context).size.width / 35,
+                                    left: MediaQuery.of(context).size.width / 9,
+                                    right:
+                                        MediaQuery.of(context).size.width / 9,
                                   ),
+                                  child: isLoading
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          "Publish",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                          ),
+                                        ),
                                 ),
                               ),
-                              Material(
-                                color: const Color(0XFF0072BA),
-                                borderRadius: BorderRadius.circular(5),
-                                child: MaterialButton(
-                                  onPressed: () {
-                                    handlePublish();
-                                    // print(newfiles.length);
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.width /
-                                          35,
-                                      bottom:
-                                          MediaQuery.of(context).size.width /
-                                              35,
-                                      left:
-                                          MediaQuery.of(context).size.width / 9,
-                                      right:
-                                          MediaQuery.of(context).size.width / 9,
-                                    ),
-                                    child: isLoading
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            "Publish",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
+
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     // InkWell(
+                          //     //   onTap: () {
+                          //     //     handleSave();
+                          //     //   },
+                          //     //   child: Container(
+                          //     //     decoration: BoxDecoration(
+                          //     //         borderRadius: BorderRadius.circular(5),
+                          //     //         border: Border.all(
+                          //     //           color: const Color(0XFF0072BA),
+                          //     //         )),
+                          //     //     child: Padding(
+                          //     //       padding: EdgeInsets.only(
+                          //     //         top: MediaQuery.of(context).size.width /
+                          //     //             35,
+                          //     //         bottom:
+                          //     //             MediaQuery.of(context).size.width /
+                          //     //                 35,
+                          //     //         left: MediaQuery.of(context).size.width /
+                          //     //             11,
+                          //     //         right: MediaQuery.of(context).size.width /
+                          //     //             11,
+                          //     //       ),
+                          //     //       child: isSaving
+                          //     //           ? const CircularProgressIndicator()
+                          //     //           : const Text(
+                          //     //               "Save",
+                          //     //               style: TextStyle(
+                          //     //                 color: Color(0XFF0072BA),
+                          //     //                 fontSize: 20,
+                          //     //               ),
+                          //     //             ),
+                          //     //     ),
+                          //     //   ),
+                          //     // ),
+
+                          //  ],
+                          // ),
                         ],
                       ),
                     ),
@@ -576,7 +587,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                   ? '0'
                   : rentListingController.agencyFee.value.toString();
           request.fields['state'] =
-              rentListingController.location.value.toString();
+              rentListingController.state.value.toString();
           request.fields['lga'] = rentListingController.lga.value.toString();
           request.fields['country'] = 'Nigeria';
           request.fields['total_area_of_land'] =
@@ -600,8 +611,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
               rentListingController.propertyCategory.toString();
           request.fields['property_type'] = "rent";
           request.fields['status'] = 'Active';
-          request.fields['location'] =
-              rentListingController.location.toString();
+          request.fields['location'] = rentListingController.state.toString();
           request.fields['negotiable'] =
               rentListingController.negotiable.value == 1 ? '1' : '0';
           request.headers['Authorization'] = "$token";
@@ -653,7 +663,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                 desc: "You can check your profile page to edit few info!",
                 btnOk: ElevatedButton(
                   onPressed: () {
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",
@@ -890,7 +900,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                   ? '0'
                   : rentListingController.agencyFee.value.toString();
           request.fields['state'] =
-              rentListingController.location.value.toString();
+              rentListingController.state.value.toString();
           request.fields['total_area_of_land'] =
               rentListingController.totalArea.value.toString();
           request.fields['interior_design'] =
@@ -912,8 +922,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
               rentListingController.propertyCategory.toString();
           request.fields['property_type'] = "rent";
           request.fields['status'] = 'Saved';
-          request.fields['location'] =
-              rentListingController.location.toString();
+          request.fields['location'] = rentListingController.state.toString();
           request.fields['lga'] = rentListingController.lga.value.toString();
           request.fields['country'] = 'Nigeria';
           request.fields['negotiable'] =
@@ -971,7 +980,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                 btnOk: ElevatedButton(
                   onPressed: () {
                     rentListingController.handleResetInformation();
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",

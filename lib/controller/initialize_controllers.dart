@@ -11,6 +11,7 @@ import 'package:findcribs/controller/login_controller.dart';
 import 'package:findcribs/controller/rent_listing_controller.dart';
 import 'package:findcribs/controller/sale_listing_controller.dart';
 import 'package:findcribs/controller/story_list_controller.dart';
+import 'package:findcribs/controller/theme_controller.dart';
 import 'package:findcribs/controller/user_favorited_agent_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
 import 'package:get/get.dart';
@@ -33,9 +34,9 @@ class HomeBindings implements Bindings {
     Get.put(RentListingController());
     Get.put(SaleListingController());
     Get.put(EstateListingController());
-    Get.put(GetPropertyListingController());
     Get.put(LoadStateLgaController());
     Get.put(HomeRootController());
     Get.put(GetMyStoryController());
+    Get.put(ThemeController());
   }
 }

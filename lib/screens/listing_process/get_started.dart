@@ -1,5 +1,6 @@
 import 'package:findcribs/screens/listing_process/identify.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -37,7 +38,6 @@ class _GetStartedState extends State<GetStarted> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontFamily: "RedHatDisplay",
                     ),
                   ),
                 ),
@@ -47,49 +47,77 @@ class _GetStartedState extends State<GetStarted> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(
-            child: Image.asset(
-              "assets/images/findcrib_logo.png",
-              scale: MediaQuery.of(context).size.width / 130,
-            ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "Welcome to ",
-                style: TextStyle(
-                  fontFamily: "RedHatDisplayLight",
-                  fontSize: 24,
-                ),
-              ),
-              Text(
-                "FindCribs",
-                style: TextStyle(
-                  color: Color(0XFF0072BA),
-                  fontFamily: "RedHatDisplay",
-                  fontSize: 24,
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    left: 30,
+                    top: 40,
+                  ),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0XFFF0F7F8),
+                    borderRadius: BorderRadius.circular(13),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SvgPicture.asset("assets/svgs/arrow_back.svg"),
+                  ),
                 ),
               ),
             ],
           ),
-          const Text(
-            "Listings Manager",
-            style: TextStyle(
-              fontFamily: "RedHatDisplayLight",
-              fontSize: 24,
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Image.asset(
+                    "assets/images/findcrib_logo.png",
+                    scale: MediaQuery.of(context).size.width / 130,
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "Welcome to ",
+                      style: TextStyle(
+                        fontFamily: "RedHatDisplayLight",
+                        fontSize: 24,
+                      ),
+                    ),
+                    Text(
+                      "FindCribs",
+                      style: TextStyle(
+                        color: Color(0XFF0072BA),
+                        fontSize: 24,
+                      ),
+                    ),
+                  ],
+                ),
+                const Text(
+                  "Listings Manager",
+                  style: TextStyle(
+                    fontFamily: "RedHatDisplayLight",
+                    fontSize: 24,
+                  ),
+                )
+              ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
-
-
 }

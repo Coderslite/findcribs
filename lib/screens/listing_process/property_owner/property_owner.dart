@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -6,8 +6,8 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:findcribs/service/user_profile_service.dart';
+import 'package:findcribs/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -86,7 +86,6 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontFamily: "RedHatDisplay",
                     ),
                   ),
                 ),
@@ -132,7 +131,6 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     const Text(
                       "Kindly provide us brief information about you",
                       style: TextStyle(
-                        fontFamily: "RedHatDisplay",
                         fontSize: 18,
                       ),
                     ),
@@ -141,9 +139,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     ),
                     const Text(
                       "Full Name",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'fullName',
@@ -155,7 +151,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                       enabled: false,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.all(20),
-                        fillColor: Color(0XFFE6E6E6),
+                        // fillColor: Color(0XFFE6E6E6),
                         filled: true,
                         border: InputBorder.none,
                         hintText: "E.g Abraham Great",
@@ -170,9 +166,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     ),
                     const Text(
                       "Business Name(Public)",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'businessName',
@@ -225,9 +219,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     ),
                     const Text(
                       "About Business",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'about',
@@ -249,9 +241,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     ),
                     const Text(
                       "Phone Number",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'phone',
@@ -272,9 +262,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     ),
                     const Text(
                       "Upload Photo",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     InkWell(
                       onTap: () {
@@ -367,9 +355,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                             children: [
                               const Text(
                                 "Booking Tour Availability (?)",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
+                                style: TextStyle(color: grey),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 68.0),

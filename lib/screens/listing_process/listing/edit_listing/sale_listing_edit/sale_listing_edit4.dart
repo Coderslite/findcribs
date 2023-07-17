@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -590,7 +590,7 @@ class _EditSale4State extends State<EditSale4> {
             btnOkOnPress: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (_) {
-                return HomePageRoot(navigateIndex: 0);
+                return const HomePageRoot(navigateIndex: 0);
               }));
             },
           ).show();

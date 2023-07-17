@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class FilterApartmentController extends GetxController {
   var propertyType = 'All'.obs;
   var state = "Nigeria".obs;
+  var lga = ''.obs;
   var area = "".obs;
 
   var sortPropertyBathroom = 0.0.obs;

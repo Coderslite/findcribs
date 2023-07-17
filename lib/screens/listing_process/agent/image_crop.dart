@@ -167,12 +167,12 @@ class _CropImageState extends State<CropImage> {
                             style: kIsWeb
                                 ? Theme.of(context)
                                     .textTheme
-                                    .headline5!
+                                    .headlineSmall!
                                     .copyWith(
                                         color: Theme.of(context).highlightColor)
                                 : Theme.of(context)
                                     .textTheme
-                                    .bodyText2!
+                                    .bodyMedium!
                                     .copyWith(
                                         color:
                                             Theme.of(context).highlightColor),

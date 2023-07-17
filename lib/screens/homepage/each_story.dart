@@ -57,7 +57,7 @@ class _EachStoryState extends State<EachStory> {
                 height: 5,
               ),
               Text(
-                widget.firstName.toString() + " " + widget.lastName.toString(),
+                "${widget.firstName} ${widget.lastName}",
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 10),
               ),
@@ -93,9 +93,7 @@ class _EachStoryState extends State<EachStory> {
                     height: 5,
                   ),
                   Text(
-                    widget.firstName.toString() +
-                        " " +
-                        widget.lastName.toString(),
+                    "${widget.firstName} ${widget.lastName}",
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 10),
                   ),

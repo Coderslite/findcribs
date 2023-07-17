@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 
 import '../../../controller/get_profile_controller.dart';
+import '../../../util/colors.dart';
 import '../listing/select_listing_type.dart';
 
 class EstateMarketRegistration extends StatefulWidget {
@@ -216,7 +217,6 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontFamily: "RedHatDisplay",
                     ),
                   ),
                 ),
@@ -262,7 +262,6 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                     const Text(
                       "Kindly provide us brief information about you",
                       style: TextStyle(
-                        fontFamily: "RedHatDisplay",
                         fontSize: 18,
                       ),
                     ),
@@ -271,9 +270,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                     ),
                     const Text(
                       "Full Name",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'fullName',
@@ -285,7 +282,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                       enabled: false,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.all(20),
-                        fillColor: Color(0XFFE6E6E6),
+                        // fillColor: Color(0XFFE6E6E6),
                         filled: true,
                         border: InputBorder.none,
                         hintText: "E.g Abraham Great",
@@ -300,9 +297,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                     ),
                     const Text(
                       "Business Name(Public)",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'businessName',
@@ -355,9 +350,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                     ),
                     const Text(
                       "About Business",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'about',
@@ -379,9 +372,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                     ),
                     const Text(
                       "Phone Number",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'phone',
@@ -453,9 +444,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                     ),
                     const Text(
                       "Upload Photo",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     InkWell(
                       onTap: () {
@@ -504,9 +493,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                       children: [
                         const Text(
                           "Booking Tour Availability (?)",
-                          style: TextStyle(
-                              fontFamily: "RedHatDisplay",
-                              color: Color(0XFF5A5A5A)),
+                          style: TextStyle(color: grey),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 68.0),
@@ -579,7 +566,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
 
   Future<void> _cropImage() async {
     if (file != null) {
-      var _croppedFile = await ImageCropper().cropImage(
+      var croppedFile = await ImageCropper().cropImage(
         sourcePath: file!.path,
         compressFormat: ImageCompressFormat.jpg,
         compressQuality: 100,
@@ -609,9 +596,9 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
           ),
         ],
       );
-      if (_croppedFile != null) {
+      if (croppedFile != null) {
         setState(() {
-          cropFile = _croppedFile;
+          cropFile = croppedFile;
         });
       }
     }

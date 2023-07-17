@@ -69,7 +69,6 @@ class _PolicyState extends State<Policy> {
                 const Text(
                   "Policy Privacy",
                   style: TextStyle(
-                    fontFamily: "RedHatDisplay",
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),

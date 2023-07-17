@@ -1,10 +1,9 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 
 import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
-import 'package:findcribs/screens/product_details/product_details.dart';
 import 'package:findcribs/service/property_list_categoty_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,6 @@ import 'package:http/http.dart' as http;
 import '../homepage/home_root.dart';
 import '../homepage/single_property.dart';
 import '../listing_process/get_started.dart';
-import '../listing_process/listing/select_listing_type.dart';
 
 class HotelScreen extends StatefulWidget {
   const HotelScreen({Key? key}) : super(key: key);
@@ -348,7 +346,7 @@ class _HotelScreenState extends State<HotelScreen> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
-                          return HomePageRoot(
+                          return const HomePageRoot(
                             navigateIndex: 0,
                           );
                         }));
@@ -364,7 +362,7 @@ class _HotelScreenState extends State<HotelScreen> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
-                          return HomePageRoot(
+                          return const HomePageRoot(
                             navigateIndex: 1,
                           );
                         }));
@@ -387,7 +385,7 @@ class _HotelScreenState extends State<HotelScreen> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
-                          return HomePageRoot(
+                          return const HomePageRoot(
                             navigateIndex: 3,
                           );
                         }));
@@ -406,7 +404,7 @@ class _HotelScreenState extends State<HotelScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (_) {
-                              return HomePageRoot(
+                              return const HomePageRoot(
                                 navigateIndex: 4,
                               );
                             },
@@ -744,6 +742,10 @@ class _HotelScreenState extends State<HotelScreen> {
                                           propertyName: filteredList[x]
                                               .propertyName
                                               .toString(),
+                                          state:filteredList[x]
+                                              .state
+                                              .toString(),
+
                                         ),
                                         const SizedBox(height: 5),
                                       ],
@@ -801,7 +803,7 @@ class _HotelScreenState extends State<HotelScreen> {
       var responseData = jsonResponse['data']['profile'];
       if (responseData['agent'] != null) {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return Rent1();
+          return const Rent1();
         }));
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {

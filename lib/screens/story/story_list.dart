@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -5,7 +7,6 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:findcribs/controller/get_my_story_controller.dart';
 import 'package:findcribs/screens/story/single_story.dart';
 import 'package:findcribs/screens/story/story_camera.dart';
-import 'package:findcribs/service/get_user_story_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:form_builder_file_picker/form_builder_file_picker.dart';
@@ -15,7 +16,7 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:path/path.dart' as p;
 
 import '../../controller/delete_story_controller.dart';
-import '../../models/story_model.dart';
+import '../../util/colors.dart';
 
 class ItemModel {
   String title;
@@ -216,7 +217,7 @@ class _StoryListState extends State<StoryList> {
                   ),
                 ],
               )),
-          backgroundColor: const Color(0xFFE5E5E5),
+          // backgroundColor: const Color(0xFFE5E5E5),
           child: GestureDetector(
               onTap: () {
                 setState(() {
@@ -229,12 +230,14 @@ class _StoryListState extends State<StoryList> {
                   isShowing = !isShowing;
                 });
               },
-              child: const CircleAvatar(
-                  radius: 35,
+              child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: blue,
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Icon(
                       Icons.add,
+                      color: context.iconColor,
                     ),
                   ))),
         ),
@@ -388,8 +391,9 @@ class _StoryListState extends State<StoryList> {
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        primary: const Color(0XFF0072BA)),
-                                    onPressed: () {handlePickFromGallery();},
+                                        backgroundColor:
+                                            const Color(0XFF0072BA)),
+                                    onPressed: () {},
                                     child: const Text("Post a story"),
                                   ),
                                 ],

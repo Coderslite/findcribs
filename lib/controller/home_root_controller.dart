@@ -6,13 +6,12 @@ import '../util/social_login.dart';
 
 class HomeRootController extends GetxController {
   var index = 0.obs;
- var isToolTip = false.obs;
-
+  var isToolTip = false.obs;
 
   selectedTab(idx) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    token == null && index > 0
+    token == null && index >= 0
         ? showModalBottomSheet<void>(
             context: Get.context!,
             builder: (BuildContext context) {

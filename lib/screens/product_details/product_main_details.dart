@@ -1,15 +1,12 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:findcribs/models/house_detail_model.dart';
 import 'package:findcribs/screens/product_details/photo_view_preview.dart';
-import 'package:findcribs/service/property_details_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -18,12 +15,14 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../controller/get_chat_controller.dart';
 import '../../controller/get_single_property_listing.dart';
+import '../../controller/panel_controller.dart';
 import '../../controller/property_view_controller.dart';
 import '../../controller/share_link_controller.dart';
 import '../../controller/user_favourited_listing_controller.dart';
 import '../../models/house_list_model.dart';
 import '../../models/user_favourite_listing.dart';
 import '../../service/user_favourited_listing_service.dart';
+import '../../util/colors.dart';
 import '../../util/social_login.dart';
 import '../homepage/home_root.dart';
 
@@ -55,6 +54,8 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
   ShareLinkController shareLinkController = Get.put(ShareLinkController());
   PropertyViewController propertyViewController =
       Get.put(PropertyViewController());
+
+  MyPanelController panelController = Get.put(MyPanelController());
 
   final _controller = PageController(
     initialPage: 0,
@@ -94,7 +95,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
   }
 
   int _currentPage = 0;
-  Timer? _timer;
+  Timer? timer;
 
   @override
   void initState() {
@@ -102,7 +103,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
     propertyViewController.handlePropertyView(widget.id!);
     handleGetLikedProperties();
 
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
+    timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       if (_currentPage == images.length - 1) {
         end = true;
       } else if (_currentPage == 0) {
@@ -148,6 +149,8 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
       } else {
         var property = getSinglePropertyController.singleProperty[0];
         int price = (property.rentalFee!.toInt());
+        var formatter = NumberFormat("#,###");
+        var formatedPrice = formatter.format(price);
         shareLinkController.handleGenerateLink(
             widget.id.toString(),
             property.image[0]['url'].toString(),
@@ -158,8 +161,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
 
         images = property.image!;
 
-        var formatter = NumberFormat("#,###");
-        var formatedPrice = formatter.format(price);
+        
 
         return Column(children: [
           Stack(
@@ -170,6 +172,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return PhotoPreview(
+                      profilePreview: false,
                         images: property.image,
                         businessName: property.agentBusinessName.toString());
                   }));
@@ -202,6 +205,8 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (_) {
                                         return PhotoPreview(
+                      profilePreview: false,
+
                                           images: property.image,
                                           businessName: property
                                               .agentBusinessName
@@ -516,12 +521,19 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                 left: 20,
                 child: GestureDetector(
                   onTap: () {
-                    widget.isDeepLinking.toString() == 'true'
-                        ? Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (_) {
-                            return HomePageRoot(navigateIndex: 0);
-                          }))
-                        : Navigator.pop(context);
+                    if (panelController.panelOpened == false) {
+                      widget.isDeepLinking.toString() == 'true'
+                          ? Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (_) {
+                              return const HomePageRoot(navigateIndex: 0);
+                            }))
+                          : Navigator.pop(context);
+                    } else {
+                      setState(() {
+                        panelController.panelOpened = false;
+                        panelController.panelController.close();
+                      });
+                    }
                   },
                   child: Container(
                     width: 40,
@@ -678,7 +690,9 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                           fontSize: 24,
                           fontFamily: 'RedHatDisplay',
                           fontWeight: FontWeight.w900,
-                          color: Color(0XFF09172D),
+                          // color: context.isDarkMode
+                          //     ? const Color(0XFF8A99B1)
+                          //     : const Color(0XFF09172D),
                         ),
                       ),
                     ],

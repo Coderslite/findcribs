@@ -409,21 +409,21 @@ class _Rent2StepperState extends State<Rent2Stepper> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             children: [
-                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(Icons.arrow_back_ios)),
-                    const Text(
-                      "Rent Listing",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text("")
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(Icons.arrow_back_ios)),
+                  const Text(
+                    "Rent Listing",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const Text("")
+                ],
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -653,10 +653,14 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     child: FormBuilderTextField(
                                       name: 'rentalFee',
                                       // maxLength: 300,
+
                                       validator: FormBuilderValidators.compose([
                                         FormBuilderValidators.required(context),
                                         FormBuilderValidators.numeric(context),
-                                        FormBuilderValidators.integer(context)
+                                        FormBuilderValidators.integer(context),
+                                        // FormBuilderValidators.minLength(
+                                        //     context, 4),
+                                            FormBuilderValidators.min(context, 2000),
                                       ]),
                                       onChanged: (value) {
                                         if (value!.isEmpty) {
@@ -682,7 +686,7 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     ),
                                   )
                                 : FormBuilder(
-                                    key:rentFeeFormKey,
+                                    key: rentFeeFormKey,
                                     child: FormBuilderTextField(
                                       name: 'rentalFee',
                                       initialValue:
@@ -691,7 +695,10 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                       validator: FormBuilderValidators.compose([
                                         FormBuilderValidators.required(context),
                                         FormBuilderValidators.numeric(context),
-                                        FormBuilderValidators.integer(context)
+                                        FormBuilderValidators.integer(context),
+                                        // FormBuilderValidators.minLength(
+                                        //     context, 4),
+                                        FormBuilderValidators.min(context, 2000),
                                       ]),
                                       onChanged: (value) {
                                         if (value!.isEmpty) {
@@ -867,7 +874,7 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                                       ? false
                                                       : true,
                                               child: FormBuilder(
-                                                key:cautionFeeFormKey,
+                                                key: cautionFeeFormKey,
                                                 child: FormBuilderTextField(
                                                   name: 'cautionFee',
                                                   initialValue:
@@ -1262,7 +1269,6 @@ class _Rent2StepperState extends State<Rent2Stepper> {
         formKey2.currentState!.save();
         var formData = formKey2.currentState!.value;
 
-
         print(formData);
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return const Rent3Stepper();
@@ -1272,7 +1278,6 @@ class _Rent2StepperState extends State<Rent2Stepper> {
             cautionFeeFormKey.currentState!.validate() &&
             serviceChargeFormKey.currentState!.validate()) {
           var formData = formKey2.currentState!.value;
-
 
           print(formData);
           Navigator.push(context, MaterialPageRoute(builder: (_) {

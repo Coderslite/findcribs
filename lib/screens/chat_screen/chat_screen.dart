@@ -7,7 +7,6 @@ import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/controller/socket_controller.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
-import 'package:findcribs/service/user_profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -17,6 +16,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../controller/connectivity_controller.dart';
+import '../../util/colors.dart';
 import '../homepage/home_root.dart';
 import 'chat_details.dart';
 
@@ -48,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ? Center(
                 child: GestureDetector(
                 onTap: () {
-                  Get.to(HomePageRoot(navigateIndex: 0));
+                  Get.to(const HomePageRoot(navigateIndex: 0));
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -67,11 +67,16 @@ class _ChatScreenState extends State<ChatScreen> {
                   const SizedBox(
                     height: 36,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(20.0),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
                     child: Text(
                       "Chats",
-                      style: TextStyle(fontSize: 36, color: Color(0xFF263238)),
+                      style: TextStyle(
+                        fontSize: 36,
+                        color: context.isDarkMode
+                            ? white
+                            : const Color(0xFF263238),
+                      ),
                     ),
                   ),
                   Container(
@@ -79,7 +84,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextFormField(
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: const Color(0xFFF9F9F9),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none),
@@ -90,9 +94,11 @@ class _ChatScreenState extends State<ChatScreen> {
                             color: Color(0xFFB1B1B1),
                           ),
                           hintText: "Search for chats & messages",
-                          hintStyle: const TextStyle(
+                          hintStyle: TextStyle(
                               fontWeight: FontWeight.w200,
-                              color: Color(0xFF7C7C7C))),
+                              color: context.isDarkMode
+                                  ? white
+                                  : Color(0xFF7C7C7C))),
                       onChanged: (value) {
                         getAllChatController.handleSearchChat(value,
                             int.parse(getProfileController.myId.toString()));
@@ -208,14 +214,18 @@ class _ChatListState extends State<ChatList> {
                       itemCount: getAllChatController.allAvailableChats.length,
                       itemBuilder: (context, index) {
                         int receiverId = getAllChatController
-                                    .allAvailableChats[index].users![1]['id'] !=
-                                int.parse(getProfileController.myId
-                                    .toString()
-                                    .toString())
-                            ? getAllChatController
-                                .allAvailableChats[index].users![1]['id']
-                            : getAllChatController
-                                .allAvailableChats[index].users![0]['id'];
+                                    .allAvailableChats[index].users![1]['id']
+                                    .toString() ==
+                                'null'
+                            ? '0'
+                            : getAllChatController.allAvailableChats[index]
+                                        .users![1]['id'] !=
+                                    int.parse(
+                                        getProfileController.myId.toString())
+                                ? getAllChatController
+                                    .allAvailableChats[index].users![1]['id']
+                                : getAllChatController
+                                    .allAvailableChats[index].users![0]['id'];
                         String receiverFirstName = getAllChatController
                                     .allAvailableChats[index].users![1]['id'] !=
                                 int.parse(getProfileController.myId.toString())
@@ -348,9 +358,8 @@ class _ChatListState extends State<ChatList> {
                                                               getAllChatController
                                                                   .allAvailableChats[index]
                                                                   .users![1]['last_name'],
-                                                      style: const TextStyle(
-                                                          color:
-                                                              Color(0xFF263238),
+                                                      style: TextStyle(
+                                                          // color: grey,
                                                           fontSize: 14),
                                                     ),
                                                     Column(

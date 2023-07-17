@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'dart:convert';
 
 // import 'package:find_cribs/favourite_screen/favourite_agent.dart';
@@ -5,6 +7,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
+import 'package:findcribs/util/colors.dart';
 import 'package:findcribs/widgets/back_arrow.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +31,10 @@ class NameScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _NameScreenState createState() => _NameScreenState();
+  NameScreenState createState() => NameScreenState();
 }
 
-class _NameScreenState extends State<NameScreen> {
+class NameScreenState extends State<NameScreen> {
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
@@ -42,7 +45,7 @@ class _NameScreenState extends State<NameScreen> {
     // Mobile Width & Height
     double mobileWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: mobileBackgroundColor,
+      // backgroundColor: mobileBackgroundColor,
       body: SingleChildScrollView(
         child: FormBuilder(
           key: _formKey,
@@ -58,7 +61,7 @@ class _NameScreenState extends State<NameScreen> {
                   child: Text(
                     "Your Name",
                     style: TextStyle(
-                        color: mobileTextColor,
+                        // color: mobileTextColor,
                         fontFamily: 'RedHatDisplay',
                         fontSize: 36,
                         fontWeight: FontWeight.w700),
@@ -67,15 +70,13 @@ class _NameScreenState extends State<NameScreen> {
                 mobileSizedBoxHeight,
                 const Text(
                   'Let us know who we are dealing with',
-                  style: TextStyle(color: mobileTextSmallColor, fontSize: 14),
+                  style: TextStyle(color: grey, fontSize: 14),
                 ),
                 mobileSizedBoxHeight,
                 const Text(
                   'First Name',
-                  style: TextStyle(
-                      color: mobileFormTextColor,
-                      fontFamily: 'RedHatDisplayLight',
-                      fontSize: 12),
+                  style:
+                      TextStyle(fontFamily: 'RedHatDisplayLight', fontSize: 12),
                 ),
                 mobileSizedBoxHeight2,
                 FormBuilderTextField(
@@ -91,10 +92,8 @@ class _NameScreenState extends State<NameScreen> {
                 mobileSizedBoxHeight,
                 const Text(
                   'Last Name',
-                  style: TextStyle(
-                      color: mobileFormTextColor,
-                      fontFamily: 'RedHatDisplayLight',
-                      fontSize: 12),
+                  style:
+                      TextStyle(fontFamily: 'RedHatDisplayLight', fontSize: 12),
                 ),
                 mobileSizedBoxHeight2,
                 FormBuilderTextField(
@@ -123,7 +122,7 @@ class _NameScreenState extends State<NameScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                           fixedSize: const Size(500, 60),
-                          primary: mobileButtonColor),
+                          backgroundColor: mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(
@@ -175,7 +174,7 @@ class _NameScreenState extends State<NameScreen> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomePageRoot(
+                              builder: (context) => const HomePageRoot(
                                     navigateIndex: 0,
                                   )));
                     },
@@ -249,7 +248,9 @@ class _NameScreenState extends State<NameScreen> {
               context,
               MaterialPageRoute(
                 builder: (_) {
-                  return  VerifyEmailScreen(email: email,);
+                  return VerifyEmailScreen(
+                    email: email,
+                  );
                 },
               ),
             );

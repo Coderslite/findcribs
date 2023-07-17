@@ -44,7 +44,6 @@ class _SocialLoginState extends State<SocialLogin> {
                       child: Text(
                         'Continue with Google',
                         style: TextStyle(
-                            color: mobileTextColor,
                             fontFamily: 'RedHatDisplayLight',
                             fontWeight: FontWeight.w600),
                       ),

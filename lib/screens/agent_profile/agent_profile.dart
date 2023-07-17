@@ -1,4 +1,4 @@
-// ignore_for_file: library_prefixes, duplicate_ignore, avoid_print, deprecated_member_use
+// ignore_for_file: library_prefixes, duplicate_ignore, avoid_print, deprecated_member_use, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -7,6 +7,7 @@ import 'package:findcribs/controller/user_favorited_agent_controller.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
 import 'package:findcribs/screens/agent_profile/agent_profile_listing.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
+import 'package:findcribs/screens/product_details/photo_view_preview.dart';
 import 'package:findcribs/service/user_profile_by_id_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,10 +33,10 @@ class AgentProfileScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AgentProfileScreenState createState() => _AgentProfileScreenState();
+  AgentProfileScreenState createState() => AgentProfileScreenState();
 }
 
-class _AgentProfileScreenState extends State<AgentProfileScreen> {
+class AgentProfileScreenState extends State<AgentProfileScreen> {
   late Future<UserProfile> userProfile;
   late Map userData;
 
@@ -67,7 +68,7 @@ class _AgentProfileScreenState extends State<AgentProfileScreen> {
       "ERROR",
       (data) {
         var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
+        print("Error ${errorMessage['message']}");
         print(data);
       },
     );
@@ -230,14 +231,31 @@ class _AgentProfileScreenState extends State<AgentProfileScreen> {
                         //   ),
                         // ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: const Color(0XFFF0F7F8),
+                                  borderRadius: BorderRadius.circular(13),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: SvgPicture.asset(
+                                      "assets/svgs/arrow_back.svg"),
+                                ),
+                              ),
+                            ),
                             Text(
                               "Profile",
-                              style: TextStyle(
-                                  fontFamily: "RedHatDisplay",
-                                  fontSize: size.width / 22),
+                              style: TextStyle(fontSize: size.width / 22),
                             ),
+                            const Text(""),
                           ],
                         ),
                         const SizedBox(
@@ -248,22 +266,38 @@ class _AgentProfileScreenState extends State<AgentProfileScreen> {
                           children: [
                             Stack(
                               children: [
-                                ClipOval(
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    width: 126,
-                                    height: 126,
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            JumpingDotsProgressIndicator(
-                                      fontSize: 20.0,
-                                      color: Colors.blue,
+                                InkWell(
+                                  onTap: () {
+                                    var images = [];
+                                    userData.profileImg == null
+                                        ? images.add(
+                                            'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg')
+                                        : images.add(
+                                            userData.profileImg.toString());
+                                    print(images.length);
+                                    Get.to(PhotoPreview(
+                                      businessName: '',
+                                      images: images,
+                                      profilePreview: true,
+                                    ));
+                                  },
+                                  child: ClipOval(
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      width: 126,
+                                      height: 126,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              JumpingDotsProgressIndicator(
+                                        fontSize: 20.0,
+                                        color: Colors.blue,
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                      imageUrl: userData.profileImg == null
+                                          ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                          : userData.profileImg.toString(),
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                    imageUrl: userData.profileImg == null
-                                        ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
-                                        : userData.profileImg.toString(),
                                   ),
                                 ),
                                 Positioned(

@@ -168,7 +168,6 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
                 const Text(
                   "Terms & Conditions",
                   style: TextStyle(
-                    fontFamily: "RedHatDisplay",
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),

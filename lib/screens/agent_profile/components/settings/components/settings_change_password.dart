@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -38,21 +38,21 @@ class _ChangePasswordSettingsState extends State<ChangePasswordSettings> {
 
   //A function that validate user entered password
   bool validatePassword(String pass) {
-    String _password = pass.trim();
-    if (_password.isEmpty) {
+    String password = pass.trim();
+    if (password.isEmpty) {
       setState(() {
         password_strength = 0;
       });
-    } else if (_password.length < 6) {
+    } else if (password.length < 6) {
       setState(() {
         password_strength = 1 / 4;
       });
-    } else if (_password.length < 10) {
+    } else if (password.length < 10) {
       setState(() {
         password_strength = 2 / 4;
       });
     } else {
-      if (pass_valid.hasMatch(_password)) {
+      if (pass_valid.hasMatch(password)) {
         setState(() {
           password_strength = 4 / 4;
         });
@@ -102,9 +102,7 @@ class _ChangePasswordSettingsState extends State<ChangePasswordSettings> {
                     ),
                     Text(
                       "Change Password",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          fontSize: size.width / 22),
+                      style: TextStyle(fontSize: size.width / 22),
                     ),
                     const Text("            "),
                   ],
@@ -196,21 +194,6 @@ class _ChangePasswordSettingsState extends State<ChangePasswordSettings> {
                             border: const OutlineInputBorder(
                                 borderSide: BorderSide())),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: LinearProgressIndicator(
-                          value: password_strength,
-                          backgroundColor: Colors.grey[300],
-                          minHeight: 5,
-                          color: password_strength <= 1 / 4
-                              ? Colors.red
-                              : password_strength == 2 / 4
-                                  ? Colors.yellow
-                                  : password_strength == 3 / 4
-                                      ? Colors.blue
-                                      : Colors.green,
-                        ),
-                      ),
                       mobileSizedBoxHeight,
                       const Text(
                         'Retype New Password',
@@ -271,7 +254,7 @@ class _ChangePasswordSettingsState extends State<ChangePasswordSettings> {
                             },
                             style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(500, 60),
-                                primary:
+                                backgroundColor:
                                     !isMatch ? Colors.grey : mobileButtonColor),
                             child: isLoading
                                 ? const CircularProgressIndicator()

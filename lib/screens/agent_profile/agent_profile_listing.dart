@@ -20,10 +20,10 @@ class SalesScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SalesScreenState createState() => _SalesScreenState();
+  SalesScreenState createState() => SalesScreenState();
 }
 
-class _SalesScreenState extends State<SalesScreen> {
+class SalesScreenState extends State<SalesScreen> {
   late Future<List<HouseListModel>> propertyList;
   List<HouseListModel> filteredRentList = [];
   List<HouseListModel> filteredSaleList = [];
@@ -106,11 +106,11 @@ class _SalesScreenState extends State<SalesScreen> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                    color: const Color(0xFFF0F7F8),
+                                    // color: const Color(0xFFF0F7F8),
                                     borderRadius: BorderRadius.circular(8)),
                                 child: const Icon(
                                   Icons.arrow_back_ios,
-                                  color: Colors.black,
+                                  // color: Colors.black,
                                 )),
                           ),
                           Expanded(
@@ -121,9 +121,9 @@ class _SalesScreenState extends State<SalesScreen> {
                                 Text(
                                   widget.businessName,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.black),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
                                 ),
                                 // Row(
                                 //     mainAxisAlignment: MainAxisAlignment.center,
@@ -173,8 +173,8 @@ class _SalesScreenState extends State<SalesScreen> {
                         indicatorSize: TabBarIndicatorSize.tab,
                         indicatorColor: Colors.grey,
                         labelPadding: EdgeInsets.only(right: 90),
-                        labelColor: Colors.black,
-                        unselectedLabelColor: Colors.black,
+                        // labelColor: Colors.black,
+                        // unselectedLabelColor: Colors.black,
                         tabs: [
                           Tab(
                             text: 'Rent',

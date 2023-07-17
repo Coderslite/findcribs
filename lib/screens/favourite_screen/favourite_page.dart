@@ -48,8 +48,6 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
     });
   }
 
-
-
   ConnectivityController connectivityController =
       Get.put(ConnectivityController());
   UserFavouritedListingController userFavouritedListingController =
@@ -60,14 +58,14 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Obx(
         // ignore: unrelated_type_equality_checks
         () => connectivityController.connectionStatus == ConnectivityResult.none
             ? Center(
                 child: GestureDetector(
                 onTap: () {
-                  Get.to(HomePageRoot(navigateIndex: 1));
+                  Get.to(const HomePageRoot(navigateIndex: 1));
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -108,7 +106,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(86, 25),
-                                primary: mobileButtonColor),
+                                backgroundColor: mobileButtonColor),
                             child: const Text(
                               'View All',
                               style: TextStyle(
@@ -182,7 +180,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                                 fixedSize: const Size(86, 25),
-                                primary: mobileButtonColor),
+                                backgroundColor: mobileButtonColor),
                             child: const Text(
                               'View All',
                               style: TextStyle(
@@ -228,11 +226,10 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (_) {
                                           return ProductDetails(
-                                              id: userFavouritedListingController
-                                                  .favouritedListing[index]
-                                                  .listingId,
-                                                  );
-
+                                            id: userFavouritedListingController
+                                                .favouritedListing[index]
+                                                .listingId,
+                                          );
                                         }));
                                       },
                                       child: Container(

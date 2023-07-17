@@ -58,7 +58,7 @@ class _FavoriteSingleState extends State<FavoriteSingle> {
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: mobileButtonColor),
+                            backgroundColor: mobileButtonColor),
                         onPressed: () {
                           handleFavouriteAgent(widget.id);
                         },

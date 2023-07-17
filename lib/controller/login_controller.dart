@@ -49,6 +49,8 @@ class LoginController extends GetxController {
     var userDetails = jsonDecode(response.body);
 
     if (userDetails['status'] == true) {
+      await getProfileController.handleGetProfile();
+
       var token = userDetails['data']['token'];
 
       isLoading.value = false;
@@ -133,7 +135,7 @@ class LoginController extends GetxController {
       prefs.remove('token');
       prefs.remove('email');
       _googleSignIn.signOut().then((value) => Get.off(const LoginScreen()));
-      getProfileController.agent.value = 'null';
+      getProfileController.agent.value = {};
       Get.deleteAll();
     } else {
       isLoading.value = false;
@@ -197,6 +199,8 @@ class LoginController extends GetxController {
           "deviceToken": deviceToken.toString(),
         });
     if (response.statusCode == 200 || response.statusCode == 201) {
+      await getProfileController.handleGetProfile();
+
       isLoading.value = false;
       isLogin.value = true;
       var jsonData = jsonDecode(response.body);
@@ -215,6 +219,7 @@ class LoginController extends GetxController {
   handleSilentLogin() async {
     final googleUser2 = await _googleSignIn.signInSilently();
     if (googleUser2 != null) {
+      isLoading.value = true;
       final googleAuth = await googleUser2.authentication;
       var myToken = googleAuth.idToken!;
       handleLoginApi(myToken);
@@ -229,6 +234,7 @@ class LoginController extends GetxController {
   handleNormalSigniin() async {
     final googleUser = await _googleSignIn.signIn();
     if (googleUser != null) {
+      isLogin.value = true;
       final googleAuth = await googleUser.authentication;
       var myToken = googleAuth.idToken!;
       handleLoginApi(myToken);
@@ -236,7 +242,6 @@ class LoginController extends GetxController {
       isLoading.value = false;
       handleGoogleLogout();
       Fluttertoast.showToast(msg: "Fail to sign in, please retry");
-
       isLogin.value = false;
     }
   }
@@ -260,7 +265,7 @@ class LoginController extends GetxController {
     prefs.remove('token');
     prefs.remove('email');
     _googleSignIn.signOut().then((value) => Get.off(const LoginScreen()));
-    getProfileController.agent.value = 'null';
+    getProfileController.agent.value = {};
     Get.deleteAll();
     // Get.reset();
   }

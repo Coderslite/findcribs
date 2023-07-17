@@ -1,4 +1,4 @@
-// ignore_for_file: library_prefixes, avoid_print, deprecated_member_use
+// ignore_for_file: library_prefixes, avoid_print, deprecated_member_use, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -6,7 +6,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/models/house_detail_model.dart';
 import 'package:findcribs/screens/product_details/photo_view_preview.dart';
-import 'package:findcribs/service/property_details_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,6 +43,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
   var messageController = TextEditingController();
   String message = '';
   late Socket socket;
+  List facilities = [];
 
   handleConnect() async {
     var prefs = await SharedPreferences.getInstance();
@@ -64,7 +64,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
       "ERROR",
       (data) {
         var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
+        print("Error ${errorMessage['message']}");
         print(data);
       },
     );
@@ -142,6 +142,15 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
             var formatter = NumberFormat("#,###");
             var formatedPrice = formatter.format(totalprice);
             var formatedSalesPrice = formatter.format(salesPrice);
+
+            try {
+              facilities = jsonDecode(property.facilities);
+              // Data was successfully decoded
+              // Handle the decoded data here
+            } catch (e) {
+              // An exception occurred during decoding
+              // Handle the error here
+            }
             return Container(
               margin: const EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width,
@@ -630,11 +639,13 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                     property.currency == 'Naira'
                                         ? "NGN".toString() + formatedSalesPrice
                                         : "\$$formatedSalesPrice",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 24,
                                       fontFamily: 'RedHatDisplay',
                                       fontWeight: FontWeight.w900,
-                                      color: Color(0XFF09172D),
+                                      color: context.isDarkMode
+                                          ? const Color(0XFF8A99B1)
+                                          : const Color(0XFF09172D),
                                     ),
                                   ),
                                 ],
@@ -771,6 +782,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                           businessName: property
                                                               .agentBusinessName
                                                               .toString(),
+                                                              profilePreview: false,
                                                         );
                                                         // return ViewProperty(
                                                         //   images:
@@ -1059,7 +1071,9 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                       fontSize: 24,
                                       fontFamily: 'RedHatDisplay',
                                       fontWeight: FontWeight.w900,
-                                      color: Color(0XFF09172D),
+                                      // color: context.isDarkMode
+                                      //     ? const Color(0XFF8A99B1)
+                                      //     : const Color(0XFF09172D),
                                     ),
                                   ),
                                   Row(
@@ -1263,9 +1277,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                for (int x = 0;
-                                    x < jsonDecode(property.facilities)!.length;
-                                    x++)
+                                for (int x = 0; x < facilities.length; x++)
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
@@ -1276,6 +1288,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                             child: CachedNetworkImage(
                                               fit: BoxFit.cover,
                                               width: 1000,
+                                              color: context.iconColor,
                                               progressIndicatorBuilder: (context,
                                                       url, downloadProgress) =>
                                                   JumpingDotsProgressIndicator(
@@ -1298,54 +1311,6 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                       ],
                                     ),
                                   )
-                                // Column(
-                                //   children: [
-                                //     Image.asset("assets/images/school.png"),
-                                //     const Text(
-                                //       "School",
-                                //       style: TextStyle(
-                                //           fontFamily: 'RedHatDisplay',
-                                //           fontSize: 14,
-                                //           fontWeight: FontWeight.w700),
-                                //     ),
-                                //   ],
-                                // ),
-                                // Column(
-                                //   children: [
-                                //     Image.asset("assets/images/spar.png"),
-                                //     const Text(
-                                //       "Spar",
-                                //       style: TextStyle(
-                                //           fontFamily: 'RedHatDisplay',
-                                //           fontSize: 14,
-                                //           fontWeight: FontWeight.w700),
-                                //     ),
-                                //   ],
-                                // ),
-                                // Column(
-                                //   children: [
-                                //     Image.asset("assets/images/resturant.png"),
-                                //     const Text(
-                                //       "Resturant",
-                                //       style: TextStyle(
-                                //           fontFamily: 'RedHatDisplay',
-                                //           fontSize: 14,
-                                //           fontWeight: FontWeight.w700),
-                                //     ),
-                                //   ],
-                                // ),
-                                // Column(
-                                //   children: [
-                                //     Image.asset("assets/images/gym.png"),
-                                //     const Text(
-                                //       "Gym",
-                                //       style: TextStyle(
-                                //           fontFamily: 'RedHatDisplay',
-                                //           fontSize: 14,
-                                //           fontWeight: FontWeight.w700),
-                                //     ),
-                                //   ],
-                                // ),
                               ],
                             ),
                           ),

@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
+import 'package:findcribs/service/property_list_all_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import '../../controller/get_single_property_listing.dart';
 import '../../models/house_detail_model.dart';
 import '../../models/user_favourite_listing.dart';
 import '../../service/user_favourited_listing_service.dart';
+import '../../util/colors.dart';
 import '../../util/social_login.dart';
 import '../product_details/product_details.dart';
 
@@ -31,6 +33,7 @@ class SingleProperty extends StatefulWidget {
   final String propertyName;
   final String comingFrom;
 
+  final String state;
   const SingleProperty({
     Key? key,
     required this.id,
@@ -45,6 +48,7 @@ class SingleProperty extends StatefulWidget {
     this.isPromoted,
     required this.propertyName,
     required this.comingFrom,
+    required this.state,
   }) : super(key: key);
 
   @override
@@ -61,8 +65,6 @@ class _SinglePropertyState extends State<SingleProperty> {
 
   GetSinglePropertyController getSinglePropertyController =
       Get.put(GetSinglePropertyController());
-  GetPropertyListingController getPropertyListingController =
-      Get.put(GetPropertyListingController());
   bool isLiked = false;
 
   handleGetLikedProperties() {
@@ -143,27 +145,37 @@ class _SinglePropertyState extends State<SingleProperty> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: CachedNetworkImage(
-                              errorWidget: (context, url, error) {
-                                return InkWell(
-                                    onTap: () {},
-                                    child: const Center(child: Text("Retry")));
-                              },
-                              // imageBuilder: (context, imageProvider) {
-                              //   return Center(
-                              //     child: CircularProgressIndicator(),
-                              //   );
-                              // },
-                              imageUrl: widget.image!.isEmpty
-                                  ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
-                                  : widget.image![0]['url'],
-                              fit: BoxFit.cover,
-                              width: 1000,
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) =>
-                                      JumpingDotsProgressIndicator(
-                                fontSize: 20.0,
-                                color: Colors.blue,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                errorWidget: (context, url, error) {
+                                  return InkWell(
+                                      onTap: () {},
+                                      child:
+                                          const Center(child: Text("Retry")));
+                                },
+                                imageUrl: widget.image!.isEmpty
+                                    ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
+                                    : widget.image![0]['url'],
+                                fit: BoxFit.cover,
+                                // width: 1000,
+                                filterQuality: FilterQuality.none,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        JumpingDotsProgressIndicator(
+                                  fontSize: 20.0,
+                                  color: Colors.blue,
+                                ),
+                                imageBuilder: (context, imageProvider) {
+                                  return Image(
+                                    image: imageProvider,
+                                    // Apply image compression options here
+                                    // For example, use the `colorBlendMode` property to reduce quality
+                                    color: Colors.black.withOpacity(0.9),
+                                    colorBlendMode: BlendMode.dstATop,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
                               ),
                             )),
                         // child: Image.network(
@@ -174,17 +186,38 @@ class _SinglePropertyState extends State<SingleProperty> {
 
                         // ),
 
-                        Positioned(
+                        Positioned.fill(
                           bottom: 10,
                           left: 10,
-                          child: Text(
-                            widget.propertyCategory.toString() ==
-                                    'Estate Market'
-                                ? ""
-                                : capitalize(widget.designType.toString()),
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  capitalize("${widget.state} State"),
+                                  style: const TextStyle(
+                                    color: white,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Text(
+                                    widget.propertyCategory.toString() ==
+                                            'Estate Market'
+                                        ? ""
+                                        : capitalize(
+                                            widget.designType.toString()),
+                                    style: const TextStyle(
+                                      color: white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         )
                       ],
@@ -321,7 +354,7 @@ class _SinglePropertyState extends State<SingleProperty> {
                             height: 25,
                             decoration: BoxDecoration(
                               color: const Color(0XFFFEC121),
-                              borderRadius: BorderRadius.circular(3),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
                               child: Padding(
