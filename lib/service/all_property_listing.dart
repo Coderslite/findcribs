@@ -56,36 +56,34 @@ class AllPropertyListingController extends GetxController {
     var myBathroom = bathroom.value == 0.0 ? '' : bathroom.toInt();
     var myBedroom = bedroom.value == 0.0 ? '' : bedroom.toInt();
 
-    while (retryCount < 3) {
-      try {
-        final response = await _client.get(Uri.parse(
-            "$baseUrl/search-listing?type=$type&minPrice=$minPrice&maxPrice=$maxPrice&search=$category&livingroom=$myLivingroom&bathroom=$myBathroom&bedroom=$myBedroom&kitchen=$myKitchen&state=$state&lga=$lga&page=$pageKey&size=$_perPage"));
+    try {
+      final response = await _client.get(Uri.parse(
+          "$baseUrl/search-listing?type=$type&minPrice=$minPrice&maxPrice=$maxPrice&search=$category&livingroom=$myLivingroom&bathroom=$myBathroom&bedroom=$myBedroom&kitchen=$myKitchen&state=$state&lga=$lga&page=$pageKey&size=$_perPage"));
 
-        if (response.statusCode == 200) {
-          isFiltering.value = false;
-          final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        isFiltering.value = false;
+        final data = jsonDecode(response.body);
 
-          List houseData = data['data']['listing'];
-          final posts = List<HouseListModel>.from(
-              houseData.map((post) => HouseListModel.fromJson(post)));
-          if (posts.isNotEmpty) {
-            categoryPagingController.appendPage(posts, pageKey + 1);
+        List houseData = data['data']['listing'];
+        final posts = List<HouseListModel>.from(
+            houseData.map((post) => HouseListModel.fromJson(post)));
+        if (posts.isNotEmpty) {
+          if (pageKey == 0 && categoryPagingController.itemList != null) {
+            print("already added");
+            // categoryPagingController.itemList!.fillRange(0, 1);
+            categoryPagingController.itemList!.clear();
+
+            categoryPagingController.appendPage(posts, pageKey + 2);
           } else {
-            categoryPagingController.appendLastPage(posts);
+            categoryPagingController.appendPage(posts, pageKey + 1);
           }
-          _posts.addAll(posts);
-
-          // Break the loop if the response was successful
-          break;
         } else {
-          throw Exception('Failed to fetch posts');
+          categoryPagingController.appendLastPage(posts);
         }
-      } catch (e) {
-        retryCount++;
-        if (retryCount == 3) {
-          throw Exception('Error: Failed to fetch posts after 3 retries');
-        }
+        _posts.addAll(posts);
       }
+    } catch (e) {
+      print(e);
     }
   }
 }

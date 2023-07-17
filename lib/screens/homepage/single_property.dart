@@ -65,8 +65,6 @@ class _SinglePropertyState extends State<SingleProperty> {
 
   GetSinglePropertyController getSinglePropertyController =
       Get.put(GetSinglePropertyController());
-  HouseListingController houseListingController =
-      Get.put(HouseListingController());
   bool isLiked = false;
 
   handleGetLikedProperties() {

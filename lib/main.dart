@@ -276,8 +276,8 @@ class _MyAppState extends State<MyApp> {
           // Customize dark theme here
           scaffoldBackgroundColor: black,
           bottomNavigationBarTheme:
-              BottomNavigationBarThemeData(backgroundColor: black),
-          bottomSheetTheme: BottomSheetThemeData(backgroundColor: black),
+             const BottomNavigationBarThemeData(backgroundColor: black),
+          bottomSheetTheme:const BottomSheetThemeData(backgroundColor: black),
           textTheme: ThemeData.dark()
               .textTheme
               .apply(fontFamily: "RedHatDisplay", bodyColor: white),

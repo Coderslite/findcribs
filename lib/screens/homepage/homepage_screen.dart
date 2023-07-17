@@ -132,7 +132,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
                 child: RefreshIndicator(
                   onRefresh: () async {
                     houseController.isFiltering.value = true;
-                    houseController.handleReset();
                     houseController.categoryPagingController.itemList!.clear();
                     houseController.fetchPosts(0);
                     houseController.handleReset();

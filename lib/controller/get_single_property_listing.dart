@@ -3,12 +3,13 @@ import 'package:findcribs/service/property_list_all_service.dart';
 import 'package:get/get.dart';
 
 import '../models/house_list_model.dart';
+import '../service/all_property_listing.dart';
 import '../service/property_details_service.dart';
 
 late Future<HouseListModel> singlePropertyModel;
 
-HouseListingController houseListingController =
-    Get.put(HouseListingController());
+AllPropertyListingController houseListingController =
+    Get.put(AllPropertyListingController());
 
 class GetSinglePropertyController extends GetxController {
   var propertyId = ''.obs;
