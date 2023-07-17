@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,6 +11,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
 // import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -53,7 +56,6 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                     : 3;
         manageAllowed =
             value.agent!['systemManaged'].toString() == 'true' ? true : false;
-       
       });
     });
   }
@@ -238,7 +240,6 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontFamily: "RedHatDisplay",
                     ),
                   ),
                 ),
@@ -257,7 +258,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
               if (snapshot.hasData) {
                 String data = snapshot.data!.agent!['availability'];
                 List<String> myAvailability = (data.split(','));
-          
+
                 availability = myAvailability;
                 agentType = snapshot.data!.agent!['category'];
 
@@ -297,7 +298,6 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               const Text(
                                 "Kindly provide us brief information about you",
                                 style: TextStyle(
-                                  fontFamily: "RedHatDisplay",
                                   fontSize: 18,
                                 ),
                               ),
@@ -306,9 +306,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               ),
                               const Text(
                                 "Full Name",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
+                                style: TextStyle(color: Color(0XFF5A5A5A)),
                               ),
                               FormBuilderTextField(
                                 name: 'fullName',
@@ -320,7 +318,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                 enabled: false,
                                 decoration: const InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
-                                  fillColor: Color(0XFFE6E6E6),
+                                  // fillColor: Color(0XFFE6E6E6),
                                   filled: true,
                                   border: InputBorder.none,
                                   hintText: "E.g Abraham Great",
@@ -335,9 +333,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               ),
                               const Text(
                                 "Business Name(Public)",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
+                                style: TextStyle(color: Color(0XFF5A5A5A)),
                               ),
                               FormBuilderTextField(
                                 name: 'businessName',
@@ -349,7 +345,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                 enabled: false,
                                 onChanged: (value) {},
                                 decoration: InputDecoration(
-                                  fillColor: const Color(0XFFE6E6E6),
+                                  // fillColor: const Color(0XFFE6E6E6),
                                   filled: true,
                                   hintText: "Create a business name",
                                   border: OutlineInputBorder(
@@ -364,9 +360,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
 
                               const Text(
                                 "About Business",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
+                                style: TextStyle(color: Color(0XFF5A5A5A)),
                               ),
                               FormBuilderTextField(
                                 name: 'about',
@@ -389,9 +383,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               ),
                               const Text(
                                 "Phone Number",
-                                style: TextStyle(
-                                    fontFamily: "RedHatDisplay",
-                                    color: Color(0XFF5A5A5A)),
+                                style: TextStyle(color: Color(0XFF5A5A5A)),
                               ),
                               FormBuilderTextField(
                                 name: 'phone',
@@ -415,7 +407,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               // const Text(
                               //   "Upload Photo",
                               //   style: TextStyle(
-                              //       fontFamily: "RedHatDisplay",
+                              //
                               //       color: Color(0XFF5A5A5A)),
                               // ),
 
@@ -489,6 +481,11 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                         ),
                                         FormBuilderDropdown(
                                           name: 'findCribManage',
+                                          style: TextStyle(
+                                            color: context
+                                                .textTheme.bodyMedium!.color,
+                                            fontFamily: "RedHatDisplay",
+                                          ),
                                           initialValue: snapshot.data!.agent![
                                                       'systemManaged'] ==
                                                   true
@@ -584,14 +581,12 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                         const Text(
                                           "Booking Tour Availability (?)",
                                           style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
                                               color: Color(0XFF5A5A5A)),
                                         ),
                                         newAvailability.isEmpty
                                             ? Text(
                                                 myAvailability.join(', '),
                                                 style: const TextStyle(
-                                                    fontFamily: "RedHatDisplay",
                                                     color: Color(0XFF0072BA)),
                                               )
                                             : const Text(""),

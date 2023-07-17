@@ -10,8 +10,6 @@ class ShareLinkController extends GetxController {
 
   handleGenerateLink(String propertyId, String imageUrl, String title,
       String description) async {
-    print("propertyId$propertyId");
-    print("imageUrl$imageUrl");
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://findcribs.page.link',
       // longDynamicLink: Uri.parse(
@@ -36,13 +34,11 @@ class ShareLinkController extends GetxController {
     final ShortDynamicLink shortLink =
         await dynamicLinks.buildShortLink(parameters);
     shareLink = shortLink.shortUrl.toString();
-    print(shareLink);
   }
 
   handleShareLink(String propertyId, String imageUrl, String title,
       String description) async {
     Share.share(shareLink).then((value) {
-      print("link shared");
     });
     update();
   }

@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -6,10 +6,12 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../components/constants.dart';
+import '../../util/colors.dart';
 import '../../widgets/back_arrow.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -36,21 +38,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   //A function that validate user entered password
   bool validatePassword(String pass) {
-    String _password = pass.trim();
-    if (_password.isEmpty) {
+    String password = pass.trim();
+    if (password.isEmpty) {
       setState(() {
         password_strength = 0;
       });
-    } else if (_password.length < 6) {
+    } else if (password.length < 6) {
       setState(() {
         password_strength = 1 / 4;
       });
-    } else if (_password.length < 10) {
+    } else if (password.length < 10) {
       setState(() {
         password_strength = 2 / 4;
       });
     } else {
-      if (pass_valid.hasMatch(_password)) {
+      if (pass_valid.hasMatch(password)) {
         setState(() {
           password_strength = 4 / 4;
         });
@@ -84,7 +86,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   child: Text(
                     "Forgot Password",
                     style: TextStyle(
-                        color: mobileTextColor,
+                        // color: mobileTextColor,
                         fontFamily: 'RedHatDisplay',
                         fontSize: 36,
                         fontWeight: FontWeight.w700),
@@ -93,31 +95,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 mobileSizedBoxHeight,
                 const Text(
                   'New Password',
-                  style: TextStyle(
-                      color: mobileFormTextColor,
-                      fontFamily: 'RedHatDisplayLight',
-                      fontSize: 14),
+                  style: TextStyle(color: grey, fontSize: 14),
                 ),
                 mobileSizedBoxHeight2,
                 FormBuilderTextField(
                   controller: passwordController1,
                   name: 'password1',
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.minLength(context, 6),
+                    ],
+                  ),
                   onChanged: (value) {
                     _formKey.currentState!.validate();
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter password";
-                    } else {
-                      //call function to check password
-                      bool result = validatePassword(value);
-                      if (result) {
-                        // create account event
-                        return null;
-                      } else {
-                        return " Password should contain Capital, small letter & Number & Special";
-                      }
-                    }
                   },
                   // controller: emailController,
                   decoration: InputDecoration(
@@ -134,54 +124,53 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       border:
                           const OutlineInputBorder(borderSide: BorderSide())),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: LinearProgressIndicator(
-                    value: password_strength,
-                    backgroundColor: Colors.grey[300],
-                    minHeight: 5,
-                    color: password_strength <= 1 / 4
-                        ? Colors.red
-                        : password_strength == 2 / 4
-                            ? Colors.yellow
-                            : password_strength == 3 / 4
-                                ? Colors.blue
-                                : Colors.green,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(12.0),
+                //   child: LinearProgressIndicator(
+                //     value: password_strength,
+                //     backgroundColor: Colors.grey[300],
+                //     minHeight: 5,
+                //     color: password_strength <= 1 / 4
+                //         ? Colors.red
+                //         : password_strength == 2 / 4
+                //             ? Colors.yellow
+                //             : password_strength == 3 / 4
+                //                 ? Colors.blue
+                //                 : Colors.green,
+                //   ),
+                // ),
+
                 mobileSizedBoxHeight,
                 const Text(
                   'Retype New Password',
-                  style: TextStyle(
-                      color: mobileFormTextColor,
-                      fontFamily: 'RedHatDisplayLight',
-                      fontSize: 14),
+                  style: TextStyle(color: grey, fontSize: 14),
                 ),
                 mobileSizedBoxHeight2,
                 FormBuilderTextField(
                   name: 'password2',
                   controller: passwordController2,
-                  validator: (value) {
-                    if (passwordController1.text != value) {
-                      setState(() {
-                        isMatch = false;
-                      });
-                      return "Password do not match";
-                    } else if (password_strength != 1) {
-                      setState(() {
-                        isMatch = false;
-                      });
-                      return " Password should contain Capital, small letter & Number & Special";
-                    } else {
+                  onChanged: (value) {
+                    _formKey.currentState!.validate();
+                    if (passwordController1.text == passwordController2.text) {
                       setState(() {
                         isMatch = true;
                       });
+                    } else {
+                      setState(() {
+                        isMatch = false;
+                      });
                     }
-                    return null;
                   },
-                  onChanged: (value) {
-                    _formKey.currentState!.validate();
-                  },
+                  validator: FormBuilderValidators.compose(
+                    [
+                      FormBuilderValidators.minLength(context, 6),
+                      FormBuilderValidators.equal(
+                        context,
+                        passwordController1.text,
+                        errorText: "Password does not match",
+                      ),
+                    ],
+                  ),
                   decoration: InputDecoration(
                       // hintText: 'Enter Email Address',
                       suffixIcon: InkWell(
@@ -209,7 +198,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                           fixedSize: const Size(500, 60),
-                          primary: !isMatch ? Colors.grey : mobileButtonColor),
+                          backgroundColor:
+                              !isMatch ? Colors.grey : mobileButtonColor),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : const Text(

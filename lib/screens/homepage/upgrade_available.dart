@@ -25,7 +25,6 @@ class _UpdateDialogState extends State<UpdateDialog> {
   @override
   void dispose() {
     if(!widget.allowDismissal) {
-      print("EXIT APP");
       // SystemNavigator.pop(); this will close the app
     }
     super.dispose();

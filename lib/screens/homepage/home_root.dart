@@ -1,4 +1,4 @@
-// ignore_for_file: library_prefixes, avoid_print
+// ignore_for_file: library_prefixes, avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:io';
@@ -29,10 +29,10 @@ import 'package:upgrader/upgrader.dart';
 import '../../controller/get_chat_controller.dart';
 import '../../main.dart';
 import '../../models/user_profile_information_model.dart';
+import '../../util/colors.dart';
 import '../../util/social_login.dart';
 import '../agent_profile/components/personal_info/personal_information.dart';
 
-// ignore: must_be_immutable
 class HomePageRoot extends StatefulWidget {
   final int navigateIndex;
   const HomePageRoot({
@@ -46,7 +46,7 @@ class HomePageRoot extends StatefulWidget {
 
 class _HomePageRootState extends State<HomePageRoot> {
   bool isLoading = false;
-//  navigateIndex == null ? int pageIndex = 0:pageIndex = navigateIndex;
+
   final tooltipController = JustTheController();
 
   List<ChatMessageModel> filteredMessageByTime = [];
@@ -145,7 +145,6 @@ class _HomePageRootState extends State<HomePageRoot> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    // handleCheckNumber();
 
     return WillPopScope(
       onWillPop: () async {
@@ -160,129 +159,125 @@ class _HomePageRootState extends State<HomePageRoot> {
           return false;
         }
       },
-      child: Obx(
-        () => Scaffold(
-            floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: isShowFloatButton == false
-                ? Container()
-                : JustTheTooltip(
-                    controller: tooltipController,
-                    isModal: true,
-                    borderRadius: BorderRadius.circular(20),
-                    curve: Curves.easeInOutCirc,
-                    tailBaseWidth: 20,
-                    tailLength: 10,
-                    // margin: const EdgeInsets.only(left: 90, right: 90, bottom: 70),
-                    content: SizedBox(
-                      height: 100,
-                      width: 170,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              homeRootController.isToolTip.value = false;
-                              tooltipController.hideTooltip().then((value) {
-                                handleGetStarted();
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset("assets/images/list_property.png"),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("List a property")
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              homeRootController.isToolTip.value = false;
-                              tooltipController.hideTooltip().then((v) =>
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return const StoryList();
-                                  })));
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  height: 40,
-                                  margin: const EdgeInsets.only(left: 20),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: const Color(0XFF0072BA),
-                                        width: 2,
-                                      )),
-                                  child: const Icon(
-                                    Icons.play_arrow,
-                                    color: Color(0XFF0072BA),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("Post a story"),
-                                Expanded(child: Container())
-                              ],
-                            ),
-                          )
-                        ],
+      child: Scaffold(
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: JustTheTooltip(
+          controller: tooltipController,
+          isModal: true,
+          borderRadius: BorderRadius.circular(20),
+          curve: Curves.easeInOutCirc,
+          tailBaseWidth: 20,
+          tailLength: 10,
+          content: SizedBox(
+            height: 100,
+            width: 170,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    homeRootController.isToolTip.value = false;
+                    tooltipController.hideTooltip().then((value) {
+                      handleGetStarted();
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/list_property.png"),
+                      const SizedBox(
+                        width: 10,
                       ),
-                    ),
-                    child: GestureDetector(
-                      onTap: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        final token = prefs.getString('token');
-                        token == null
-                            ? showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const SocialLogin();
-                                })
-                            : getProfileController.agent.string != 'null'
-                                ? homeRootController.isToolTip.isTrue
-                                    ? tooltipController.hideTooltip()
-                                    : tooltipController.showTooltip()
-                                : handleGetStarted();
-                        ;
-                      },
-                      child: const Material(
-                        color: Color(0XFF0072BA),
-                        shape: CircleBorder(),
-                        elevation: 4.0,
-                        child: Padding(
-                          padding: EdgeInsets.all(18.0),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
+                      const Text("List a property")
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    homeRootController.isToolTip.value = false;
+                    tooltipController.hideTooltip().then((v) =>
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return const StoryList();
+                        })));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 40,
+                        margin: const EdgeInsets.only(left: 20),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: blue,
+                            width: 2,
                           ),
                         ),
+                        child: const Icon(
+                          Icons.play_arrow,
+                          color: blue,
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text("Post a story"),
+                      Expanded(child: Container())
+                    ],
                   ),
-            bottomNavigationBar: getFooter(size),
-            body: UpgradeAlert(
-              upgrader: Upgrader(
-                canDismissDialog: false,
-                showIgnore: false,
-                showLater: false,
-                dialogStyle: Platform.isIOS
-                    ? UpgradeDialogStyle.cupertino
-                    : UpgradeDialogStyle.material,
-                durationUntilAlertAgain: const Duration(minutes: 1),
+                )
+              ],
+            ),
+          ),
+          child: GestureDetector(
+            onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+              final token = prefs.getString('token');
+              token == null
+                  ? showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const SocialLogin();
+                      })
+                  : getProfileController.agent.string == 'null' ||
+                          getProfileController.agent.string == '{}'
+                      ? handleGetStarted()
+                      : homeRootController.isToolTip.isTrue
+                          ? tooltipController.hideTooltip()
+                          : tooltipController.showTooltip();
+            },
+            child: const Material(
+              color: blue,
+              shape: CircleBorder(),
+              elevation: 4.0,
+              child: Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
-              child: SafeArea(
-                child: getBody(),
-              ),
-            )),
+            ),
+          ),
+        ),
+        bottomNavigationBar: getFooter(size),
+        body: UpgradeAlert(
+          upgrader: Upgrader(
+            canDismissDialog: false,
+            showIgnore: false,
+            showLater: false,
+            dialogStyle: Platform.isIOS
+                ? UpgradeDialogStyle.cupertino
+                : UpgradeDialogStyle.material,
+            durationUntilAlertAgain: const Duration(minutes: 1),
+          ),
+          child: SafeArea(
+            child: getBody(),
+          ),
+        ),
       ),
     );
   }
@@ -291,11 +286,8 @@ class _HomePageRootState extends State<HomePageRoot> {
     List<Widget> pages = [
       const HomepageScreen(),
       const FavouritePageScreen(),
-      // const HomepageScreen(),
-      const HomepageScreen(),
+      Container(),
       const ChatScreen(),
-      // const ChatSocket(),
-      // const ProfileScreen(),
       const ProfileScreen(),
     ];
     return Obx(
@@ -308,96 +300,105 @@ class _HomePageRootState extends State<HomePageRoot> {
 
   getFooter(size) {
     List bottomItems = [
-      homeRootController.index.toInt() == 0
-          ? "assets/svgs/home_active.svg"
-          : "assets/svgs/home.svg",
-      homeRootController.index.toInt() == 1
-          ? "assets/svgs/love_active.svg"
-          : "assets/svgs/love.svg",
-      homeRootController.index.toInt() == 2
-          ? "assets/svgs/blank.svg"
-          : "assets/svgs/blank.svg",
-      homeRootController.index.toInt() == 3
-          ? "assets/svgs/chat_active.svg"
-          : "assets/svgs/chat2.svg",
-      homeRootController.index.toInt() == 4
-          ? "assets/svgs/account_icon.svg"
-          : "assets/svgs/account.svg",
+      "assets/svgs/home.svg",
+      "assets/svgs/love.svg",
+      "assets/svgs/blank.svg",
+      "assets/svgs/chat_active.svg",
+      "assets/svgs/account_icon.svg"
     ];
 
-    return Container(
-      width: double.infinity,
-      height: 70,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: 10,
-          bottom: 20,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 0.4,
-              decoration: const BoxDecoration(
-                color: Color(0xFFBDBDBD),
+    return Obx(
+      () => Container(
+        width: double.infinity,
+        height: 70,
+        decoration: BoxDecoration(),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            bottom: 20,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 0.4,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFBDBDBD),
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(
-                bottomItems.length,
-                (index) {
-                  return InkWell(
-                    onTap: () {
-                      homeRootController.selectedTab(index);
-                    },
-                    child: index == 3
-                        ? getAllChatController.filteredUnreadMessage.isEmpty
-                            ? SizedBox(
-                                width: size.width / 7,
-                                child: SvgPicture.asset(
-                                  bottomItems[index],
-                                  width: 25,
-                                ),
-                              )
-                            : SizedBox(
-                                width: size.width / 7,
-                                child:badges. Badge(
-                                  badgeContent: Text(getAllChatController
-                                      .filteredUnreadMessage.length
-                                      .toString()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(
+                  bottomItems.length,
+                  (index) {
+                    return InkWell(
+                      onTap: () {
+                        homeRootController.selectedTab(index);
+                      },
+                      child: index == 3
+                          ? getAllChatController.filteredUnreadMessage.isEmpty
+                              ? SizedBox(
+                                  width: size.width / 7,
                                   child: SvgPicture.asset(
                                     bottomItems[index],
                                     width: 25,
+                                    color:
+                                        index == homeRootController.index.value
+                                            ? blue
+                                            : context.isDarkMode
+                                                ? white
+                                                : lightBlue,
                                   ),
-                                ),
-                              )
-                        : SizedBox(
-                            width: size.width / 7,
-                            child: SvgPicture.asset(
-                              bottomItems[index],
-                              width: 25,
+                                )
+                              : SizedBox(
+                                  width: size.width / 7,
+                                  child: badges.Badge(
+                                    badgeContent: Text(getAllChatController
+                                        .filteredUnreadMessage.length
+                                        .toString()),
+                                    child: SvgPicture.asset(
+                                      bottomItems[index],
+                                      width: 25,
+                                      color: index ==
+                                              homeRootController.index.value
+                                          ? blue
+                                          : context.isDarkMode
+                                              ? white
+                                              : lightBlue,
+                                    ),
+                                  ),
+                                )
+                          : SizedBox(
+                              width: size.width / 7,
+                              child: SvgPicture.asset(
+                                bottomItems[index],
+                                width: 25,
+                                color: index == homeRootController.index.value
+                                    ? blue
+                                    : context.isDarkMode
+                                        ? white
+                                        : lightBlue,
+                              ),
                             ),
-                          ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   handleGetStarted() async {
-    if (getProfileController.agent.string != 'null') {
-      Get.to(const SelectListingType());
-    } else {
+    print("handling get started");
+    if (getProfileController.agent.string == 'null' ||
+        getProfileController.agent.string == '{}') {
       Get.to(const GetStarted());
+    } else {
+      Get.to(const SelectListingType());
     }
   }
 }

@@ -2,7 +2,6 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/screens/listing_process/listing/components/rent/rent2_stepper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -372,7 +371,7 @@ class _Rent1State extends State<Rent1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -387,7 +386,7 @@ class _Rent1State extends State<Rent1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -705,7 +704,7 @@ class _Rent1State extends State<Rent1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -720,7 +719,7 @@ class _Rent1State extends State<Rent1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1038,7 +1037,7 @@ class _Rent1State extends State<Rent1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -1053,7 +1052,7 @@ class _Rent1State extends State<Rent1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1373,7 +1372,7 @@ class _Rent1State extends State<Rent1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -1388,7 +1387,7 @@ class _Rent1State extends State<Rent1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1416,7 +1415,7 @@ class _Rent1State extends State<Rent1> {
                       "Rent Listing",
                       style: TextStyle(fontSize: 20),
                     ),
-                    Text("")
+                    const Text("")
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -1955,7 +1954,7 @@ class _Rent1State extends State<Rent1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentBedroom = index;
       rentListingController.bedroom.value = bedroom.toString();
@@ -1984,7 +1983,7 @@ class _Rent1State extends State<Rent1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentBathroom = index;
       rentListingController.bathroomIndex.value = index;
@@ -2011,7 +2010,7 @@ class _Rent1State extends State<Rent1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentLivingroom = index;
       rentListingController.livingRoomIndex.value = index;
@@ -2038,7 +2037,7 @@ class _Rent1State extends State<Rent1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentKitchen = index;
       rentListingController.kitchen.value = kitchenRoom.toString();

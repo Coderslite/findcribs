@@ -44,7 +44,7 @@ class _LegalSettingsState extends State<LegalSettings> {
             Text(
               "Legal",
               style: TextStyle(
-                  fontFamily: "RedHatDisplay", fontSize: size.width / 22),
+                   fontSize: size.width / 22),
             ),
             const Text("            "),
           ],
@@ -82,7 +82,7 @@ class _LegalSettingsState extends State<LegalSettings> {
                     children: [
                       Text("Policy Privacy",
                           style: TextStyle(
-                            fontFamily: "RedHatDisplay",
+                            
                             fontSize: size.width / 26,
                             fontWeight: FontWeight.bold,
                           )),
@@ -134,7 +134,7 @@ class _LegalSettingsState extends State<LegalSettings> {
                     children: [
                       Text("FAQs",
                           style: TextStyle(
-                            fontFamily: "RedHatDisplay",
+                            
                             fontSize: size.width / 26,
                             fontWeight: FontWeight.bold,
                           )),
@@ -186,7 +186,7 @@ class _LegalSettingsState extends State<LegalSettings> {
                     children: [
                       Text("Terms and Conditions",
                           style: TextStyle(
-                            fontFamily: "RedHatDisplay",
+                            
                             fontSize: size.width / 26,
                             fontWeight: FontWeight.bold,
                           )),

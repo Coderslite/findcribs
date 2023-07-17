@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -9,15 +11,17 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../../util/colors.dart';
+
 class ForgetPasswordEmailVerifyScreen extends StatefulWidget {
   const ForgetPasswordEmailVerifyScreen({Key? key}) : super(key: key);
 
   @override
-  _ForgetPasswordEmailVerifyScreenState createState() =>
-      _ForgetPasswordEmailVerifyScreenState();
+  ForgetPasswordEmailVerifyScreenState createState() =>
+      ForgetPasswordEmailVerifyScreenState();
 }
 
-class _ForgetPasswordEmailVerifyScreenState
+class ForgetPasswordEmailVerifyScreenState
     extends State<ForgetPasswordEmailVerifyScreen> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormBuilderState>();
@@ -41,7 +45,6 @@ class _ForgetPasswordEmailVerifyScreenState
                   child: Text(
                     "Forgot Password",
                     style: TextStyle(
-                        color: mobileTextColor,
                         fontFamily: 'RedHatDisplay',
                         fontSize: 36,
                         fontWeight: FontWeight.w700),
@@ -51,9 +54,7 @@ class _ForgetPasswordEmailVerifyScreenState
                 const Text(
                   'please enter your email address',
                   style: TextStyle(
-                      color: mobileTextSmallColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
+                      color: grey, fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(
                   height: 44,
@@ -75,7 +76,7 @@ class _ForgetPasswordEmailVerifyScreenState
                     },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(500, 60),
-                        primary: mobileButtonColor),
+                        backgroundColor: mobileButtonColor),
                     child: isLoading
                         ? const CircularProgressIndicator()
                         : const Text(
@@ -160,7 +161,6 @@ class _ForgetPasswordEmailVerifyScreenState
           ),
           dismissOnTouchOutside: true,
           dismissOnBackKeyPress: false,
-    
           headerAnimationLoop: false,
           animType: AnimType.bottomSlide,
           desc: responseData['message'],

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:convert';
@@ -24,7 +24,7 @@ class Sale4Stepper extends StatefulWidget {
   final String? currency;
   final String? charge;
   final String? negotiable;
-  final String? location;
+  final String? state;
   final String? area;
   final String? covered;
   final String? interiorDesign;
@@ -48,7 +48,7 @@ class Sale4Stepper extends StatefulWidget {
       this.currency,
       this.charge,
       this.negotiable,
-      this.location,
+      this.state,
       this.area,
       this.covered,
       this.interiorDesign,
@@ -277,76 +277,76 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  handleSave();
+                          SizedBox(
+                            width: 500,
+                            child: Material(
+                              color: const Color(0XFF0072BA),
+                              borderRadius: BorderRadius.circular(5),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  handlePublish();
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                        color: const Color(0XFF0072BA),
-                                      )),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.width /
-                                          35,
-                                      bottom:
-                                          MediaQuery.of(context).size.width /
-                                              35,
-                                      left: MediaQuery.of(context).size.width /
-                                          11,
-                                      right: MediaQuery.of(context).size.width /
-                                          11,
-                                    ),
-                                    child: isSaving
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            "Save",
-                                            style: TextStyle(
-                                              color: Color(0XFF0072BA),
-                                              fontSize: 20,
-                                            ),
-                                          ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.width / 35,
+                                    bottom:
+                                        MediaQuery.of(context).size.width / 35,
+                                    left: MediaQuery.of(context).size.width / 9,
+                                    right:
+                                        MediaQuery.of(context).size.width / 9,
                                   ),
+                                  child: isLoading
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          "Publish",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                          ),
+                                        ),
                                 ),
                               ),
-                              Material(
-                                color: const Color(0XFF0072BA),
-                                borderRadius: BorderRadius.circular(5),
-                                child: MaterialButton(
-                                  onPressed: () {
-                                    handlePublish();
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.width /
-                                          35,
-                                      bottom:
-                                          MediaQuery.of(context).size.width /
-                                              35,
-                                      left:
-                                          MediaQuery.of(context).size.width / 9,
-                                      right:
-                                          MediaQuery.of(context).size.width / 9,
-                                    ),
-                                    child: isLoading
-                                        ? const CircularProgressIndicator()
-                                        : const Text(
-                                            "Publish",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     InkWell(
+                          //       onTap: () {
+                          //         handleSave();
+                          //       },
+                          //       child: Container(
+                          //         decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.circular(5),
+                          //             border: Border.all(
+                          //               color: const Color(0XFF0072BA),
+                          //             )),
+                          //         child: Padding(
+                          //           padding: EdgeInsets.only(
+                          //             top: MediaQuery.of(context).size.width /
+                          //                 35,
+                          //             bottom:
+                          //                 MediaQuery.of(context).size.width /
+                          //                     35,
+                          //             left: MediaQuery.of(context).size.width /
+                          //                 11,
+                          //             right: MediaQuery.of(context).size.width /
+                          //                 11,
+                          //           ),
+                          //           child: isSaving
+                          //               ? const CircularProgressIndicator()
+                          //               : const Text(
+                          //                   "Save",
+                          //                   style: TextStyle(
+                          //                     color: Color(0XFF0072BA),
+                          //                     fontSize: 20,
+                          //                   ),
+                          //                 ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //    ],
+                          // ),
                         ],
                       ),
                     ),
@@ -484,7 +484,7 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                   ? '0'
                   : '${saleListingController.saleCommission.value}'.toString();
           request.fields['state'] =
-              saleListingController.location.value.toString();
+              saleListingController.state.value.toString();
           request.fields['total_area_of_land'] =
               saleListingController.totalArea.value.toString();
           request.fields['interior_design'] = 'Furnished';
@@ -508,7 +508,7 @@ class _Sale4StepperState extends State<Sale4Stepper> {
           request.fields['property_type'] = "sale";
           request.fields['status'] = 'Active';
           request.fields['state'] =
-              saleListingController.location.value.toString();
+              saleListingController.state.value.toString();
           request.fields['lga'] = saleListingController.lga.value.toString();
           request.fields['country'] = 'Nigeria';
           request.fields['negotiable'] =
@@ -555,7 +555,7 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                 btnOk: ElevatedButton(
                   onPressed: () {
                     saleListingController.handleResetInformation();
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",
@@ -784,7 +784,7 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                   ? '0'
                   : '${saleListingController.saleCommission.value}'.toString();
           request.fields['state'] =
-              saleListingController.location.value.toString();
+              saleListingController.state.value.toString();
           request.fields['lga'] = saleListingController.lga.value.toString();
           request.fields['country'] = 'Nigeria';
           request.fields['total_area_of_land'] =
@@ -809,8 +809,8 @@ class _Sale4StepperState extends State<Sale4Stepper> {
               saleListingController.propertyCategory.value.toString();
           request.fields['property_type'] = "sale";
           request.fields['status'] = 'Saved';
-          request.fields['location'] =
-              saleListingController.location.value.toString();
+          request.fields['state'] =
+              saleListingController.state.value.toString();
           request.fields['negotiable'] =
               saleListingController.negotiable.value == 1 ? '1' : '0';
           request.fields['hasDocuments'] =
@@ -852,7 +852,7 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                 btnOk: ElevatedButton(
                   onPressed: () {
                     saleListingController.handleResetInformation();
-                    Get.off(HomePageRoot(navigateIndex: 0));
+                    Get.off(const HomePageRoot(navigateIndex: 0));
                   },
                   child: const Text(
                     "Go Home",

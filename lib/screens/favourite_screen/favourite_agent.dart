@@ -1,5 +1,4 @@
 import 'package:findcribs/controller/user_favorited_agent_controller.dart';
-import 'package:findcribs/models/user_favourite_agent.dart';
 import 'package:findcribs/widgets/agent_listings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +26,7 @@ class _FavouriteAgentScreenState extends State<FavouriteAgentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Obx(
         () => SafeArea(
           child: Column(
@@ -73,7 +72,7 @@ class _FavouriteAgentScreenState extends State<FavouriteAgentScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 19),
                 child: TextFormField(
                   decoration: InputDecoration(
-                      fillColor: const Color(0xFFF9F9F9),
+                      // fillColor: const Color(0xFFF9F9F9),
                       filled: true,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),

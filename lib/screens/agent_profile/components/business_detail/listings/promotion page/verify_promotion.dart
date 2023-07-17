@@ -93,8 +93,7 @@ class _VerifyPromotionState extends State<VerifyPromotion> {
                             }));
                           },
                           style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(500, 60),
-                              primary: mobileButtonColor),
+                              fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                           child: const Text(
                             //  Connect EndPoint
 
@@ -142,8 +141,7 @@ class _VerifyPromotionState extends State<VerifyPromotion> {
                             }));
                           },
                           style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(500, 60),
-                              primary: mobileButtonColor),
+                              fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                           child: const Text(
                             //  Connect EndPoint
 

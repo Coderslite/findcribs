@@ -4,6 +4,9 @@ import 'package:findcribs/screens/agent_profile/components/business_detail/listi
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/listings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+import '../../../../../../util/colors.dart';
 
 class ActiveListing extends StatefulWidget {
   const ActiveListing({Key? key}) : super(key: key);
@@ -48,22 +51,21 @@ class _ActiveListingState extends State<ActiveListing>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (_) {
-                            return const UserListing();
-                          }));
+                          Navigator.pop(context);
                         },
                         child: Container(
-                          width: 20,
-                          height: 20,
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13),
                             color: const Color(0XFFF0F7F8),
+                            borderRadius: BorderRadius.circular(13),
                           ),
-                          child: SvgPicture.asset(
-                            "assets/svgs/arrow_back.svg",
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child:
+                                SvgPicture.asset("assets/svgs/arrow_back.svg"),
                           ),
                         ),
                       ),
@@ -86,7 +88,7 @@ class _ActiveListingState extends State<ActiveListing>
                       controller: _tabController,
                       // physics: const NeverScrollableScrollPhysics(),
                       // isScrollable: false,
-                      unselectedLabelColor: Colors.black,
+                      unselectedLabelColor: context.iconColor,
                       // indicatorSize: TabBarIndicatorSize.label,
                       indicator: BoxDecoration(
                           color: const Color(0xFF0072BA),

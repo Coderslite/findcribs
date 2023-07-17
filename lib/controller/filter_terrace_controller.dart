@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class FilterTerraceController extends GetxController {
   var propertyType = 'All'.obs;
   var state = "Nigeria".obs;
+  var lga = ''.obs;
   var area = "".obs;
 
   var sortPropertyBathroom = 0.0.obs;
@@ -17,7 +18,8 @@ class FilterTerraceController extends GetxController {
   handleFilterPropertyType(String propertytype) {
     propertyType.value = propertytype;
   }
-    handleResetInfo() {
+
+  handleResetInfo() {
     propertyType.value = 'All';
     state.value = "Nigeria";
     area.value = "";

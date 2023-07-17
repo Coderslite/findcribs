@@ -353,7 +353,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -368,7 +368,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -686,7 +686,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -701,7 +701,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1019,7 +1019,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -1034,7 +1034,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1354,7 +1354,7 @@ class _Sale1State extends State<Sale1> {
                       bottomRight: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -1369,7 +1369,7 @@ class _Sale1State extends State<Sale1> {
                       bottomLeft: Radius.circular(5))),
               child: const Center(
                 child: Text(
-                  "10+",
+                  "10",
                   style: TextStyle(
                       // color: Colors.white,
                       ),
@@ -1485,6 +1485,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyCategory
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Detached Duplex",
                                       "Semi Duplex",
@@ -1517,6 +1522,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyCategory
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Detached Duplex",
                                       "Semi Duplex",
@@ -1553,6 +1563,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.designType.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Contemporary",
                                       "Modern",
@@ -1581,6 +1596,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.designType.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Contemporary",
                                       "Modern",
@@ -1615,6 +1635,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyAddress
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(5),
@@ -1635,6 +1660,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.propertyAddress
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(5),
@@ -1658,6 +1688,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.interiorDesign
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Furnished",
                                       "Semi-Furnished",
@@ -1687,6 +1722,11 @@ class _Sale1State extends State<Sale1> {
                                       saleListingController.interiorDesign
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Furnished",
                                       "Semi-Furnished",
@@ -1968,7 +2008,7 @@ class _Sale1State extends State<Sale1> {
         ).show();
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return Sale2Stepper();
+          return const Sale2Stepper();
         }));
       }
     }
@@ -1993,7 +2033,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentBedroom = index;
       saleListingController.bedroom.value = bedroom.toString();
@@ -2022,7 +2062,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentBathroom = index;
       saleListingController.bathroomIndex.value = index;
@@ -2049,7 +2089,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentLivingroom = index;
       saleListingController.livingRoomIndex.value = index;
@@ -2076,7 +2116,7 @@ class _Sale1State extends State<Sale1> {
                                     ? '8'
                                     : index == 8
                                         ? '9'
-                                        : '10+';
+                                        : '10';
     setState(() {
       selecteRentKitchen = index;
       saleListingController.kitchen.value = kitchenRoom.toString();

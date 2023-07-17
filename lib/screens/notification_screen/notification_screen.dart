@@ -207,9 +207,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       ),
                       Text(
                         "Notification",
-                        style: TextStyle(
-                            fontFamily: "RedHatDisplay",
-                            fontSize: size.width / 22),
+                        style: TextStyle(fontSize: size.width / 22),
                       ),
                       const Text("            "),
                     ],
@@ -272,15 +270,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     return filteredNotificationList[index]
                                                 .type ==
                                             'listing'
-                                        ?
-                                         ProductDetails(
+                                        ? ProductDetails(
                                             id: filteredNotificationList[index]
                                                 .refId)
                                         : filteredNotificationList[index]
                                                     .type ==
                                                 'chat'
-                                            ? HomePageRoot(navigateIndex: 3)
-                                            : HomePageRoot(navigateIndex: 0);
+                                            ? const HomePageRoot(
+                                                navigateIndex: 3)
+                                            : const HomePageRoot(
+                                                navigateIndex: 0);
                                   })).then((value) => handleNotificationRead(
                                       filteredNotificationList[index].id));
                                 },

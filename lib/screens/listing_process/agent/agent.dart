@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -7,7 +7,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/controller/get_profile_controller.dart';
-import 'package:findcribs/screens/listing_process/listing/components/rent/rent1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -21,7 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 import '../../../models/user_profile_information_model.dart';
-import '../../../service/user_profile_service.dart';
+import '../../../util/colors.dart';
 import '../listing/select_listing_type.dart';
 
 class AgentRegistration extends StatefulWidget {
@@ -80,7 +79,6 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontFamily: "RedHatDisplay",
                     ),
                   ),
                 ),
@@ -126,7 +124,6 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     const Text(
                       "Kindly provide us brief information about you",
                       style: TextStyle(
-                        fontFamily: "RedHatDisplay",
                         fontSize: 18,
                       ),
                     ),
@@ -135,9 +132,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     ),
                     const Text(
                       "Full Name",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'fullName',
@@ -149,7 +144,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                       enabled: false,
                       decoration: const InputDecoration(
                         contentPadding: EdgeInsets.all(20),
-                        fillColor: Color(0XFFE6E6E6),
+                        // fillColor: Color(0XFFE6E6E6),
                         filled: true,
                         border: InputBorder.none,
                         hintText: "E.g Abraham Great",
@@ -164,9 +159,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     ),
                     const Text(
                       "Business Name(Public)",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'businessName',
@@ -220,9 +213,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
 
                     const Text(
                       "About Business",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'about',
@@ -244,9 +235,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     ),
                     const Text(
                       "Phone Number",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     FormBuilderTextField(
                       name: 'phone',
@@ -267,9 +256,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     ),
                     const Text(
                       "Upload Photo",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
 
                     InkWell(
@@ -316,9 +303,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     ),
                     const Text(
                       "Booking Tour Availability (?)",
-                      style: TextStyle(
-                          fontFamily: "RedHatDisplay",
-                          color: Color(0XFF5A5A5A)),
+                      style: TextStyle(color: grey),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 68.0),

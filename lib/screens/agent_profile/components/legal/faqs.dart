@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../util/colors.dart';
+
 class Faqs extends StatefulWidget {
   const Faqs({Key? key}) : super(key: key);
 
@@ -162,7 +164,6 @@ class _FaqsState extends State<Faqs> {
                   const Text(
                     "FAQs",
                     style: TextStyle(
-                      fontFamily: "RedHatDisplay",
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                     ),
@@ -215,13 +216,9 @@ class EachFAQ extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      textColor: Colors.black,
-      iconColor: const Color(0xFFB9C2C2),
-      collapsedIconColor: const Color(0xFFB9C2C2),
       title: Text(
         question,
         style: const TextStyle(
-          color: Color(0xFF09172D),
           fontSize: 14,
           fontWeight: FontWeight.w700,
         ),
@@ -263,13 +260,11 @@ class EachFAQWithChildren extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      textColor: Colors.black,
       iconColor: const Color(0xFFB9C2C2),
       collapsedIconColor: const Color(0xFFB9C2C2),
       title: Text(
         question,
         style: const TextStyle(
-          color: Color(0xFF09172D),
           fontSize: 14,
           fontWeight: FontWeight.w700,
         ),

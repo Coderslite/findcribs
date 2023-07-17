@@ -7,7 +7,7 @@ class PasswordChangedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mobileBackgroundColor,
+      // backgroundColor: mobileBackgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -37,7 +37,7 @@ class PasswordChangedScreen extends StatelessWidget {
                   //Navigate to homepage acct verified Page
                 },
                 style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(500, 60), primary: mobileButtonColor),
+                    fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
                 child: const Text(
                   //  Connect EndPoint
 

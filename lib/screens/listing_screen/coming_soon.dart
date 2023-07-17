@@ -49,7 +49,7 @@ class _ComingSoonState extends State<ComingSoon> {
                   GestureDetector(
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return HomePageRoot(
+                        return const HomePageRoot(
                           navigateIndex: 0,
                         );
                       }));
@@ -65,7 +65,7 @@ class _ComingSoonState extends State<ComingSoon> {
                   GestureDetector(
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return HomePageRoot(
+                        return const HomePageRoot(
                           navigateIndex: 1,
                         );
                       }));
@@ -88,7 +88,7 @@ class _ComingSoonState extends State<ComingSoon> {
                   GestureDetector(
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return HomePageRoot(
+                        return const HomePageRoot(
                           navigateIndex: 3,
                         );
                       }));
@@ -107,7 +107,7 @@ class _ComingSoonState extends State<ComingSoon> {
                         context,
                         MaterialPageRoute(
                           builder: (_) {
-                            return HomePageRoot(
+                            return const HomePageRoot(
                               navigateIndex: 4,
                             );
                           },

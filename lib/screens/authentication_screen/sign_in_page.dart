@@ -11,10 +11,10 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   bool isVisible = true;
   var emailController = TextEditingController();
@@ -22,14 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   LoginController loginController = LoginController();
 
-
   @override
   Widget build(BuildContext context) {
     // Mobile Width & Height
     double mobileWidth = MediaQuery.of(context).size.width;
     // double mobileHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: mobileBackgroundColor,
+      // backgroundColor: mobileBackgroundColor,
       body: Obx(
         () => SingleChildScrollView(
           child: Container(
@@ -42,21 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: EdgeInsets.only(top: 150),
                   child: Text(
                     "Welcome Back!",
-                    style: TextStyle(
-                        color: mobileTextColor,
-                        fontFamily: 'RedHatDisplay',
-                        fontSize: 36,
-                        fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.w700),
                   ),
                 ),
                 mobileSizedBoxHeight,
                 mobileSizedBoxHeight,
                 const Text(
                   'Email Address',
-                  style: TextStyle(
-                      color: mobileFormTextColor,
-                      fontFamily: 'RedHatDisplayLight',
-                      fontSize: 12),
+                  style:
+                      TextStyle(fontFamily: 'RedHatDisplayLight', fontSize: 12),
                 ),
                 mobileSizedBoxHeight2,
                 TextFormField(
@@ -68,10 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 mobileSizedBoxHeight,
                 const Text(
                   'Password',
-                  style: TextStyle(
-                      color: mobileFormTextColor,
-                      fontFamily: 'RedHatDisplayLight',
-                      fontSize: 12),
+                  style:
+                      TextStyle(fontFamily: 'RedHatDisplayLight', fontSize: 12),
                 ),
                 mobileSizedBoxHeight2,
                 TextFormField(
@@ -121,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(500, 60),
-                        primary: mobileButtonColor),
+                        backgroundColor: mobileButtonColor),
                     // ignore: unrelated_type_equality_checks
                     child: loginController.isLoading == true
                         ? const CircularProgressIndicator()

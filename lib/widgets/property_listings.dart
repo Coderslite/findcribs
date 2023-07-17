@@ -2,9 +2,11 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../screens/product_details/product_details.dart';
+import '../util/colors.dart';
 
 // ignore: camel_case_types
 class Property_Listings extends StatefulWidget {
@@ -77,27 +79,27 @@ class _Property_ListingsState extends State<Property_Listings> {
               children: [
                 Text(
                   widget.price.toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF09172D)),
+                      color: context.isDarkMode ? white : Color(0xFF09172D)),
                 ),
                 const SizedBox(
                   height: 7,
                 ),
                 Text(
                   widget.propertyAddress.toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF304059)),
+                      color: context.isDarkMode ? white : Color(0xFF304059)),
                 ),
                 Text(
                   widget.propertyState.toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF8A99B1)),
+                      color: context.isDarkMode ? white : Color(0xFF8A99B1)),
                 ),
                 const SizedBox(
                   height: 8.64,
@@ -106,7 +108,7 @@ class _Property_ListingsState extends State<Property_Listings> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
                   decoration: BoxDecoration(
-                      color: const Color(0xFFF8FEFF),
+                      // color: const Color(0xFFF8FEFF),
                       borderRadius: BorderRadius.circular(7)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,

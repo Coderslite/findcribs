@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, library_prefixes
 
 import 'dart:convert';
 
@@ -35,7 +35,7 @@ class MomentSocketController extends GetxController {
       "ERROR",
       (data) {
         var errorMessage = jsonDecode(data);
-        print("Error" + errorMessage['message']);
+        print("Error  ${errorMessage['message']}");
         print(data);
       },
     );

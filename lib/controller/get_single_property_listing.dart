@@ -1,13 +1,15 @@
 import 'package:findcribs/controller/get_property_listing_controller.dart';
+import 'package:findcribs/service/property_list_all_service.dart';
 import 'package:get/get.dart';
 
 import '../models/house_list_model.dart';
+import '../service/all_property_listing.dart';
 import '../service/property_details_service.dart';
 
 late Future<HouseListModel> singlePropertyModel;
 
-GetPropertyListingController getPropertyListingController =
-    Get.put(GetPropertyListingController());
+AllPropertyListingController houseListingController =
+    Get.put(AllPropertyListingController());
 
 class GetSinglePropertyController extends GetxController {
   var propertyId = ''.obs;
@@ -16,7 +18,7 @@ class GetSinglePropertyController extends GetxController {
 
   handleGetPropertyById() {
     isLoading.value = true;
-    singleProperty.value = getPropertyListingController.filteredList
+    singleProperty.value = houseListingController.posts
         .where((p0) => p0.id.toString() == propertyId.toString())
         .toList();
     isLoading.value = false;
@@ -35,7 +37,7 @@ class GetSinglePropertyController extends GetxController {
   handlePropertyClicked(int id) {
     propertyId.value = id.toString();
     isLoading.value = true;
-    getPropertyListingController.filteredList
+    houseListingController.posts
             .where((p0) => p0.id.toString() == id.toString())
             .isNotEmpty
         ? handleGetPropertyById()

@@ -18,8 +18,8 @@ class Sale2Stepper extends StatefulWidget {
 }
 
 class _Sale2StepperState extends State<Sale2Stepper> {
-   final _formKey2 = GlobalKey<FormBuilderState>();
-   final _saleFeeFormKey = GlobalKey<FormBuilderState>();
+  final _formKey2 = GlobalKey<FormBuilderState>();
+  final _saleFeeFormKey = GlobalKey<FormBuilderState>();
   bool? otherChargesIncluded;
 
   int? selecteSaleFee;
@@ -220,7 +220,7 @@ class _Sale2StepperState extends State<Sale2Stepper> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                          Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
@@ -232,10 +232,10 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                       "Sale Listing",
                       style: TextStyle(fontSize: 20),
                     ),
-                  const  Text("")
+                    const Text("")
                   ],
                 ),
-                    const SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -321,6 +321,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.parkingSpace.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -340,12 +345,17 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                 : FormBuilderDropdown(
                                     name: 'space',
                                     isExpanded: true,
-                                    initialValue:
-                                        saleListingController.parkingSpace.value,
+                                    initialValue: saleListingController
+                                        .parkingSpace.value,
                                     onChanged: (value) {
                                       saleListingController.parkingSpace.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -374,6 +384,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.propertyDocument
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -399,6 +414,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.propertyDocument
                                           .value = value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Yes",
                                       "No",
@@ -427,6 +447,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.currency.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Naira",
                                       "Dollar",
@@ -452,6 +477,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       saleListingController.currency.value =
                                           value.toString();
                                     },
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     items: [
                                       "Naira",
                                       "Dollar",
@@ -482,11 +512,19 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       name: 'salesPrice',
                                       // maxLength: 300,
                                       keyboardType: TextInputType.number,
-      
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
                                       validator: FormBuilderValidators.compose([
                                         FormBuilderValidators.required(context),
                                         FormBuilderValidators.numeric(context),
-                                        FormBuilderValidators.integer(context)
+                                        FormBuilderValidators.integer(context),
+                                        // FormBuilderValidators.minLength(
+                                        //     context, 4),
+                                        FormBuilderValidators.min(
+                                            context, 10000),
                                       ]),
                                       onChanged: (value) {
                                         if (value!.isEmpty) {
@@ -495,15 +533,16 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                         } else if (_saleFeeFormKey.currentState!
                                             .validate()) {
                                           setState(() {
-                                            saleListingController.saleFee.value =
-                                                value.toString();
+                                            saleListingController.saleFee
+                                                .value = value.toString();
                                           });
                                         }
                                       },
-      
+
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                           borderSide: const BorderSide(),
                                         ),
                                       ),
@@ -515,11 +554,18 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       name: 'salesPrice',
                                       // maxLength: 300,
                                       keyboardType: TextInputType.number,
-      
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
                                       validator: FormBuilderValidators.compose([
                                         FormBuilderValidators.required(context),
                                         FormBuilderValidators.numeric(context),
-                                        FormBuilderValidators.integer(context)
+                                        FormBuilderValidators.integer(context),
+                                        // FormBuilderValidators.minLength(context, 4),
+                                        FormBuilderValidators.min(
+                                            context, 10000),
                                       ]),
                                       onChanged: (value) {
                                         if (value!.isEmpty) {
@@ -528,17 +574,18 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                         } else if (_saleFeeFormKey.currentState!
                                             .validate()) {
                                           setState(() {
-                                            saleListingController.saleFee.value =
-                                                value.toString();
+                                            saleListingController.saleFee
+                                                .value = value.toString();
                                           });
                                         }
                                       },
-      
+
                                       initialValue:
                                           saleListingController.saleFee.value,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                           borderSide: const BorderSide(),
                                         ),
                                       ),
@@ -555,6 +602,10 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                   saleListingController.negotiable.value == 1
                                       ? "Yes"
                                       : "No",
+                              style: TextStyle(
+                                color: context.textTheme.bodyMedium!.color,
+                                fontFamily: "RedHatDisplay",
+                              ),
                               onChanged: (value) {
                                 if (value == 'Yes') {
                                   setState(() {
@@ -600,6 +651,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                         child: Text(option),
                                       );
                                     }).toList(),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     onChanged: (value) {
                                       if (value == 'Yes') {
                                         setState(() {
@@ -625,8 +681,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                 : FormBuilderDropdown(
                                     name: 'charge',
                                     isExpanded: true,
-                                    initialValue:
-                                        saleListingController.otherCharges.value,
+                                    initialValue: saleListingController
+                                        .otherCharges.value,
                                     items: [
                                       "Yes",
                                       "No",
@@ -636,6 +692,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                         child: Text(option),
                                       );
                                     }).toList(),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     onChanged: (value) {
                                       if (value == 'Yes') {
                                         setState(() {
@@ -662,10 +723,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                               height: 20,
                             ),
                             Visibility(
-                              visible: saleListingController.otherCharges.value ==
-                                      'Yes'
-                                  ? false
-                                  : true,
+                              visible:
+                                  saleListingController.otherCharges.value ==
+                                          'Yes'
+                                      ? false
+                                      : true,
                               child: Column(
                                 children: [
                                   Row(
@@ -791,24 +853,6 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                 ],
                               ),
                             ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     Text("Total Price"),
-                            //     Text(
-                            //       "N" +
-                            //           ((cauFee + serCharge + rentFee) +
-                            //                   (rentFee *
-                            //                       selecteRentLegalFee /
-                            //                       100) +
-                            //                   (rentFee * selecteRentAgencyFee))
-                            //               .toString(),
-                            //       style: TextStyle(
-                            //         color: Color(0XFF0072BA),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -822,6 +866,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     validator: FormBuilderValidators.compose([
                                       FormBuilderValidators.required(context),
                                     ]),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     onChanged: (value) {
                                       saleListingController.description.value =
                                           value.toString();
@@ -841,6 +890,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     validator: FormBuilderValidators.compose([
                                       FormBuilderValidators.required(context),
                                     ]),
+                                    style: TextStyle(
+                                      color:
+                                          context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
                                     initialValue:
                                         saleListingController.description.value,
                                     onChanged: (value) {
@@ -861,14 +915,15 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text("Total Price"),
-                                saleListingController.otherCharges.value == 'Yes'
+                                saleListingController.otherCharges.value ==
+                                        'Yes'
                                     ? Text(
-                                        formatter.format(
-                                            saleListingController.saleFee.value ==
-                                                    ''
-                                                ? 0
-                                                : int.parse(saleListingController
-                                                    .saleFee.value)),
+                                        formatter.format(saleListingController
+                                                    .saleFee.value ==
+                                                ''
+                                            ? 0
+                                            : int.parse(saleListingController
+                                                .saleFee.value)),
                                         style: const TextStyle(
                                           color: Color(0XFF0072BA),
                                         ),
@@ -908,9 +963,11 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                         left:
-                                            MediaQuery.of(context).size.width / 5,
+                                            MediaQuery.of(context).size.width /
+                                                5,
                                         right:
-                                            MediaQuery.of(context).size.width / 5,
+                                            MediaQuery.of(context).size.width /
+                                                5,
                                         top: 4.5,
                                         bottom: 4.5,
                                       ),

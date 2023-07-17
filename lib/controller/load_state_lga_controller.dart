@@ -28,33 +28,30 @@ class LoadStateLgaController extends GetxController {
     lga.value = data
         .where((p0) =>
             p0['state'].toLowerCase() ==
-            estateListingController.location.toLowerCase().toString())
+            estateListingController.state.toLowerCase().toString())
         .toList();
     lga.value = lga[0]['lgas'];
     estateListingController.lga.value = '';
-    print(lga[0]);
   }
 
   handleRentFetchLga() {
     lga.value = data
         .where((p0) =>
             p0['state'].toLowerCase() ==
-            rentListingController.location.toLowerCase().toString())
+            rentListingController.state.toLowerCase().toString())
         .toList();
     lga.value = lga[0]['lgas'];
     rentListingController.lga.value = '';
-    print(lga[0]);
   }
 
   handleSaleFetchLga() {
     lga.value = data
         .where((p0) =>
             p0['state'].toLowerCase() ==
-            saleListingController.location.toLowerCase().toString())
+            saleListingController.state.toLowerCase().toString())
         .toList();
     lga.value = lga[0]['lgas'];
     saleListingController.lga.value = '';
-    print(lga[0]);
   }
 
   handleSearchFetchLga() {
@@ -65,13 +62,11 @@ class LoadStateLgaController extends GetxController {
         .toList();
     lga.value = lga[0]['lgas'];
     searchListingController.lga.value = '';
-    print(lga[0]);
   }
 
   @override
   void onReady() {
-    // TODO: implement onReady
     loadStates();
-    super.onReady();
+    super.onInit();
   }
 }
