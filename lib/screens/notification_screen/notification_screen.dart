@@ -19,6 +19,8 @@ import '../../controller/get_notification_controller.dart';
 import '../../models/notification_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../../util/colors.dart';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
 
@@ -401,8 +403,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                   true
                                                               ? FontWeight.w300
                                                               : FontWeight.w700,
-                                                      color: const Color(
-                                                          0xFF4F5E76)),
+                                                      color: grey),
                                                 ),
                                                 const SizedBox(
                                                   height: 6,
@@ -411,8 +412,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                   notificationTime,
                                                   style: const TextStyle(
                                                     fontSize: 8,
-                                                    color: Color(0xFFAFAFAF),
-                                                    fontFamily: "",
+                                                    color: grey,
                                                   ),
                                                 ),
                                               ],

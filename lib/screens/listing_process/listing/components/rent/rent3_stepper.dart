@@ -281,7 +281,10 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            border: Border.all(width: 1),
+                                            border: Border.all(
+                                              width: 1,
+                                              color: context.iconColor!,
+                                            ),
                                             borderRadius:
                                                 BorderRadius.circular(7),
                                           ),

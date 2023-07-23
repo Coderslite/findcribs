@@ -473,7 +473,10 @@ class _EstateMarketState extends State<EstateMarket> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(width: 1),
+                                  border: Border.all(
+                                    width: 1,
+                                    color: context.iconColor!,
+                                  ),
                                   borderRadius: BorderRadius.circular(7),
                                 ),
                                 child: Padding(
@@ -924,7 +927,8 @@ class _EstateMarketState extends State<EstateMarket> {
             return Container(
               height: MediaQuery.of(context).size.height * 0.9,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.white),
+                  borderRadius: BorderRadius.circular(20),
+                  color: context.theme.scaffoldBackgroundColor),
               child: Column(
                 children: [
                   Padding(
