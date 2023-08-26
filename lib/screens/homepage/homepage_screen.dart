@@ -938,7 +938,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
                                                                           Text(
-                                                                            "Land",
+                                                                            "Land Title",
                                                                             style: TextStyle(
                                                                                 color: context.isDarkMode ? white : Color(0xFF455A64),
                                                                                 fontSize: 14,

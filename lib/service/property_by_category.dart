@@ -22,7 +22,7 @@ class HouseByCategoryController extends GetxController {
   var lga = ''.obs;
   var isFiltering = false.obs;
   final PagingController<int, HouseListModel> categoryPagingController =
-      PagingController(firstPageKey: 0);
+      PagingController(firstPageKey: 1);
   final _posts = <HouseListModel>[];
 
   List<HouseListModel> get posts => _posts;
@@ -57,6 +57,7 @@ class HouseByCategoryController extends GetxController {
     var myBathroom = bathroom.value == 0.0 ? '' : bathroom.toInt();
     var myBedroom = bedroom.value == 0.0 ? '' : bedroom.toInt();
 
+
     while (retryCount < 3) {
       try {
         final response = await _client.get(Uri.parse(
@@ -69,12 +70,19 @@ class HouseByCategoryController extends GetxController {
           List houseData = data['data']['listing'];
           final posts = List<HouseListModel>.from(
               houseData.map((post) => HouseListModel.fromJson(post)));
-          if (posts.isNotEmpty) {
-            categoryPagingController.appendPage(posts, pageKey + 1);
+        if (posts.isNotEmpty) {
+          if (pageKey == 1 && categoryPagingController.itemList != null) {
+            print("already added");
+            // categoryPagingController.itemList!.fillRange(0, 1);
+            categoryPagingController.itemList!.clear();
+
+            categoryPagingController.appendPage(posts, pageKey + 2);
           } else {
-            categoryPagingController.appendLastPage(posts);
+            categoryPagingController.appendPage(posts, pageKey + 1);
           }
-          _posts.addAll(posts);
+        } else {
+          categoryPagingController.appendLastPage(posts);
+        }
 
           // Break the loop if the response was successful
           break;

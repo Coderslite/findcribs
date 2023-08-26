@@ -22,7 +22,7 @@ class AllPropertyListingController extends GetxController {
   var lga = ''.obs;
   var isFiltering = false.obs;
   final PagingController<int, HouseListModel> categoryPagingController =
-      PagingController(firstPageKey: 0);
+      PagingController(firstPageKey: 1);
   final _posts = <HouseListModel>[];
 
   List<HouseListModel> get posts => _posts;
@@ -68,7 +68,7 @@ class AllPropertyListingController extends GetxController {
         final posts = List<HouseListModel>.from(
             houseData.map((post) => HouseListModel.fromJson(post)));
         if (posts.isNotEmpty) {
-          if (pageKey == 0 && categoryPagingController.itemList != null) {
+          if (pageKey == 1 && categoryPagingController.itemList != null) {
             print("already added");
             // categoryPagingController.itemList!.fillRange(0, 1);
             categoryPagingController.itemList!.clear();

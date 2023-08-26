@@ -1,4 +1,4 @@
-package com.findcribs
+package com.findcribs.ng
 
 import io.flutter.embedding.android.FlutterActivity
 

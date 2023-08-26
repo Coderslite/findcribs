@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.findcribs">
+    package="com.findcribs.ng">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     
@@ -63,7 +63,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
              <service
-            android:name="com.findcribs.ForegroundService"        
+            android:name="com.findcribs.ng.ForegroundService"        
             android:exported="false"
             android:stopWithTask="false"/>
     </application>
