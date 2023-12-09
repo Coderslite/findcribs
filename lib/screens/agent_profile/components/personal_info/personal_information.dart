@@ -97,7 +97,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return const HomePageRoot(navigateIndex: 4);
+                                  }));
                                 },
                                 child: Container(
                                   width: 40,
@@ -1088,6 +1091,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         btnOkOnPress: () {},
       ).show();
     } else {
+      final respStr = await response.stream.bytesToString();
+      print(respStr);
+      var msg = jsonDecode(respStr);
+      print(msg['message']);
       AwesomeDialog(
         context: context,
         dialogType: DialogType.error,

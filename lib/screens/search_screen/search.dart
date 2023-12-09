@@ -355,7 +355,7 @@ class _Search_ScreenState extends State<Search_Screen> {
             },
             onChanged: (value) {
               setState(() {
-                houseController.category.value = value.toString();
+                houseController.search.value = value.toString();
               });
             },
             scrollPadding: const EdgeInsets.all(0),

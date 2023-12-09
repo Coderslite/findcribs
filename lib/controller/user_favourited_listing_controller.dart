@@ -51,11 +51,13 @@ class UserFavouritedListingController extends GetxController {
       userFavouritedListing.removeWhere((element) => element == id);
       // favouritedListing.removeWhere((element) => element.listingId == id);
       like(id, token.toString());
+      handleGetFavouritedListing();
     } else {
       userFavouritedListing.add(id);
 
       // favouritedListing.removeWhere((element) => element.listingId == id);
       like(id, token.toString());
+      handleGetFavouritedListing();
     }
   }
 

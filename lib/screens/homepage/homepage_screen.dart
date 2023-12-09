@@ -28,17 +28,14 @@ import 'package:findcribs/screens/story_screen/story_base_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/get_notification_controller.dart';
-import '../../controller/get_property_listing_controller.dart';
 // ignore: library_prefixes
 
 import '../../service/all_property_listing.dart';
 import '../../service/property_by_category.dart';
-import '../../service/property_list_all_service.dart';
 import '../../util/colors.dart';
 import '../../widgets/loading_widget.dart';
 import '../favourite_screen/all_agent/all_agent.dart';
@@ -62,16 +59,19 @@ class _HomepageScreenState extends State<HomepageScreen> {
   AllPropertyListingController houseController =
       Get.put(AllPropertyListingController());
 
+  HouseByCategoryController house_controller =
+      Get.put(HouseByCategoryController());
+
   handleFilter() {
     houseController.isFiltering.value = true;
     houseController.categoryPagingController.itemList!.clear();
-    houseController.fetchPosts(0);
+    houseController.fetchPosts(1);
   }
 
   @override
   void initState() {
     print("homescreen init");
-    houseController.fetchPosts(0);
+    houseController.fetchPosts(1);
     super.initState();
     // _controller.addListener();
   }
@@ -189,9 +189,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                         ? const Icon(
                                             Icons.notifications_none_outlined)
                                         : badges.Badge(
-                                            toAnimate: false,
-                                            animationDuration: const Duration(
-                                                milliseconds: 500),
                                             badgeContent: Text(
                                               getAllNotificationController
                                                   .allNotificationList.length
@@ -200,7 +197,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                 fontSize: 12,
                                               ),
                                             ),
-                                            elevation: 1,
                                             position:
                                                 badges.BadgePosition.topEnd(
                                                     top: -20),
@@ -388,7 +384,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
                                 builderDelegate:
                                     PagedChildBuilderDelegate<HouseListModel>(
-                                  animateTransitions: true,
+                                  animateTransitions: false,
                                   itemBuilder: (context, post, index) {
                                     int price = (post.rentalFee!.toInt());
                                     var formatter = NumberFormat("#,###");
@@ -496,6 +492,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                                       wrapDirection: Axis.vertical,
                                                                                       orientation: OptionsOrientation.vertical,
                                                                                       onChanged: (e) {
+                                                                                        house_controller.category.value = e.toString();
                                                                                         Navigator.push(
                                                                                           context,
                                                                                           MaterialPageRoute(
@@ -630,6 +627,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                                           context,
                                                                                           MaterialPageRoute(
                                                                                             builder: (_) {
+                                                                                              house_controller.category.value = e.toString();
                                                                                               return ApartmentScreen(
                                                                                                 apartmentType: e.toString(),
                                                                                               );
@@ -722,6 +720,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                 children: [
                                                                   GestureDetector(
                                                                     onTap: () {
+                                                                      house_controller
+                                                                          .category
+                                                                          .value = 'terrace';
                                                                       Navigator.push(
                                                                           context,
                                                                           MaterialPageRoute(builder:
@@ -846,6 +847,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                 children: [
                                                                   GestureDetector(
                                                                     onTap: () {
+                                                                      house_controller
+                                                                          .category
+                                                                          .value = 'Estate Market';
                                                                       Navigator.push(
                                                                           context,
                                                                           MaterialPageRoute(builder:

@@ -26,15 +26,15 @@
             android:windowSoftInputMode="adjustResize"
             android:showWhenLocked="true"
             android:turnScreenOn="true">
- <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/default_notification_channel_id"/>   
-           <meta-data
-  android:name="com.google.firebase.messaging.default_notification_icon"
-  android:value="@drawable/ic_launcher" />
-  <meta-data
-    android:name="com.google.firebase.messaging.default_notification_color"
-    android:resource="@color/colorAccent" />    
+            <meta-data
+                        android:name="com.google.firebase.messaging.default_notification_channel_id"
+                        android:value="@string/default_notification_channel_id"/>   
+                    <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:value="@drawable/ic_launcher" />
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorAccent" />    
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
@@ -53,7 +53,7 @@
                 <data
                 android:scheme="https"
                 android:host="https://findcribs.page.link"
-                android:pathPrefix="/properties"  />
+                android:pathPrefix="/listings"  />
             </intent-filter>
             
         </activity>

@@ -14,6 +14,7 @@ class AllPropertyListingController extends GetxController {
   var minPrice = ''.obs;
   var maxPrice = ''.obs;
   var category = ''.obs;
+  var search = ''.obs;
   var livingRoom = 0.0.obs;
   var bathroom = 0.0.obs;
   var bedroom = 0.0.obs;
@@ -40,6 +41,7 @@ class AllPropertyListingController extends GetxController {
     minPrice.value = '';
     maxPrice.value = '';
     category.value = '';
+    search.value = '';
     livingRoom.value = 0.0;
     bathroom.value = 0.0;
     bedroom.value = 0.0;
@@ -56,9 +58,11 @@ class AllPropertyListingController extends GetxController {
     var myBathroom = bathroom.value == 0.0 ? '' : bathroom.toInt();
     var myBedroom = bedroom.value == 0.0 ? '' : bedroom.toInt();
 
+    pageKey == 1 ? _posts.clear() : null;
+
     try {
       final response = await _client.get(Uri.parse(
-          "$baseUrl/search-listing?type=$type&minPrice=$minPrice&maxPrice=$maxPrice&search=$category&livingroom=$myLivingroom&bathroom=$myBathroom&bedroom=$myBedroom&kitchen=$myKitchen&state=$state&lga=$lga&page=$pageKey&size=$_perPage"));
+          "$baseUrl/search-listing?type=$type&minPrice=$minPrice&maxPrice=$maxPrice&search=$search&category=$category&livingroom=$myLivingroom&bathroom=$myBathroom&bedroom=$myBedroom&kitchen=$myKitchen&state=$state&lga=$lga&page=$pageKey&size=$_perPage"));
 
       if (response.statusCode == 200) {
         isFiltering.value = false;
@@ -67,6 +71,7 @@ class AllPropertyListingController extends GetxController {
         List houseData = data['data']['listing'];
         final posts = List<HouseListModel>.from(
             houseData.map((post) => HouseListModel.fromJson(post)));
+
         if (posts.isNotEmpty) {
           if (pageKey == 1 && categoryPagingController.itemList != null) {
             print("already added");
@@ -78,6 +83,13 @@ class AllPropertyListingController extends GetxController {
             categoryPagingController.appendPage(posts, pageKey + 1);
           }
         } else {
+          for (var post in posts.toList()) {
+            if (_posts.any((element) => element.id == post.id)) {
+              posts.remove(post);
+              print("removed");
+              update();
+            }
+          }
           categoryPagingController.appendLastPage(posts);
         }
         _posts.addAll(posts);

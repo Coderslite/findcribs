@@ -1,20 +1,26 @@
 import 'dart:convert';
 
 import 'package:findcribs/models/unfavourite_agent.dart';
+import 'package:findcribs/models/user_favourite_agent.dart';
 import 'package:findcribs/screens/agent_profile/agent_profile.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:findcribs/service/all_agent_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../components/constants.dart';
 import '../../../controller/user_favorited_agent_controller.dart';
+import '../../../models/house_list_model.dart';
 import '../../../models/search_agent_model.dart';
+import '../../../service/all_agents.dart';
 import '../../../service/search_agent_service.dart';
+import '../../../service/searched_agent.dart';
 import '../../../util/colors.dart';
 
 class AllAgent extends StatefulWidget {
@@ -30,43 +36,20 @@ class _AllAgentState extends State<AllAgent> {
   List<UserUnFavouritedAgentModel>? allAgents = [];
   List<SearchAgentModel>? searchedAgentList = [];
   String searchQuery = '';
+  AllAgentController agentController = Get.put(AllAgentController());
 
   bool isLoading = true;
   List<int> isChecked = [];
   @override
   void initState() {
-    handleGetAgents();
+    agentController.fetchAgents(1);
     super.initState();
-  }
-
-  handleSearchAgent(String query) {
-    setState(() {
-      isLoading = true;
-    });
-    searchedAgentModel = searchAgent(query);
-    searchedAgentModel.then((value) {
-      print(value);
-      setState(() {
-        searchedAgentList = value;
-        isLoading = false;
-      });
-    });
-  }
-
-  handleGetAgents() async {
-    allAgentList = getAllAgentList();
-    allAgentList.then((value) {
-      setState(() {
-        isLoading = false;
-        isChecked = [];
-        allAgents = value;
-      });
-    });
   }
 
   @override
   void dispose() {
     userFavouritedAgentController.handleGetAllAgents();
+    agentController.searchQuery.value = "";
     super.dispose();
   }
 
@@ -157,12 +140,14 @@ class _AllAgentState extends State<AllAgent> {
                       hintText: "Search an agent name",
                       hintStyle: TextStyle(
                           fontWeight: FontWeight.w200,
-                          color:
-                              context.isDarkMode ? white : Color(0xFF7C7C7C))),
+                          color: context.isDarkMode
+                              ? white
+                              : const Color(0xFF7C7C7C))),
                   onFieldSubmitted: (val) {
-                    handleSearchAgent(val);
                     setState(() {
-                      searchQuery = val;
+                      agentController.searchQuery.value = val;
+                      agentController.agentPagingController.itemList!.clear();
+                      agentController.fetchAgents(1);
                     });
                   },
                   scrollPadding: const EdgeInsets.all(0),
@@ -171,260 +156,96 @@ class _AllAgentState extends State<AllAgent> {
                   height: 10,
                 ),
                 Expanded(
-                    child: isLoading
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CollectionSlideTransition(
-                                  children: const <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: Colors.blue,
-                                      radius: 6,
+                  child: PagedGridView<int, UserUnFavouritedAgentModel>(
+                    pagingController: agentController.agentPagingController,
+                    // physics: NeverScrollableScrollPhysics(),
+                    primary: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, // Number of items per row
+                    ),
+                    builderDelegate:
+                        PagedChildBuilderDelegate<UserUnFavouritedAgentModel>(
+                      noMoreItemsIndicatorBuilder: (context) {
+                        Fluttertoast.showToast(msg: "No more items to load");
+                        return Container();
+                      },
+                      itemBuilder: (context, post, index) {
+                        return Stack(
+                          children: [
+                            GestureDetector(
+                              onLongPress: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) {
+                                  return AgentProfileScreen(
+                                    id: post.id,
+                                  );
+                                }));
+                              },
+                              onTap: () {
+                                setState(() {
+                                  // isChecked.add(int.parse(post.id.toString()));
+
+                                  handleFavouriteAgent(
+                                      int.parse(post.id.toString()));
+                                });
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: NetworkImage(post
+                                                .profilePic ==
+                                            null
+                                        ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                        : post.profilePic.toString()),
+                                    radius:
+                                        MediaQuery.of(context).size.width / 8,
+                                  ),
+                                  Text(
+                                    post.businessName.toString(),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
                                     ),
-                                    CircleAvatar(
-                                      backgroundColor: Colors.red,
-                                      radius: 6,
-                                    ),
-                                    CircleAvatar(
-                                      backgroundColor: Colors.yellow,
-                                      radius: 6,
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                  // isFavourite
+                                  //     ? const CircularProgressIndicator()
+                                  //     : ElevatedButton(
+                                  //         style: ElevatedButton.styleFrom(
+                                  //             primary: mobileButtonColor),
+                                  //         onPressed: () {
+                                  //           handleFavouriteAgent(widget.id);
+                                  //         },
+                                  //         child: const Text("Favourite"),
+                                  //       ),
+                                ],
+                              ),
                             ),
-                          )
-                        : searchQuery.isNotEmpty
-                            ? searchedAgentList!.isEmpty
-                                ? Text(
-                                    "No result found for the keyword $searchQuery")
-                                : GridView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: searchedAgentList!.length < 12
-                                        ? searchedAgentList!.length
-                                        : 12,
-                                    physics: const ScrollPhysics(),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: 150,
-                                            crossAxisSpacing: 5,
-                                            mainAxisExtent: 150,
-                                            mainAxisSpacing: 2),
-                                    itemBuilder: (context, index) => isChecked
-                                            .contains(
-                                                searchedAgentList![index].id)
-                                        ? Container()
-                                        : Stack(
-                                            children: [
-                                              GestureDetector(
-                                                onLongPress: () {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (_) {
-                                                    return AgentProfileScreen(
-                                                      id: searchedAgentList![
-                                                              index]
-                                                          .id,
-                                                    );
-                                                  }));
-                                                },
-                                                onTap: () {
-                                                  setState(() {
-                                                    isChecked.add(int.parse(
-                                                        searchedAgentList![
-                                                                index]
-                                                            .id
-                                                            .toString()));
-
-                                                    handleFavouriteAgent(
-                                                        int.parse(
-                                                            searchedAgentList![
-                                                                    index]
-                                                                .id
-                                                                .toString()));
-                                                  });
-                                                },
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    CircleAvatar(
-                                                      backgroundImage: NetworkImage(
-                                                          searchedAgentList![
-                                                                          index]
-                                                                      .profilePic ==
-                                                                  null
-                                                              ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
-                                                              : searchedAgentList![
-                                                                      index]
-                                                                  .profilePic
-                                                                  .toString()),
-                                                      radius:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              8,
-                                                    ),
-                                                    Text(
-                                                      searchedAgentList![index]
-                                                          .businessName
-                                                          .toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                    // isFavourite
-                                                    //     ? const CircularProgressIndicator()
-                                                    //     : ElevatedButton(
-                                                    //         style: ElevatedButton.styleFrom(
-                                                    //             primary: mobileButtonColor),
-                                                    //         onPressed: () {
-                                                    //           handleFavouriteAgent(widget.id);
-                                                    //         },
-                                                    //         child: const Text("Favourite"),
-                                                    //       ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 0,
-                                                right: 0,
-                                                child: isChecked.contains(
-                                                        searchedAgentList![
-                                                                index]
-                                                            .id)
-                                                    ? const CircleAvatar(
-                                                        radius: 10,
-                                                        backgroundColor:
-                                                            Color(0XFF263238),
-                                                        child: Icon(
-                                                          Icons.check,
-                                                          size: 12,
-                                                        ),
-                                                      )
-                                                    : Container(),
-                                              ),
-                                            ],
-                                          ),
-                                  )
-                            : allAgents!.isEmpty
-                                ? const Text("empty")
-                                : GridView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: allAgents!.length < 12
-                                        ? allAgents!.length
-                                        : 12,
-                                    physics: const ScrollPhysics(),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: 150,
-                                            crossAxisSpacing: 5,
-                                            mainAxisExtent: 150,
-                                            mainAxisSpacing: 2),
-                                    itemBuilder: (context, index) => isChecked
-                                            .contains(allAgents![index].id)
-                                        ? Container()
-                                        : Stack(
-                                            children: [
-                                              GestureDetector(
-                                                onLongPress: () {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (_) {
-                                                    return AgentProfileScreen(
-                                                      id: allAgents![index].id,
-                                                    );
-                                                  }));
-                                                },
-                                                onTap: () {
-                                                  setState(() {
-                                                    isChecked.add(int.parse(
-                                                        allAgents![index]
-                                                            .id
-                                                            .toString()));
-
-                                                    handleFavouriteAgent(
-                                                        int.parse(
-                                                            allAgents![index]
-                                                                .id
-                                                                .toString()));
-                                                  });
-                                                },
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(allAgents![
-                                                                          index]
-                                                                      .profilePic ==
-                                                                  null
-                                                              ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
-                                                              : allAgents![
-                                                                      index]
-                                                                  .profilePic
-                                                                  .toString()),
-                                                      radius:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              8,
-                                                    ),
-                                                    Text(
-                                                      allAgents![index]
-                                                          .businessName
-                                                          .toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                    // isFavourite
-                                                    //     ? const CircularProgressIndicator()
-                                                    //     : ElevatedButton(
-                                                    //         style: ElevatedButton.styleFrom(
-                                                    //             primary: mobileButtonColor),
-                                                    //         onPressed: () {
-                                                    //           handleFavouriteAgent(widget.id);
-                                                    //         },
-                                                    //         child: const Text("Favourite"),
-                                                    //       ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 0,
-                                                right: 0,
-                                                child: isChecked.contains(
-                                                        allAgents![index].id)
-                                                    ? const CircleAvatar(
-                                                        radius: 10,
-                                                        backgroundColor:
-                                                            Color(0XFF263238),
-                                                        child: Icon(
-                                                          Icons.check,
-                                                          size: 12,
-                                                        ),
-                                                      )
-                                                    : Container(),
-                                              ),
-                                            ],
-                                          ),
-                                  )),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: isChecked.contains(post.id)
+                                  ? const CircleAvatar(
+                                      radius: 10,
+                                      backgroundColor: Color(0XFF263238),
+                                      child: Icon(
+                                        Icons.check,
+                                        size: 12,
+                                      ),
+                                    )
+                                  : Container(),
+                            ),
+                          ],
+                        );
+                      },
+                      noItemsFoundIndicatorBuilder: (context) =>
+                          const Center(child: Text('No Agent found.')),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -436,22 +257,13 @@ class _AllAgentState extends State<AllAgent> {
 
   handleFavouriteAgent(int id) async {
     userFavouritedAgentController.handleGetAllAgents();
-
+    agentController.agentPagingController.itemList!
+        .removeWhere((element) => element.userId == id);
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     var response = await http.post(
       Uri.parse("$baseUrl/agent/favourite/$id"),
       headers: {"Authorization": "$token"},
     );
-    var responseJson = jsonDecode(response.body);
-    if (responseJson['status'] == true) {
-      // print(responseJson['message']);
-
-      searchQuery.isEmpty ? handleGetAgents() : handleSearchAgent(searchQuery);
-    } else {
-      // print(responseJson['message']);
-
-      // Fluttertoast.showToast(msg: responseJson['message']);
-    }
   }
 }

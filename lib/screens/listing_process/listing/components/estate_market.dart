@@ -8,6 +8,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/controller/estate_listing_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../../components/constants.dart';
 import '../../../../controller/load_state_lga_controller.dart';
+import '../../../../controller/thousand_formatter.dart';
 import '../../../homepage/home_root.dart';
 
 class EstateMarket extends StatefulWidget {
@@ -109,12 +111,14 @@ class _EstateMarketState extends State<EstateMarket> {
                                 forRent = true;
                                 estateListingController.propertyType.value =
                                     value.toString();
+                                _estateFeeFormKey.currentState!.validate();
                               });
                             } else {
                               setState(() {
                                 forRent = false;
                                 estateListingController.propertyType.value =
                                     value.toString();
+                                _estateFeeFormKey.currentState!.validate();
                               });
                             }
                           },
@@ -145,12 +149,14 @@ class _EstateMarketState extends State<EstateMarket> {
                                 forRent = true;
                                 estateListingController.propertyType.value =
                                     value.toString();
+                                _estateFeeFormKey.currentState!.validate();
                               });
                             } else {
                               setState(() {
                                 forRent = false;
                                 estateListingController.propertyType.value =
                                     value.toString();
+                                _estateFeeFormKey.currentState!.validate();
                               });
                             }
                           },
@@ -222,25 +228,57 @@ class _EstateMarketState extends State<EstateMarket> {
                             // maxLength: 300,
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
+                              print(value);
+
                               if (value!.isEmpty) {
                                 estateListingController.price.value =
                                     0.toString();
                               } else if (_estateFeeFormKey.currentState!
                                   .validate()) {
                                 setState(() {
+                                  final numericValue =
+                                      int.tryParse(value.replaceAll(',', ''));
                                   estateListingController.price.value =
-                                      value.toString();
+                                      numericValue.toString();
                                 });
                               }
                             },
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(context),
-                              FormBuilderValidators.numeric(context),
-                              FormBuilderValidators.integer(context),
-                              forRent == true
-                                  ? FormBuilderValidators.min(context, 2000)
-                                  : FormBuilderValidators.min(context, 10000),
-                            ]),
+                            validator: (value) {
+                              if (forRent == true) {
+                                if (value!.isEmpty) {
+                                  return 'Value is required';
+                                }
+                                final numericValue =
+                                    int.tryParse(value.replaceAll(',', ''));
+                                if (numericValue == null) {
+                                  return 'Invalid number format';
+                                }
+                                if (numericValue < 3000) {
+                                  return 'Value must be at least 3,000';
+                                }
+                              } else {
+                                if (value!.isEmpty) {
+                                  return 'Value is required';
+                                }
+
+                                // Remove commas and parse as an integer
+                                final numericValue =
+                                    int.tryParse(value.replaceAll(',', ''));
+
+                                if (numericValue == null) {
+                                  return 'Invalid number format';
+                                }
+
+                                if (numericValue < 10000) {
+                                  return 'Value must be at least 10,000';
+                                }
+                              }
+                              return null;
+                            },
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                              ThousandsSeparatorInputFormatter(),
+                            ],
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
@@ -255,27 +293,57 @@ class _EstateMarketState extends State<EstateMarket> {
                             name: 'price',
                             // maxLength: 300,
                             onChanged: (value) {
+                              print(value);
                               if (value!.isEmpty) {
                                 estateListingController.price.value =
                                     0.toString();
                               } else if (_estateFeeFormKey.currentState!
                                   .validate()) {
-                                setState(() {
-                                  saleListingController.saleFee.value =
-                                      value.toString();
-                                });
+                                final numericValue =
+                                    int.tryParse(value.replaceAll(',', ''));
+                                estateListingController.price.value =
+                                    numericValue.toString();
                               }
                             },
+                            validator: (value) {
+                              if (forRent == true) {
+                                if (value!.isEmpty) {
+                                  return 'Value is required';
+                                }
+                                final numericValue =
+                                    int.tryParse(value.replaceAll(',', ''));
+                                if (numericValue == null) {
+                                  return 'Invalid number format';
+                                }
+                                if (numericValue < 3000) {
+                                  return 'Value must be at least 3,000';
+                                }
+                              } else {
+                                if (value!.isEmpty) {
+                                  return 'Value is required';
+                                }
+
+                                // Remove commas and parse as an integer
+                                final numericValue =
+                                    int.tryParse(value.replaceAll(',', ''));
+
+                                if (numericValue == null) {
+                                  return 'Invalid number format';
+                                }
+
+                                if (numericValue < 10000) {
+                                  return 'Value must be at least 10,000';
+                                }
+                              }
+                              return null;
+                            },
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                              ThousandsSeparatorInputFormatter(),
+                            ],
                             keyboardType: TextInputType.number,
                             initialValue: estateListingController.price.value,
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(context),
-                              FormBuilderValidators.numeric(context),
-                              FormBuilderValidators.integer(context),
-                              forRent == true
-                                  ? FormBuilderValidators.min(context, 2000)
-                                  : FormBuilderValidators.min(context, 10000),
-                            ]),
+
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
@@ -964,6 +1032,7 @@ class _EstateMarketState extends State<EstateMarket> {
   }
 
   Future handlePublish() async {
+    print(estateListingController.price.value);
     if (_formKey.currentState!.validate()) {
       if (estateListingController.newfiles.isEmpty ||
           estateListingController.newfiles.length < 3) {
@@ -1239,7 +1308,8 @@ class _EstateMarketState extends State<EstateMarket> {
   }
 
   Future handleSave() async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() &&
+        _estateFeeFormKey.currentState!.validate()) {
       if (estateListingController.newfiles.isEmpty ||
           estateListingController.newfiles.length < 3) {
         AwesomeDialog(

@@ -161,8 +161,7 @@ class _HomePageRootState extends State<HomePageRoot> {
       },
       child: Scaffold(
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: JustTheTooltip(
           controller: tooltipController,
           isModal: true,
@@ -266,7 +265,7 @@ class _HomePageRootState extends State<HomePageRoot> {
         bottomNavigationBar: getFooter(size),
         body: UpgradeAlert(
           upgrader: Upgrader(
-            canDismissDialog: false,
+            canDismissDialog: true,
             showIgnore: false,
             showLater: false,
             dialogStyle: Platform.isIOS

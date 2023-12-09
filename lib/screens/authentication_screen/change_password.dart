@@ -25,10 +25,6 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormBuilderState>();
-  // regular expression to check if string
-  RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
-  double password_strength = 0;
-
   bool isVisible1 = true;
   bool isVisible2 = true;
 
@@ -36,36 +32,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   var passwordController2 = TextEditingController();
   bool isMatch = false;
 
-  //A function that validate user entered password
-  bool validatePassword(String pass) {
-    String password = pass.trim();
-    if (password.isEmpty) {
-      setState(() {
-        password_strength = 0;
-      });
-    } else if (password.length < 6) {
-      setState(() {
-        password_strength = 1 / 4;
-      });
-    } else if (password.length < 10) {
-      setState(() {
-        password_strength = 2 / 4;
-      });
-    } else {
-      if (pass_valid.hasMatch(password)) {
-        setState(() {
-          password_strength = 4 / 4;
-        });
-        return true;
-      } else {
-        setState(() {
-          password_strength = 3 / 4;
-        });
-        return false;
-      }
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {

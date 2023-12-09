@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../../models/house_list_model.dart';
 import '../../service/get_agent_listings.dart';
+import 'agent_profile.dart';
 
 class SalesScreen extends StatefulWidget {
   final int id;
@@ -142,23 +144,30 @@ class SalesScreenState extends State<SalesScreen> {
                               ],
                             ),
                           ),
-                          Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 20.0),
-                                child: CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: NetworkImage(widget.image),
+                          InkWell(
+                            onTap: () {
+                              Get.to(AgentProfileScreen(
+                                id: widget.id,
+                              ));
+                            },
+                            child: Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: NetworkImage(widget.image),
+                                  ),
                                 ),
-                              ),
-                              Positioned(
-                                  left: 35,
-                                  right: 10,
-                                  top: 0,
-                                  child: widget.isVerified == 'verified'
-                                      ? Image.asset("assets/images/tick.png")
-                                      : Container())
-                            ],
+                                Positioned(
+                                    left: 35,
+                                    right: 10,
+                                    top: 0,
+                                    child: widget.isVerified == 'verified'
+                                        ? Image.asset("assets/images/tick.png")
+                                        : Container())
+                              ],
+                            ),
                           )
                         ],
                       ),

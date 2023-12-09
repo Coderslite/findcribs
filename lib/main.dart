@@ -7,6 +7,7 @@ import 'package:findcribs/controller/initialize_controllers.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/message_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
+import 'package:findcribs/screens/agent_profile/agent_profile.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/onboarding.dart';
@@ -20,6 +21,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 // <<<<<<< gabriel
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -123,6 +126,15 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await initialize(aLocaleLanguageList: [
+    LanguageDataModel(name: 'English', languageCode: 'en'),
+    LanguageDataModel(name: 'Hindi', languageCode: 'hi'),
+  ]);
+  defaultToastBackgroundColor = Colors.black;
+  defaultToastTextColor = Colors.white;
+  defaultToastGravityGlobal = ToastGravity.CENTER;
+  defaultRadius = 16;
+  defaultAppButtonRadius = 16;
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -205,8 +217,9 @@ class _MyAppState extends State<MyApp> {
   bool isTyping = false;
   String isTypingChatId = '';
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
-  String link = 'https://findcribs.page.link/properties';
+  String link = 'https://findcribs.page.link/listings';
   String? propertyId;
+  String? agentId;
 
   @override
   void initState() {
@@ -223,6 +236,7 @@ class _MyAppState extends State<MyApp> {
     final queryParams = uri?.queryParameters;
     setState(() {
       propertyId = queryParams?['propertyId'].toString();
+      agentId = queryParams?['agentId'].toString();
     });
     print("propertyId");
     print(propertyId);
@@ -234,10 +248,18 @@ class _MyAppState extends State<MyApp> {
       print(dynamicLinkData);
       final Uri uri = dynamicLinkData.link;
       final queryParams = uri.queryParameters;
-      final int propertyId = int.parse(queryParams['propertyId'].toString());
-      Future.delayed(const Duration(seconds: 1)).then((value) {
-        Get.to(ProductDetails(id: propertyId));
-      });
+      final propertyId = queryParams['propertyId'].toString();
+      final agentId = queryParams['agentId'].toString();
+      if (propertyId.toString() != 'null') {
+        Future.delayed(const Duration(seconds: 1)).then((value) {
+          Get.to(ProductDetails(id: int.parse(propertyId)));
+        });
+      }
+      if (agentId.toString() != 'null') {
+        Future.delayed(const Duration(seconds: 1)).then((value) {
+          Get.to(AgentProfileScreen(id: int.parse(agentId)));
+        });
+      }
     }).onError((error) {
       print('onLink error');
       print(error.message);
@@ -265,22 +287,26 @@ class _MyAppState extends State<MyApp> {
     );
     return Obx(
       () => GetMaterialApp(
+        builder: scrollBehaviour(),
+        navigatorKey: navigatorKey,
         theme: ThemeData.light().copyWith(
           // Customize light theme here
+
           scaffoldBackgroundColor: mobileBackgroundColor,
           textTheme: ThemeData.dark()
               .textTheme
-              .apply(fontFamily: "RedHatDisplay", bodyColor: black),
+              .apply(fontFamily: "RedHatDisplay", bodyColor: blackColor),
         ),
         darkTheme: ThemeData.dark().copyWith(
           // Customize dark theme here
-          scaffoldBackgroundColor: black,
+          scaffoldBackgroundColor: blackColor,
           bottomNavigationBarTheme:
-             const BottomNavigationBarThemeData(backgroundColor: black),
-          bottomSheetTheme:const BottomSheetThemeData(backgroundColor: black),
+              const BottomNavigationBarThemeData(backgroundColor: blackColor),
+          bottomSheetTheme:
+              const BottomSheetThemeData(backgroundColor: blackColor),
           textTheme: ThemeData.dark()
               .textTheme
-              .apply(fontFamily: "RedHatDisplay", bodyColor: white),
+              .apply(fontFamily: "RedHatDisplay", bodyColor: whiteColor),
         ),
         themeMode: themeController.themeMode.value,
         initialBinding: HomeBindings(),

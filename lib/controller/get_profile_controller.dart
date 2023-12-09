@@ -15,6 +15,9 @@ class GetProfileController extends GetxController {
   var isLoading = true.obs;
   var myId = ''.obs;
   var phoneNumber = ''.obs;
+  var listingCount = ''.obs;
+  var favouritingAgentCount = ''.obs;
+  var favouritedAgentCount = ''.obs;
   handleGetProfile() {
     userProfile = getUserProfile();
     userProfile.then((value) {
@@ -27,6 +30,9 @@ class GetProfileController extends GetxController {
       myId.value = value.id.toString();
       phoneNumber.value = value.phoneNumber.toString();
       isVerified.value = value.agent!['is_verified'].toString();
+      listingCount.value = value.listingCount.toString();
+      favouritedAgentCount.value = value.favouritedAgentCount.toString();
+      favouritingAgentCount.value = value.favouritingAgentCount.toString();
     });
   }
 

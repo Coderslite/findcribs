@@ -8,10 +8,13 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../controller/edit_rent_listing_controller.dart';
 import '../../../../../controller/rent_listing_controller.dart';
 import '../../../../../controller/thousand_formatter.dart';
+import '../../../../../models/house_list_model.dart';
+import 'edit_rent3.dart';
 
-class Rent2Stepper extends StatefulWidget {
+class EditRent2Stepper extends StatefulWidget {
   final String? propertyCategory;
   final String? houseType;
   final String? propertyAddress;
@@ -19,29 +22,29 @@ class Rent2Stepper extends StatefulWidget {
   final String? bathrooom;
   final String? livingroom;
   final String? kitchen;
-  const Rent2Stepper(
-      {Key? key,
-      this.propertyCategory,
-      this.houseType,
-      this.propertyAddress,
-      this.bedroom,
-      this.bathrooom,
-      this.livingroom,
-      this.kitchen})
-      : super(key: key);
+  const EditRent2Stepper({
+    Key? key,
+    this.propertyCategory,
+    this.houseType,
+    this.propertyAddress,
+    this.bedroom,
+    this.bathrooom,
+    this.livingroom,
+    this.kitchen,
+  }) : super(key: key);
 
   @override
-  State<Rent2Stepper> createState() => _Rent2StepperState();
+  State<EditRent2Stepper> createState() => _EditRent2StepperState();
 }
 
-class _Rent2StepperState extends State<Rent2Stepper> {
+class _EditRent2StepperState extends State<EditRent2Stepper> {
   bool? otherChargesIncluded;
 
   int? selecteRentLegalFee;
   int? selecteRentAgencyFee;
 
-  RentListingController rentListingController =
-      Get.put(RentListingController());
+  EditRentListingController rentListingController =
+      Get.put(EditRentListingController());
 
   // @override
   @override
@@ -54,7 +57,7 @@ class _Rent2StepperState extends State<Rent2Stepper> {
   void initState() {
     super.initState();
     otherChargesIncluded =
-        rentListingController.otherCharges.value == 'Yes' ? true : false;
+        rentListingController.otherCharges.value == 'true' ? true : false;
     selecteRentAgencyFee = rentListingController.agencyFeeIndex.value;
     selecteRentLegalFee = rentListingController.legalFeeIndex.value;
   }
@@ -424,7 +427,7 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                       },
                       child: const Icon(Icons.arrow_back_ios)),
                   const Text(
-                    "Rent Listing",
+                    "Edit Rent Listing",
                     style: TextStyle(fontSize: 20),
                   ),
                   const Text("")
@@ -658,20 +661,11 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     key: rentFeeFormKey,
                                     child: FormBuilderTextField(
                                       name: 'rentalFee',
-                                                  validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Value is required';
-                                        }
-                                        final numericValue = int.tryParse(
-                                            value.replaceAll(',', ''));
-                                        if (numericValue == null) {
-                                          return 'Invalid number format';
-                                        }
-                                        if (numericValue < 3000) {
-                                          return 'Value must be at least 3,000';
-                                        }
-                                        return null;
-                                      },
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(context),
+                                        FormBuilderValidators.min(
+                                            context, 10000),
+                                      ]),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.digitsOnly,
                                         ThousandsSeparatorInputFormatter(),
@@ -747,7 +741,8 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                             const SizedBox(
                               height: 20,
                             ),
-                            const Text("Other charges included Above?"),
+                            const Text(
+                                "Other charges included Above?"),
                             rentListingController.otherCharges.value == ''
                                 ? FormBuilderDropdown(
                                     name: 'charge',
@@ -788,7 +783,10 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                     name: 'charge',
                                     isExpanded: true,
                                     initialValue: rentListingController
-                                        .otherCharges.value,
+                                                .otherCharges.value ==
+                                            'true'
+                                        ? 'Yes'
+                                        : 'No',
                                     items: [
                                       "Yes",
                                       "No",
@@ -866,13 +864,11 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                                     } else if (cautionFeeFormKey
                                                         .currentState!
                                                         .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
                                                       setState(() {
                                                         rentListingController
                                                                 .cautionFee
                                                                 .value =
-                                                        numericValue.toString();
+                                                            value.toString();
                                                       });
                                                     }
                                                   },
@@ -922,13 +918,11 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                                     } else if (cautionFeeFormKey
                                                         .currentState!
                                                         .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
                                                       setState(() {
                                                         rentListingController
                                                                 .cautionFee
                                                                 .value =
-                                                            numericValue.toString();
+                                                            value.toString();
                                                       });
                                                     }
                                                   },
@@ -1072,13 +1066,11 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                                     } else if (serviceChargeFormKey
                                                         .currentState!
                                                         .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
                                                       setState(() {
                                                         rentListingController
                                                                 .serviceCharge
                                                                 .value =
-                                                            numericValue.toString();
+                                                            value.toString();
                                                       });
                                                     }
                                                   },
@@ -1125,13 +1117,11 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                                     } else if (serviceChargeFormKey
                                                         .currentState!
                                                         .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
                                                       setState(() {
                                                         rentListingController
                                                                 .serviceCharge
                                                                 .value =
-                                                            numericValue.toString();
+                                                            value.toString();
                                                       });
                                                     }
                                                   },
@@ -1307,7 +1297,7 @@ class _Rent2StepperState extends State<Rent2Stepper> {
 
           print(formData);
           Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return const Rent3Stepper();
+            return const EditRent3Stepper();
           }));
         }
       }

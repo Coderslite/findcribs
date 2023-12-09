@@ -113,6 +113,7 @@ class _ActiveListingForEstateMarketState
                     var formatter = NumberFormat("#,###");
                     var formatedPrice = formatter.format(totalprice);
                     return SinglePropertyStatus(
+                      houseModel: filteredList[index],
                       viewCount: filteredList[index].viewCount.toString(),
                       likeCOunt: filteredList[index].likeCount.toString(),
                       image: filteredList[index].image,

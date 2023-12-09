@@ -7,14 +7,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/listing_process/listing/edit_listing/estate_market_edit/estate_market_edit.dart';
-import 'package:findcribs/screens/listing_process/listing/edit_listing/rent_listing_edit/rent_listing_edit1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../../../controller/edit_rent_listing_controller.dart';
+import '../../../../../../../models/house_list_model.dart';
 import '../../../../../../../models/property_option_model.dart';
 import '../../../../../../../util/colors.dart';
+import '../../../../../../listing_process/listing/edit_listing/rent_listing_edit/edit_rent1.dart';
 import '../../../../../../listing_process/listing/edit_listing/sale_listing_edit/sale_listing_edit1.dart';
 import '../../disabled_listing/disabled_listing.dart';
 import '../../promotion page/promote_listing.dart';
@@ -35,6 +37,7 @@ class SinglePropertyStatus extends StatefulWidget {
   final String viewCount;
   final bool? isPromoted;
   final String? category;
+  final HouseListModel houseModel;
   const SinglePropertyStatus({
     Key? key,
     required this.image,
@@ -49,6 +52,7 @@ class SinglePropertyStatus extends StatefulWidget {
     required this.propertyLocation,
     this.category,
     required this.propertyName,
+    required this.houseModel,
   }) : super(key: key);
 
   @override
@@ -58,6 +62,8 @@ class SinglePropertyStatus extends StatefulWidget {
 class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
   bool isDeleting = false;
   late CustomPopupMenuController _controller;
+  EditRentListingController editRentController =
+      Get.put(EditRentListingController());
   @override
   void initState() {
     // ignore: todo
@@ -468,10 +474,57 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
 
   handleEditListing() {
     _controller.hideMenu();
+
     if (widget.category == 'rent') {
-      Get.to(EditRent1(
-        propertyId: int.parse(widget.id.toString()),
-      ));
+      editRentController.ageRestriction.value =
+          widget.houseModel.ageRestriction == true ? 1 : 0;
+      editRentController.designType.value = widget.houseModel.designType!;
+      editRentController.propertyAddress.value =
+          widget.houseModel.propertyAddress!;
+      editRentController.bathroom.value = widget.houseModel.bathroom.toString();
+      editRentController.bedroom.value = widget.houseModel.bedroom.toString();
+      editRentController.livingRoom.value =
+          widget.houseModel.livingRoom.toString();
+      editRentController.currency.value = widget.houseModel.currency.toString();
+      editRentController.kitchen.value = widget.houseModel.kitchen.toString();
+      editRentController.rentFrequency.value =
+          widget.houseModel.rentalFrequncy.toString();
+      editRentController.rentFee.value = widget.houseModel.rentalFee.toString();
+      editRentController.otherCharges.value =
+          widget.houseModel.otherCharges.toString();
+      editRentController.cautionFee.value =
+          widget.houseModel.cautionFee.toString();
+      editRentController.serviceCharge.value =
+          widget.houseModel.serviceCharge.toString();
+      editRentController.legalFee.value = widget.houseModel.legalFee!;
+      editRentController.agencyFee.value = widget.houseModel.agencyFee!;
+      editRentController.coveredBy.value =
+          widget.houseModel.coveredByProperty.toString();
+      editRentController.totalArea.value =
+          widget.houseModel.totalAreaOfLand.toString();
+      editRentController.interiorDesign.value =
+          widget.houseModel.interiorDesign.toString();
+      editRentController.parkingSpace.value =
+          widget.houseModel.parkingSpace.toString();
+      editRentController.water.value =
+          widget.houseModel.availabilityOfWater.toString();
+      editRentController.electricity.value =
+          widget.houseModel.availabilityOfElectricity.toString();
+      editRentController.description.value =
+          widget.houseModel.description.toString();
+      editRentController.propertyCategory.value =
+          widget.houseModel.propertyCategory.toString();
+      editRentController.propertyType.value =
+          widget.houseModel.propertyType.toString();
+      editRentController.state.value = widget.houseModel.state.toString();
+      // editRentController.lga.value = widget.houseModel.lga.toString();
+      editRentController.negotiable.value =
+          widget.houseModel.negotiable! ? 1 : 0;
+      editRentController.myImages.value = [];
+      editRentController.newfiles.value = [];
+      editRentController.facilities.value = [];
+
+      Get.to(const EditRent1());
     } else if (widget.category == 'sale') {
       Get.to(const EditSale1());
     } else {
@@ -741,7 +794,6 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
     } else {
       setState(() {
         _controller.hideMenu();
-
         isDeleting = false;
       });
       AwesomeDialog(
