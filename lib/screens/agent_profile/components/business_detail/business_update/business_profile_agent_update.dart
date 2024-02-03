@@ -311,7 +311,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               FormBuilderTextField(
                                 name: 'fullName',
                                 validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
+                                  FormBuilderValidators.required(),
                                 ]),
                                 initialValue:
                                     "${snapshot.data!.firstName} ${snapshot.data!.lastName}",
@@ -340,7 +340,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                 initialValue:
                                     snapshot.data!.agent!['business_name'],
                                 validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
+                                  FormBuilderValidators.required(),
                                 ]),
                                 enabled: false,
                                 onChanged: (value) {},
@@ -369,7 +369,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                 // maxLength: 300,
                                 initialValue: snapshot.data!.agent!['about'],
                                 validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
+                                  FormBuilderValidators.required(),
                                 ]),
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -388,9 +388,9 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               FormBuilderTextField(
                                 name: 'phone',
                                 validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context),
-                                  FormBuilderValidators.minLength(context, 11),
-                                  FormBuilderValidators.maxLength(context, 11),
+                                  FormBuilderValidators.required(),
+                                  FormBuilderValidators.minLength(11),
+                                  FormBuilderValidators.maxLength(11),
                                 ]),
                                 initialValue:
                                     snapshot.data!.agent!['phone_number'],
@@ -599,7 +599,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                             validator: (valid) {
                                               FormBuilderValidators.compose([
                                                 FormBuilderValidators.required(
-                                                    context),
+                                                ),
                                               ]);
                                               return null;
                                             },

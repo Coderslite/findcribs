@@ -65,10 +65,10 @@ class _BusinessVerificationScreenState
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : isVerified == 'pending'
-                    ? Center(
+                    ? const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Text("Verification is in progress... please wait")
                           ],
                         ),
@@ -124,8 +124,8 @@ class _BusinessVerificationScreenState
                                 const SizedBox(
                                   height: 50,
                                 ),
-                                Row(
-                                  children: const [
+                                const Row(
+                                  children: [
                                     Text(
                                       "Upload Business Doc (CAC),",
                                       style: TextStyle(

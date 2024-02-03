@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../controller/panel_controller.dart';
-import '../../util/colors.dart';
 
 class ProductDetails extends StatefulWidget {
   final bool? isDeepLinking;

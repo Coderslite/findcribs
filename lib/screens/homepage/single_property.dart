@@ -2,14 +2,12 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
-import 'package:findcribs/service/property_list_all_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../controller/get_property_listing_controller.dart';
 import '../../controller/get_single_property_listing.dart';
 import '../../models/house_detail_model.dart';
 import '../../models/user_favourite_listing.dart';
@@ -110,6 +108,7 @@ class _SinglePropertyState extends State<SingleProperty> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.image!.first);
     return Obx(
       () => Padding(
         padding:
@@ -295,8 +294,8 @@ class _SinglePropertyState extends State<SingleProperty> {
                     Row(
                       children: [
                         widget.isPromoted == true
-                            ? Row(
-                                children: const [
+                            ? const Row(
+                                children: [
                                   Icon(
                                     Icons.star_rate,
                                     color: Color(0xFFFEC121),

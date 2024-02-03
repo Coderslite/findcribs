@@ -1,12 +1,8 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
-import 'dart:convert';
 
-import 'package:findcribs/controller/filter_apartment_controller.dart';
 import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
-import 'package:findcribs/service/filter_property_category.dart';
-import 'package:findcribs/service/property_list_categoty_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -15,21 +11,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:progress_indicators/progress_indicators.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../components/constants.dart';
 import '../../controller/load_state_lga_controller.dart';
-import '../../controller/search_listing_controller.dart';
 import '../../service/property_by_category.dart';
 import '../../widgets/loading_widget.dart';
 import '../homepage/single_property.dart';
-import '../listing_process/get_started.dart';
-import '../listing_process/listing/components/rent/rent1.dart';
 
 class ApartmentScreen extends StatefulWidget {
   final String apartmentType;
@@ -352,10 +341,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Size",
                                   style: TextStyle(
@@ -564,10 +553,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Price",
                                   style: TextStyle(

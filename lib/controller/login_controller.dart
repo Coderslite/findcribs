@@ -25,8 +25,8 @@ class LoginController extends GetxController {
     scopes: [
       "email",
       "profile",
-      "openid"
-      // "https://www.googleapis.com/auth/userinfo.email",
+      "openid",
+      "https://www.googleapis.com/auth/userinfo.email",
     ],
   );
 
@@ -160,30 +160,31 @@ class LoginController extends GetxController {
         btnOkOnPress: () {},
       ).show();
     }
-    
   }
 
   lougoutUser() {
     AwesomeDialog(
-        context: Get.context!,
-        dialogType: DialogType.error,
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: false,
-        dismissOnBackKeyPress: false,
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        desc: "Are you sure you want to delete your account",
-        showCloseIcon: true,
-        btnOkText: "Continue",
-        btnOkOnPress: () {logout();},
-      ).show();
+      context: Get.context!,
+      dialogType: DialogType.error,
+      borderSide: const BorderSide(
+        color: Colors.red,
+        width: 2,
+      ),
+      width: 280,
+      buttonsBorderRadius: const BorderRadius.all(
+        Radius.circular(2),
+      ),
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      desc: "Are you sure you want to delete your account",
+      showCloseIcon: true,
+      btnOkText: "Continue",
+      btnOkOnPress: () {
+        logout();
+      },
+    ).show();
   }
 
   handleLoginApi(String token) async {
@@ -222,6 +223,7 @@ class LoginController extends GetxController {
       isLoading.value = true;
       final googleAuth = await googleUser2.authentication;
       var myToken = googleAuth.idToken!;
+      print("token $myToken");
       handleLoginApi(myToken);
     } else {
       isLoading.value = false;
@@ -232,7 +234,9 @@ class LoginController extends GetxController {
   }
 
   handleNormalSigniin() async {
+    print("google sign in");
     final googleUser = await _googleSignIn.signIn();
+    print(googleUser);
     if (googleUser != null) {
       isLogin.value = true;
       final googleAuth = await googleUser.authentication;
@@ -248,15 +252,7 @@ class LoginController extends GetxController {
 
   handleGoogleSignin() async {
     isLoading.value = true;
-
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      _currentUser = account;
-    });
-    if (_currentUser != null) {
-      handleSilentLogin();
-    } else {
-      handleNormalSigniin();
-    }
+    handleNormalSigniin();
   }
 
   handleLogout() async {

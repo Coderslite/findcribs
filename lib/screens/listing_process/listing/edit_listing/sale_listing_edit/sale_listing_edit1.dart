@@ -1470,7 +1470,7 @@ class _EditSale1State extends State<EditSale1> {
                           name: 'propertyCategory',
                           isExpanded: true,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           items: [
                             "Detached Duplex",
@@ -1500,7 +1500,7 @@ class _EditSale1State extends State<EditSale1> {
                           name: 'houseDesignType',
                           isExpanded: true,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           items: [
                             "Contemporary",
@@ -1526,13 +1526,13 @@ class _EditSale1State extends State<EditSale1> {
                           name: 'address',
                           keyboardType: TextInputType.streetAddress,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           maxLength: 30,
 
                           // maxLength: 300,
                           // validator: FormBuilderValidators.compose([
-                          //   FormBuilderValidators.required(context),
+                          //   FormBuilderValidators.required(),
                           // ]),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -1549,7 +1549,7 @@ class _EditSale1State extends State<EditSale1> {
                           name: 'interiorDesign',
                           isExpanded: true,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           items: ["Furnished", "Semi-Furnished", "Unfurnished"]
                               .map((option) {

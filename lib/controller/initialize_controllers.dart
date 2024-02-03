@@ -5,7 +5,6 @@ import 'package:findcribs/controller/get_chat_controller.dart';
 import 'package:findcribs/controller/get_my_story_controller.dart';
 import 'package:findcribs/controller/get_notification_controller.dart';
 import 'package:findcribs/controller/get_profile_controller.dart';
-import 'package:findcribs/controller/get_property_listing_controller.dart';
 import 'package:findcribs/controller/home_root_controller.dart';
 import 'package:findcribs/controller/login_controller.dart';
 import 'package:findcribs/controller/rent_listing_controller.dart';

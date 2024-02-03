@@ -245,8 +245,8 @@ class _EditSale3State extends State<EditSale3> {
                         // maxLength: 300,
                         keyboardType: TextInputType.number,
                         validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context),
-                          FormBuilderValidators.numeric(context)
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.numeric()
                         ]),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -264,8 +264,8 @@ class _EditSale3State extends State<EditSale3> {
                         // maxLength: 300,
                         keyboardType: TextInputType.number,
                         validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context),
-                          FormBuilderValidators.numeric(context)
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.numeric()
                         ]),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(

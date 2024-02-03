@@ -22,7 +22,6 @@ import '../../controller/user_favourited_listing_controller.dart';
 import '../../models/house_list_model.dart';
 import '../../models/user_favourite_listing.dart';
 import '../../service/user_favourited_listing_service.dart';
-import '../../util/colors.dart';
 import '../../util/social_login.dart';
 import '../homepage/home_root.dart';
 

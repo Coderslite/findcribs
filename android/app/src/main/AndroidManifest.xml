@@ -11,7 +11,9 @@
         android:requestLegacyExternalStorage="true"
         android:label="FindCribs"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true"
+        >
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -24,8 +26,7 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize"
-            android:showWhenLocked="true"
-            android:turnScreenOn="true">
+            >
             <meta-data
                         android:name="com.google.firebase.messaging.default_notification_channel_id"
                         android:value="@string/default_notification_channel_id"/>   
@@ -62,10 +63,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-             <service
+             <!-- <service
             android:name="com.findcribs.ng.ForegroundService"        
             android:exported="false"
-            android:stopWithTask="false"/>
+            android:stopWithTask="false"/> -->
     </application>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> -->
 </manifest>

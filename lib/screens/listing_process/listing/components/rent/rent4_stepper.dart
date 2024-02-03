@@ -205,7 +205,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                                     fontFamily: "RedHatDisplay",
                                   ),
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
+                                    FormBuilderValidators.required(),
                                   ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
@@ -230,7 +230,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                                     fontFamily: "RedHatDisplay",
                                   ),
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
+                                    FormBuilderValidators.required(),
                                   ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
@@ -246,7 +246,7 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                           FormBuilderRadioGroup(
                             name: "ageRestriction",
                             validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(context),
+                              FormBuilderValidators.required(),
                             ]),
                             activeColor: const Color(0XFF0072BA),
                             decoration: const InputDecoration(
@@ -297,12 +297,12 @@ class _Rent4StepperState extends State<Rent4Stepper> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
-                                        children: const [
+                                        children: [
                                           Icon(
                                             Icons.camera_alt_outlined,
                                             color: Color(0XFF0072BA),

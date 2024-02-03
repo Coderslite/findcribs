@@ -313,7 +313,7 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
                           ],
                         ),
                         Text(
-                          "@" + userData.agent!['business_name'].toString(),
+                          "@${userData.agent!['business_name']}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 26),
@@ -338,7 +338,7 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
                                   const Text(
                                     "Followers",
                                     style:
-                                        const TextStyle(color: Colors.blueGrey),
+                                        TextStyle(color: Colors.blueGrey),
                                   ),
                                 ],
                               ),
@@ -350,7 +350,7 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
                                   const Text(
                                     "Following",
                                     style:
-                                        const TextStyle(color: Colors.blueGrey),
+                                        TextStyle(color: Colors.blueGrey),
                                   ),
                                 ],
                               ),
@@ -382,7 +382,7 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
                                     ),
                                     const Text(
                                       "Listings",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.blueGrey),
                                     ),
                                   ],

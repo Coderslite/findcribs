@@ -1479,7 +1479,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'propertyCategory',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       saleListingController.propertyCategory
@@ -1514,7 +1514,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'propertyCategory',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     initialValue: saleListingController
                                         .propertyCategory.value,
@@ -1557,7 +1557,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'houseDesignType',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       saleListingController.designType.value =
@@ -1588,7 +1588,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'houseDesignType',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     initialValue:
                                         saleListingController.designType.value,
@@ -1628,7 +1628,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'address',
                                     keyboardType: TextInputType.streetAddress,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     maxLength: 30,
                                     onChanged: (value) {
@@ -1651,7 +1651,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'address',
                                     keyboardType: TextInputType.streetAddress,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     maxLength: 30,
                                     initialValue: saleListingController
@@ -1682,7 +1682,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'interiorDesign',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       saleListingController.interiorDesign
@@ -1714,7 +1714,7 @@ class _Sale1State extends State<Sale1> {
                                     name: 'interiorDesign',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     initialValue: saleListingController
                                         .interiorDesign.value,

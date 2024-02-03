@@ -35,11 +35,11 @@ class _ImagePreviewState extends State<ImagePreview> {
     return Scaffold(
         backgroundColor: mobileBackgroundColor,
         body: isUploading
-            ? Center(
+            ? const Center(
                 child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   CircularProgressIndicator(),
                   SizedBox(
                     height: 20,

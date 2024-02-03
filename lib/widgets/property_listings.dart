@@ -82,7 +82,7 @@ class _Property_ListingsState extends State<Property_Listings> {
                   style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: context.isDarkMode ? white : Color(0xFF09172D)),
+                      color: context.isDarkMode ? white : const Color(0xFF09172D)),
                 ),
                 const SizedBox(
                   height: 7,
@@ -92,14 +92,14 @@ class _Property_ListingsState extends State<Property_Listings> {
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: context.isDarkMode ? white : Color(0xFF304059)),
+                      color: context.isDarkMode ? white : const Color(0xFF304059)),
                 ),
                 Text(
                   widget.propertyState.toString(),
                   style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: context.isDarkMode ? white : Color(0xFF8A99B1)),
+                      color: context.isDarkMode ? white : const Color(0xFF8A99B1)),
                 ),
                 const SizedBox(
                   height: 8.64,

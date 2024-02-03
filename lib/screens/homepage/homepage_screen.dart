@@ -411,8 +411,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                             onTap: () {
                                                               // Get.to(ExternalDirScreen());
                                                             },
-                                                            child: Row(
-                                                              children: const [
+                                                            child: const Row(
+                                                              children: [
                                                                 Text(
                                                                   "Categories",
                                                                   style: TextStyle(
@@ -530,7 +530,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                     child:
                                                                         Container(
                                                                       margin: const EdgeInsets
-                                                                              .only(
+                                                                          .only(
                                                                           left:
                                                                               20),
                                                                       width: MediaQuery.of(context)
@@ -540,7 +540,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                       height:
                                                                           68,
                                                                       padding: const EdgeInsets
-                                                                              .symmetric(
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               10),
                                                                       decoration: BoxDecoration(
@@ -558,7 +558,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           Text(
                                                                             "Duplex",
                                                                             style: TextStyle(
-                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -593,7 +593,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                                 context) {
                                                                           return Container(
                                                                             height:
-                                                                                280,
+                                                                                320,
 
                                                                             // color: Colors.amber,
 
@@ -642,7 +642,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                                       options: [
                                                                                         "Flats",
                                                                                         "Shortlet",
-                                                                                        "Service apartment",
+                                                                                        "Service Apartment",
+                                                                                        "Shared Apartment",
                                                                                         "Self-contained"
                                                                                       ]
                                                                                           .map((e) => FormBuilderFieldOption(
@@ -662,7 +663,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                     child:
                                                                         Container(
                                                                       margin: const EdgeInsets
-                                                                              .only(
+                                                                          .only(
                                                                           left:
                                                                               20),
                                                                       width: MediaQuery.of(context)
@@ -672,7 +673,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                       height:
                                                                           68,
                                                                       padding: const EdgeInsets
-                                                                              .symmetric(
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               10),
                                                                       decoration: BoxDecoration(
@@ -690,7 +691,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           Text(
                                                                             "Apartments",
                                                                             style: TextStyle(
-                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -739,7 +740,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                       height:
                                                                           68,
                                                                       padding: const EdgeInsets
-                                                                              .symmetric(
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               10),
                                                                       decoration: BoxDecoration(
@@ -757,7 +758,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           Text(
                                                                             "Terrace",
                                                                             style: TextStyle(
-                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -799,7 +800,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                       height:
                                                                           68,
                                                                       padding: const EdgeInsets
-                                                                              .symmetric(
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               10),
                                                                       decoration: BoxDecoration(
@@ -817,7 +818,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           Text(
                                                                             "Hotels",
                                                                             style: TextStyle(
-                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -864,7 +865,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                               .width /
                                                                           2.5,
                                                                       padding: const EdgeInsets
-                                                                              .symmetric(
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               10),
                                                                       height:
@@ -884,7 +885,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           Text(
                                                                             "Estate Market",
                                                                             style: TextStyle(
-                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -926,7 +927,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                       height:
                                                                           68,
                                                                       padding: const EdgeInsets
-                                                                              .symmetric(
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               10),
                                                                       decoration: BoxDecoration(
@@ -944,7 +945,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                           Text(
                                                                             "Land Title",
                                                                             style: TextStyle(
-                                                                                color: context.isDarkMode ? white : Color(0xFF455A64),
+                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'RedHatDisplay',
                                                                                 fontWeight: FontWeight.w400),
@@ -1139,7 +1140,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                     );
                                   },
                                   noItemsFoundIndicatorBuilder: (context) =>
-                                      Text('No posts found.'),
+                                      const Text('No posts found.'),
                                 ),
                               ),
                       )

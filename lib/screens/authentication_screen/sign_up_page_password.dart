@@ -89,7 +89,7 @@ class PasswordScreenState extends State<PasswordScreen> {
                   obscureText: isVisible1,
                   validator: FormBuilderValidators.compose(
                     [
-                      FormBuilderValidators.minLength(context, 6),
+                      FormBuilderValidators.minLength(6),
                     ],
                   ),
                   onChanged: (value) {
@@ -151,9 +151,8 @@ class PasswordScreenState extends State<PasswordScreen> {
                   },
                   validator: FormBuilderValidators.compose(
                     [
-                      FormBuilderValidators.minLength(context, 6),
+                      FormBuilderValidators.minLength( 6),
                       FormBuilderValidators.equal(
-                        context,
                         passwordController1.text,
                         errorText: "Password does not match",
                       ),

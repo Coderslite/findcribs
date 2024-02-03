@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../../../util/colors.dart';
 
 class ActiveListing extends StatefulWidget {
   const ActiveListing({Key? key}) : super(key: key);

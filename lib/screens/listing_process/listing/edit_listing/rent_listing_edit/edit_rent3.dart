@@ -12,7 +12,6 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../../../controller/edit_rent_listing_controller.dart';
 import '../../../../../controller/load_state_lga_controller.dart';
-import '../../../../../controller/rent_listing_controller.dart';
 
 class EditRent3Stepper extends StatefulWidget {
   final String? propertyCategory;
@@ -409,7 +408,7 @@ class _EditRent3StepperState extends State<EditRent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   )
                                 : FormBuilderDropdown(
@@ -442,7 +441,7 @@ class _EditRent3StepperState extends State<EditRent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   ),
                             const SizedBox(
@@ -478,7 +477,7 @@ class _EditRent3StepperState extends State<EditRent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   )
                                 : FormBuilderDropdown(
@@ -511,7 +510,7 @@ class _EditRent3StepperState extends State<EditRent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   ),
                             const SizedBox(
@@ -547,7 +546,7 @@ class _EditRent3StepperState extends State<EditRent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   )
                                 : FormBuilderDropdown(
@@ -580,7 +579,7 @@ class _EditRent3StepperState extends State<EditRent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   ),
                             const SizedBox(

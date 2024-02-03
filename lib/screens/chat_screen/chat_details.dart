@@ -598,7 +598,7 @@ class _ChatItemState extends State<ChatItem> {
         children: [
           Container(
             padding: const EdgeInsets.all(15),
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               top: 10,
             ),
             decoration: BoxDecoration(

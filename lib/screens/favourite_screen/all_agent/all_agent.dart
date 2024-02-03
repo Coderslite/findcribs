@@ -1,26 +1,19 @@
-import 'dart:convert';
 
 import 'package:findcribs/models/unfavourite_agent.dart';
-import 'package:findcribs/models/user_favourite_agent.dart';
 import 'package:findcribs/screens/agent_profile/agent_profile.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
-import 'package:findcribs/service/all_agent_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../components/constants.dart';
 import '../../../controller/user_favorited_agent_controller.dart';
-import '../../../models/house_list_model.dart';
 import '../../../models/search_agent_model.dart';
 import '../../../service/all_agents.dart';
-import '../../../service/search_agent_service.dart';
-import '../../../service/searched_agent.dart';
 import '../../../util/colors.dart';
 
 class AllAgent extends StatefulWidget {

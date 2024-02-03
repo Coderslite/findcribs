@@ -208,12 +208,12 @@ class _Sale4StepperState extends State<Sale4Stepper> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
-                                        children: const [
+                                        children: [
                                           Icon(
                                             Icons.camera_alt_outlined,
                                             color: Color(0XFF0072BA),

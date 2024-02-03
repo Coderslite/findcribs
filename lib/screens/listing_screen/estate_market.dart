@@ -5,14 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 
 import '../../components/constants.dart';
 import '../../controller/load_state_lga_controller.dart';
 import '../../models/house_list_model.dart';
 import '../../service/property_by_category.dart';
-import '../../service/property_list_categoty_service.dart';
-import '../../service/search_property.dart';
 import '../../widgets/loading_widget.dart';
 import '../homepage/single_property.dart';
 
@@ -161,7 +158,7 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                                     decoration: BoxDecoration(
                                         color: context
                                             .theme.scaffoldBackgroundColor,
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(20),
                                             topRight: Radius.circular(20))),
                                     child: Container(

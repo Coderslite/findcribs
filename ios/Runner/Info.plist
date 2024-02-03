@@ -2,29 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-	<string>instagram-stories</string>
-	<string>facebook-stories</string>
-	<string>facebook</string>
-	<string>instagram</string>
-	<string>twitter</string>
-	<string>whatsapp</string>
-    <string>tg</string>
-	</array>
-	<key>UILocalNotification</key>
-	<string>Grant access to push notification</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-	<string>sms</string>
-	<string>tel</string>
-	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Grant access to photo library</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Grant access to camera</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Grant access to microphone</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -47,6 +26,11 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sms</string>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -55,10 +39,21 @@
 	<string>Select property images</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Property location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Grant access to microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Select property images</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UILocalNotification</key>
+	<string>Grant access to push notification</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
@@ -76,7 +71,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
 </dict>
 </plist>

@@ -687,8 +687,8 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Row(
-                                children: const [
+                              const Row(
+                                children: [
                                   Text(
                                     "Photos",
                                     style: TextStyle(
@@ -1047,9 +1047,9 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
+                              const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                children: [
                                   Text(
                                     "Total Price",
                                     style: TextStyle(
@@ -1260,9 +1260,9 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                   ],
                                 )
                               : Container(),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Facilities in Area",
                                 style: TextStyle(
@@ -1412,8 +1412,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                         ).show();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  fixedSize: const Size(500, 60),
-                                  primary: const Color(0xFF0072BA),
+                                  fixedSize: const Size(500, 60), backgroundColor: const Color(0xFF0072BA),
                                 ),
                                 child: const Text(
                                   'Book Tour',

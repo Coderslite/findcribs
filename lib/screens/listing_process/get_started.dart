@@ -87,9 +87,9 @@ class _GetStartedState extends State<GetStarted> {
                 const SizedBox(
                   height: 40,
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       "Welcome to ",
                       style: TextStyle(

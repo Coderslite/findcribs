@@ -1,21 +1,16 @@
 // ignore_for_file: avoid_print
 
 import 'package:findcribs/models/house_list_model.dart';
-import 'package:findcribs/service/property_list_categoty_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../components/constants.dart';
-import '../../controller/filter_duplex_controller.dart';
 import '../../controller/load_state_lga_controller.dart';
-import '../../service/filter_property_category.dart';
 import '../../service/property_by_category.dart';
 import '../../widgets/loading_widget.dart';
 import '../homepage/single_property.dart';
@@ -336,10 +331,10 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Size",
                                   style: TextStyle(
@@ -548,10 +543,10 @@ class _DuplexScreenState extends State<DuplexScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Price",
                                   style: TextStyle(

@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print, depend_on_referenced_packages
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/controller/initialize_controllers.dart';
 import 'package:findcribs/models/chat_list_model.dart';
@@ -12,14 +12,10 @@ import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/onboarding.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
-import 'package:findcribs/util/colors.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -28,7 +24,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:system_settings/system_settings.dart';
 
@@ -38,91 +33,16 @@ import 'screens/homepage/home_root.dart';
 import 'screens/story/story_camera.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-// import 'authentication_screen/sign_up_page.dart';
-// =======
-// import 'package:flutter/services.dart';
-// import 'screens/onboarding.dart';
-// >>>>>>> main
-@pragma('vm:entry-point')
+import 'service/FirebaseMessaging.dart';
 
-/// Create a [AndroidNotificationChannel] for heads up notifications
-late AndroidNotificationChannel channel;
-
-bool isFlutterLocalNotificationsInitialized = false;
 ThemeController themeController = Get.put(ThemeController());
 
-Future<void> setupFlutterNotifications() async {
-  if (isFlutterLocalNotificationsInitialized) {}
-  channel = const AndroidNotificationChannel(
-    'com.findcribs', // id
-    'FindCribs Notification Permission', // title
-    description: 'Please turn on notification on the app', // description
-    importance: Importance.high,
-  );
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-  isFlutterLocalNotificationsInitialized = true;
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  showFlutterNotification(message);
+  FirebaseMessagings().displayLocalNotification(message);
 }
-
-void showFlutterNotification(RemoteMessage message) async {
-  channel = const AndroidNotificationChannel(
-    'com.findcribs', // id
-    'FindCribs Notification Permission', // title
-    description: 'Please turn on notification on the app', // description
-    importance: Importance.high,
-  );
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-  isFlutterLocalNotificationsInitialized = true;
-
-  print(message.messageType);
-
-  RemoteNotification? notification = message.notification;
-  AndroidNotification? android = message.notification?.android;
-  if (notification != null && android != null && !kIsWeb) {
-    print(message);
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: android.smallIcon,
-          colorized: true,
-        ),
-      ),
-    );
-  }
-}
-
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 void onDidReceiveLocalNotification(
     int id, String? title, String? body, String? payload) async {
@@ -131,7 +51,7 @@ void onDidReceiveLocalNotification(
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await initialize(aLocaleLanguageList: [
     LanguageDataModel(name: 'English', languageCode: 'en'),
     LanguageDataModel(name: 'Hindi', languageCode: 'hi'),
@@ -141,64 +61,14 @@ Future<void> main() async {
   defaultToastGravityGlobal = ToastGravity.CENTER;
   defaultRadius = 16;
   defaultAppButtonRadius = 16;
-
-  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  AndroidInitializationSettings initializationSettingsAndroid = const AndroidInitializationSettings('ic_launcher');
-
-  final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-
-  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, macOS: null, iOS: initializationSettingsDarwin);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  if (!kIsWeb) {
-    await setupFlutterNotifications();
-  }
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  var notificationPermission = await Permission.notification.isGranted;
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  if (notificationPermission == false) {
-    messaging.requestPermission().then((value) async {
-      messaging.setForegroundNotificationPresentationOptions(
-        alert: true, // Required to display a heads up notification
-        badge: true,
-        sound: true,
-      );
-      var prefs = await SharedPreferences.getInstance();
-
-      messaging.getToken().then((token) {
-        prefs.setString('fcmToken', token.toString());
-        print(
-          "token$token",
-        );
-      });
-
-      cameras = await availableCameras();
-      final appState = prefs.getString('action');
-      final email = prefs.getString('email');
-      final token = prefs.getString('token');
-      print(token);
-      print(email);
-      runApp(MyApp(
-        appState: appState.toString(),
-        email: email.toString(),
-      ));
-    }).onError((error, stackTrace) {
-      Fluttertoast.showToast(msg: "Notification Permission Required")
-          .then((value) => SystemSettings.appNotifications());
-    });
-  }
-
-
-
-
+  FirebaseMessagings().handleInit();
+  // cameras = await availableCameras();
+  var prefs = await SharedPreferences.getInstance();
+  final appState = prefs.getString('action');
+  final email = prefs.getString('email');
+  final token = prefs.getString('token');
+  print(token);
+  runApp(MyApp(appState: appState.toString(), email: email.toString()));
 }
 
 class MyApp extends StatefulWidget {
@@ -217,11 +87,8 @@ class _MyAppState extends State<MyApp> {
   List<ChatMessageModel> messageList = [];
   List<MessageModel> currentMessageList = [];
   late Future<UserProfile> userProfile;
-  List myMessage = [];
   Map<String, dynamic> messages = {};
   int? id;
-  late Socket socket;
-  late List online;
   var messageController = TextEditingController();
   String message = '';
   ScrollController listScrollController = ScrollController();
@@ -234,9 +101,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    online = [];
-    checkDynamicLink();
-    initDynamicLinks();
+    // checkDynamicLink();
+    // initDynamicLinks();
     super.initState();
   }
 

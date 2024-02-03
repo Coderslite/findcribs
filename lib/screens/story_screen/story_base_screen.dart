@@ -297,8 +297,8 @@ class StoryItem extends StatelessWidget {
                                     color: Color(0xFFFFFFFF)),
                               ),
                             ),
-                            Row(
-                              children: const [
+                            const Row(
+                              children: [
                                 Text(
                                   "click on the ",
                                   style: TextStyle(
@@ -350,9 +350,9 @@ class StoryItem extends StatelessWidget {
               const SizedBox(
                 height: 40,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     "Welcome to",
                     style: TextStyle(
@@ -362,9 +362,9 @@ class StoryItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     " FindCribs",
                     style: TextStyle(

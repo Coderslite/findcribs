@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "285049044019-51faijk2msedmoodnpo3hrs56ic9pba7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.findcribs",
+            "certificate_hash": "8329fe948bb628ef6e38a731d6abfda7179dde5a"
+          }
+        },
+        {
           "client_id": "285049044019-72sqbrsp43uqllf6tdmq0ba978k16up7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -66,6 +74,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "285049044019-g845fpklu4fdu3kodbjoagftgj0koqpv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.findcribs.ng",
+            "certificate_hash": "4908b054b6c94de7362789528ca028a10eed982f"
+          }
+        },
+        {
+          "client_id": "285049044019-vl11h719o7hrup9octaml7qt96d2a5sv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.findcribs.ng",
+            "certificate_hash": "aa04cb93b560791af8128bff7172a4c7672750c4"
+          }
+        },
         {
           "client_id": "285049044019-15kmillcvga7kc79366cdqgko9i1ev8u.apps.googleusercontent.com",
           "client_type": 3

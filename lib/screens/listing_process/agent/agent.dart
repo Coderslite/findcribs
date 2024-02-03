@@ -137,7 +137,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     FormBuilderTextField(
                       name: 'fullName',
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(),
                       ]),
                       initialValue:
                           "${getProfileController.firstName.string + getProfileController.lastName.string} ",
@@ -164,7 +164,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     FormBuilderTextField(
                       name: 'businessName',
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(),
                       ]),
                       onChanged: (value) {
                         businessName = value.toString();
@@ -221,7 +221,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                       maxLines: 5,
                       // maxLength: 300,
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(),
                       ]),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -240,9 +240,9 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                     FormBuilderTextField(
                       name: 'phone',
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
-                        FormBuilderValidators.minLength(context, 11),
-                        FormBuilderValidators.maxLength(context, 11),
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(11),
+                        FormBuilderValidators.maxLength(11),
                       ]),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -311,7 +311,7 @@ class _AgentRegistrationState extends State<AgentRegistration> {
                         // selectedColor: const Color(0XFF0072BA),
                         validator: (valid) {
                           FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]);
                           return null;
                         },

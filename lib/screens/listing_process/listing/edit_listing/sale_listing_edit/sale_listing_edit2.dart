@@ -409,8 +409,8 @@ class _EditSale2State extends State<EditSale2> {
                           // maxLength: 300,
                           keyboardType: TextInputType.number,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
-                            FormBuilderValidators.numeric(context)
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.numeric()
                           ]),
                           onChanged: (value) {
                             if (value!.isEmpty) {
@@ -510,7 +510,7 @@ class _EditSale2State extends State<EditSale2> {
                                   //   // maxLength: 300,
                                   //   keyboardType: TextInputType.number,
                                   //   validator: FormBuilderValidators.compose([
-                                  //     FormBuilderValidators.required(context),
+                                  //     FormBuilderValidators.required(),
                                   //     FormBuilderValidators.numeric(context)
                                   //   ]),
                                   //   onChanged: (value) {
@@ -533,8 +533,8 @@ class _EditSale2State extends State<EditSale2> {
                                   //   ),
                                   // ),
 
-                                  Row(
-                                    children: const [
+                                  const Row(
+                                    children: [
                                       Text("Seller's commission (%)"),
                                       Icon(
                                         Icons.info,
@@ -626,7 +626,7 @@ class _EditSale2State extends State<EditSale2> {
                                   //   // maxLength: 300,
                                   //   name: 'serviceCharge',
                                   //   validator: FormBuilderValidators.compose([
-                                  //     FormBuilderValidators.required(context),
+                                  //     FormBuilderValidators.required(),
                                   //     FormBuilderValidators.numeric(context)
                                   //   ]),
                                   //   // maxLength: 300,
@@ -683,7 +683,7 @@ class _EditSale2State extends State<EditSale2> {
                           maxLines: 5,
                           minLines: 3,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(

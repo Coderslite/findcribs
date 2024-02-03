@@ -408,7 +408,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   )
                                 : FormBuilderDropdown(
@@ -422,7 +422,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     },
                                     style: TextStyle(
                                       color:
-                                          context.textTheme.bodyMedium!.color,
+                                         context .textTheme.bodyMedium!.color,
                                       fontFamily: "RedHatDisplay",
                                     ),
                                     items: [
@@ -441,7 +441,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   ),
                             const SizedBox(
@@ -477,7 +477,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   )
                                 : FormBuilderDropdown(
@@ -491,7 +491,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     },
                                     style: TextStyle(
                                       color:
-                                          context.textTheme.bodyMedium!.color,
+                                        context  .textTheme.bodyMedium!.color,
                                       fontFamily: "RedHatDisplay",
                                     ),
                                     items: [
@@ -510,7 +510,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   ),
                             const SizedBox(
@@ -527,7 +527,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     },
                                     style: TextStyle(
                                       color:
-                                          context.textTheme.bodyMedium!.color,
+                                       context   .textTheme.bodyMedium!.color,
                                       fontFamily: "RedHatDisplay",
                                     ),
                                     items: [
@@ -546,7 +546,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   )
                                 : FormBuilderDropdown(
@@ -560,7 +560,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                     },
                                     style: TextStyle(
                                       color:
-                                          context.textTheme.bodyMedium!.color,
+                                         context .textTheme.bodyMedium!.color,
                                       fontFamily: "RedHatDisplay",
                                     ),
                                     items: [
@@ -579,7 +579,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                                       ),
                                     ),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                   ),
                             const SizedBox(

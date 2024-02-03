@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../util/colors.dart';
 
 class Faqs extends StatefulWidget {
   const Faqs({Key? key}) : super(key: key);

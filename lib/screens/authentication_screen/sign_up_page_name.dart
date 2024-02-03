@@ -83,7 +83,7 @@ class NameScreenState extends State<NameScreen> {
                   name: 'fName',
                   controller: firstNameController,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(),
                   ]),
                   decoration: const InputDecoration(
                       // hintText: 'Enter Email Address',
@@ -100,7 +100,7 @@ class NameScreenState extends State<NameScreen> {
                   name: 'lName',
                   controller: lastNameController,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(),
                   ]),
                   decoration: const InputDecoration(
                       // hintText: 'Enter Email Address',

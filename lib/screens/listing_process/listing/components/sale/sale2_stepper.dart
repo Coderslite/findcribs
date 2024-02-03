@@ -525,9 +525,9 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                         fontFamily: "RedHatDisplay",
                                       ),
                                       validator: FormBuilderValidators.compose([
-                                        FormBuilderValidators.required(context),
+                                        FormBuilderValidators.required(),
                                         FormBuilderValidators.min(
-                                            context, 10000),
+                                          10000),
                                       ]),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.digitsOnly,
@@ -752,8 +752,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       : true,
                               child: Column(
                                 children: [
-                                  Row(
-                                    children: const [
+                                  const Row(
+                                    children: [
                                       Text("Seller's commission (%)"),
                                       Icon(
                                         Icons.info,
@@ -845,7 +845,7 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                   //   // maxLength: 300,
                                   //   name: 'serviceCharge',
                                   //   validator: FormBuilderValidators.compose([
-                                  //     FormBuilderValidators.required(context),
+                                  //     FormBuilderValidators.required(),
                                   //     FormBuilderValidators.numeric(context)
                                   //   ]),
                                   //   // maxLength: 300,
@@ -886,7 +886,7 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     minLines: 3,
                                     maxLength: 250,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     style: TextStyle(
                                       color:
@@ -910,7 +910,7 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                     minLines: 3,
                                     maxLength: 250,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     style: TextStyle(
                                       color:

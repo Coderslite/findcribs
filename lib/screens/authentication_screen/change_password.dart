@@ -69,7 +69,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   name: 'password1',
                   validator: FormBuilderValidators.compose(
                     [
-                      FormBuilderValidators.minLength(context, 6),
+                      FormBuilderValidators.minLength(
+                      6),
                     ],
                   ),
                   onChanged: (value) {
@@ -129,10 +130,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   },
                   validator: FormBuilderValidators.compose(
                     [
-                      FormBuilderValidators.minLength(context, 6),
+                      FormBuilderValidators.minLength(
+                      6),
                       FormBuilderValidators.equal(
-                        context,
-                        passwordController1.text,
+                     passwordController1.text,
                         errorText: "Password does not match",
                       ),
                     ],
@@ -221,7 +222,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           });
           AwesomeDialog(
             context: context,
-            dialogType: DialogType.success,
+                        dialogType: DialogType.success,
             borderSide: const BorderSide(
               color: Colors.green,
               width: 2,
@@ -238,7 +239,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             desc: "You have successfully reset your password, Login now",
             showCloseIcon: true,
             btnOkOnPress: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
+              Navigator.push(context,
+              MaterialPageRoute(builder: (_) {
                 return const LoginScreen();
               }));
             },
@@ -250,7 +252,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
           AwesomeDialog(
             context: context,
-            dialogType: DialogType.error,
+                        dialogType: DialogType.error,
             borderSide: const BorderSide(
               color: Colors.red,
               width: 2,

@@ -177,7 +177,7 @@ class _EstateMarketState extends State<EstateMarket> {
                           maxLength: 20,
                           // maxLength: 300,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           onChanged: (value) {
                             estateListingController.propertyName.value =
@@ -200,7 +200,7 @@ class _EstateMarketState extends State<EstateMarket> {
                           initialValue:
                               estateListingController.propertyName.value,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           onChanged: (value) {
                             estateListingController.propertyName.value =
@@ -575,7 +575,7 @@ class _EstateMarketState extends State<EstateMarket> {
                     maxLength: 30,
                     keyboardType: TextInputType.streetAddress,
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
+                      FormBuilderValidators.required(),
                     ]),
                     onChanged: (value) {
                       setState(() {
@@ -601,7 +601,7 @@ class _EstateMarketState extends State<EstateMarket> {
                           maxLines: 5,
                           maxLength: 250,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           onChanged: (value) {
                             estateListingController.description.value =
@@ -620,7 +620,7 @@ class _EstateMarketState extends State<EstateMarket> {
                           maxLines: 5,
                           maxLength: 250,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           initialValue:
                               estateListingController.description.value,
@@ -648,7 +648,7 @@ class _EstateMarketState extends State<EstateMarket> {
                                 value.toString();
                           },
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           items: [
                             "Newly Built",
@@ -677,7 +677,7 @@ class _EstateMarketState extends State<EstateMarket> {
                                 value.toString();
                           },
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           items: [
                             "Newly Built",
@@ -711,7 +711,7 @@ class _EstateMarketState extends State<EstateMarket> {
                                 value.toString();
                           },
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           items: [
                             "Naira",
@@ -738,7 +738,7 @@ class _EstateMarketState extends State<EstateMarket> {
                                 value.toString();
                           },
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.required(),
                           ]),
                           items: [
                             "Naira",
@@ -831,11 +831,11 @@ class _EstateMarketState extends State<EstateMarket> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.camera_alt_outlined,
                                     color: Color(0XFF0072BA),

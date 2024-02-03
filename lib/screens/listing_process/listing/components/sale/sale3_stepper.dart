@@ -281,8 +281,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   // maxLength: 300,
                                   keyboardType: TextInputType.number,
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                    FormBuilderValidators.numeric(context)
+                                    FormBuilderValidators.required(),
+                                    FormBuilderValidators.numeric()
                                   ]),
                                   onChanged: (value) {
                                     saleListingController.totalArea.value =
@@ -304,8 +304,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   // maxLength: 300,
                                   keyboardType: TextInputType.number,
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                    FormBuilderValidators.numeric(context)
+                                    FormBuilderValidators.required(),
+                                    FormBuilderValidators.numeric()
                                   ]),
                                   style: TextStyle(
                                     color: context.textTheme.bodyMedium!.color,
@@ -334,8 +334,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   // maxLength: 300,
                                   keyboardType: TextInputType.number,
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                    FormBuilderValidators.numeric(context)
+                                    FormBuilderValidators.required(),
+                                    FormBuilderValidators.numeric()
                                   ]),
                                   onChanged: (value) {
                                     saleListingController.coveredBy.value =
@@ -357,8 +357,8 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                   // maxLength: 300,
                                   keyboardType: TextInputType.number,
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
-                                    FormBuilderValidators.numeric(context)
+                                    FormBuilderValidators.required(),
+                                    FormBuilderValidators.numeric()
                                   ]),
                                   initialValue:
                                       saleListingController.coveredBy.value,
@@ -406,7 +406,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     fontFamily: "RedHatDisplay",
                                   ),
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
+                                    FormBuilderValidators.required(),
                                   ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
@@ -441,7 +441,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     fontFamily: "RedHatDisplay",
                                   ),
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
+                                    FormBuilderValidators.required(),
                                   ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
@@ -479,7 +479,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     fontFamily: "RedHatDisplay",
                                   ),
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
+                                    FormBuilderValidators.required(),
                                   ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
@@ -514,7 +514,7 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                     fontFamily: "RedHatDisplay",
                                   ),
                                   validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(context),
+                                    FormBuilderValidators.required(),
                                   ]),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(

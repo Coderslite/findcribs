@@ -1498,7 +1498,7 @@ class _Rent1State extends State<Rent1> {
                                         .propertyCategoryKey,
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.propertyCategory
@@ -1511,6 +1511,7 @@ class _Rent1State extends State<Rent1> {
                                       "Flats",
                                       "Shortlet",
                                       "Service Apartment",
+                                      "Shared Apartment",
                                       "Self-Contained",
                                       "Duplex Bungalow",
                                     ].map((option) {
@@ -1532,7 +1533,7 @@ class _Rent1State extends State<Rent1> {
                                     initialValue: rentListingController
                                         .propertyCategory.value,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.propertyCategory
@@ -1545,6 +1546,7 @@ class _Rent1State extends State<Rent1> {
                                       "Flats",
                                       "Shortlet",
                                       "Service Apartment",
+                                      "Shared Apartment",
                                       "Self-Contained",
                                       "Duplex Bungalow",
                                     ].map((option) {
@@ -1569,7 +1571,7 @@ class _Rent1State extends State<Rent1> {
                                     name: 'houseDesignType',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.designType.value =
@@ -1595,7 +1597,7 @@ class _Rent1State extends State<Rent1> {
                                     name: 'houseDesignType',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.designType.value =
@@ -1633,7 +1635,7 @@ class _Rent1State extends State<Rent1> {
                                           .value = value.toString();
                                     },
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -1653,7 +1655,7 @@ class _Rent1State extends State<Rent1> {
                                           .value = value.toString();
                                     },
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(

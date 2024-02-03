@@ -512,10 +512,10 @@ class _HotelScreenState extends State<HotelScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Sale",
                                   style: TextStyle(
@@ -544,10 +544,10 @@ class _HotelScreenState extends State<HotelScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Type",
                                   style: TextStyle(
@@ -576,10 +576,10 @@ class _HotelScreenState extends State<HotelScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Sort",
                                   style: TextStyle(
@@ -608,10 +608,10 @@ class _HotelScreenState extends State<HotelScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Price",
                                   style: TextStyle(
@@ -640,10 +640,10 @@ class _HotelScreenState extends State<HotelScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
+                              children: [
                                 Text(
                                   "Location",
                                   style: TextStyle(

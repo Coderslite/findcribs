@@ -70,9 +70,9 @@ class SignUpPhoneNumberState extends State<SignUpPhoneNumber> {
                   controller: phoneController,
                   keyboardType: TextInputType.number,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.numeric(context),
-                    FormBuilderValidators.required(context),
-                    FormBuilderValidators.maxLength(context, 11),
+                    FormBuilderValidators.numeric(),
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.maxLength(11),
                   ]),
                   decoration: const InputDecoration(
                       // hintText: 'Enter Email Address',

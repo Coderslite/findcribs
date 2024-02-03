@@ -1,16 +1,12 @@
 // ignore_for_file: avoid_print
-import 'package:findcribs/controller/get_property_listing_controller.dart';
-import 'package:findcribs/controller/search_listing_controller.dart';
 import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/screens/homepage/single_property.dart';
-import 'package:findcribs/service/search_property.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import '../../components/constants.dart';
 import '../../controller/load_state_lga_controller.dart';
 import '../../service/property_by_category.dart';
@@ -121,7 +117,7 @@ class _Search_ScreenState extends State<Search_Screen> {
                                 decoration: BoxDecoration(
                                     color:
                                         context.theme.scaffoldBackgroundColor,
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(20),
                                         topRight: Radius.circular(20))),
                                 child: Container(

@@ -1,5 +1,3 @@
-import 'package:findcribs/controller/get_property_listing_controller.dart';
-import 'package:findcribs/service/property_list_all_service.dart';
 import 'package:get/get.dart';
 
 import '../models/house_list_model.dart';

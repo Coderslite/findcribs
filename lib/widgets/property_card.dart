@@ -30,9 +30,9 @@ class PropertyCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             Text(
               "Redding Villa",
               style: TextStyle(
@@ -52,11 +52,11 @@ class PropertyCard extends StatelessWidget {
         const SizedBox(
           height: 5,
         ),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              children: const [
+              children: [
                 Icon(
                   Icons.location_on,
                   color: Color(0xFFFEC121),
@@ -93,7 +93,7 @@ class PropertyCard extends StatelessWidget {
               ],
             ),
             Row(
-              children: const [
+              children: [
                 Icon(
                   Icons.star_rate,
                   color: Color(0xFFFEC121),

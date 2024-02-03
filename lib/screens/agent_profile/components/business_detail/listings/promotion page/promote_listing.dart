@@ -247,7 +247,7 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
                                       initialValue: "1",
                                       alignment: Alignment.center,
                                       validator: FormBuilderValidators.compose([
-                                        FormBuilderValidators.required(context),
+                                        FormBuilderValidators.required(),
                                       ]),
                                       onChanged: (value) {
                                         setState(() {

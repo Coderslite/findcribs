@@ -9,7 +9,6 @@ import 'package:findcribs/screens/agent_profile/components/help/help.dart';
 import 'package:findcribs/screens/agent_profile/components/legal/legal.dart';
 import 'package:findcribs/screens/agent_profile/components/personal_info/personal_information.dart';
 import 'package:findcribs/screens/agent_profile/components/settings/settings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -90,7 +89,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                                   onTap: () {
                                     shareLinkController.handleShareAgentLink();
                                   },
-                                  child: Icon(Icons.share))
+                                  child: const Icon(Icons.share))
                             ],
                           ),
                           const SizedBox(

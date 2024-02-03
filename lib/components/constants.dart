@@ -28,8 +28,8 @@ const kFontFamily = 'RedHatDisplay';
 
 // const baseUrl = 'https://findcribs.ng/user';
 
-const baseUrl = 'http://18.233.168.44:5000/user';
-const socketUrl = 'http://18.233.168.44:5000';
+const baseUrl = 'http://137.184.87.179:5000/user';
+const socketUrl = 'http://137.184.87.179:5000';
 
 const avataImg =
     'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg';

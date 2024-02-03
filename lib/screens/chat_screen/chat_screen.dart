@@ -98,7 +98,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontWeight: FontWeight.w200,
                               color: context.isDarkMode
                                   ? white
-                                  : Color(0xFF7C7C7C))),
+                                  : const Color(0xFF7C7C7C))),
                       onChanged: (value) {
                         getAllChatController.handleSearchChat(value,
                             int.parse(getProfileController.myId.toString()));
@@ -359,7 +359,7 @@ class _ChatListState extends State<ChatList> {
                                                               getAllChatController
                                                                   .allAvailableChats[index]
                                                                   .users![1]['last_name'],
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           // color: grey,
                                                           fontSize: 14),
                                                     ),

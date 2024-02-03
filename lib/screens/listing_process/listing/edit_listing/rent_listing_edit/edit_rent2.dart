@@ -9,9 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../controller/edit_rent_listing_controller.dart';
-import '../../../../../controller/rent_listing_controller.dart';
 import '../../../../../controller/thousand_formatter.dart';
-import '../../../../../models/house_list_model.dart';
 import 'edit_rent3.dart';
 
 class EditRent2Stepper extends StatefulWidget {
@@ -538,7 +536,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                           value.toString();
                                     },
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -562,7 +560,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                       );
                                     }).toList(),
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.currency.value =
@@ -606,7 +604,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                           .value = value.toString();
                                     },
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -643,7 +641,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                           .value = value.toString();
                                     },
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -662,9 +660,9 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                     child: FormBuilderTextField(
                                       name: 'rentalFee',
                                       validator: FormBuilderValidators.compose([
-                                        FormBuilderValidators.required(context),
+                                        FormBuilderValidators.required(),
                                         FormBuilderValidators.min(
-                                            context, 10000),
+                                           10000),
                                       ]),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.digitsOnly,
@@ -824,8 +822,8 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                             otherChargesIncluded == false
                                 ? Column(
                                     children: [
-                                      Row(
-                                        children: const [
+                                      const Row(
+                                        children: [
                                           Text("Caution fee"),
                                           Icon(
                                             Icons.info,
@@ -848,7 +846,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                                       FormBuilderValidators
                                                           .compose([
                                                     FormBuilderValidators
-                                                        .required(context),
+                                                        .required(),
                                                   ]),
                                                   inputFormatters: <
                                                       TextInputFormatter>[
@@ -902,7 +900,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                                       FormBuilderValidators
                                                           .compose([
                                                     FormBuilderValidators
-                                                        .required(context),
+                                                        .required(),
                                                   ]),
                                                   inputFormatters: <
                                                       TextInputFormatter>[
@@ -943,8 +941,8 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      Row(
-                                        children: const [
+                                      const Row(
+                                        children: [
                                           Text("Legal fee (%)"),
                                           Icon(
                                             Icons.info,
@@ -984,8 +982,8 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      Row(
-                                        children: const [
+                                      const Row(
+                                        children: [
                                           Text("Agency fee (%)"),
                                           Icon(
                                             Icons.info,
@@ -1025,8 +1023,8 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      Row(
-                                        children: const [
+                                      const Row(
+                                        children: [
                                           Text("Service Charge"),
                                           Icon(
                                             Icons.info,
@@ -1050,7 +1048,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                                       FormBuilderValidators
                                                           .compose([
                                                     FormBuilderValidators
-                                                        .required(context),
+                                                        .required(),
                                                   ]),
                                                   inputFormatters: <
                                                       TextInputFormatter>[
@@ -1101,7 +1099,7 @@ class _EditRent2StepperState extends State<EditRent2Stepper> {
                                                       FormBuilderValidators
                                                           .compose([
                                                     FormBuilderValidators
-                                                        .required(context),
+                                                        .required(),
                                                   ]),
                                                   inputFormatters: <
                                                       TextInputFormatter>[

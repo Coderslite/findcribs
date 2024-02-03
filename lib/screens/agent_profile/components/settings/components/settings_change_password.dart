@@ -132,7 +132,7 @@ class _ChangePasswordSettingsState extends State<ChangePasswordSettings> {
                           });
                         },
                         validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context),
+                          FormBuilderValidators.required(),
                         ]),
                         decoration: InputDecoration(
                             // hintText: 'Enter Email Address',

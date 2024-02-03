@@ -117,7 +117,7 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                   maxLength: 20,
                   // maxLength: 300,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(),
                   ]),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -136,7 +136,7 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                   name: 'price',
                   // maxLength: 300,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(),
                   ]),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -276,7 +276,7 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                   maxLength: 30,
                   keyboardType: TextInputType.streetAddress,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(),
                   ]),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -294,7 +294,7 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                   minLines: 3,
                   maxLines: 5,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(),
                   ]),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -421,11 +421,11 @@ class _EditEstateMarketState extends State<EditEstateMarket> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.camera_alt_outlined,
                                   color: Color(0XFF0072BA),

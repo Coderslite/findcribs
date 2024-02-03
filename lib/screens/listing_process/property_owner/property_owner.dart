@@ -144,7 +144,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     FormBuilderTextField(
                       name: 'fullName',
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(),
                       ]),
                       initialValue:
                           "${getProfileController.firstName.string + getProfileController.lastName.string} ",
@@ -171,7 +171,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     FormBuilderTextField(
                       name: 'businessName',
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(),
                       ]),
                       onChanged: (value) {
                         businessName = value.toString();
@@ -227,7 +227,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                       maxLines: 5,
                       // maxLength: 300,
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(),
                       ]),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -246,9 +246,9 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                     FormBuilderTextField(
                       name: 'phone',
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
-                        FormBuilderValidators.minLength(context, 11),
-                        FormBuilderValidators.maxLength(context, 11),
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(11),
+                        FormBuilderValidators.maxLength(11),
                       ]),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(

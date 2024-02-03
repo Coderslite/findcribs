@@ -253,7 +253,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                     .compose(
                                                   [
                                                     FormBuilderValidators
-                                                        .required(context)
+                                                        .required()
                                                   ],
                                                 ),
                                                 decoration: InputDecoration(
@@ -378,7 +378,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                     .compose(
                                                   [
                                                     FormBuilderValidators
-                                                        .required(context),
+                                                        .required(),
                                                   ],
                                                 ),
                                                 decoration: InputDecoration(
@@ -618,9 +618,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                 validator: FormBuilderValidators
                                                     .compose([
                                                   FormBuilderValidators.numeric(
-                                                      context),
+                                                  ),
                                                   FormBuilderValidators
-                                                      .minLength(context, 11),
+                                                      .minLength(11),
                                                 ]),
                                                 decoration: InputDecoration(
                                                     hintText:

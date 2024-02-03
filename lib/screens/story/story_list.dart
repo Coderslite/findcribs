@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:findcribs/controller/get_my_story_controller.dart';
 import 'package:findcribs/screens/story/single_story.dart';
@@ -129,10 +128,10 @@ class _StoryListState extends State<StoryList> {
                                 tooltipController.hideTooltip();
                                 isStandalone = false;
                               });
-                              Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (_) {
-                                return const StoryCamera();
-                              }));
+                              // Navigator.pushReplacement(context,
+                              //     MaterialPageRoute(builder: (_) {
+                              //   return const StoryCamera();
+                              // }));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,

@@ -71,7 +71,7 @@ class Agent_Listings extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: context.isDarkMode ? white : Color(0xFF4F5E76)),
+                    color: context.isDarkMode ? white : const Color(0xFF4F5E76)),
               ),
               const SizedBox(
                 height: 3,
@@ -81,7 +81,7 @@ class Agent_Listings extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
-                    color: context.isDarkMode ? white : Color(0xFF4F5E76)),
+                    color: context.isDarkMode ? white : const Color(0xFF4F5E76)),
               ),
               const SizedBox(
                 height: 5,

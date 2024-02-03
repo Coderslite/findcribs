@@ -1497,7 +1497,7 @@ class _EditRent1State extends State<EditRent1> {
                                         .propertyCategoryKey,
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.propertyCategory
@@ -1531,7 +1531,7 @@ class _EditRent1State extends State<EditRent1> {
                                     initialValue: rentListingController
                                         .propertyCategory.value,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.propertyCategory
@@ -1568,7 +1568,7 @@ class _EditRent1State extends State<EditRent1> {
                                     name: 'houseDesignType',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.designType.value =
@@ -1594,7 +1594,7 @@ class _EditRent1State extends State<EditRent1> {
                                     name: 'houseDesignType',
                                     isExpanded: true,
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     onChanged: (value) {
                                       rentListingController.designType.value =
@@ -1632,7 +1632,7 @@ class _EditRent1State extends State<EditRent1> {
                                           .value = value.toString();
                                     },
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -1652,7 +1652,7 @@ class _EditRent1State extends State<EditRent1> {
                                           .value = value.toString();
                                     },
                                     validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(context),
+                                      FormBuilderValidators.required(),
                                     ]),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(

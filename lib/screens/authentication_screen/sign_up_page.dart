@@ -85,8 +85,8 @@ class EmailScreenState extends State<EmailScreen> {
                           name: 'email',
                           controller: emailController,
                           validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.email(context),
-                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.email(),
+                            FormBuilderValidators.required(),
                           ]),
                           decoration: const InputDecoration(
                               // hintText: 'Enter Email Address',

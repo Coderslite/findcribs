@@ -69,10 +69,10 @@ class VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   name: 'code',
                   keyboardType: TextInputType.number,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
-                    FormBuilderValidators.numeric(context),
-                    FormBuilderValidators.maxLength(context, 4),
-                    FormBuilderValidators.minLength(context, 4)
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.numeric(),
+                    FormBuilderValidators.maxLength( 4),
+                    FormBuilderValidators.minLength( 4)
                   ]),
                   decoration: const InputDecoration(
                       hintText: 'Enter Code',

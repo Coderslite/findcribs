@@ -88,21 +88,6 @@ class _HomePageRootState extends State<HomePageRoot> {
 
     super.initState();
 
-    // Terminated State
-    FirebaseMessaging.instance.getInitialMessage().then(
-          (event) {},
-        );
-
-    // Foregrand State
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
-    // background State
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      getAllChatController.handleGetMessage();
-      showFlutterNotification(event);
-      print(event.messageType);
-      print("foreground");
-    });
-
     Timer(const Duration(seconds: 5), () {
       handleCheckNumber();
     });
@@ -310,7 +295,7 @@ class _HomePageRootState extends State<HomePageRoot> {
       () => Container(
         width: double.infinity,
         height: 70,
-        decoration: BoxDecoration(),
+        decoration: const BoxDecoration(),
         child: Padding(
           padding: const EdgeInsets.only(
             top: 10,
