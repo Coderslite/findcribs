@@ -567,6 +567,57 @@ class ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              loginController.lougoutUser();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(
+                                top: 5,
+                                bottom: 5,
+                                right: 15,
+                                left: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Delete Account",
+                                            style: TextStyle(
+                                              fontFamily: "RedHatDisplay",
+                                              fontSize: size.width / 26,
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                        Text(
+                                          "Delete user account",
+                                          style: TextStyle(
+                                            fontSize: size.width / 37,
+                                            color: const Color(0XFF8A99B1),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

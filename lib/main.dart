@@ -32,6 +32,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:system_settings/system_settings.dart';
 
+import 'firebase_options.dart';
 import 'controller/theme_controller.dart';
 import 'screens/homepage/home_root.dart';
 import 'screens/story/story_camera.dart';
@@ -123,6 +124,11 @@ void showFlutterNotification(RemoteMessage message) async {
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+void onDidReceiveLocalNotification(
+    int id, String? title, String? body, String? payload) async {
+  // display a dialog with the notification details, tap ok to go to another page
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -138,13 +144,17 @@ Future<void> main() async {
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  AndroidInitializationSettings initializationSettingsAndroid =
-      const AndroidInitializationSettings('ic_launcher');
+  AndroidInitializationSettings initializationSettingsAndroid = const AndroidInitializationSettings('ic_launcher');
+
+  final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
   final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, macOS: null, iOS: null);
+      android: initializationSettingsAndroid, macOS: null, iOS: initializationSettingsDarwin);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   if (!kIsWeb) {
     await setupFlutterNotifications();
@@ -152,42 +162,43 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   var notificationPermission = await Permission.notification.isGranted;
-  if (notificationPermission == false) {
-    Fluttertoast.showToast(msg: "Notification Permission Required")
-        .then((value) => SystemSettings.appNotifications());
-  }
-
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  messaging.requestPermission().then((value) async {
-    messaging.setForegroundNotificationPresentationOptions(
-      alert: true, // Required to display a heads up notification
-      badge: true,
-      sound: true,
-    );
-    var prefs = await SharedPreferences.getInstance();
-
-    messaging.getToken().then((token) {
-      prefs.setString('fcmToken', token.toString());
-      print(
-        "token$token",
+  if (notificationPermission == false) {
+    messaging.requestPermission().then((value) async {
+      messaging.setForegroundNotificationPresentationOptions(
+        alert: true, // Required to display a heads up notification
+        badge: true,
+        sound: true,
       );
-    });
+      var prefs = await SharedPreferences.getInstance();
 
-    cameras = await availableCameras();
-    final appState = prefs.getString('action');
-    final email = prefs.getString('email');
-    final token = prefs.getString('token');
-    print(token);
-    print(email);
-    runApp(MyApp(
-      appState: appState.toString(),
-      email: email.toString(),
-    ));
-  }).onError((error, stackTrace) {
-    Fluttertoast.showToast(msg: "Notification Permission Required")
-        .then((value) => SystemSettings.appNotifications());
-  });
+      messaging.getToken().then((token) {
+        prefs.setString('fcmToken', token.toString());
+        print(
+          "token$token",
+        );
+      });
+
+      cameras = await availableCameras();
+      final appState = prefs.getString('action');
+      final email = prefs.getString('email');
+      final token = prefs.getString('token');
+      print(token);
+      print(email);
+      runApp(MyApp(
+        appState: appState.toString(),
+        email: email.toString(),
+      ));
+    }).onError((error, stackTrace) {
+      Fluttertoast.showToast(msg: "Notification Permission Required")
+          .then((value) => SystemSettings.appNotifications());
+    });
+  }
+
+
+
+
 }
 
 class MyApp extends StatefulWidget {

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:findcribs/controller/get_my_story_controller.dart';
 import 'package:findcribs/screens/story/single_story.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:path/path.dart' as p;
 
@@ -39,6 +41,8 @@ class _StoryListState extends State<StoryList> {
   bool isShowing = false;
   bool firstClick = true;
   List toBeDeleteStory = [];
+  final ImagePicker _picker = ImagePicker();
+  List<File> newfiles = [];
 
   DeleteStoryController deleteStoryController =
       Get.put(DeleteStoryController());
@@ -482,7 +486,19 @@ class _StoryListState extends State<StoryList> {
     );
   }
 
-  handlePickFromGallery() {
+  handlePickFromGallery() async {
     tooltipController.hideTooltip();
+    final List<XFile> image = (await _picker.pickMultiImage());
+
+    if (mounted) {
+      // ignore: unnecessary_null_comparison
+      if (image != null) {
+        setState(() {
+          for (var img in image) {
+            newfiles.add(File(img.path));
+          }
+        });
+      }
+    }
   }
 }

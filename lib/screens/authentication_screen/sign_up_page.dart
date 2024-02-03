@@ -28,7 +28,7 @@ class EmailScreen extends StatefulWidget {
 class EmailScreenState extends State<EmailScreen> {
   // final GoogleSignIn _googleSignIn = GoogleSignIn(
   //   serverClientId:
-  //       '82498358652-u740omqt5f4lc9cvhfdsarhqd8b293ck.apps.googleusercontent.com',
+  //       '82498358652-u740omqt5f4lc9cvhfdsarhqd8b293ck.apps.usercontent.com',
   // );
 
   bool isLoading = false;

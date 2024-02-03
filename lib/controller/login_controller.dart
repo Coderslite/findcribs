@@ -115,6 +115,77 @@ class LoginController extends GetxController {
     }
   }
 
+  Future<void> logout() async {
+    isLoading.value = true;
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
+    final response = await http.post(
+      Uri.parse("$baseUrl/auth/delete-user"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "$token",
+      },
+    );
+    var userDetails = jsonDecode(response.body);
+
+    if (userDetails['status'] == true) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('action', '');
+      prefs.remove('token');
+      prefs.remove('email');
+      _googleSignIn.signOut().then((value) => Get.off(const LoginScreen()));
+      getProfileController.agent.value = {};
+      Get.deleteAll();
+    } else {
+      isLoading.value = false;
+      AwesomeDialog(
+        context: Get.context!,
+        dialogType: DialogType.error,
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2,
+        ),
+        width: 280,
+        buttonsBorderRadius: const BorderRadius.all(
+          Radius.circular(2),
+        ),
+        dismissOnTouchOutside: false,
+        dismissOnBackKeyPress: false,
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        desc: userDetails['message'],
+        showCloseIcon: true,
+        btnOkText: "Try again",
+        btnOkOnPress: () {},
+      ).show();
+    }
+    
+  }
+
+  lougoutUser() {
+    AwesomeDialog(
+        context: Get.context!,
+        dialogType: DialogType.error,
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2,
+        ),
+        width: 280,
+        buttonsBorderRadius: const BorderRadius.all(
+          Radius.circular(2),
+        ),
+        dismissOnTouchOutside: false,
+        dismissOnBackKeyPress: false,
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        desc: "Are you sure you want to delete your account",
+        showCloseIcon: true,
+        btnOkText: "Continue",
+        btnOkOnPress: () {logout();},
+      ).show();
+  }
+
   handleLoginApi(String token) async {
     isLoading.value = true;
     final prefs = await SharedPreferences.getInstance();

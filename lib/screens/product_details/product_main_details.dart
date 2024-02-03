@@ -166,6 +166,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
         return Column(children: [
           Stack(
             alignment: AlignmentDirectional.bottomCenter,
+            fit: StackFit.passthrough,
             children: [
               InkWell(
                 onTap: () {
@@ -516,7 +517,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                       ),
                     ),
               Positioned(
-                top: 30,
+                top: 50,
                 left: 20,
                 child: GestureDetector(
                   onTap: () {
