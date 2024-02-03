@@ -642,7 +642,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                                       options: [
                                                                                         "Flats",
                                                                                         "Shortlet",
-                                                                                        "Service apartment",
+                                                                                        "Service Apartment",
+                                                                                        "Shared Apartment"
                                                                                         "Self-contained"
                                                                                       ]
                                                                                           .map((e) => FormBuilderFieldOption(

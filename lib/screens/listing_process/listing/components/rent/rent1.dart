@@ -1511,6 +1511,7 @@ class _Rent1State extends State<Rent1> {
                                       "Flats",
                                       "Shortlet",
                                       "Service Apartment",
+                                      "Shared Apartment",
                                       "Self-Contained",
                                       "Duplex Bungalow",
                                     ].map((option) {
@@ -1545,6 +1546,7 @@ class _Rent1State extends State<Rent1> {
                                       "Flats",
                                       "Shortlet",
                                       "Service Apartment",
+                                      "Shared Apartment",
                                       "Self-Contained",
                                       "Duplex Bungalow",
                                     ].map((option) {
