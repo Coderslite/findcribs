@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<UserProfile> getUserProfileById(int? id) async {
+  print("agent id $id");
   final prefs = await SharedPreferences.getInstance();
 
   var token = prefs.getString('token');

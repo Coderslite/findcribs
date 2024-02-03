@@ -10,6 +10,8 @@ class UserProfile {
   Map? agent;
   int? storyCount;
   int? listingCount;
+  int? favouritedAgentCount;
+  int? favouritingAgentCount;
   String? createdAt;
   String? updatedAt;
   // String? businessName;
@@ -26,6 +28,8 @@ class UserProfile {
     this.createdAt,
     this.updatedAt,
     this.agent,
+    this.favouritedAgentCount,
+    this.favouritingAgentCount,
     this.storyCount,
     this.listingCount,
     // this.businessName,
@@ -44,6 +48,8 @@ class UserProfile {
       updatedAt: json['updatedAt'],
       agent: json['agent'],
       storyCount: json['story_count'],
+      favouritedAgentCount: json['favouritedAgentCount'],
+      favouritingAgentCount: json['favouritingAgentCount'],
       listingCount: json['listing_count'],
       // businessName: json['agent']['business_name'],
     );

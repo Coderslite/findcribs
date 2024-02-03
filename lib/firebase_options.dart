@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAKBV8pRah3vw94P7WeLAZN0wWJbEZb66A',
-    appId: '1:285049044019:android:99a56f6483699337e7f746',
+    appId: '1:285049044019:android:88c83f29f09c36a5e7f746',
     messagingSenderId: '285049044019',
     projectId: 'findcribs-917f9',
     storageBucket: 'findcribs-917f9.appspot.com',
@@ -68,7 +68,7 @@ class DefaultFirebaseOptions {
     projectId: 'findcribs-917f9',
     storageBucket: 'findcribs-917f9.appspot.com',
     androidClientId: '285049044019-2pufghms7pv3682duirssfqt63iarsr0.apps.googleusercontent.com',
-    iosClientId: '285049044019-ogi4una7gkgh4qbapag1o488bphulhep.apps.googleusercontent.com',
+    iosClientId: '285049044019-gt2ehvaac2r40291pp13vor8fj6qm4lp.apps.googleusercontent.com',
     iosBundleId: 'com.findcribs.findcribs',
   );
 
@@ -79,7 +79,7 @@ class DefaultFirebaseOptions {
     projectId: 'findcribs-917f9',
     storageBucket: 'findcribs-917f9.appspot.com',
     androidClientId: '285049044019-2pufghms7pv3682duirssfqt63iarsr0.apps.googleusercontent.com',
-    iosClientId: '285049044019-ogi4una7gkgh4qbapag1o488bphulhep.apps.googleusercontent.com',
+    iosClientId: '285049044019-gt2ehvaac2r40291pp13vor8fj6qm4lp.apps.googleusercontent.com',
     iosBundleId: 'com.findcribs.findcribs',
   );
 }

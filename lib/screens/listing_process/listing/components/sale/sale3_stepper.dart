@@ -240,7 +240,10 @@ class _Sale3StepperState extends State<Sale3Stepper> {
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          border: Border.all(width: 1),
+                                          border: Border.all(
+                                            width: 1,
+                                            color: context.iconColor!,
+                                          ),
                                           borderRadius:
                                               BorderRadius.circular(7),
                                         ),

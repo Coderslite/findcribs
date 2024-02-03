@@ -313,7 +313,7 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
                           ],
                         ),
                         Text(
-                          userData.agent!['business_name'].toString(),
+                          "@" + userData.agent!['business_name'].toString(),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 26),
@@ -325,8 +325,71 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
                           userData.agent!['category'] ?? "Not Identified",
                           style: const TextStyle(color: Colors.grey),
                         ),
-                        const SizedBox(
-                          height: 20,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    "${userData.favouritingAgentCount}",
+                                  ),
+                                  const Text(
+                                    "Followers",
+                                    style:
+                                        const TextStyle(color: Colors.blueGrey),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    "${userData.favouritedAgentCount}",
+                                  ),
+                                  const Text(
+                                    "Following",
+                                    style:
+                                        const TextStyle(color: Colors.blueGrey),
+                                  ),
+                                ],
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SalesScreen(
+                                        id: int.parse(
+                                          widget.id.toString(),
+                                        ),
+                                        isVerified:
+                                            userData.agent!['is_verified'],
+                                        image: userData.profileImg == null
+                                            ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                            : userData.profileImg.toString(),
+                                        businessName: userData
+                                            .agent!['business_name']
+                                            .toString(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "${userData.listingCount}",
+                                    ),
+                                    const Text(
+                                      "Listings",
+                                      style: const TextStyle(
+                                          color: Colors.blueGrey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
 
                         // Row(

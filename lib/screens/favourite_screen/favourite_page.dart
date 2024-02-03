@@ -128,34 +128,36 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                           ? const Center(
                               child:
                                   Text("You have not favourited any agent yet"))
-                          : ListView.builder(
-                              padding: const EdgeInsets.all(0),
-                              itemCount: userFavoritedAgentController
-                                          .allAgents.length <
-                                      5
-                                  ? userFavoritedAgentController
-                                      .allAgents.length
-                                  : 5,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                    margin: const EdgeInsets.fromLTRB(
-                                        19, 0, 19, 15),
-                                    child: Agent_Listings(
-                                      id: userFavoritedAgentController
-                                          .allAgents[index].userId,
-                                      name: userFavoritedAgentController
-                                          .allAgents[index].businessName
-                                          .toString(),
-                                      image: userFavoritedAgentController
-                                          .allAgents[index].profilePic
-                                          .toString(),
-                                      category: userFavoritedAgentController
-                                          .allAgents[index].category
-                                          .toString(),
-                                      isverified: userFavoritedAgentController
-                                          .allAgents[index].isVerified,
-                                    ));
-                              },
+                          : Obx(
+                              () => ListView.builder(
+                                padding: const EdgeInsets.all(0),
+                                itemCount: userFavoritedAgentController
+                                            .allAgents.length <
+                                        5
+                                    ? userFavoritedAgentController
+                                        .allAgents.length
+                                    : 5,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          19, 0, 19, 15),
+                                      child: Agent_Listings(
+                                        id: userFavoritedAgentController
+                                            .allAgents[index].userId,
+                                        name: userFavoritedAgentController
+                                            .allAgents[index].businessName
+                                            .toString(),
+                                        image: userFavoritedAgentController
+                                            .allAgents[index].profilePic
+                                            .toString(),
+                                        category: userFavoritedAgentController
+                                            .allAgents[index].category
+                                            .toString(),
+                                        isverified: userFavoritedAgentController
+                                            .allAgents[index].isVerified,
+                                      ));
+                                },
+                              ),
                             ),
                     ),
                     const SizedBox(height: 14),
@@ -198,72 +200,75 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                       child: userFavouritedListingController
                               .userFavouritedListing.isEmpty
                           ? const Center(child: Text("No Favourited Property"))
-                          : RefreshIndicator(
-                              onRefresh: () async {
-                                await Future.delayed(
-                                    const Duration(seconds: 2));
-                                return userFavouritedListingController
-                                    .handleGetFavouritedListing();
-                              },
-                              child: ListView.builder(
-                                padding: const EdgeInsets.all(0),
-                                itemCount: userFavouritedListingController
-                                            .favouritedListing.length <
-                                        5
-                                    ? userFavouritedListingController
-                                        .favouritedListing.length
-                                    : 5,
-                                itemBuilder: (context, index) {
-                                  int rentFee = userFavouritedListingController
-                                      .favouritedListing[index]
-                                      .listing!['rental_fee'];
-
-                                  int price = (rentFee);
-                                  var formatter = NumberFormat("#,###");
-                                  var formatedPrice = formatter.format(price);
-                                  return InkWell(
-                                      onTap: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (_) {
-                                          return ProductDetails(
-                                            id: userFavouritedListingController
-                                                .favouritedListing[index]
-                                                .listingId,
-                                          );
-                                        }));
-                                      },
-                                      child: Container(
-                                          margin: const EdgeInsets.fromLTRB(
-                                              19, 0, 19, 15),
-                                          height: 130,
-                                          child: Property_Listings(
-                                            id: userFavouritedListingController
-                                                .favouritedListing[index]
-                                                .listingId,
-                                            images:
-                                                userFavouritedListingController
-                                                    .favouritedListing[index]
-                                                    .listing!["listingImage"],
-                                            bedroom:
-                                                userFavouritedListingController
-                                                    .favouritedListing[index]
-                                                    .listing!['bedroom'],
-                                            propertyAddress:
-                                                userFavouritedListingController
-                                                        .favouritedListing[index]
-                                                        .listing![
-                                                    'property_address'],
-                                            propertyType:
-                                                userFavouritedListingController
-                                                    .favouritedListing[index]
-                                                    .listing!['property_type'],
-                                            propertyState:
-                                                userFavouritedListingController
-                                                    .favouritedListing[index]
-                                                    .listing!['state'],
-                                            price: formatedPrice,
-                                          )));
+                          : Obx(
+                              () => RefreshIndicator(
+                                onRefresh: () async {
+                                  await Future.delayed(
+                                      const Duration(seconds: 2));
+                                  return userFavouritedListingController
+                                      .handleGetFavouritedListing();
                                 },
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.all(0),
+                                  itemCount: userFavouritedListingController
+                                              .favouritedListing.length <
+                                          5
+                                      ? userFavouritedListingController
+                                          .favouritedListing.length
+                                      : 5,
+                                  itemBuilder: (context, index) {
+                                    int rentFee =
+                                        userFavouritedListingController
+                                            .favouritedListing[index]
+                                            .listing!['rental_fee'];
+
+                                    int price = (rentFee);
+                                    var formatter = NumberFormat("#,###");
+                                    var formatedPrice = formatter.format(price);
+                                    return InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (_) {
+                                            return ProductDetails(
+                                              id: userFavouritedListingController
+                                                  .favouritedListing[index]
+                                                  .listingId,
+                                            );
+                                          }));
+                                        },
+                                        child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                19, 0, 19, 15),
+                                            height: 130,
+                                            child: Property_Listings(
+                                              id: userFavouritedListingController
+                                                  .favouritedListing[index]
+                                                  .listingId,
+                                              images:
+                                                  userFavouritedListingController
+                                                      .favouritedListing[index]
+                                                      .listing!["listingImage"],
+                                              bedroom:
+                                                  userFavouritedListingController
+                                                      .favouritedListing[index]
+                                                      .listing!['bedroom'],
+                                              propertyAddress:
+                                                  userFavouritedListingController
+                                                          .favouritedListing[index]
+                                                          .listing![
+                                                      'property_address'],
+                                              propertyType:
+                                                  userFavouritedListingController
+                                                      .favouritedListing[index]
+                                                      .listing!['property_type'],
+                                              propertyState:
+                                                  userFavouritedListingController
+                                                      .favouritedListing[index]
+                                                      .listing!['state'],
+                                              price: formatedPrice,
+                                            )));
+                                  },
+                                ),
                               ),
                             ),
                     )

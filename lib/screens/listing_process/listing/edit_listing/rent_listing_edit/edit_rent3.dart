@@ -10,10 +10,11 @@ import 'package:get/get.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
+import '../../../../../controller/edit_rent_listing_controller.dart';
 import '../../../../../controller/load_state_lga_controller.dart';
 import '../../../../../controller/rent_listing_controller.dart';
 
-class Rent3Stepper extends StatefulWidget {
+class EditRent3Stepper extends StatefulWidget {
   final String? propertyCategory;
   final String? houseType;
   final String? propertyAddress;
@@ -30,7 +31,7 @@ class Rent3Stepper extends StatefulWidget {
   final String? serviceCharge;
   final String? legalFee;
   final String? agencyFee;
-  const Rent3Stepper(
+  const EditRent3Stepper(
       {Key? key,
       this.propertyCategory,
       this.houseType,
@@ -51,18 +52,18 @@ class Rent3Stepper extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<Rent3Stepper> createState() => _Rent3StepperState();
+  State<EditRent3Stepper> createState() => _EditRent3StepperState();
 }
 
-class _Rent3StepperState extends State<Rent3Stepper> {
+class _EditRent3StepperState extends State<EditRent3Stepper> {
   final formKey3 = GlobalKey<FormBuilderState>();
 
   List facilities = [];
   String totalAreaOfLand = "0";
   String coveredByProperty = "0";
 
-  RentListingController rentListingController =
-      Get.put(RentListingController());
+  EditRentListingController rentListingController =
+      Get.put(EditRentListingController());
   LoadStateLgaController loadStateLgaController =
       Get.put(LoadStateLgaController());
   @override
@@ -144,7 +145,7 @@ class _Rent3StepperState extends State<Rent3Stepper> {
                       onTap: () {
                         // Navigator.pushReplacement(context,
                         //     MaterialPageRoute(builder: (_) {
-                        //   return Rent3();
+                        //   return EditRent3();
                         // }));
                       },
                       child: const CircleAvatar(

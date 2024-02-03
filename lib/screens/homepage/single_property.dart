@@ -110,304 +110,296 @@ class _SinglePropertyState extends State<SingleProperty> {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener(
-      onNotification: (notification) {
-        // handleGetProperties();
-        return true;
-      },
-      child: Obx(
-        () => Padding(
-          padding:
-              const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 20, right: 20),
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      getSinglePropertyController.propertyId.value =
-                          widget.id.toString();
-                      getSinglePropertyController.isLoading.value = true;
+    return Obx(
+      () => Padding(
+        padding:
+            const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 20, right: 20),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    getSinglePropertyController.propertyId.value =
+                        widget.id.toString();
+                    getSinglePropertyController.isLoading.value = true;
 
-                      print(widget.id);
-                      await Navigator.push(context,
-                          MaterialPageRoute(builder: (_) {
-                        return ProductDetails(
-                          id: widget.id,
-                        );
-                      }));
-                    },
-                    child: Stack(
-                      children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 166,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                errorWidget: (context, url, error) {
-                                  return InkWell(
-                                      onTap: () {},
-                                      child:
-                                          const Center(child: Text("Retry")));
-                                },
-                                imageUrl: widget.image!.isEmpty
-                                    ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
-                                    : widget.image![0]['url'],
-                                fit: BoxFit.cover,
-                                // width: 1000,
-                                filterQuality: FilterQuality.none,
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        JumpingDotsProgressIndicator(
-                                  fontSize: 20.0,
-                                  color: Colors.blue,
-                                ),
-                                imageBuilder: (context, imageProvider) {
-                                  return Image(
-                                    image: imageProvider,
-                                    // Apply image compression options here
-                                    // For example, use the `colorBlendMode` property to reduce quality
-                                    color: Colors.black.withOpacity(0.9),
-                                    colorBlendMode: BlendMode.dstATop,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
+                    print(widget.id);
+                    await Navigator.push(context,
+                        MaterialPageRoute(builder: (_) {
+                      return ProductDetails(
+                        id: widget.id,
+                      );
+                    }));
+                  },
+                  child: Stack(
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 166,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              errorWidget: (context, url, error) {
+                                return InkWell(
+                                    onTap: () {},
+                                    child: const Center(child: Text("Retry")));
+                              },
+                              imageUrl: widget.image!.isEmpty
+                                  ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
+                                  : widget.image![0]['url'],
+                              fit: BoxFit.cover,
+                              // width: 1000,
+                              filterQuality: FilterQuality.none,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      JumpingDotsProgressIndicator(
+                                fontSize: 20.0,
+                                color: Colors.blue,
                               ),
-                            )),
-                        // child: Image.network(
+                              imageBuilder: (context, imageProvider) {
+                                return Image(
+                                  image: imageProvider,
+                                  // Apply image compression options here
+                                  // For example, use the `colorBlendMode` property to reduce quality
+                                  color: Colors.black.withOpacity(0.9),
+                                  colorBlendMode: BlendMode.dstATop,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
+                          )),
+                      // child: Image.network(
 
-                        //   widget.image1,
+                      //   widget.image1,
 
-                        //   fit: BoxFit.cover,
+                      //   fit: BoxFit.cover,
 
-                        // ),
+                      // ),
 
-                        Positioned.fill(
-                          bottom: 10,
-                          left: 10,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Align(
-                                alignment: Alignment.bottomLeft,
+                      Positioned.fill(
+                        bottom: 10,
+                        left: 10,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                capitalize("${widget.state} State"),
+                                style: const TextStyle(
+                                  color: white,
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 10),
                                 child: Text(
-                                  capitalize("${widget.state} State"),
+                                  widget.propertyCategory.toString() ==
+                                          'Estate Market'
+                                      ? ""
+                                      : capitalize(
+                                          widget.designType.toString()),
                                   style: const TextStyle(
                                     color: white,
                                   ),
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Text(
-                                    widget.propertyCategory.toString() ==
-                                            'Estate Market'
-                                        ? ""
-                                        : capitalize(
-                                            widget.designType.toString()),
-                                    style: const TextStyle(
-                                      color: white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        capitalize(widget.propertyCategory == 'Estate Market'
-                            ? widget.propertyName.toString()
-                            : widget.propertyCategory.toString()),
-                        style: const TextStyle(
-                            fontFamily: 'RedHatDisplay',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      Text(
-                        widget.currency == 'Naira'
-                            ? "NGN${widget.price}"
-                            : "\$".toString() + widget.price.toString(),
-                        style: const TextStyle(
-                            fontFamily: 'RedHatDisplay',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            color: Color(0xFFFEC121),
-                            size: 10,
-                          ),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            widget.propertyAddress.toString(),
-                            style: const TextStyle(
-                              fontFamily: 'RedHatDisplay',
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF8A99B1),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          widget.propertyCategory != 'Estate Market'
-                              ? const Icon(
-                                  Icons.qr_code_rounded,
-                                  color: Color(0xFFFEC121),
-                                  size: 10,
-                                )
-                              : Container(),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          widget.propertyCategory != 'Estate Market'
-                              ? Text(
-                                  "${widget.bedroom} bedroom",
-                                  style: const TextStyle(
-                                    fontFamily: 'RedHatDisplay',
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF8A99B1),
-                                  ),
-                                )
-                              : const Text("")
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          widget.isPromoted == true
-                              ? Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.star_rate,
-                                      color: Color(0xFFFEC121),
-                                      size: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 2,
-                                    ),
-                                    Text(
-                                      "Promoted",
-                                      style: TextStyle(
-                                        fontFamily: 'RedHatDisplay',
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFF0072BA),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : const Text(
-                                  "",
-                                  style: TextStyle(
-                                      fontFamily: 'RedHatDisplay',
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                        ],
+                          ],
+                        ),
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-              Positioned.fill(
-                  top: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      capitalize(widget.propertyCategory == 'Estate Market'
+                          ? widget.propertyName.toString()
+                          : widget.propertyCategory.toString()),
+                      style: const TextStyle(
+                          fontFamily: 'RedHatDisplay',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      widget.currency == 'Naira'
+                          ? "NGN${widget.price}"
+                          : "\$".toString() + widget.price.toString(),
+                      style: const TextStyle(
+                          fontFamily: 'RedHatDisplay',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            // // width: 85,
-                            // padding:
-                            //     const EdgeInsets.all(5),
-                            height: 25,
-                            decoration: BoxDecoration(
-                              color: const Color(0XFFFEC121),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Text(
-                                  capitalize('for ') +
-                                      capitalize(
-                                          widget.propertyType.toString()),
-                                  style: const TextStyle(color: Colors.white),
+                        const Icon(
+                          Icons.location_on,
+                          color: Color(0xFFFEC121),
+                          size: 10,
+                        ),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Text(
+                          widget.propertyAddress.toString(),
+                          style: const TextStyle(
+                            fontFamily: 'RedHatDisplay',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF8A99B1),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        widget.propertyCategory != 'Estate Market'
+                            ? const Icon(
+                                Icons.qr_code_rounded,
+                                color: Color(0xFFFEC121),
+                                size: 10,
+                              )
+                            : Container(),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        widget.propertyCategory != 'Estate Market'
+                            ? Text(
+                                "${widget.bedroom} bedroom",
+                                style: const TextStyle(
+                                  fontFamily: 'RedHatDisplay',
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF8A99B1),
                                 ),
+                              )
+                            : const Text("")
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        widget.isPromoted == true
+                            ? Row(
+                                children: const [
+                                  Icon(
+                                    Icons.star_rate,
+                                    color: Color(0xFFFEC121),
+                                    size: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    "Promoted",
+                                    style: TextStyle(
+                                      fontFamily: 'RedHatDisplay',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF0072BA),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const Text(
+                                "",
+                                style: TextStyle(
+                                    fontFamily: 'RedHatDisplay',
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                      ],
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+            Positioned.fill(
+                top: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          // // width: 85,
+                          // padding:
+                          //     const EdgeInsets.all(5),
+                          height: 25,
+                          decoration: BoxDecoration(
+                            color: const Color(0XFFFEC121),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Text(
+                                capitalize('for ') +
+                                    capitalize(widget.propertyType.toString()),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   width: MediaQuery.of(context)
-                        //           .size
-                        //           .width /
-                        //       1.6,
-                        // ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: InkWell(
-                            onTap: () async {
-                              var prefs = await SharedPreferences.getInstance();
-                              var token = prefs.getString('token');
-                              token == null
-                                  ? showModalBottomSheet<void>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return const SocialLogin();
-                                      })
-                                  : userFavouritedListingController
-                                      .handleLike(widget.id);
-                            },
-                            child: CircleAvatar(
-                              radius: 10,
-                              backgroundColor: Colors.white,
-                              child: userFavouritedListingController
-                                      .userFavouritedListing
-                                      .contains(widget.id)
-                                  ? const Icon(CupertinoIcons.heart_solid,
-                                      size: 16, color: Color(0xFFDD1611))
-                                  : const Icon(CupertinoIcons.heart,
-                                      size: 16, color: Color(0XFF304059)),
-                            ),
+                      ),
+                      // SizedBox(
+                      //   width: MediaQuery.of(context)
+                      //           .size
+                      //           .width /
+                      //       1.6,
+                      // ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap: () async {
+                            var prefs = await SharedPreferences.getInstance();
+                            var token = prefs.getString('token');
+                            token == null
+                                ? showModalBottomSheet<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const SocialLogin();
+                                    })
+                                : userFavouritedListingController
+                                    .handleLike(widget.id);
+                          },
+                          child: CircleAvatar(
+                            radius: 10,
+                            backgroundColor: Colors.white,
+                            child: userFavouritedListingController
+                                    .userFavouritedListing
+                                    .contains(widget.id)
+                                ? const Icon(CupertinoIcons.heart_solid,
+                                    size: 16, color: Color(0xFFDD1611))
+                                : const Icon(CupertinoIcons.heart,
+                                    size: 16, color: Color(0XFF304059)),
                           ),
                         ),
-                      ],
-                    ),
-                  )),
-            ],
-          ),
+                      ),
+                    ],
+                  ),
+                )),
+          ],
         ),
       ),
     );

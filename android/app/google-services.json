@@ -47,10 +47,48 @@
               "client_type": 3
             },
             {
-              "client_id": "285049044019-ogi4una7gkgh4qbapag1o488bphulhep.apps.googleusercontent.com",
+              "client_id": "285049044019-gt2ehvaac2r40291pp13vor8fj6qm4lp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.findcribs.findcribs"
+                "bundle_id": "com.findcribs.findcribs",
+                "app_store_id": "1663939836"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285049044019:android:88c83f29f09c36a5e7f746",
+        "android_client_info": {
+          "package_name": "com.findcribs.ng"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285049044019-15kmillcvga7kc79366cdqgko9i1ev8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKBV8pRah3vw94P7WeLAZN0wWJbEZb66A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285049044019-15kmillcvga7kc79366cdqgko9i1ev8u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "285049044019-gt2ehvaac2r40291pp13vor8fj6qm4lp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.findcribs.findcribs",
+                "app_store_id": "1663939836"
               }
             }
           ]

@@ -3,10 +3,13 @@
 import 'package:findcribs/controller/sale_listing_controller.dart';
 import 'package:findcribs/screens/listing_process/listing/components/sale/sale3_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../../controller/thousand_formatter.dart';
 
 class Sale2Stepper extends StatefulWidget {
   const Sale2Stepper({
@@ -39,6 +42,10 @@ class _Sale2StepperState extends State<Sale2Stepper> {
         saleListingController.otherCharges.value == 'Yes' ? true : false;
     selecteSaleFee = saleListingController.saleCommissionIndex.value;
     super.initState();
+  }
+
+  String _formatValue(String value) {
+    return value.replaceAll(',', '');
   }
 
   @override
@@ -519,23 +526,23 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                       ),
                                       validator: FormBuilderValidators.compose([
                                         FormBuilderValidators.required(context),
-                                        FormBuilderValidators.numeric(context),
-                                        FormBuilderValidators.integer(context),
-                                        // FormBuilderValidators.minLength(
-                                        //     context, 4),
                                         FormBuilderValidators.min(
                                             context, 10000),
                                       ]),
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        ThousandsSeparatorInputFormatter(),
+                                      ],
                                       onChanged: (value) {
                                         if (value!.isEmpty) {
                                           saleListingController.saleFee.value =
                                               0.toString();
                                         } else if (_saleFeeFormKey.currentState!
                                             .validate()) {
-                                          setState(() {
-                                            saleListingController.saleFee
-                                                .value = value.toString();
-                                          });
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+                                          saleListingController.saleFee.value =
+                                              numericValue.toString();
                                         }
                                       },
 
@@ -559,29 +566,44 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                             context.textTheme.bodyMedium!.color,
                                         fontFamily: "RedHatDisplay",
                                       ),
-                                      validator: FormBuilderValidators.compose([
-                                        FormBuilderValidators.required(context),
-                                        FormBuilderValidators.numeric(context),
-                                        FormBuilderValidators.integer(context),
-                                        // FormBuilderValidators.minLength(context, 4),
-                                        FormBuilderValidators.min(
-                                            context, 10000),
-                                      ]),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Value is required';
+                                        }
+
+                                        // Remove commas and parse as an integer
+                                        final numericValue = int.tryParse(
+                                            value.replaceAll(',', ''));
+
+                                        if (numericValue == null) {
+                                          return 'Invalid number format';
+                                        }
+
+                                        if (numericValue < 10000) {
+                                          return 'Value must be at least 10,000';
+                                        }
+
+                                        return null; // Validation passed
+                                      },
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        ThousandsSeparatorInputFormatter(),
+                                      ],
                                       onChanged: (value) {
                                         if (value!.isEmpty) {
                                           saleListingController.saleFee.value =
                                               0.toString();
                                         } else if (_saleFeeFormKey.currentState!
                                             .validate()) {
-                                          setState(() {
-                                            saleListingController.saleFee
-                                                .value = value.toString();
-                                          });
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+                                          saleListingController.saleFee.value =
+                                              numericValue.toString();
                                         }
                                       },
 
-                                      initialValue:
-                                          saleListingController.saleFee.value,
+                                      initialValue: _formatValue(
+                                          saleListingController.saleFee.value),
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius:
@@ -918,12 +940,14 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                 saleListingController.otherCharges.value ==
                                         'Yes'
                                     ? Text(
-                                        formatter.format(saleListingController
-                                                    .saleFee.value ==
+                                        formatter.format(_formatValue(
+                                                    saleListingController
+                                                        .saleFee.value) ==
                                                 ''
                                             ? 0
-                                            : int.parse(saleListingController
-                                                .saleFee.value)),
+                                            : int.parse(_formatValue(
+                                                saleListingController
+                                                    .saleFee.value))),
                                         style: const TextStyle(
                                           color: Color(0XFF0072BA),
                                         ),
@@ -933,10 +957,13 @@ class _Sale2StepperState extends State<Sale2Stepper> {
                                                     .saleFee.value ==
                                                 ''
                                             ? 0
-                                            : int.parse(saleListingController
-                                                    .saleFee.value) +
-                                                (int.parse(saleListingController
-                                                            .saleFee.value) *
+                                            : int.parse(_formatValue(
+                                                    saleListingController
+                                                        .saleFee.value)) +
+                                                (int.parse(_formatValue(
+                                                            saleListingController
+                                                                .saleFee
+                                                                .value)) *
                                                         saleListingController
                                                             .saleCommission
                                                             .value) /
@@ -999,7 +1026,8 @@ class _Sale2StepperState extends State<Sale2Stepper> {
   }
 
   handleNextScreen() async {
-    if (_formKey2.currentState!.validate()) {
+    if (_formKey2.currentState!.validate() &&
+        _saleFeeFormKey.currentState!.validate()) {
       _formKey2.currentState!.save();
       print("clicked");
       var formData = _formKey2.currentState!.value;

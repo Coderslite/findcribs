@@ -43,10 +43,8 @@ class _TerraceScreenState extends State<TerraceScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      houseController.category.value = 'terrace';
       houseController.fetchPosts(0);
       houseController.isFiltering.value = true;
-      houseController.categoryPagingController.itemList!.clear();
     });
     super.initState();
   }

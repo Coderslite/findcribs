@@ -212,6 +212,7 @@ class _ChatListState extends State<ChatList> {
                       shrinkWrap: true,
                       reverse: true,
                       itemCount: getAllChatController.allAvailableChats.length,
+                      physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         int receiverId = getAllChatController
                                     .allAvailableChats[index].users![1]['id']

@@ -14,6 +14,7 @@ class HouseByCategoryController extends GetxController {
   var minPrice = ''.obs;
   var maxPrice = ''.obs;
   var category = ''.obs;
+  var search = ''.obs;
   var livingRoom = 0.0.obs;
   var bathroom = 0.0.obs;
   var bedroom = 0.0.obs;
@@ -22,7 +23,7 @@ class HouseByCategoryController extends GetxController {
   var lga = ''.obs;
   var isFiltering = false.obs;
   final PagingController<int, HouseListModel> categoryPagingController =
-      PagingController(firstPageKey: 0);
+      PagingController(firstPageKey: 1);
   final _posts = <HouseListModel>[];
 
   List<HouseListModel> get posts => _posts;
@@ -40,6 +41,7 @@ class HouseByCategoryController extends GetxController {
     minPrice.value = '';
     maxPrice.value = '';
     category.value = '';
+    search.value = '';
     livingRoom.value = 0.0;
     bathroom.value = 0.0;
     bedroom.value = 0.0;
@@ -50,7 +52,10 @@ class HouseByCategoryController extends GetxController {
 
   Future<void> fetchPosts(int pageKey) async {
     print("property by category");
+    print(category);
     var retryCount = 0;
+    categoryPagingController.itemList != [];
+
     var type = propertyType.value == 'All' ? '' : propertyType.toString();
     var myLivingroom = livingRoom.value == 0.0 ? '' : livingRoom.toInt();
     var myKitchen = kitchen.value == 0.0 ? '' : kitchen.toInt();
@@ -60,7 +65,7 @@ class HouseByCategoryController extends GetxController {
     while (retryCount < 3) {
       try {
         final response = await _client.get(Uri.parse(
-            "$baseUrl/search-listing?type=$type&minPrice=$minPrice&maxPrice=$maxPrice&search=$category&livingroom=$myLivingroom&bathroom=$myBathroom&bedroom=$myBedroom&kitchen=$myKitchen&state=$state&lga=$lga&page=$pageKey&size=$_perPage"));
+            "$baseUrl/search-listing?type=$type&minPrice=${minPrice.value}&maxPrice=${maxPrice.value}&search=${search.value}&category=${category.value}&livingroom=$myLivingroom&bathroom=$myBathroom&bedroom=$myBedroom&kitchen=$myKitchen&state=${state.value}&lga=${lga.value}&page=$pageKey&size=$_perPage"));
 
         if (response.statusCode == 200) {
           isFiltering.value = false;
@@ -70,11 +75,18 @@ class HouseByCategoryController extends GetxController {
           final posts = List<HouseListModel>.from(
               houseData.map((post) => HouseListModel.fromJson(post)));
           if (posts.isNotEmpty) {
-            categoryPagingController.appendPage(posts, pageKey + 1);
+            if (pageKey == 1 && categoryPagingController.itemList != null) {
+              print("already added");
+              // categoryPagingController.itemList!.fillRange(0, 1);
+              categoryPagingController.itemList!.clear();
+
+              categoryPagingController.appendPage(posts, pageKey + 2);
+            } else {
+              categoryPagingController.appendPage(posts, pageKey + 1);
+            }
           } else {
             categoryPagingController.appendLastPage(posts);
           }
-          _posts.addAll(posts);
 
           // Break the loop if the response was successful
           break;
