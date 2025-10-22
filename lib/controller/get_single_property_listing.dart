@@ -11,7 +11,7 @@ AllPropertyListingController houseListingController =
 
 class GetSinglePropertyController extends GetxController {
   var propertyId = ''.obs;
-  var singleProperty = [].obs;
+  RxList<HouseListModel> singleProperty = <HouseListModel>[].obs;
   var isLoading = true.obs;
 
   handleGetPropertyById() {

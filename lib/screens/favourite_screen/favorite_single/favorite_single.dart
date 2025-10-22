@@ -14,11 +14,10 @@ class FavoriteSingle extends StatefulWidget {
   final String image;
   final int id;
   const FavoriteSingle(
-      {Key? key,
+      {super.key,
       required this.businessName,
       required this.image,
-      required this.id})
-      : super(key: key);
+      required this.id});
 
   @override
   State<FavoriteSingle> createState() => _FavoriteSingleState();
@@ -38,7 +37,7 @@ class _FavoriteSingleState extends State<FavoriteSingle> {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return AgentProfileScreen(
-                  id: widget.id,
+                  userId: widget.id,
                 );
               }));
             },

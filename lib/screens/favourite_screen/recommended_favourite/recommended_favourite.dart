@@ -14,7 +14,7 @@ import '../../../components/constants.dart';
 import '../../agent_profile/agent_profile.dart';
 
 class RecommendedFavourite extends StatefulWidget {
-  const RecommendedFavourite({Key? key}) : super(key: key);
+  const RecommendedFavourite({super.key});
 
   @override
   State<RecommendedFavourite> createState() => _RecommendedFavouriteState();
@@ -179,7 +179,7 @@ class _RecommendedFavouriteState extends State<RecommendedFavourite> {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (_) {
                                     return AgentProfileScreen(
-                                      id: allAgents![index].id,
+                                      userId: allAgents![index].userId,
                                     );
                                   }));
                                 },

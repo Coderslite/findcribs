@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-
 class ActiveListing extends StatefulWidget {
-  const ActiveListing({Key? key}) : super(key: key);
+  const ActiveListing({super.key});
 
   @override
   State<ActiveListing> createState() => _ActiveListingState();
@@ -101,12 +100,11 @@ class _ActiveListingState extends State<ActiveListing>
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10))),
-                            child: Text(
+                            child: const Text(
                               "For Rent",
                               style: TextStyle(
                                 // color: Colors.black,
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -120,12 +118,11 @@ class _ActiveListingState extends State<ActiveListing>
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10))),
-                            child: Text(
+                            child: const Text(
                               "For Sale",
                               style: TextStyle(
                                 // color: Colors.black,
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -141,11 +138,10 @@ class _ActiveListingState extends State<ActiveListing>
                                 bottomRight: Radius.circular(10),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Estate Market",
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),

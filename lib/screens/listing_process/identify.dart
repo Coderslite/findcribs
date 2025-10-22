@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Identify extends StatefulWidget {
-  const Identify({Key? key}) : super(key: key);
+  const Identify({super.key});
 
   @override
   State<Identify> createState() => _IdentifyState();

@@ -1,7 +1,6 @@
 // ignore_for_file: library_prefixes, avoid_print, use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:badges/badges.dart' as badges;
@@ -9,6 +8,7 @@ import 'package:findcribs/controller/connectivity_controller.dart';
 import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/controller/home_root_controller.dart';
 import 'package:findcribs/models/chat_list_model.dart';
+import 'package:findcribs/screens/agent_profile/components/business_detail/business_update/business_profile_agent_update.dart';
 import 'package:findcribs/screens/agent_profile/profile.dart';
 import 'package:findcribs/screens/chat_screen/chat_screen.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_page.dart';
@@ -16,7 +16,7 @@ import 'package:findcribs/screens/homepage/homepage_screen.dart';
 import 'package:findcribs/screens/listing_process/get_started.dart';
 import 'package:findcribs/screens/listing_process/listing/select_listing_type.dart';
 import 'package:findcribs/screens/story/story_list.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,7 +27,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../controller/get_chat_controller.dart';
-import '../../main.dart';
 import '../../models/user_profile_information_model.dart';
 import '../../util/colors.dart';
 import '../../util/social_login.dart';
@@ -36,9 +35,9 @@ import '../agent_profile/components/personal_info/personal_information.dart';
 class HomePageRoot extends StatefulWidget {
   final int navigateIndex;
   const HomePageRoot({
-    Key? key,
+    super.key,
     required this.navigateIndex,
-  }) : super(key: key);
+  });
 
   @override
   State<HomePageRoot> createState() => _HomePageRootState();
@@ -46,6 +45,7 @@ class HomePageRoot extends StatefulWidget {
 
 class _HomePageRootState extends State<HomePageRoot> {
   bool isLoading = false;
+  FirebaseInAppMessaging fiam = FirebaseInAppMessaging.instance;
 
   final tooltipController = JustTheController();
 
@@ -89,7 +89,9 @@ class _HomePageRootState extends State<HomePageRoot> {
     super.initState();
 
     Timer(const Duration(seconds: 5), () {
-      handleCheckNumber();
+      if (getProfileController.showUpdateNumber.value) {
+        handleCheckNumber();
+      }
     });
   }
 
@@ -116,8 +118,38 @@ class _HomePageRootState extends State<HomePageRoot> {
         btnOkOnPress: () {
           Get.off(const PersonalInformationScreen());
         },
+        onDismissCallback: (type) {
+          getProfileController.showUpdateNumber.value = false;
+        },
       ).show();
-    } else {}
+    } else if (getProfileController.whatsappNo.string == 'null' &&
+        getProfileController.isLoading.isFalse &&
+        getProfileController.agent != {}) {
+      AwesomeDialog(
+        context: Get.context!,
+        dialogType: DialogType.warning,
+        borderSide: const BorderSide(
+          color: Colors.yellow,
+          width: 2,
+        ),
+        width: 280,
+        buttonsBorderRadius: const BorderRadius.all(
+          Radius.circular(2),
+        ),
+        dismissOnTouchOutside: false,
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        desc: 'You haven\'t updated your whatsapp number',
+        showCloseIcon: true,
+        btnOkText: "Update now",
+        btnOkOnPress: () {
+          Get.off(const BusinessProfileUpdate());
+        },
+        onDismissCallback: (type) {
+          getProfileController.showUpdateNumber.value = false;
+        },
+      ).show();
+    }
   }
 
   bool willPop = false;
@@ -250,12 +282,6 @@ class _HomePageRootState extends State<HomePageRoot> {
         bottomNavigationBar: getFooter(size),
         body: UpgradeAlert(
           upgrader: Upgrader(
-            canDismissDialog: true,
-            showIgnore: false,
-            showLater: false,
-            dialogStyle: Platform.isIOS
-                ? UpgradeDialogStyle.cupertino
-                : UpgradeDialogStyle.material,
             durationUntilAlertAgain: const Duration(minutes: 1),
           ),
           child: SafeArea(

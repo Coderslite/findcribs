@@ -40,7 +40,7 @@ class AllAgentController extends GetxController {
           headers: {
             "authorization": "$token",
           });
-
+      print(response.body);
       if (response.statusCode == 200) {
         isFiltering.value = false;
         final data = jsonDecode(response.body);

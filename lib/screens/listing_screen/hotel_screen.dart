@@ -22,7 +22,7 @@ import '../homepage/single_property.dart';
 import '../listing_process/get_started.dart';
 
 class HotelScreen extends StatefulWidget {
-  const HotelScreen({Key? key}) : super(key: key);
+  const HotelScreen({super.key});
 
   @override
   State<HotelScreen> createState() => _HotelScreenState();
@@ -712,40 +712,20 @@ class _HotelScreenState extends State<HotelScreen> {
                                   shrinkWrap: true,
                                   itemCount: filteredList.length,
                                   itemBuilder: (context, x) {
-                                    int price = (filteredList[x]
-                                            .rentalFee!
-                                            .toInt() +
-                                        filteredList[x].cautionFee!.toInt() +
-                                        filteredList[x].legalFee!.toInt() +
-                                        filteredList[x].agencyFee!.toInt());
+                                    int price =
+                                        (int.parse(filteredList[x].rentalFee!) +
+                                            filteredList[x]
+                                                .cautionFee!
+                                                .toInt() +
+                                            filteredList[x].legalFee!.toInt() +
+                                            filteredList[x].agencyFee!.toInt());
                                     var formatter = NumberFormat("#,###");
                                     var formatedPrice = formatter.format(price);
                                     return Column(
                                       children: [
                                         SingleProperty(
                                           comingFrom: 'Hotel',
-                                          id: filteredList[x].id,
-                                          image: filteredList[x].image,
-                                          designType:
-                                              filteredList[x].designType,
-                                          currency: filteredList[x].currency,
-                                          propertyType:
-                                              filteredList[x].propertyType,
-                                          propertyAddress:
-                                              filteredList[x].propertyAddress,
-                                          bedroom: filteredList[x].bedroom,
-                                          propertyCategory: filteredList[x]
-                                              .propertyCategory,
-                                          price: formatedPrice,
-                                          isPromoted:
-                                              filteredList[x].isPromoted,
-                                          propertyName: filteredList[x]
-                                              .propertyName
-                                              .toString(),
-                                          state:filteredList[x]
-                                              .state
-                                              .toString(),
-
+                                          listing: filteredList[x],
                                         ),
                                         const SizedBox(height: 5),
                                       ],

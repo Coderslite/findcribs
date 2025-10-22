@@ -24,11 +24,10 @@ class NameScreen extends StatefulWidget {
   final String password1;
   final String password2;
   const NameScreen(
-      {Key? key,
+      {super.key,
       required this.email,
       required this.password1,
-      required this.password2})
-      : super(key: key);
+      required this.password2});
 
   @override
   NameScreenState createState() => NameScreenState();

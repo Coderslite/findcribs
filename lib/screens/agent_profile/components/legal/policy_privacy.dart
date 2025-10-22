@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Policy extends StatefulWidget {
-  const Policy({Key? key}) : super(key: key);
+  const Policy({super.key});
 
   @override
   State<Policy> createState() => _PolicyState();
@@ -96,8 +96,7 @@ class _PolicyState extends State<Policy> {
 class EachPolicy extends StatelessWidget {
   final String title;
   final String body;
-  const EachPolicy({Key? key, required this.title, required this.body})
-      : super(key: key);
+  const EachPolicy({super.key, required this.title, required this.body});
 
   @override
   Widget build(BuildContext context) {

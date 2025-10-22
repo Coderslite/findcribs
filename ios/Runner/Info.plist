@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key></key>
+	<string></string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -24,27 +26,20 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>sms</string>
-		<string>tel</string>
-	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Profile picture</string>
-	<key>NSFileProviderDomainUsageDescription</key>
-	<string>Select property images</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Property location</string>
+	<string>This app requires access to the camera to take photos and videos.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Grant access to microphone</string>
+	<string>We need access to your microphone to enable audio recording and voice features within the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Select property images</string>
+	<string>We need access to your photo library to allow you to select and share photos within the app</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>aps-environment</key>
+	<string>production</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -52,8 +47,6 @@
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>UILocalNotification</key>
-	<string>Grant access to push notification</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
@@ -69,7 +62,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 </dict>
 </plist>

@@ -24,7 +24,7 @@ import '../../../../controller/get_profile_controller.dart';
 import '../../../homepage/home_root.dart';
 
 class PersonalInformationScreen extends StatefulWidget {
-  const PersonalInformationScreen({Key? key}) : super(key: key);
+  const PersonalInformationScreen({super.key});
 
   @override
   State<PersonalInformationScreen> createState() =>
@@ -35,6 +35,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _whatsappController = TextEditingController();
   bool isUpdating = false;
   final _formKey = GlobalKey<FormBuilderState>();
   // late File profileImage;
@@ -60,6 +61,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   bool isExpandedLastName = false;
   bool isExpandedAddress = false;
   bool isExpandedPhone = false;
+  bool isExpandedWhatsapp = false;
   bool isExpandedEmail = false;
   bool isUploading = false;
 
@@ -115,9 +117,9 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                   ),
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 "Personal Detaiils",
-                                style: TextStyle(fontSize: size.width / 22),
+                                style: TextStyle(fontSize: 18),
                               ),
                               const Text("            "),
                             ],
@@ -184,7 +186,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               right: 15,
                               left: 15,
                             ),
-                            height: isExpandedName ? 200 : 60,
+                            height: isExpandedName ? 200 : null,
                             duration: const Duration(milliseconds: 300),
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -211,15 +213,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(userData.firstName.toString(),
-                                              style: TextStyle(
-                                                fontSize: size.width / 26,
+                                              style: const TextStyle(
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                               )),
-                                          Text(
+                                          const Text(
                                             "First Name",
                                             style: TextStyle(
-                                                fontSize: size.width / 37,
-                                                color: const Color(0XFF8A99B1)),
+                                                fontSize: 14,
+                                                color: Color(0XFF8A99B1)),
                                           ),
                                         ],
                                       ),
@@ -259,8 +261,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                 decoration: InputDecoration(
                                                     hintText:
                                                         "Enter first name",
-                                                    hintStyle: TextStyle(
-                                                      fontSize: size.width / 33,
+                                                    hintStyle: const TextStyle(
+                                                      fontSize: 16,
                                                     ),
                                                     border: OutlineInputBorder(
                                                         borderRadius:
@@ -308,7 +310,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               right: 15,
                               left: 15,
                             ),
-                            height: isExpandedLastName ? 200 : 60,
+                            height: isExpandedLastName ? 200 : null,
                             duration: const Duration(milliseconds: 300),
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -336,15 +338,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(userData.lastName.toString(),
-                                              style: TextStyle(
-                                                fontSize: size.width / 26,
+                                              style: const TextStyle(
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                               )),
-                                          Text(
+                                          const Text(
                                             "Last Name",
                                             style: TextStyle(
-                                                fontSize: size.width / 37,
-                                                color: const Color(0XFF8A99B1)),
+                                                fontSize: 14,
+                                                color: Color(0XFF8A99B1)),
                                           ),
                                         ],
                                       ),
@@ -384,8 +386,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                 decoration: InputDecoration(
                                                     hintText:
                                                         "Enter Second name",
-                                                    hintStyle: TextStyle(
-                                                      fontSize: size.width / 33,
+                                                    hintStyle: const TextStyle(
+                                                      fontSize: 16,
                                                     ),
                                                     border: OutlineInputBorder(
                                                         borderRadius:
@@ -433,7 +435,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           //     right: 15,
                           //     left: 15,
                           //   ),
-                          //   height: isExpandedAddress ? 200 : 60,
+                          //   height: isExpandedAddress ? 200 : null,
                           //   duration: const Duration(milliseconds: 300),
                           //   decoration: BoxDecoration(
                           //     border: Border.all(
@@ -465,7 +467,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           //                     "22, oyo efam street, calabar",
                           //                     style: TextStyle(
                           //
-                          //                       fontSize: size.width / 26,
+                          //                       fontSize: 16,
                           //                       fontWeight: FontWeight.bold,
                           //                       overflow: TextOverflow.ellipsis,
                           //                     ),
@@ -475,7 +477,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           //                 Text(
                           //                   "Address",
                           //                   style: TextStyle(
-                          //                       fontSize: size.width / 37,
+                          //                       fontSize: 14,
                           //                       color: const Color(0XFF8A99B1)),
                           //                 ),
                           //               ],
@@ -507,7 +509,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           //                       decoration: InputDecoration(
                           //                           hintText: "Enter address",
                           //                           hintStyle: TextStyle(
-                          //                             fontSize: size.width / 33,
+                          //                             fontSize: 16,
                           //                           ),
                           //                           border: OutlineInputBorder(
                           //                               borderRadius:
@@ -549,7 +551,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               right: 15,
                               left: 15,
                             ),
-                            height: isExpandedPhone ? 200 : 60,
+                            height: isExpandedPhone ? 200 : null,
                             duration: const Duration(milliseconds: 300),
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -578,15 +580,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                           Text(
                                               userData.phoneNumber ??
                                                   "Enter your mobile number",
-                                              style: TextStyle(
-                                                fontSize: size.width / 25,
+                                              style: const TextStyle(
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                               )),
-                                          Text(
+                                          const Text(
                                             "Phone number",
                                             style: TextStyle(
-                                                fontSize: size.width / 37,
-                                                color: const Color(0XFF8A99B1)),
+                                                fontSize: 14,
+                                                color: Color(0XFF8A99B1)),
                                           ),
                                         ],
                                       ),
@@ -617,16 +619,16 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                                 controller: _phoneController,
                                                 validator: FormBuilderValidators
                                                     .compose([
-                                                  FormBuilderValidators.numeric(
-                                                  ),
+                                                  FormBuilderValidators
+                                                      .numeric(),
                                                   FormBuilderValidators
                                                       .minLength(11),
                                                 ]),
                                                 decoration: InputDecoration(
                                                     hintText:
                                                         "Enter new mobile number",
-                                                    hintStyle: TextStyle(
-                                                      fontSize: size.width / 33,
+                                                    hintStyle: const TextStyle(
+                                                      fontSize: 16,
                                                     ),
                                                     border: OutlineInputBorder(
                                                         borderRadius:
@@ -666,6 +668,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           const SizedBox(
                             height: 10,
                           ),
+
                           AnimatedContainer(
                             padding: const EdgeInsets.only(
                               top: 5,
@@ -673,7 +676,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               right: 15,
                               left: 15,
                             ),
-                            height: isExpandedEmail ? 200 : 60,
+                            height: isExpandedEmail ? 200 : null,
                             duration: const Duration(milliseconds: 300),
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -693,15 +696,15 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(userData.email.toString(),
-                                            style: TextStyle(
-                                              fontSize: size.width / 25,
+                                            style: const TextStyle(
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             )),
-                                        Text(
+                                        const Text(
                                           "Email email address",
                                           style: TextStyle(
-                                              fontSize: size.width / 37,
-                                              color: const Color(0XFF8A99B1)),
+                                              fontSize: 14,
+                                              color: Color(0XFF8A99B1)),
                                         ),
                                       ],
                                     ),
@@ -718,8 +721,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                               TextField(
                                                 decoration: InputDecoration(
                                                     hintText: "Enter address",
-                                                    hintStyle: TextStyle(
-                                                      fontSize: size.width / 33,
+                                                    hintStyle: const TextStyle(
+                                                      fontSize: 16,
                                                     ),
                                                     border: OutlineInputBorder(
                                                         borderRadius:
@@ -937,7 +940,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       final response = await http.put(Uri.parse("$baseUrl/profile"), headers: {
         "Authorization": "$token",
       }, body: <String, String>{
-        'phone_number': phone,
+        "phone_number": phone,
       });
       var responseData = jsonDecode(response.body);
 
@@ -1027,16 +1030,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
           ),
           WebUiSettings(
             context: context,
-            presentStyle: CropperPresentStyle.dialog,
-            boundary: const CroppieBoundary(
-              width: 520,
-              height: 520,
-            ),
-            viewPort:
-                const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-            enableExif: true,
-            enableZoom: true,
-            showZoomer: true,
+            presentStyle: WebPresentStyle.dialog,
+            zoomable: true,
           ),
         ],
       );

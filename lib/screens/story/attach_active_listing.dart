@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:findcribs/screens/story/image_preview.dart';
 import 'package:findcribs/screens/story/single_active_listing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../../models/house_list_model.dart';
@@ -13,8 +15,8 @@ import '../../service/active_list_service.dart';
 class AttachActiveListing extends StatefulWidget {
   final File file;
   final String type;
-  const AttachActiveListing({Key? key, required this.file, required this.type})
-      : super(key: key);
+  const AttachActiveListing(
+      {super.key, required this.file, required this.type});
 
   @override
   State<AttachActiveListing> createState() => _AttachActiveListingState();
@@ -76,7 +78,7 @@ class _AttachActiveListingState extends State<AttachActiveListing> {
                   ),
                   Text(
                     "Active Listing",
-                    style: TextStyle( fontSize: size.width / 22),
+                    style: TextStyle(fontSize: size.width / 22),
                   ),
                   const Text("            "),
                 ],
@@ -135,7 +137,7 @@ class _AttachActiveListingState extends State<AttachActiveListing> {
                             itemCount: filteredList.length,
                             itemBuilder: (context, index) {
                               int price =
-                                  (filteredList[index].rentalFee!.toInt() +
+                                  (filteredList[index].rentalFee.toInt() +
                                       filteredList[index].cautionFee!.toInt() +
                                       filteredList[index].legalFee!.toInt() +
                                       filteredList[index].agencyFee!.toInt());
@@ -144,7 +146,7 @@ class _AttachActiveListingState extends State<AttachActiveListing> {
                               return GestureDetector(
                                 onTap: () {
                                   widget.type == 'video'
-                                      ? 
+                                      ?
                                       // Navigator.push(context,
                                       //     MaterialPageRoute(builder: (_) {
                                       //     return VideoTrim(
@@ -174,8 +176,7 @@ class _AttachActiveListingState extends State<AttachActiveListing> {
                                   currency: filteredList[index].currency,
                                   propertyAddress:
                                       filteredList[index].propertyAddress,
-                                  propertyLocation:
-                                      filteredList[index].state,
+                                  propertyLocation: filteredList[index].state,
                                   id: filteredList[index].id.toString(),
                                   formattedPrice: formatedPrice,
                                   status: 'Active',

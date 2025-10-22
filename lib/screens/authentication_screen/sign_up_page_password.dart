@@ -16,7 +16,7 @@ import '../../widgets/back_arrow.dart';
 
 class PasswordScreen extends StatefulWidget {
   final String email;
-  const PasswordScreen({Key? key, required this.email}) : super(key: key);
+  const PasswordScreen({super.key, required this.email});
 
   @override
   PasswordScreenState createState() => PasswordScreenState();

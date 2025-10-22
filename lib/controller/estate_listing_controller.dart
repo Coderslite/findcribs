@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class EstateListingController extends GetxController {
   var ageRestriction = 0.obs;
@@ -76,5 +79,48 @@ class EstateListingController extends GetxController {
 
     legalFeeIndex.value = 0;
     agencyFeeIndex.value = 0;
+  }
+
+  Future<bool> handleShowConfirmPrice(BuildContext context) async {
+    var res = false;
+    var formatter = NumberFormat("#,###");
+    var formatedPrice = formatter.format(int.parse(price.value));
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              "Is this the price for your property?",
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "${currency.value == 'Naira' ? "NGN" : "\$"}$formatedPrice",
+                  style: const TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                  res = false;
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  res = true;
+                  Get.back();
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        });
+    return res;
   }
 }

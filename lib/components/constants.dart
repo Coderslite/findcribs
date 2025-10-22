@@ -9,6 +9,8 @@ const mobileButtonColor = Color(0xff0072BA);
 const mobileButtonTextColor = Color(0xffffffff);
 const mobileColorForText = Color(0xffB6B6B6);
 const mobileIconColor = Color(0xffF0F7F8);
+const kPrimary = Color(0xFF0072BA);
+const secondaryColor = Color(0xFF4D4D4D);
 
 // Mobile Fonts#B6B6B6
 const mobileTextFont = TextStyle(
@@ -25,11 +27,18 @@ const mobileTopHeight = SizedBox(height: 35);
 
 const mobileBigHeight = SizedBox(height: 80);
 const kFontFamily = 'RedHatDisplay';
+// test
+// const baseUrl = 'https://find-cribs-api.onrender.com/user';
+// const socketUrl = 'https://find-cribs-api.onrender.com';
 
-// const baseUrl = 'https://findcribs.ng/user';
-
-const baseUrl = 'http://137.184.87.179:5000/user';
-const socketUrl = 'http://137.184.87.179:5000';
+// live
+const baseUrl = 'https://api.findcribs.ng/user';
+const socketUrl = 'https://api.findcribs.ng';
 
 const avataImg =
     'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg';
+
+class PaystackKey {
+  // test
+  static const publicKey = "pk_test_07ddd5c122045aadbb59afc18f329864e73c1ed1";
+}

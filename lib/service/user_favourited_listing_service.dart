@@ -7,7 +7,9 @@ import 'package:findcribs/models/user_favourite_listing.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List<UserFavouritedListingModel>> getUserFavouritedListing() async {
+import '../models/house_list_model.dart';
+
+Future<List<HouseListModel>> getUserFavouritedListing() async {
   var prefs = await SharedPreferences.getInstance();
   var token = prefs.getString("token");
   var response =
@@ -18,7 +20,7 @@ Future<List<UserFavouritedListingModel>> getUserFavouritedListing() async {
   if (userData['status'] == true) {
     List favouritedProperty = userData['data']['listingLikes'];
     return favouritedProperty
-        .map((e) => UserFavouritedListingModel.fromJson(e))
+        .map((e) => HouseListModel.fromJson(e['listing']))
         .toList();
   } else {
     print(userData['message']);

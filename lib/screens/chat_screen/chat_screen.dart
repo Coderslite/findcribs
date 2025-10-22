@@ -21,7 +21,7 @@ import '../homepage/home_root.dart';
 import 'chat_details.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -36,6 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    getAllChatController.handleGetMessage();
     super.initState();
   }
 
@@ -109,10 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  const Expanded(
-                      child: SingleChildScrollView(
-                          // reverse: true,
-                          child: ChatList()))
+                  const Expanded(child: ChatList())
                 ],
               ),
       ),
@@ -121,7 +119,7 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class ChatList extends StatefulWidget {
-  const ChatList({Key? key}) : super(key: key);
+  const ChatList({super.key});
 
   @override
   State<ChatList> createState() => _ChatListState();
@@ -209,80 +207,97 @@ class _ChatListState extends State<ChatList> {
                     return getAllChatController.handleGetMessage();
                   },
                   child: ListView.builder(
-                      shrinkWrap: true,
-                      reverse: true,
+                      // reverse: true,
                       itemCount: getAllChatController.allAvailableChats.length,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        int receiverId = getAllChatController
-                                    .allAvailableChats[index].users![1]['id']
+                        String receiverId = getAllChatController
+                                    .allAvailableChats[index].userTwo['id']
                                     .toString() ==
                                 'null'
                             ? '0'
                             : getAllChatController.allAvailableChats[index]
-                                        .users![1]['id'] !=
-                                    int.parse(
+                                        .userTwo['id'] !=
+                                    int.tryParse(
                                         getProfileController.myId.toString())
                                 ? getAllChatController
-                                    .allAvailableChats[index].users![1]['id']
+                                    .allAvailableChats[index].userTwo['id']
+                                    .toString()
                                 : getAllChatController
-                                    .allAvailableChats[index].users![0]['id'];
+                                    .allAvailableChats[index].userOne['id']
+                                    .toString();
                         String receiverFirstName = getAllChatController
-                                    .allAvailableChats[index].users![1]['id'] !=
-                                int.parse(getProfileController.myId.toString())
-                            ? getAllChatController.allAvailableChats[index]
-                                .users![1]['first_name']
-                            : getAllChatController.allAvailableChats[index]
-                                .users![0]['first_name'];
-                        String receiverLastName = getAllChatController
-                                    .allAvailableChats[index].users![1]['id'] !=
+                                    .allAvailableChats[index].userTwo['id'] !=
                                 int.parse(getProfileController.myId.toString())
                             ? getAllChatController
-                                .allAvailableChats[index].users![1]['last_name']
-                            : getAllChatController.allAvailableChats[index]
-                                .users![0]['last_name'];
+                                .allAvailableChats[index].userTwo['first_name']
+                            : getAllChatController
+                                .allAvailableChats[index].userTwo['first_name'];
+                        String receiverLastName = getAllChatController
+                                    .allAvailableChats[index].userTwo['id'] !=
+                                int.parse(getProfileController.myId.toString())
+                            ? getAllChatController
+                                .allAvailableChats[index].userTwo['last_name']
+                            : getAllChatController
+                                .allAvailableChats[index].userTwo['last_name'];
                         String receiverImage = getAllChatController
-                                    .allAvailableChats[index].users![0]['id'] !=
+                                    .allAvailableChats[index].userTwo['id'] !=
                                 int.parse(getProfileController.myId.toString())
                             ? getAllChatController.allAvailableChats[index]
-                                    .users![0]['profile_pic'] ??
+                                    .userTwo['profile_pic'] ??
                                 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
                             : getAllChatController.allAvailableChats[index]
-                                    .users![1]['profile_pic'] ??
+                                    .userTwo['profile_pic'] ??
                                 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg';
-                        String usrDate = (getAllChatController
-                                .allAvailableChats[index]
-                                .messages!
-                                .last['createdAt'])
-                            .toString();
+                        String usrDate;
+                        if (getAllChatController
+                                    .allAvailableChats[index].messages ==
+                                null ||
+                            getAllChatController
+                                .allAvailableChats[index].messages!.isEmpty) {
+                          // Fallback to current time if no messages exist
+                          usrDate = DateTime.now().toString();
+                        } else {
+                          // Safely get the last message's createdAt
+                          final lastMessage = getAllChatController
+                              .allAvailableChats[index].messages!.last;
+                          usrDate = lastMessage['createdAt']?.toString() ??
+                              DateTime.now().toString();
+                        }
+
                         var todayDate = DateTime.parse(usrDate);
                         var lastChatTime = timeago.format(todayDate);
-                        filteredUnreadMessage = getAllChatController
-                            .allAvailableChats[index].messages!
-                            .where((element) {
-                          return element['status'] == 'sent' &&
-                              element['senderId'] == receiverId;
+                        List filteredUnreadMessageArray = getAllChatController
+                            .allAvailableChats[index].messages;
+                        filteredUnreadMessage =
+                            filteredUnreadMessageArray.where((msg) {
+                          return msg['status'] == 'sent' &&
+                              msg['senderId'] !=
+                                  int.parse(
+                                      getProfileController.myId.toString());
                         }).toList();
-                        filteredReadMessage = getAllChatController
-                            .allAvailableChats[index].messages!
-                            .where((element) {
+                        print(filteredUnreadMessage);
+                        filteredReadMessage =
+                            filteredUnreadMessageArray.where((element) {
                           return element['status'] == 'read' &&
-                              element['senderId'] == receiverId;
+                              element['senderId'] ==
+                                  int.parse(
+                                      getProfileController.myId.toString());
                         }).toList();
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ChatDetails(
                                   chatIndex: index,
-                                  receiverId: receiverId,
+                                  receiverId: int.parse(receiverId),
                                   receiverImage: receiverImage,
                                   firstName: receiverFirstName,
                                   lastName: receiverLastName,
                                   chatId: getAllChatController
                                       .allAvailableChats[index].id,
-                                  lastReadMsg: filteredUnreadMessage.isEmpty
+                                  lastReadMsg: filteredReadMessage.isEmpty
                                       ? 0
-                                      : filteredUnreadMessage.first['id']),
+                                      : filteredReadMessage.last['id']),
                             ));
                           },
                           child: Column(
@@ -339,26 +354,33 @@ class _ChatListState extends State<ChatList> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      getAllChatController
-                                                                  .allAvailableChats[
-                                                                      index]
-                                                                  .users![0]
-                                                                      ['id']
+                                                      getAllChatController.allAvailableChats[index].userTwo['id']
                                                                   .toString() !=
                                                               getProfileController
                                                                   .myId
                                                                   .toString()
-                                                          ? getAllChatController.allAvailableChats[index].users![0]['first_name'] +
-                                                              " " +
-                                                              getAllChatController.allAvailableChats[index].users![0]
-                                                                  ['last_name']
-                                                          : getAllChatController
-                                                                      .allAvailableChats[index].users![1][
+                                                          ? getAllChatController
+                                                                      .allAvailableChats[
+                                                                          index]
+                                                                      .userTwo[
                                                                   'first_name'] +
                                                               " " +
                                                               getAllChatController
-                                                                  .allAvailableChats[index]
-                                                                  .users![1]['last_name'],
+                                                                      .allAvailableChats[
+                                                                          index]
+                                                                      .userTwo[
+                                                                  'last_name']
+                                                          : getAllChatController
+                                                                      .allAvailableChats[
+                                                                          index]
+                                                                      .userTwo[
+                                                                  'first_name'] +
+                                                              " " +
+                                                              getAllChatController
+                                                                      .allAvailableChats[
+                                                                          index]
+                                                                      .userTwo[
+                                                                  'last_name'],
                                                       style: const TextStyle(
                                                           // color: grey,
                                                           fontSize: 14),
@@ -417,16 +439,30 @@ class _ChatListState extends State<ChatList> {
                                                                   index]
                                                               .id
                                                               .toString()
-                                                      ? "Typing"
-                                                      : getAllChatController
-                                                          .allAvailableChats[
-                                                              index]
-                                                          .messages!
-                                                          .last['message']
-                                                          .toString(),
+                                                      ? "Typing..."
+                                                      : (getAllChatController
+                                                                      .allAvailableChats[
+                                                                          index]
+                                                                      .messages ==
+                                                                  null ||
+                                                              getAllChatController
+                                                                  .allAvailableChats[
+                                                                      index]
+                                                                  .messages!
+                                                                  .isEmpty)
+                                                          ? "No messages yet" // Fallback text if no messages
+                                                          : getAllChatController
+                                                                  .allAvailableChats[
+                                                                      index]
+                                                                  .messages!
+                                                                  .last[
+                                                                      'message']
+                                                                  ?.toString() ??
+                                                              "Message unavailable", // Fallback if 'message' is null
                                                   style: const TextStyle(
-                                                      fontSize: 12,
-                                                      color: Color(0xFFA5A5A5)),
+                                                    fontSize: 12,
+                                                    color: Color(0xFFA5A5A5),
+                                                  ),
                                                 )
                                               ],
                                             ),

@@ -12,10 +12,9 @@ class GetStoryListController extends GetxController {
     storyList = getAllStoryList();
     storyList.then((value) {
       filteredStoryList = value;
-           filteredStoryList = value
-            .where((element) => element.moment!.isNotEmpty)
-            .toList();
-      
+      filteredStoryList =
+          value.where((element) => element.moment!.isNotEmpty).toList();
+
       allStoryList.value = filteredStoryList;
       // print("allStories" + allStoryList.toString());
     });

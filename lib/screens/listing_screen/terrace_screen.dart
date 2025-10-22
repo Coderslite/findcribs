@@ -17,7 +17,7 @@ import '../../widgets/loading_widget.dart';
 import '../homepage/single_property.dart';
 
 class TerraceScreen extends StatefulWidget {
-  const TerraceScreen({Key? key}) : super(key: key);
+  const TerraceScreen({super.key});
 
   @override
   State<TerraceScreen> createState() => _TerraceScreenState();
@@ -736,22 +736,12 @@ class _TerraceScreenState extends State<TerraceScreen> {
                       builderDelegate:
                           PagedChildBuilderDelegate<HouseListModel>(
                         itemBuilder: (context, post, index) {
-                          int price = (post.rentalFee!.toInt());
+                          int price = int.parse(post.rentalFee.toString());
                           var formatter = NumberFormat("#,###");
                           var formatedPrice = formatter.format(price);
                           return SingleProperty(
-                            id: post.id,
-                            image: post.image,
-                            designType: post.designType,
-                            currency: post.currency,
-                            propertyType: post.propertyType,
-                            propertyAddress: post.propertyAddress,
-                            bedroom: post.bedroom,
-                            propertyCategory: post.propertyCategory,
-                            price: formatedPrice,
-                            propertyName: post.propertyName.toString(),
+                            listing: post,
                             comingFrom: 'Homescreen',
-                            state: post.state!,
                           );
                         },
                         noItemsFoundIndicatorBuilder: (context) =>

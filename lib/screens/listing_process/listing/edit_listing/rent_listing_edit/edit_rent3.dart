@@ -31,7 +31,7 @@ class EditRent3Stepper extends StatefulWidget {
   final String? legalFee;
   final String? agencyFee;
   const EditRent3Stepper(
-      {Key? key,
+      {super.key,
       this.propertyCategory,
       this.houseType,
       this.propertyAddress,
@@ -47,8 +47,7 @@ class EditRent3Stepper extends StatefulWidget {
       this.cautionFee,
       this.serviceCharge,
       this.legalFee,
-      this.agencyFee})
-      : super(key: key);
+      this.agencyFee});
 
   @override
   State<EditRent3Stepper> createState() => _EditRent3StepperState();

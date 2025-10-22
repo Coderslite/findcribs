@@ -40,7 +40,7 @@ class EditRent4 extends StatefulWidget {
   final String? legalFee;
   final String? agencyFee;
   const EditRent4(
-      {Key? key,
+      {super.key,
       this.propertyCategory,
       this.houseType,
       this.propertyAddress,
@@ -63,8 +63,7 @@ class EditRent4 extends StatefulWidget {
       this.cautionFee,
       this.serviceCharge,
       this.legalFee,
-      this.agencyFee})
-      : super(key: key);
+      this.agencyFee});
 
   @override
   State<EditRent4> createState() => _EditRent4State();

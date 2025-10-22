@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import '../../util/colors.dart';
 
 class ForgetPasswordEmailVerifyScreen extends StatefulWidget {
-  const ForgetPasswordEmailVerifyScreen({Key? key}) : super(key: key);
+  const ForgetPasswordEmailVerifyScreen({super.key});
 
   @override
   ForgetPasswordEmailVerifyScreenState createState() =>

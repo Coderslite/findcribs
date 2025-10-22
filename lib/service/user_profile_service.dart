@@ -19,6 +19,10 @@ Future<UserProfile> getUserProfile() async {
   var responseData = jsonDecode(response.body);
   if (responseData['status'] == true) {
     // print(responseData['data']);
+    var subscriptionId = responseData['data']['profile']['subscriptionLogs']
+            ['subscriptionId']
+        .toString();
+    prefs.setString('subscriptionId', subscriptionId);
     return UserProfile.fromJson(responseData['data']['profile']);
   } else {
     // print(response.reasonPhrase);

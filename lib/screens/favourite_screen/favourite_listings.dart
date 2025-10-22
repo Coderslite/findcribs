@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:findcribs/widgets/property_listings.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../../controller/user_favourited_listing_controller.dart';
+import '../../models/house_list_model.dart';
 
 class FavouriteListingScreen extends StatefulWidget {
-  const FavouriteListingScreen({Key? key}) : super(key: key);
+  const FavouriteListingScreen({super.key});
 
   @override
   State<FavouriteListingScreen> createState() => _FavouriteListingScreenState();
@@ -133,73 +135,66 @@ class _FavouriteListingScreenState extends State<FavouriteListingScreen> {
               height: 14,
             ),
             Expanded(
-              child: isLoading
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CollectionSlideTransition(
-                            children: const <Widget>[
-                              CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                radius: 6,
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.red,
-                                radius: 6,
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.yellow,
-                                radius: 6,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  : userFavouritedListingController.favouritedListing.isEmpty
-                      ? const Center(child: Text("No Favourited Property"))
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(0),
-                          itemCount: userFavouritedListingController
-                              .favouritedListing.length,
-                          itemBuilder: (context, index) {
-                            int rentFee = userFavouritedListingController
-                                .favouritedListing[index]
-                                .listing!['rental_fee'];
-
-                            int price = (rentFee);
-                            var formatter = NumberFormat("#,###");
-                            var formatedPrice = formatter.format(price);
-                            return Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 0, 19, 15),
-                                height: 130,
-                                child: Property_Listings(
-                                  id: userFavouritedListingController
-                                      .favouritedListing[index].listingId,
-                                  images: userFavouritedListingController
-                                      .favouritedListing[index]
-                                      .listing!["listingImage"],
-                                  bedroom: userFavouritedListingController
-                                      .favouritedListing[index]
-                                      .listing!['bedroom'],
-                                  propertyAddress:
-                                      userFavouritedListingController
-                                          .favouritedListing[index]
-                                          .listing!['property_address'],
-                                  propertyType: userFavouritedListingController
-                                      .favouritedListing[index]
-                                      .listing!['property_type'],
-                                  propertyState: userFavouritedListingController
-                                      .favouritedListing[index]
-                                      .listing!['state'],
-                                  price: formatedPrice,
-                                ));
-                          },
+                child: isLoading
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CollectionSlideTransition(
+                              children: const <Widget>[
+                                CircleAvatar(
+                                  backgroundColor: Colors.blue,
+                                  radius: 6,
+                                ),
+                                CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                  radius: 6,
+                                ),
+                                CircleAvatar(
+                                  backgroundColor: Colors.yellow,
+                                  radius: 6,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-            )
+                      )
+                    : Obx(() {
+                        return userFavouritedListingController
+                                .favouritedListing.isEmpty
+                            ? const Center(
+                                child: Text("No Favourited Property"))
+                            : ListView.builder(
+                                padding: const EdgeInsets.all(0),
+                                itemCount: userFavouritedListingController
+                                    .favouritedListing.length,
+                                itemBuilder: (context, index) {
+                                  HouseListModel listing =
+                                      userFavouritedListingController
+                                          .favouritedListing[index];
+                                  int rentFee = listing.rentalFee.toInt();
+
+                                  int price = (rentFee);
+                                  var formatter = NumberFormat("#,###");
+                                  var formatedPrice = formatter.format(price);
+                                  return Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          19, 0, 19, 15),
+                                      height: 130,
+                                      child: Property_Listings(
+                                        id: listing.id,
+                                        images: listing.image,
+                                        bedroom: listing.bedroom,
+                                        propertyAddress:
+                                            listing.propertyAddress,
+                                        propertyType: listing.propertyType,
+                                        propertyState: listing.state.toString(),
+                                        price: formatedPrice,
+                                      ));
+                                },
+                              );
+                      }))
           ],
         ),
       ),

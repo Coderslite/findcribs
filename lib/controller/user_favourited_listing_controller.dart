@@ -1,14 +1,12 @@
+import 'package:findcribs/models/house_list_model.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/constants.dart';
-import '../models/user_favourite_listing.dart';
 import '../service/user_favourited_listing_service.dart';
 import 'package:http/http.dart' as http;
 
 class UserFavouritedListingController extends GetxController {
-  late Future<List<UserFavouritedListingModel>> favouritePropertyList;
-  var userFavouritedListing = [].obs;
   var favouritedListing = [].obs;
   var isLiked = false.obs;
   @override
@@ -18,53 +16,48 @@ class UserFavouritedListingController extends GetxController {
   }
 
   handleGetFavouritedListing() async {
-    favouritePropertyList = getUserFavouritedListing();
-    favouritePropertyList.then((value) {
-      favouritedListing.value = (value);
-      for (int x = 0; x < value.length; x++) {
-        if (userFavouritedListing.contains(value[x].listing)) {
-          // print("already exist in favourited lising");
-        } else {
-          userFavouritedListing.add(value[x].listingId);
-        }
+    // favouritedListing.clear();
+    var result = await getUserFavouritedListing();
+    for (int x = 0; x < result.length; x++) {
+      if (favouritedListing.contains(result[x].id)) {
+      } else {
+        favouritedListing.add(result[x]);
       }
-      // print("user favourited Listing : " + userFavouritedListing.toString());
+    }
+    // print("user favourited Listing : " + userFavouritedListing.toString());
 
-      // print(value);
-    });
+    // print(value);
   }
 
   handleCheckLike(id) {
-    if (userFavouritedListing.contains(id)) {
+    if (favouritedListing.contains(id)) {
       isLiked.value = true;
     } else {
       isLiked.value = false;
     }
   }
 
-  handleLike(int? id) async {
+  handleLike(HouseListModel listing) async {
     // handleGetFavouritedListing();
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    List favouritedListing = userFavouritedListing;
-    if (favouritedListing.contains(id)) {
-      userFavouritedListing.removeWhere((element) => element == id);
-      // favouritedListing.removeWhere((element) => element.listingId == id);
-      like(id, token.toString());
-      handleGetFavouritedListing();
-    } else {
-      userFavouritedListing.add(id);
-
-      // favouritedListing.removeWhere((element) => element.listingId == id);
-      like(id, token.toString());
-      handleGetFavouritedListing();
+    favouritedListing.add(listing);
+    await like(listing.id, token.toString());
+    if (favouritedListing
+        .where((e) => e.id == listing.id)
+        .toList()
+        .isNotEmpty) {
+      favouritedListing.removeWhere((e) => e.id == listing.id);
     }
+    await handleGetFavouritedListing();
   }
 
   like(int? id, String token) async {
-    await http.put(Uri.parse("$baseUrl/like-listing/$id"), headers: {
+    var res = await http.put(Uri.parse("$baseUrl/like-listing/$id"), headers: {
       "Authorization": token,
     });
+    print(res.body);
+    return;
   }
 
   //   handleGetLikedProperties() {

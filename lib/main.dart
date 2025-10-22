@@ -7,12 +7,11 @@ import 'package:findcribs/controller/initialize_controllers.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/message_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
-import 'package:findcribs/screens/agent_profile/agent_profile.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
 import 'package:findcribs/screens/onboarding.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:findcribs/service/AgentService.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,22 +19,20 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 // <<<<<<< gabriel
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart';
-import 'package:system_settings/system_settings.dart';
 
 import 'firebase_options.dart';
 import 'controller/theme_controller.dart';
 import 'screens/homepage/home_root.dart';
-import 'screens/story/story_camera.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'service/FirebaseMessaging.dart';
 
 ThemeController themeController = Get.put(ThemeController());
+
+// services
+AgentService agentService = AgentService();
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -56,12 +53,12 @@ Future<void> main() async {
     LanguageDataModel(name: 'English', languageCode: 'en'),
     LanguageDataModel(name: 'Hindi', languageCode: 'hi'),
   ]);
+  FirebaseMessagings().handleInit();
   defaultToastBackgroundColor = Colors.black;
   defaultToastTextColor = Colors.white;
   defaultToastGravityGlobal = ToastGravity.CENTER;
   defaultRadius = 16;
   defaultAppButtonRadius = 16;
-  FirebaseMessagings().handleInit();
   // cameras = await availableCameras();
   var prefs = await SharedPreferences.getInstance();
   final appState = prefs.getString('action');
@@ -74,14 +71,14 @@ Future<void> main() async {
 class MyApp extends StatefulWidget {
   final String email;
   final String appState;
-  const MyApp({Key? key, required this.appState, required this.email})
-      : super(key: key);
+  const MyApp({super.key, required this.appState, required this.email});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+
   late Future<List<ChatMessageModel>> getChat;
 
   List<ChatMessageModel> messageList = [];
@@ -94,54 +91,15 @@ class _MyAppState extends State<MyApp> {
   ScrollController listScrollController = ScrollController();
   bool isTyping = false;
   String isTypingChatId = '';
-  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
   String link = 'https://findcribs.page.link/listings';
   String? propertyId;
   String? agentId;
 
   @override
   void initState() {
-    // checkDynamicLink();
-    // initDynamicLinks();
     super.initState();
   }
 
-  checkDynamicLink() async {
-    final PendingDynamicLinkData? initialLink =
-        await FirebaseDynamicLinks.instance.getDynamicLink(Uri.parse(link));
-    final Uri? uri = initialLink?.link;
-    final queryParams = uri?.queryParameters;
-    setState(() {
-      propertyId = queryParams?['propertyId'].toString();
-      agentId = queryParams?['agentId'].toString();
-    });
-    print("propertyId");
-    print(propertyId);
-    print(uri);
-  }
-
-  Future<void> initDynamicLinks() async {
-    dynamicLinks.onLink.listen((dynamicLinkData) {
-      print(dynamicLinkData);
-      final Uri uri = dynamicLinkData.link;
-      final queryParams = uri.queryParameters;
-      final propertyId = queryParams['propertyId'].toString();
-      final agentId = queryParams['agentId'].toString();
-      if (propertyId.toString() != 'null') {
-        Future.delayed(const Duration(seconds: 1)).then((value) {
-          Get.to(ProductDetails(id: int.parse(propertyId)));
-        });
-      }
-      if (agentId.toString() != 'null') {
-        Future.delayed(const Duration(seconds: 1)).then((value) {
-          Get.to(AgentProfileScreen(id: int.parse(agentId)));
-        });
-      }
-    }).onError((error) {
-      print('onLink error');
-      print(error.message);
-    });
-  }
 
   handleScroll() {
     if (listScrollController.hasClients) {

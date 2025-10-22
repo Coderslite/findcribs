@@ -35,13 +35,21 @@ class LoadStateLgaController extends GetxController {
   }
 
   handleRentFetchLga() {
-    lga.value = data
-        .where((p0) =>
-            p0['state'].toLowerCase() ==
-            rentListingController.state.toLowerCase().toString())
-        .toList();
-    lga.value = lga[0]['lgas'];
-    rentListingController.lga.value = '';
+    try {
+      print("fetching");
+      print(rentListingController.state.value);
+      lga.value = data
+          .where((p0) =>
+              p0['state'].toLowerCase() ==
+              rentListingController.state.toLowerCase().toString())
+          .toList();
+      lga.value = lga[0]['lgas'];
+      print(lga.length);
+      print("lga");
+      rentListingController.lga.value = '';
+    } catch (err) {
+      print(err);
+    }
   }
 
   handleSaleFetchLga() {

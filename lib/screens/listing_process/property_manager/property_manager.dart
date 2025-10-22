@@ -24,7 +24,7 @@ import '../../../util/colors.dart';
 import '../listing/select_listing_type.dart';
 
 class PropertyManagerRegistration extends StatefulWidget {
-  const PropertyManagerRegistration({Key? key}) : super(key: key);
+  const PropertyManagerRegistration({super.key});
 
   @override
   State<PropertyManagerRegistration> createState() =>
@@ -254,6 +254,27 @@ class _PropertyManagerRegistrationState
                         height: 30,
                       ),
                       const Text(
+                        "Whatsapp Number",
+                        style: TextStyle(color: grey),
+                      ),
+                      FormBuilderTextField(
+                        name: 'whatsapp',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.minLength(11),
+                          FormBuilderValidators.maxLength(11),
+                        ]),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
                         "Upload Photo",
                         style: TextStyle(color: grey),
                       ),
@@ -382,16 +403,8 @@ class _PropertyManagerRegistrationState
           ),
           WebUiSettings(
             context: context,
-            presentStyle: CropperPresentStyle.dialog,
-            boundary: const CroppieBoundary(
-              width: 520,
-              height: 520,
-            ),
-            viewPort:
-                const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-            enableExif: true,
-            enableZoom: true,
-            showZoomer: true,
+            presentStyle: WebPresentStyle.dialog,
+            zoomable: true,
           ),
         ],
       );
@@ -462,6 +475,7 @@ class _PropertyManagerRegistrationState
         request.fields['category'] = 'Property_Manager';
         request.fields['business_name'] = formData['businessName'];
         request.fields['phone_number'] = formData['phone'];
+        request.fields['whatsapp_number'] = formData['whatsapp'];
         request.fields['about'] = formData['about'];
         request.fields['availability'] = jsonEncode(availability);
         request.fields['systemManaged'] = '0';

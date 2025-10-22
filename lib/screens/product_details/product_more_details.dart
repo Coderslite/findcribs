@@ -4,8 +4,11 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/models/house_detail_model.dart';
 import 'package:findcribs/screens/product_details/photo_view_preview.dart';
+import 'package:findcribs/util/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,9 +29,9 @@ import '../agent_profile/agent_profile.dart';
 class ProductMoreDetails extends StatefulWidget {
   final int? id;
   const ProductMoreDetails({
-    Key? key,
+    super.key,
     required this.id,
-  }) : super(key: key);
+  });
 
   @override
   State<ProductMoreDetails> createState() => _ProductMoreDetailsState();
@@ -51,7 +54,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
     print(token);
 
     socket = IO.io(
-        'http://18.233.168.44:5000/',
+        socketUrl,
         OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
             .setExtraHeaders({'Authorization': "$token"}) // optional
             .build());
@@ -106,12 +109,12 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
     // var adminId = prefs.getString("adminId");
 
     var messageMap = {
-      "clientMesgId": UniqueKey().toString(),
-      "mesgType": "text",
       "receiverId": receiverId,
       "message": chatMessage,
       "propertyId": propertyId,
-      "sentAt": DateTime(2022).toString(),
+      "clientMesgId": UniqueKey().toString(),
+      "mesgType": "text",
+      "sentAt": DateTime.now().toIso8601String(),
     };
     print(messageMap);
     socket.emit('MESSAGE', messageMap);
@@ -133,10 +136,10 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
             return const Center(child: CircularProgressIndicator());
           } else {
             var property = getSinglePropertyController.singleProperty[0];
-            int salesPrice = property.rentalFee!.toInt();
-            int totalprice = (property.rentalFee!.toInt() +
-                (property.cautionFee)!.toInt() +
-                (property.serviceCharge)!.toInt() +
+            int salesPrice = int.parse(property.rentalFee!);
+            int totalprice = (int.parse(property.rentalFee!) +
+                (property.cautionFee)! +
+                (property.serviceCharge)! +
                 ((salesPrice * property.legalFee!) ~/ 100) +
                 ((salesPrice * property.agencyFee!) ~/ 100));
             var formatter = NumberFormat("#,###");
@@ -144,7 +147,8 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
             var formatedSalesPrice = formatter.format(salesPrice);
 
             try {
-              facilities = jsonDecode(property.facilities);
+              // facilities = jsonDecode(property.facilities);
+              facilities = property.facilities!;
               // Data was successfully decoded
               // Handle the decoded data here
             } catch (e) {
@@ -180,7 +184,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (_) {
                             return AgentProfileScreen(
-                              id: property.agentId,
+                              userId: property.userId,
                               propertyId: property.id,
                             );
                           }));
@@ -265,8 +269,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   border: Border.all(
-                                                    color:
-                                                        const Color(0xFF0072BA),
+                                                    color: kPrimary,
                                                   ),
                                                 ),
                                                 child: const Center(
@@ -285,7 +288,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                   InkWell(
                                                     onTap: () async {
                                                       var phone = property
-                                                          .agentPhoneNUmber
+                                                          .agentPhoneNumber
                                                           .toString();
                                                       launchUrl
                                                           .launch("tel:$phone");
@@ -305,8 +308,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                   Container(
                                                     width: 130,
                                                     height: 2,
-                                                    color:
-                                                        const Color(0xFF0072BA),
+                                                    color: kPrimary,
                                                   )
                                                 ],
                                               ),
@@ -323,7 +325,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0xFF0072BA),
+                                  color: kPrimary,
                                 ),
                               ),
                               child: const Center(
@@ -352,6 +354,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                   : showModalBottomSheet<void>(
                                       context: context,
                                       isScrollControlled: true,
+                                      backgroundColor: kPrimary,
                                       builder: (BuildContext context) {
                                         return AnimatedPadding(
                                           padding:
@@ -361,47 +364,59 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                           curve: Curves.decelerate,
                                           child: Container(
                                             alignment: Alignment.center,
-                                            height: 200,
+                                            height: 180,
                                             padding: const EdgeInsets.all(10),
                                             child: Wrap(
+                                              spacing: 10,
+                                              runSpacing: 10,
                                               children: <Widget>[
-                                                SizedBox(
-                                                  // height: 20,
-                                                  child: TextFormField(
-                                                      controller:
-                                                          messageController,
-                                                      onChanged: (value) {
-                                                        message = value;
-                                                      },
-                                                      onFieldSubmitted:
-                                                          (value) {
-                                                        handleSendMessage(
-                                                            messageController
-                                                                .text,
-                                                            property.agentId,
-                                                            property.id,
-                                                            property
-                                                                .managedBy!);
-                                                      },
-                                                      style: const TextStyle(
-                                                          color: Colors.black),
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText:
-                                                            "Send Message to Seller",
-                                                      )),
+                                                TextFormField(
+                                                  controller: messageController,
+                                                  onChanged: (value) {
+                                                    message = value;
+                                                  },
+                                                  style: const TextStyle(
+                                                    color: white,
+                                                  ),
+                                                  onFieldSubmitted: (value) {
+                                                    handleSendMessage(
+                                                        messageController.text,
+                                                        property.userId,
+                                                        property.id,
+                                                        property.managedBy!);
+                                                  },
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    prefixIcon: Icon(
+                                                      CupertinoIcons
+                                                          .chat_bubble_2_fill,
+                                                      color: white,
+                                                    ),
+                                                    hintText:
+                                                        "Send Message to Seller",
+                                                    hintStyle:
+                                                        TextStyle(color: grey),
+                                                  ),
                                                 ),
+                                                const SizedBox(height: 20),
                                                 ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            backgroundColor:
+                                                                white),
                                                     onPressed: () {
                                                       handleSendMessage(
                                                           messageController
                                                               .text,
-                                                          property.agentId,
+                                                          property.userId,
                                                           property.id,
                                                           property.managedBy!);
                                                     },
                                                     child: const Text(
-                                                        "Send Message")),
+                                                      "Send Message",
+                                                      style: TextStyle(
+                                                          color: black),
+                                                    )),
                                               ],
                                             ),
                                           ),
@@ -415,7 +430,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0xFF0072BA),
+                                  color: kPrimary,
                                 ),
                               ),
                               child: Padding(
@@ -467,7 +482,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                               padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                   shape: BoxShape.rectangle,
-                                  color: const Color(0xFF0072BA),
+                                  color: kPrimary,
                                   borderRadius: BorderRadius.circular(5)),
                               child: Center(
                                 child: Text(
@@ -626,7 +641,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                           ),
                                         )
                                       : Text(
-                                          "Rent fee /${property.rentalFrequncy}",
+                                          "Rent fee /${property.rentalFrequency}",
                                           style: const TextStyle(
                                             fontSize: 12,
                                             fontFamily: 'RedHatDisplay',
@@ -761,7 +776,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                           .height /
                                                       6,
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 10),
                                                   // decoration: BoxDecoration(
                                                   //     borderRadius:
@@ -782,7 +797,7 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                           businessName: property
                                                               .agentBusinessName
                                                               .toString(),
-                                                              profilePreview: false,
+                                                          profilePreview: false,
                                                         );
                                                         // return ViewProperty(
                                                         //   images:
@@ -1299,10 +1314,10 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                                   (context, url, error) =>
                                                       const Icon(Icons.error),
                                               imageUrl:
-                                                  "https://res.cloudinary.com/dae0rudcd/image/upload/v1671193468/features/${jsonDecode(property.facilities)![x]}.png",
+                                                  "https://res.cloudinary.com/dae0rudcd/image/upload/v1671193468/features/${property.facilities![x]}.png",
                                             )),
                                         Text(
-                                          "${jsonDecode(property.facilities)![x]}",
+                                          "${property.facilities![x]}",
                                           style: const TextStyle(
                                               fontFamily: 'RedHatDisplay',
                                               fontSize: 14,
@@ -1412,7 +1427,8 @@ class _ProductMoreDetailsState extends State<ProductMoreDetails> {
                                         ).show();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  fixedSize: const Size(500, 60), backgroundColor: const Color(0xFF0072BA),
+                                  fixedSize: const Size(500, 60),
+                                  backgroundColor: kPrimary,
                                 ),
                                 child: const Text(
                                   'Book Tour',

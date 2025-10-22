@@ -5,7 +5,7 @@ class MostFavouritedModel {
   String? category;
   // int? staffNo;
   String? fullName;
-  bool? isVerified;
+  String? isVerified;
   String? phoneNumber;
   String? businessName;
   String? about;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

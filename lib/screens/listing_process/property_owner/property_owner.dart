@@ -25,7 +25,7 @@ import '../../../models/user_profile_information_model.dart';
 import '../listing/select_listing_type.dart';
 
 class PropertyOwnerRegistration extends StatefulWidget {
-  const PropertyOwnerRegistration({Key? key}) : super(key: key);
+  const PropertyOwnerRegistration({super.key});
 
   @override
   State<PropertyOwnerRegistration> createState() =>
@@ -261,6 +261,27 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
                       height: 30,
                     ),
                     const Text(
+                      "Whatsapp Number",
+                      style: TextStyle(color: grey),
+                    ),
+                    FormBuilderTextField(
+                      name: 'whatsapp',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(11),
+                        FormBuilderValidators.maxLength(11),
+                      ]),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
                       "Upload Photo",
                       style: TextStyle(color: grey),
                     ),
@@ -440,16 +461,8 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
           ),
           WebUiSettings(
             context: context,
-            presentStyle: CropperPresentStyle.dialog,
-            boundary: const CroppieBoundary(
-              width: 520,
-              height: 520,
-            ),
-            viewPort:
-                const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-            enableExif: true,
-            enableZoom: true,
-            showZoomer: true,
+            presentStyle: WebPresentStyle.dialog,
+            zoomable: true,
           ),
         ],
       );
@@ -581,6 +594,7 @@ class _PropertyOwnerRegistrationState extends State<PropertyOwnerRegistration> {
         request.fields['full_name'] = formData['fullName'];
         request.fields['business_name'] = formData['businessName'];
         request.fields['phone_number'] = formData['phone'];
+        request.fields['whatsapp_number'] = formData['whatsapp'];
         request.fields['about'] = formData['about'];
         request.fields['availability'] = manageAllowed == true
             ? ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']

@@ -6,11 +6,17 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../components/constants.dart';
+import '../../../../../components/payment_plan.dart';
+import '../../../../../controller/get_profile_controller.dart';
+import '../../../../../controller/login_controller.dart';
 import '../../../../../controller/sale_listing_controller.dart';
+import '../../../../../models/payment_plan_model.dart';
+import '../../../../../service/PaymentPlanService.dart';
 import '../../../../homepage/home_root.dart';
 
 class Sale4Stepper extends StatefulWidget {
@@ -37,7 +43,7 @@ class Sale4Stepper extends StatefulWidget {
   final String? descriptioon;
   final String? sellerFee;
   const Sale4Stepper(
-      {Key? key,
+      {super.key,
       this.propertyCategory,
       this.houseType,
       this.propertyAddress,
@@ -59,8 +65,7 @@ class Sale4Stepper extends StatefulWidget {
       this.salesPrice,
       this.facilities,
       this.descriptioon,
-      this.sellerFee})
-      : super(key: key);
+      this.sellerFee});
 
   @override
   State<Sale4Stepper> createState() => _Sale4StepperState();
@@ -78,6 +83,14 @@ class _Sale4StepperState extends State<Sale4Stepper> {
   SaleListingController saleListingController =
       Get.put(SaleListingController());
 
+  bool gettingPlan = true;
+  List<PaymentPlanModel> plans = [];
+  handleGetPlans() async {
+    plans = await PaymentplanService().getPlans();
+    gettingPlan = false;
+    setState(() {});
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -85,274 +98,325 @@ class _Sale4StepperState extends State<Sale4Stepper> {
   }
 
   @override
+  void initState() {
+    handleGetPlans();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Obx(
-          () => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
+    return KeyboardDismissOnTap(
+      child: Scaffold(
+        body: SafeArea(
+          child: Obx(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.arrow_back_ios)),
+                      const Text(
+                        "Sale Listing",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      const Text("")
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
                         onTap: () {
-                          Navigator.pop(context);
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (_) {
+                          //   return ListPropertyScreen1(
+                          //     tab: 1,
+                          //   );
+                          // }));
                         },
-                        child: const Icon(Icons.arrow_back_ios)),
-                    const Text(
-                      "Sale Listing",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    const Text("")
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (_) {
-                        //   return ListPropertyScreen1(
-                        //     tab: 1,
-                        //   );
-                        // }));
-                      },
-                      child: const CircleAvatar(
+                        child: const CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Color(0XFF0072BA),
+                          child: Text("1"),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.grey,
+                        height: 1,
+                        width: size.width / 5,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (_) {
+                          //   return Sale2();
+                          // }));
+                        },
+                        child: const CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Color(0XFF0072BA),
+                          child: Text("2"),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.grey,
+                        height: 1,
+                        width: size.width / 5,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (_) {
+                          //   return Sale3();
+                          // }));
+                        },
+                        child: const CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Color(0XFF0072BA),
+                          child: Text("3"),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.grey,
+                        height: 1,
+                        width: size.width / 5,
+                      ),
+                      const CircleAvatar(
                         radius: 12,
                         backgroundColor: Color(0XFF0072BA),
-                        child: Text("1"),
+                        child: Text("4"),
                       ),
-                    ),
-                    Container(
-                      color: Colors.grey,
-                      height: 1,
-                      width: size.width / 5,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (_) {
-                        //   return Sale2();
-                        // }));
-                      },
-                      child: const CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Color(0XFF0072BA),
-                        child: Text("2"),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.grey,
-                      height: 1,
-                      width: size.width / 5,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (_) {
-                        //   return Sale3();
-                        // }));
-                      },
-                      child: const CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Color(0XFF0072BA),
-                        child: Text("3"),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.grey,
-                      height: 1,
-                      width: size.width / 5,
-                    ),
-                    const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Color(0XFF0072BA),
-                      child: Text("4"),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: FormBuilder(
-                      key: _formKey4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              // handleGetImage();
-                              saleListingController.getImage();
-                            },
-                            child: AnimatedContainer(
-                              padding: const EdgeInsets.all(8),
-                              height: saleListingController.newfiles.isEmpty
-                                  ? 50
-                                  : newfiles.length > 3
-                                      ? 600
-                                      : 300,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(),
-                              ),
-                              duration: const Duration(milliseconds: 500),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.camera_alt_outlined,
-                                            color: Color(0XFF0072BA),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          // files == null
-                                          //     ? const Text("select photo")
-                                          //     : const Text("image Available now"),
-                                        ],
-                                      ),
-                                      // files.isEmpty
-                                      //     ? Image.asset("assets/images/avatar.png")
-                                      //     : CircleAvatar(
-                                      //         child: Image.file(
-                                      //         files[0],
-                                      //         fit: BoxFit.fitHeight,
-                                      //       ))
-                                    ],
-                                  ),
-                                  saleListingController.newfiles.isEmpty
-                                      ? Container()
-                                      : SizedBox(
-                                          child: GridView.builder(
-                                              shrinkWrap: true,
-                                              itemCount: saleListingController
-                                                  .newfiles.length,
-                                              physics: const ScrollPhysics(),
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                                      maxCrossAxisExtent: 150,
-                                                      crossAxisSpacing: 5,
-                                                      mainAxisSpacing: 5),
-                                              itemBuilder: (context, index) =>
-                                                  Stack(
-                                                    children: [
-                                                      Image.file(
-                                                          saleListingController
-                                                              .newfiles[index]),
-                                                      Positioned(
-                                                          child: InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            saleListingController
-                                                                .newfiles
-                                                                .removeAt(
-                                                                    index);
-                                                          });
-                                                        },
-                                                        child: const Icon(
-                                                          Icons.cancel_rounded,
-                                                          color: Colors.white,
-                                                        ),
-                                                      )),
-                                                    ],
-                                                  )),
-                                        ),
-                                ],
-                              ),
+                    ],
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: FormBuilder(
+                        key: _formKey4,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10,
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            width: 500,
-                            child: Material(
-                              color: const Color(0XFF0072BA),
-                              borderRadius: BorderRadius.circular(5),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  handlePublish();
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.width / 35,
-                                    bottom:
-                                        MediaQuery.of(context).size.width / 35,
-                                    left: MediaQuery.of(context).size.width / 9,
-                                    right:
-                                        MediaQuery.of(context).size.width / 9,
-                                  ),
-                                  child: isLoading
-                                      ? const CircularProgressIndicator()
-                                      : const Text(
-                                          "Publish",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                          ),
+                            getProfileController.hasSubscription.value
+                                ? Container()
+                                : gettingPlan
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: kPrimary,
                                         ),
+                                      )
+                                    : SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            for (var x = 0;
+                                                x < plans.length;
+                                                x++)
+                                              paymentPlan(
+                                                id: plans[x].id!,
+                                                selected: getProfileController
+                                                        .subscriptionId.value ==
+                                                    plans[x].id.toString(),
+                                                name: plans[x].name!,
+                                                price:
+                                                    plans[x].price.toString(),
+                                                benefits: plans[x].benefit!,
+                                                subscriptionId:
+                                                    getProfileController
+                                                        .subscriptionId.value,
+                                                returnUrl: Sale4Stepper(),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                // handleGetImage();
+                                saleListingController.getImage();
+                              },
+                              child: AnimatedContainer(
+                                padding: const EdgeInsets.all(8),
+                                height: saleListingController.newfiles.isEmpty
+                                    ? 50
+                                    : newfiles.length > 3
+                                        ? 600
+                                        : 300,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(),
+                                ),
+                                duration: const Duration(milliseconds: 500),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.camera_alt_outlined,
+                                              color: Color(0XFF0072BA),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            // files == null
+                                            //     ? const Text("select photo")
+                                            //     : const Text("image Available now"),
+                                          ],
+                                        ),
+                                        // files.isEmpty
+                                        //     ? Image.asset("assets/images/avatar.png")
+                                        //     : CircleAvatar(
+                                        //         child: Image.file(
+                                        //         files[0],
+                                        //         fit: BoxFit.fitHeight,
+                                        //       ))
+                                      ],
+                                    ),
+                                    saleListingController.newfiles.isEmpty
+                                        ? Container()
+                                        : SizedBox(
+                                            child: GridView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: saleListingController
+                                                    .newfiles.length,
+                                                physics: const ScrollPhysics(),
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                                        maxCrossAxisExtent: 150,
+                                                        crossAxisSpacing: 5,
+                                                        mainAxisSpacing: 5),
+                                                itemBuilder: (context, index) =>
+                                                    Stack(
+                                                      children: [
+                                                        Image.file(
+                                                            saleListingController
+                                                                    .newfiles[
+                                                                index]),
+                                                        Positioned(
+                                                            child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              saleListingController
+                                                                  .newfiles
+                                                                  .removeAt(
+                                                                      index);
+                                                            });
+                                                          },
+                                                          child: const Icon(
+                                                            Icons
+                                                                .cancel_rounded,
+                                                            color: Colors.white,
+                                                          ),
+                                                        )),
+                                                      ],
+                                                    )),
+                                          ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     InkWell(
-                          //       onTap: () {
-                          //         handleSave();
-                          //       },
-                          //       child: Container(
-                          //         decoration: BoxDecoration(
-                          //             borderRadius: BorderRadius.circular(5),
-                          //             border: Border.all(
-                          //               color: const Color(0XFF0072BA),
-                          //             )),
-                          //         child: Padding(
-                          //           padding: EdgeInsets.only(
-                          //             top: MediaQuery.of(context).size.width /
-                          //                 35,
-                          //             bottom:
-                          //                 MediaQuery.of(context).size.width /
-                          //                     35,
-                          //             left: MediaQuery.of(context).size.width /
-                          //                 11,
-                          //             right: MediaQuery.of(context).size.width /
-                          //                 11,
-                          //           ),
-                          //           child: isSaving
-                          //               ? const CircularProgressIndicator()
-                          //               : const Text(
-                          //                   "Save",
-                          //                   style: TextStyle(
-                          //                     color: Color(0XFF0072BA),
-                          //                     fontSize: 20,
-                          //                   ),
-                          //                 ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //    ],
-                          // ),
-                        ],
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              width: 500,
+                              child: Material(
+                                color: const Color(0XFF0072BA),
+                                borderRadius: BorderRadius.circular(5),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    handlePublish();
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.width /
+                                          35,
+                                      bottom:
+                                          MediaQuery.of(context).size.width /
+                                              35,
+                                      left:
+                                          MediaQuery.of(context).size.width / 9,
+                                      right:
+                                          MediaQuery.of(context).size.width / 9,
+                                    ),
+                                    child: isLoading
+                                        ? const CircularProgressIndicator()
+                                        : const Text(
+                                            "Publish",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     InkWell(
+                            //       onTap: () {
+                            //         handleSave();
+                            //       },
+                            //       child: Container(
+                            //         decoration: BoxDecoration(
+                            //             borderRadius: BorderRadius.circular(5),
+                            //             border: Border.all(
+                            //               color: const Color(0XFF0072BA),
+                            //             )),
+                            //         child: Padding(
+                            //           padding: EdgeInsets.only(
+                            //             top: MediaQuery.of(context).size.width /
+                            //                 35,
+                            //             bottom:
+                            //                 MediaQuery.of(context).size.width /
+                            //                     35,
+                            //             left: MediaQuery.of(context).size.width /
+                            //                 11,
+                            //             right: MediaQuery.of(context).size.width /
+                            //                 11,
+                            //           ),
+                            //           child: isSaving
+                            //               ? const CircularProgressIndicator()
+                            //               : const Text(
+                            //                   "Save",
+                            //                   style: TextStyle(
+                            //                     color: Color(0XFF0072BA),
+                            //                     fontSize: 20,
+                            //                   ),
+                            //                 ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //    ],
+                            // ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -612,317 +676,6 @@ class _Sale4StepperState extends State<Sale4Stepper> {
               desc: msg['message'].toString(),
               showCloseIcon: true,
               btnCancelOnPress: () {},
-            ).show();
-          }
-        } on TimeoutException catch (e) {
-          setState(() {
-            isLoading = true;
-          });
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
-            width: 280,
-            buttonsBorderRadius: const BorderRadius.all(
-              Radius.circular(2),
-            ),
-            dismissOnTouchOutside: true,
-            dismissOnBackKeyPress: false,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            title: 'Listing Failed',
-            desc: e.toString(),
-            showCloseIcon: true,
-            btnCancelOnPress: () {},
-          ).show();
-        } on SocketException catch (e) {
-          setState(() {
-            isLoading = true;
-          });
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
-            width: 280,
-            buttonsBorderRadius: const BorderRadius.all(
-              Radius.circular(2),
-            ),
-            dismissOnTouchOutside: true,
-            dismissOnBackKeyPress: false,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            title: 'Listing Failed',
-            desc: e.toString(),
-            showCloseIcon: true,
-            btnCancelOnPress: () {},
-          ).show();
-        } on Error catch (e) {
-          setState(() {
-            isLoading = true;
-          });
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
-            width: 280,
-            buttonsBorderRadius: const BorderRadius.all(
-              Radius.circular(2),
-            ),
-            dismissOnTouchOutside: true,
-            dismissOnBackKeyPress: false,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            title: 'Listing Failed',
-            desc: e.toString(),
-            showCloseIcon: true,
-            btnCancelOnPress: () {},
-          ).show();
-        }
-      }
-    }
-  }
-
-  handleSave() async {
-    if (_formKey4.currentState!.validate()) {
-      if (saleListingController.newfiles.isEmpty ||
-          saleListingController.newfiles.length < 3) {
-        setState(() {
-          isSaving = false;
-        });
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-          width: 280,
-          buttonsBorderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-          dismissOnTouchOutside: true,
-          dismissOnBackKeyPress: false,
-          headerAnimationLoop: false,
-          animType: AnimType.bottomSlide,
-          title: 'Listing Failed',
-          desc: "Require a minimum of 3 images",
-          showCloseIcon: true,
-          btnOkOnPress: () {},
-        ).show();
-      } else if (saleListingController.newfiles.length > 5) {
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-          width: 280,
-          buttonsBorderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-          dismissOnTouchOutside: true,
-          dismissOnBackKeyPress: false,
-          headerAnimationLoop: false,
-          animType: AnimType.bottomSlide,
-          title: 'Listing Failed',
-          desc: "You can only upload a maximum of 5 images",
-          showCloseIcon: true,
-          btnOkOnPress: () {},
-        ).show();
-      } else {
-        try {
-          setState(() {
-            isSaving = true;
-          });
-          _formKey4.currentState!.save();
-
-          final prefs = await SharedPreferences.getInstance();
-
-          var token = prefs.getString('token');
-          final request =
-              http.MultipartRequest('POST', Uri.parse("$baseUrl/listing"));
-          request.fields['facilities'] =
-              jsonEncode(saleListingController.facilities);
-          request.fields['age_restriction'] = '0';
-          request.fields['design_type'] =
-              saleListingController.designType.value.toString();
-          request.fields['property_address'] =
-              saleListingController.propertyAddress.value.toString();
-          request.fields['bathroom'] =
-              saleListingController.bathroom.value.toString();
-          request.fields['bedroom'] =
-              saleListingController.bedroom.value.toString();
-          request.fields['living_room'] =
-              saleListingController.livingRoom.value.toString();
-          request.fields['currency'] =
-              saleListingController.currency.value.toString();
-          request.fields['kitchen'] =
-              saleListingController.kitchen.value.toString();
-          request.fields['rental_frequency'] = "per year";
-          request.fields['rental_fee'] =
-              saleListingController.saleFee.value.toString();
-          request.fields['other_charges'] =
-              saleListingController.otherCharges.value.toString() == 'Yes'
-                  ? '1'
-                  : '0';
-          request.fields['caution_fee'] = '0';
-          request.fields['legal_fee'] = '0';
-          request.fields['covered_by_property'] =
-              saleListingController.coveredBy.value.toString();
-          request.fields['agency_fee'] =
-              saleListingController.otherCharges.value == 'Yes'
-                  ? '0'
-                  : '${saleListingController.saleCommission.value}'.toString();
-          request.fields['state'] =
-              saleListingController.state.value.toString();
-          request.fields['lga'] = saleListingController.lga.value.toString();
-          request.fields['country'] = 'Nigeria';
-          request.fields['total_area_of_land'] =
-              saleListingController.totalArea.value.toString();
-          request.fields['interior_design'] = 'Furnished';
-          request.fields['parking_space'] =
-              saleListingController.parkingSpace.value.toString() == 'Yes'
-                  ? '1'
-                  : '0';
-
-          request.fields['availability_of_water'] =
-              saleListingController.water.value.toString() == 'Yes' ? '1' : '0';
-
-          request.fields['availability_of_electricity'] =
-              saleListingController.electricity.value.toString() == 'Yes'
-                  ? '1'
-                  : '0';
-
-          request.fields['description'] =
-              saleListingController.description.value.toString();
-          request.fields['property_category'] =
-              saleListingController.propertyCategory.value.toString();
-          request.fields['property_type'] = "sale";
-          request.fields['status'] = 'Saved';
-          request.fields['state'] =
-              saleListingController.state.value.toString();
-          request.fields['negotiable'] =
-              saleListingController.negotiable.value == 1 ? '1' : '0';
-          request.fields['hasDocuments'] =
-              saleListingController.propertyDocument.value == 'Yes' ? '1' : '0';
-          request.headers['Authorization'] = "$token";
-          for (var file in newfiles) {
-            final httpImage =
-                await http.MultipartFile.fromPath('images', file.path);
-            request.files.add(httpImage);
-            print(httpImage);
-          }
-
-          var response = await request.send();
-          final respStr = await response.stream.bytesToString();
-          if (response.statusCode == 200) {
-            // var responseData = await response.stream.toBytes();
-            // var result = String.fromCharCodes(responseData);
-            // print(result);
-            setState(() {
-              isSaving = false;
-            });
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.success,
-                borderSide: const BorderSide(
-                  color: Colors.green,
-                  width: 2,
-                ),
-                width: MediaQuery.of(context).size.width / 1.2,
-                buttonsBorderRadius: const BorderRadius.all(
-                  Radius.circular(2),
-                ),
-                dismissOnTouchOutside: false,
-                dismissOnBackKeyPress: false,
-                headerAnimationLoop: false,
-                animType: AnimType.bottomSlide,
-                title: 'Saved to draft  successfully!',
-                desc: "You can check your profile page to edit few info!",
-                btnOk: ElevatedButton(
-                  onPressed: () {
-                    saleListingController.handleResetInformation();
-                    Get.off(const HomePageRoot(navigateIndex: 0));
-                  },
-                  child: const Text(
-                    "Go Home",
-                    style: TextStyle(color: mobileButtonColor, fontSize: 14),
-                  ),
-                )).show();
-          } else if (response.statusCode == 500) {
-            var msg = jsonDecode(respStr);
-            print(msg['message']);
-            setState(() {
-              isLoading = false;
-            });
-            AwesomeDialog(
-              context: context,
-              dialogType: DialogType.error,
-              borderSide: const BorderSide(
-                color: Colors.red,
-                width: 2,
-              ),
-              width: 280,
-              buttonsBorderRadius: const BorderRadius.all(
-                Radius.circular(2),
-              ),
-              dismissOnTouchOutside: true,
-              dismissOnBackKeyPress: false,
-              onDismissCallback: (type) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Dismissed by $type'),
-                  ),
-                );
-              },
-              headerAnimationLoop: false,
-              animType: AnimType.bottomSlide,
-              title: 'Listing Failed',
-              desc: "something went wrong",
-              showCloseIcon: true,
-              btnOkOnPress: () {},
-            ).show();
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-            var msg = jsonDecode(respStr);
-            AwesomeDialog(
-              context: context,
-              dialogType: DialogType.error,
-              borderSide: const BorderSide(
-                color: Colors.red,
-                width: 2,
-              ),
-              width: 280,
-              buttonsBorderRadius: const BorderRadius.all(
-                Radius.circular(2),
-              ),
-              dismissOnTouchOutside: true,
-              dismissOnBackKeyPress: false,
-              onDismissCallback: (type) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Dismissed by $type'),
-                  ),
-                );
-              },
-              headerAnimationLoop: false,
-              animType: AnimType.bottomSlide,
-              title: 'Listing Failed',
-              desc: msg['message'].toString(),
-              showCloseIcon: true,
-              btnOkOnPress: () {},
             ).show();
           }
         } on TimeoutException catch (e) {

@@ -21,7 +21,7 @@ class EditRent2Stepper extends StatefulWidget {
   final String? livingroom;
   final String? kitchen;
   const EditRent2Stepper({
-    Key? key,
+    super.key,
     this.propertyCategory,
     this.houseType,
     this.propertyAddress,
@@ -29,7 +29,7 @@ class EditRent2Stepper extends StatefulWidget {
     this.bathrooom,
     this.livingroom,
     this.kitchen,
-  }) : super(key: key);
+  });
 
   @override
   State<EditRent2Stepper> createState() => _EditRent2StepperState();

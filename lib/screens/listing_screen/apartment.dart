@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
-
 import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,7 @@ import '../homepage/single_property.dart';
 
 class ApartmentScreen extends StatefulWidget {
   final String apartmentType;
-  const ApartmentScreen({Key? key, required this.apartmentType})
-      : super(key: key);
+  const ApartmentScreen({super.key, required this.apartmentType});
 
   @override
   State<ApartmentScreen> createState() => _ApartmentScreenState();
@@ -774,22 +772,13 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                         },
                         animateTransitions: true,
                         itemBuilder: (context, post, index) {
-                          int price = (post.rentalFee!.toInt());
+                          int price = int.parse(post.rentalFee.toString());
                           var formatter = NumberFormat("#,###");
                           var formatedPrice = formatter.format(price);
                           return SingleProperty(
-                              id: post.id,
-                              image: post.image,
-                              designType: post.designType,
-                              currency: post.currency,
-                              propertyType: post.propertyType,
-                              propertyAddress: post.propertyAddress,
-                              bedroom: post.bedroom,
-                              propertyCategory: post.propertyCategory,
-                              price: formatedPrice,
-                              propertyName: post.propertyName.toString(),
-                                          state: post.state!,
-                              comingFrom: 'Homescreen',);
+                            listing: post,
+                            comingFrom: 'Homescreen',
+                          );
                         },
                         noItemsFoundIndicatorBuilder: (context) =>
                             const Center(child: Text('No property found.')),

@@ -2,9 +2,11 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
+import 'package:findcribs/models/house_list_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,36 +20,14 @@ import '../product_details/product_details.dart';
 
 class SingleProperty extends StatefulWidget {
 //  final List<HouseListModel> filteredList;
-  final int? id;
-  final List? image;
-  final String? designType;
-  final String? currency;
-  final String? propertyType;
-  final String? propertyAddress;
-  final int? bedroom;
-  final String? propertyCategory;
-  final String? price;
-  final bool? isPromoted;
-  final String propertyName;
-  final String comingFrom;
+  final HouseListModel listing;
 
-  final String state;
+  final String comingFrom;
   const SingleProperty({
-    Key? key,
-    required this.id,
-    required this.image,
-    required this.designType,
-    required this.currency,
-    required this.propertyType,
-    required this.propertyAddress,
-    required this.bedroom,
-    required this.propertyCategory,
-    required this.price,
-    this.isPromoted,
-    required this.propertyName,
+    super.key,
+    required this.listing,
     required this.comingFrom,
-    required this.state,
-  }) : super(key: key);
+  });
 
   @override
   State<SingleProperty> createState() => _SinglePropertyState();
@@ -57,46 +37,13 @@ class _SinglePropertyState extends State<SingleProperty> {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
   late Future<HouseDetailModel> singleProperty;
 
-  List<UserFavouritedListingModel> filteredFavouritePropertyList = [];
-  List<UserFavouritedListingModel> firstFavouritePropertyList = [];
-  late Future<List<UserFavouritedListingModel>> favouritePropertyList;
+  List<HouseListModel> filteredFavouritePropertyList = [];
+  List<HouseListModel> firstFavouritePropertyList = [];
+  late Future<List<HouseListModel>> favouritePropertyList;
 
   GetSinglePropertyController getSinglePropertyController =
       Get.put(GetSinglePropertyController());
   bool isLiked = false;
-
-  handleGetLikedProperties() {
-    favouritePropertyList = getUserFavouritedListing();
-    favouritePropertyList.then((value) {
-      // print(value);
-      if (mounted) {
-        setState(() {
-          firstFavouritePropertyList = filteredFavouritePropertyList = value;
-          handleFilter(widget.id.toString());
-        });
-        print(firstFavouritePropertyList);
-      }
-    });
-  }
-
-  handleFilter(String value) {
-    setState(() {
-      filteredFavouritePropertyList =
-          firstFavouritePropertyList.where((element) {
-        return element.listingId.toString().contains(value);
-      }).toList();
-      print("filter$filteredFavouritePropertyList");
-    });
-    if (filteredFavouritePropertyList.isEmpty) {
-      setState(() {
-        isLiked = false;
-      });
-    } else {
-      setState(() {
-        isLiked = true;
-      });
-    }
-  }
 
   UserFavouritedListingController userFavouritedListingController =
       Get.put(UserFavouritedListingController());
@@ -108,7 +55,9 @@ class _SinglePropertyState extends State<SingleProperty> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.image!.first);
+    int price = int.parse(widget.listing.rentalFee.toString());
+    var formatter = NumberFormat("#,###");
+    var formatedPrice = formatter.format(price);
     return Obx(
       () => Padding(
         padding:
@@ -120,14 +69,13 @@ class _SinglePropertyState extends State<SingleProperty> {
                 GestureDetector(
                   onTap: () async {
                     getSinglePropertyController.propertyId.value =
-                        widget.id.toString();
+                        widget.listing.id.toString();
                     getSinglePropertyController.isLoading.value = true;
 
-                    print(widget.id);
                     await Navigator.push(context,
                         MaterialPageRoute(builder: (_) {
                       return ProductDetails(
-                        id: widget.id,
+                        id: widget.listing.id,
                       );
                     }));
                   },
@@ -147,9 +95,9 @@ class _SinglePropertyState extends State<SingleProperty> {
                                     onTap: () {},
                                     child: const Center(child: Text("Retry")));
                               },
-                              imageUrl: widget.image!.isEmpty
+                              imageUrl: widget.listing.image!.isEmpty
                                   ? 'http://campus.murraystate.edu/academic/faculty/BAtieh/House1.JPG'
-                                  : widget.image![0]['url'],
+                                  : widget.listing.image![0]['url'],
                               fit: BoxFit.cover,
                               // width: 1000,
                               filterQuality: FilterQuality.none,
@@ -173,7 +121,7 @@ class _SinglePropertyState extends State<SingleProperty> {
                           )),
                       // child: Image.network(
 
-                      //   widget.image1,
+                      //   widget.listing.image1,
 
                       //   fit: BoxFit.cover,
 
@@ -188,7 +136,7 @@ class _SinglePropertyState extends State<SingleProperty> {
                             Align(
                               alignment: Alignment.bottomLeft,
                               child: Text(
-                                capitalize("${widget.state} State"),
+                                capitalize("${widget.listing.state} State"),
                                 style: const TextStyle(
                                   color: white,
                                 ),
@@ -199,11 +147,11 @@ class _SinglePropertyState extends State<SingleProperty> {
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 10),
                                 child: Text(
-                                  widget.propertyCategory.toString() ==
+                                  widget.listing.propertyCategory.toString() ==
                                           'Estate Market'
                                       ? ""
                                       : capitalize(
-                                          widget.designType.toString()),
+                                          widget.listing.designType.toString()),
                                   style: const TextStyle(
                                     color: white,
                                   ),
@@ -221,18 +169,19 @@ class _SinglePropertyState extends State<SingleProperty> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      capitalize(widget.propertyCategory == 'Estate Market'
-                          ? widget.propertyName.toString()
-                          : widget.propertyCategory.toString()),
+                      capitalize(
+                          widget.listing.propertyCategory == 'Estate Market'
+                              ? widget.listing.propertyName.toString()
+                              : widget.listing.propertyCategory.toString()),
                       style: const TextStyle(
                           fontFamily: 'RedHatDisplay',
                           fontSize: 16,
                           fontWeight: FontWeight.w700),
                     ),
                     Text(
-                      widget.currency == 'Naira'
-                          ? "NGN${widget.price}"
-                          : "\$".toString() + widget.price.toString(),
+                      widget.listing.currency == 'Naira'
+                          ? "NGN${formatedPrice}"
+                          : "\$".toString() + formatedPrice.toString(),
                       style: const TextStyle(
                           fontFamily: 'RedHatDisplay',
                           fontSize: 16,
@@ -257,7 +206,7 @@ class _SinglePropertyState extends State<SingleProperty> {
                           width: 2,
                         ),
                         Text(
-                          widget.propertyAddress.toString(),
+                          widget.listing.propertyAddress.toString(),
                           style: const TextStyle(
                             fontFamily: 'RedHatDisplay',
                             fontSize: 10,
@@ -268,7 +217,7 @@ class _SinglePropertyState extends State<SingleProperty> {
                         const SizedBox(
                           width: 10,
                         ),
-                        widget.propertyCategory != 'Estate Market'
+                        widget.listing.propertyCategory != 'Estate Market'
                             ? const Icon(
                                 Icons.qr_code_rounded,
                                 color: Color(0xFFFEC121),
@@ -278,9 +227,9 @@ class _SinglePropertyState extends State<SingleProperty> {
                         const SizedBox(
                           width: 2,
                         ),
-                        widget.propertyCategory != 'Estate Market'
+                        widget.listing.propertyCategory != 'Estate Market'
                             ? Text(
-                                "${widget.bedroom} bedroom",
+                                "${widget.listing.bedroom} bedroom",
                                 style: const TextStyle(
                                   fontFamily: 'RedHatDisplay',
                                   fontSize: 10,
@@ -293,7 +242,7 @@ class _SinglePropertyState extends State<SingleProperty> {
                     ),
                     Row(
                       children: [
-                        widget.isPromoted == true
+                        widget.listing.isPromoted == true
                             ? const Row(
                                 children: [
                                   Icon(
@@ -354,7 +303,8 @@ class _SinglePropertyState extends State<SingleProperty> {
                               padding: const EdgeInsets.all(2.0),
                               child: Text(
                                 capitalize('for ') +
-                                    capitalize(widget.propertyType.toString()),
+                                    capitalize(
+                                        widget.listing.propertyType.toString()),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -380,14 +330,18 @@ class _SinglePropertyState extends State<SingleProperty> {
                                       return const SocialLogin();
                                     })
                                 : userFavouritedListingController
-                                    .handleLike(widget.id);
+                                    .handleLike(widget.listing);
+
+                            setState(() {});
                           },
                           child: CircleAvatar(
                             radius: 10,
                             backgroundColor: Colors.white,
                             child: userFavouritedListingController
-                                    .userFavouritedListing
-                                    .contains(widget.id)
+                                    .favouritedListing
+                                    .where((e) => e.id == widget.listing.id)
+                                    .toList()
+                                    .isNotEmpty
                                 ? const Icon(CupertinoIcons.heart_solid,
                                     size: 16, color: Color(0xFFDD1611))
                                 : const Icon(CupertinoIcons.heart,

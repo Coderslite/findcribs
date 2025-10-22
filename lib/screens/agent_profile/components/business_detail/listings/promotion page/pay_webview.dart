@@ -1,16 +1,20 @@
-import 'dart:io';
-
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/promotion%20page/verify_promotion.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../../controller/login_controller.dart';
+
 class WebViewExample extends StatefulWidget {
   final String webLink;
   final String referenceId;
+
+  final StatefulWidget returnUrl;
   const WebViewExample(
-      {Key? key, required this.webLink, required this.referenceId})
-      : super(key: key);
+      {super.key,
+      required this.webLink,
+      required this.referenceId,
+      required this.returnUrl});
   @override
   WebViewExampleState createState() => WebViewExampleState();
 }
@@ -21,7 +25,31 @@ class WebViewExampleState extends State<WebViewExample> {
   void initState() {
     super.initState();
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    handleInit();
+  }
+
+  handleInit() async {
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onHttpError: (HttpResponseError error) {},
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith('https://findcribs.ng/')) {
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.webLink));
   }
 
   @override
@@ -33,6 +61,7 @@ class WebViewExampleState extends State<WebViewExample> {
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
+              getProfileController.handleGetProfile();
             },
             child: const Icon(
               Icons.arrow_back_ios,
@@ -42,9 +71,11 @@ class WebViewExampleState extends State<WebViewExample> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (_) {
                   return VerifyPromotion(
                     reference: widget.referenceId,
+                    returnUrl: widget.returnUrl,
                   );
                 }));
               },
@@ -62,12 +93,8 @@ class WebViewExampleState extends State<WebViewExample> {
             }
           },
           child: SafeArea(
-            child: WebView(
-              onWebViewCreated: (con) {
-                controller = con;
-              },
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: widget.webLink,
+            child: WebViewWidget(
+              controller: controller,
             ),
           ),
         ));

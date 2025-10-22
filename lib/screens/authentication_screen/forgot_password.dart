@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import '../../util/colors.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+  const ForgotPasswordScreen({super.key});
 
   @override
   ForgotPasswordScreenState createState() => ForgotPasswordScreenState();
@@ -66,6 +66,83 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       // hintText: 'Enter Email Address',
                       border: OutlineInputBorder(borderSide: BorderSide())),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Note:",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "If you didn't receive our verification email",
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "* ",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.orange),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "Check your spam or junk email folder",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 1,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "* ",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.orange),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "Confirm that your email address was entered correctly.",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
               mobileSizedBoxHeight,
               SizedBox(

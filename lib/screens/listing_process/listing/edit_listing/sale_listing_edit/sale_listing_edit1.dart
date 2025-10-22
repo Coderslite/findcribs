@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class EditSale1 extends StatefulWidget {
-  const EditSale1({Key? key}) : super(key: key);
+  const EditSale1({super.key});
 
   @override
   State<EditSale1> createState() => _EditSale1State();

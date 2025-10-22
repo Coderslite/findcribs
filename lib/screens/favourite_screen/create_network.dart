@@ -3,7 +3,7 @@ import 'package:findcribs/screens/favourite_screen/recommended_favourite/recomme
 import 'package:flutter/material.dart';
 
 class CreateNetworkScreen extends StatefulWidget {
-  const CreateNetworkScreen({Key? key}) : super(key: key);
+  const CreateNetworkScreen({super.key});
 
   @override
   State<CreateNetworkScreen> createState() => _CreateNetworkScreenState();

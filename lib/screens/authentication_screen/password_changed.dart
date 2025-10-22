@@ -2,7 +2,7 @@ import 'package:findcribs/components/constants.dart';
 import 'package:flutter/material.dart';
 
 class PasswordChangedScreen extends StatelessWidget {
-  const PasswordChangedScreen({Key? key}) : super(key: key);
+  const PasswordChangedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

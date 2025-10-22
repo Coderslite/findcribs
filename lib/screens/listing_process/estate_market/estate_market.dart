@@ -23,7 +23,7 @@ import '../../../util/colors.dart';
 import '../listing/select_listing_type.dart';
 
 class EstateMarketRegistration extends StatefulWidget {
-  const EstateMarketRegistration({Key? key}) : super(key: key);
+  const EstateMarketRegistration({super.key});
 
   @override
   State<EstateMarketRegistration> createState() =>
@@ -388,7 +388,27 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
                         ),
                       ),
                     ),
-
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      "Whatsapp Number",
+                      style: TextStyle(color: grey),
+                    ),
+                    FormBuilderTextField(
+                      name: 'whatsapp',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(11),
+                        FormBuilderValidators.maxLength(11),
+                      ]),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(),
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 30,
                     ),
@@ -583,16 +603,8 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
           ),
           WebUiSettings(
             context: context,
-            presentStyle: CropperPresentStyle.dialog,
-            boundary: const CroppieBoundary(
-              width: 520,
-              height: 520,
-            ),
-            viewPort:
-                const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-            enableExif: true,
-            enableZoom: true,
-            showZoomer: true,
+            presentStyle: WebPresentStyle.dialog,
+            zoomable: true,
           ),
         ],
       );
@@ -664,6 +676,7 @@ class _EstateMarketRegistrationState extends State<EstateMarketRegistration> {
         request.fields['full_name'] = formData['fullName'];
         request.fields['business_name'] = formData['businessName'];
         request.fields['phone_number'] = formData['phone'];
+        request.fields['whatsapp_number'] = formData['whatsapp'];
         request.fields['about'] = formData['about'];
         request.fields['availability'] = jsonEncode(availability);
         request.fields['systemManaged'] = '0';

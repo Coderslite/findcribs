@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:findcribs/screens/product_details/product_details.dart';
@@ -22,7 +21,7 @@ import 'package:http/http.dart' as http;
 import '../../util/colors.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  const NotificationScreen({super.key});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -179,260 +178,270 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ],
               ),
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(
-                  height: 36,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              color: const Color(0XFFF0F7F8),
-                              borderRadius: BorderRadius.circular(13)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child:
-                                SvgPicture.asset("assets/svgs/arrow_back.svg"),
+          : SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                color: const Color(0XFFF0F7F8),
+                                borderRadius: BorderRadius.circular(13)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: SvgPicture.asset(
+                                  "assets/svgs/arrow_back.svg"),
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                        "Notification",
-                        style: TextStyle(fontSize: size.width / 22),
-                      ),
-                      const Text("            "),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 33,
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        filteredUnreadNotificationList.isEmpty
-                            ? Container()
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        handleMarkAllRead();
-                                      },
-                                      child: const Text(
-                                        "Mark all as read",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            // reverse: true,
-                            itemCount: filteredNotificationList.length,
-                            physics: const ScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              String usrDate =
-                                  (filteredNotificationList[index].createdAt)
-                                      .toString();
-                              var todayDate = DateTime.parse(usrDate);
-                              var notDate =
-                                  DateFormat('yyyy-MM-dd').format(todayDate);
-                              var notificationTime = timeago.format(todayDate);
-
-                              print(notDate);
-                              Duration dur =
-                                  DateTime.now().difference(todayDate);
-                              String differenceInYears =
-                                  (dur.inDays).floor().toString();
-                              print(differenceInYears);
-                              // return new Text(differenceInYears + ' years');
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return filteredNotificationList[index]
-                                                .type ==
-                                            'listing'
-                                        ? ProductDetails(
-                                            id: filteredNotificationList[index]
-                                                .refId)
-                                        : filteredNotificationList[index]
-                                                    .type ==
-                                                'chat'
-                                            ? const HomePageRoot(
-                                                navigateIndex: 3)
-                                            : const HomePageRoot(
-                                                navigateIndex: 0);
-                                  })).then((value) => handleNotificationRead(
-                                      filteredNotificationList[index].id));
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: index < 1
-                                          ? Column(
-                                              children: [
-                                                Text(
-                                                  int.parse(differenceInYears) <
-                                                          1
-                                                      ? "Today"
-                                                      : int.parse(differenceInYears) >
-                                                                  0 &&
-                                                              int.parse(
-                                                                      differenceInYears) <
-                                                                  2
-                                                          ? "Yesterday"
-                                                          : notDate,
-                                                  style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                                const SizedBox(
-                                                  height: 38,
-                                                ),
-                                              ],
-                                            )
-                                          : (DateTime.now()
-                                                      .difference(DateTime.parse(
-                                                          filteredNotificationList[
-                                                                  index]
-                                                              .createdAt
-                                                              .toString()))
-                                                      .inDays
-                                                      .floor()
-                                                      .toString()) !=
-                                                  DateTime.now()
-                                                      .difference(DateTime.parse(
-                                                          filteredNotificationList[
-                                                                  index - 1]
-                                                              .createdAt
-                                                              .toString()))
-                                                      .inDays
-                                                      .floor()
-                                                      .toString()
-                                              ? Column(
-                                                  children: [
-                                                    Text(
-                                                      int.parse(differenceInYears) <
-                                                              1
-                                                          ? "Today"
-                                                          : int.parse(differenceInYears) >
-                                                                      0 &&
-                                                                  int.parse(
-                                                                          differenceInYears) <
-                                                                      2
-                                                              ? "Yesterday"
-                                                              : notDate,
-                                                      style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 38,
-                                                    ),
-                                                  ],
-                                                )
-                                              : const Text(""),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          15, 0, 15, 25),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          CircleAvatar(
-                                              backgroundColor:
-                                                  filteredNotificationList[
-                                                                  index]
-                                                              .isRead ==
-                                                          true
-                                                      ? const Color(0xFFF7F7F7)
-                                                      : const Color(0xFFD4E6EB),
-                                              child: filteredNotificationList[
-                                                              index]
-                                                          .isRead ==
-                                                      true
-                                                  ? Image.asset(
-                                                      "assets/images/notification_read.png")
-                                                  : Image.asset(
-                                                      "assets/images/notification_unread.png")),
-                                          const SizedBox(
-                                            width: 16,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  filteredNotificationList[
-                                                          index]
-                                                      .description
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          filteredNotificationList[
-                                                                          index]
-                                                                      .isRead ==
-                                                                  true
-                                                              ? FontWeight.w300
-                                                              : FontWeight.w700,
-                                                      color: grey),
-                                                ),
-                                                const SizedBox(
-                                                  height: 6,
-                                                ),
-                                                Text(
-                                                  notificationTime,
-                                                  style: const TextStyle(
-                                                    fontSize: 8,
-                                                    color: grey,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                        _isLoadMoreRunning
-                            ? const CircularProgressIndicator()
-                            : Container(),
+                        Text(
+                          "Notification",
+                          style: TextStyle(fontSize: size.width / 22),
+                        ),
+                        const Text("            "),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 33,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          filteredUnreadNotificationList.isEmpty
+                              ? Container()
+                              : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          handleMarkAllRead();
+                                        },
+                                        child: const Text(
+                                          "Mark all as read",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              // reverse: true,
+                              itemCount: filteredNotificationList.length,
+                              physics: const ScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                String usrDate =
+                                    (filteredNotificationList[index].createdAt)
+                                        .toString();
+                                var todayDate = DateTime.parse(usrDate);
+                                var notDate =
+                                    DateFormat('yyyy-MM-dd').format(todayDate);
+                                var notificationTime =
+                                    timeago.format(todayDate);
+
+                                print(notDate);
+                                Duration dur =
+                                    DateTime.now().difference(todayDate);
+                                String differenceInYears =
+                                    (dur.inDays).floor().toString();
+                                print(differenceInYears);
+                                // return new Text(differenceInYears + ' years');
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return filteredNotificationList[index]
+                                                  .type ==
+                                              'listing'
+                                          ? ProductDetails(
+                                              id: filteredNotificationList[
+                                                      index]
+                                                  .refId)
+                                          : filteredNotificationList[index]
+                                                      .type ==
+                                                  'chat'
+                                              ? const HomePageRoot(
+                                                  navigateIndex: 3)
+                                              : const HomePageRoot(
+                                                  navigateIndex: 0);
+                                    })).then((value) => handleNotificationRead(
+                                        filteredNotificationList[index].id));
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: index < 1
+                                            ? Column(
+                                                children: [
+                                                  Text(
+                                                    int.parse(differenceInYears) <
+                                                            1
+                                                        ? "Today"
+                                                        : int.parse(differenceInYears) >
+                                                                    0 &&
+                                                                int.parse(
+                                                                        differenceInYears) <
+                                                                    2
+                                                            ? "Yesterday"
+                                                            : notDate,
+                                                    style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 38,
+                                                  ),
+                                                ],
+                                              )
+                                            : (DateTime.now()
+                                                        .difference(DateTime.parse(
+                                                            filteredNotificationList[
+                                                                    index]
+                                                                .createdAt
+                                                                .toString()))
+                                                        .inDays
+                                                        .floor()
+                                                        .toString()) !=
+                                                    DateTime.now()
+                                                        .difference(DateTime.parse(
+                                                            filteredNotificationList[
+                                                                    index - 1]
+                                                                .createdAt
+                                                                .toString()))
+                                                        .inDays
+                                                        .floor()
+                                                        .toString()
+                                                ? Column(
+                                                    children: [
+                                                      Text(
+                                                        int.parse(differenceInYears) <
+                                                                1
+                                                            ? "Today"
+                                                            : int.parse(differenceInYears) >
+                                                                        0 &&
+                                                                    int.parse(
+                                                                            differenceInYears) <
+                                                                        2
+                                                                ? "Yesterday"
+                                                                : notDate,
+                                                        style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 38,
+                                                      ),
+                                                    ],
+                                                  )
+                                                : const Text(""),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 25),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CircleAvatar(
+                                                backgroundColor:
+                                                    filteredNotificationList[
+                                                                    index]
+                                                                .isRead ==
+                                                            true
+                                                        ? const Color(
+                                                            0xFFF7F7F7)
+                                                        : const Color(
+                                                            0xFFD4E6EB),
+                                                child: filteredNotificationList[
+                                                                index]
+                                                            .isRead ==
+                                                        true
+                                                    ? Image.asset(
+                                                        "assets/images/notification_read.png")
+                                                    : Image.asset(
+                                                        "assets/images/notification_unread.png")),
+                                            const SizedBox(
+                                              width: 16,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    filteredNotificationList[
+                                                            index]
+                                                        .description
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            filteredNotificationList[
+                                                                            index]
+                                                                        .isRead ==
+                                                                    true
+                                                                ? FontWeight
+                                                                    .w300
+                                                                : FontWeight
+                                                                    .w700,
+                                                        color: grey),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 6,
+                                                  ),
+                                                  Text(
+                                                    notificationTime,
+                                                    style: const TextStyle(
+                                                      fontSize: 10,
+                                                      color: grey,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                          _isLoadMoreRunning
+                              ? const CircularProgressIndicator()
+                              : Container(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
     );
   }

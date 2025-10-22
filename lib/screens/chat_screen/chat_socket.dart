@@ -8,7 +8,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatSocket extends StatefulWidget {
-  const ChatSocket({Key? key}) : super(key: key);
+  const ChatSocket({super.key});
 
   @override
   State<ChatSocket> createState() => _ChatSocketState();

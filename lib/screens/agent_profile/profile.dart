@@ -1,9 +1,7 @@
 // ignore_for_file: avoid_print
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/controller/login_controller.dart';
-import 'package:findcribs/controller/share_link_controller.dart';
 import 'package:findcribs/screens/agent_profile/components/business_detail/business_detail.dart';
 import 'package:findcribs/screens/agent_profile/components/help/help.dart';
 import 'package:findcribs/screens/agent_profile/components/legal/legal.dart';
@@ -11,6 +9,7 @@ import 'package:findcribs/screens/agent_profile/components/personal_info/persona
 import 'package:findcribs/screens/agent_profile/components/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 import '../../controller/connectivity_controller.dart';
@@ -19,7 +18,7 @@ import '../homepage/home_root.dart';
 import 'agent_profile_listing.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   ProfileScreenState createState() => ProfileScreenState();
@@ -28,15 +27,9 @@ class ProfileScreen extends StatefulWidget {
 class ProfileScreenState extends State<ProfileScreen> {
   GetProfileController getProfileController = Get.put(GetProfileController());
   LoginController loginController = Get.put(LoginController());
-  ShareLinkController shareLinkController = Get.put(ShareLinkController());
   @override
   void initState() {
     getProfileController.handleGetProfile();
-    shareLinkController.handleGenerateAgentLink(
-        getProfileController.myId.string,
-        getProfileController.profileImg.string,
-        getProfileController.firstName.string +
-            getProfileController.lastName.string);
 
     super.initState();
   }
@@ -86,10 +79,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                                 style: TextStyle(fontSize: size.width / 22),
                               ),
                               InkWell(
-                                  onTap: () {
-                                    shareLinkController.handleShareAgentLink();
-                                  },
-                                  child: const Icon(Icons.share))
+                                  onTap: () {}, child: const Icon(Icons.share))
                             ],
                           ),
                           const SizedBox(
@@ -139,6 +129,25 @@ class ProfileScreenState extends State<ProfileScreen> {
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 26),
                           ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
+                            decoration: BoxDecoration(
+                                color: kPrimary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              "${getProfileController.subscriptionName}",
+                              style: TextStyle(
+                                color: kPrimary,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ).visible(getProfileController.agent.toString() !=
+                                  '{}' &&
+                              getProfileController.agent.toString() != 'null'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -260,16 +269,16 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Personal Details",
-                                            style: TextStyle(
-                                              fontSize: size.width / 26,
-                                              fontWeight: FontWeight.bold,
-                                            )),
+                                        Text(
+                                          "Personal Details",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                         Text(
                                           "Manage your personal information",
-                                          style: TextStyle(
-                                              fontSize: size.width / 37,
-                                              color: const Color(0XFF8A99B1)),
+                                          style: secondaryTextStyle(),
                                         ),
                                       ],
                                     ),
@@ -318,18 +327,15 @@ class ProfileScreenState extends State<ProfileScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text("Business Details",
-                                                  style: TextStyle(
-                                                    fontSize: size.width / 26,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
+                                              const Text(
+                                                "Business Details",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
                                               Text(
                                                 "Manage your business information",
-                                                style: TextStyle(
-                                                  fontSize: size.width / 37,
-                                                  color:
-                                                      const Color(0XFF8A99B1),
-                                                ),
+                                                style: secondaryTextStyle(),
                                               ),
                                             ],
                                           ),
@@ -377,17 +383,15 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Get Help",
-                                            style: TextStyle(
-                                              fontSize: size.width / 26,
-                                              fontWeight: FontWeight.bold,
-                                            )),
+                                        const Text(
+                                          "Get Help",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
                                         Text(
                                           "Get support or send feedback",
-                                          style: TextStyle(
-                                            fontSize: size.width / 37,
-                                            color: const Color(0XFF8A99B1),
-                                          ),
+                                          style: secondaryTextStyle(),
                                         ),
                                       ],
                                     ),
@@ -435,17 +439,14 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Legal",
-                                            style: TextStyle(
-                                              fontSize: size.width / 26,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Text(
-                                          "About our contract with you",
+                                        const Text(
+                                          "Legal",
                                           style: TextStyle(
-                                              fontSize: size.width / 37,
-                                              color: const Color(0XFF8A99B1)),
+                                            fontSize: 16,
+                                          ),
                                         ),
+                                        Text("About our contract with you",
+                                            style: secondaryTextStyle()),
                                       ],
                                     ),
                                   ),
@@ -492,17 +493,15 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Settings",
-                                            style: TextStyle(
-                                              fontSize: size.width / 26,
-                                              fontWeight: FontWeight.bold,
-                                            )),
+                                        const Text(
+                                          "Settings",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
                                         Text(
                                           "Do your own customization",
-                                          style: TextStyle(
-                                            fontSize: size.width / 37,
-                                            color: const Color(0XFF8A99B1),
-                                          ),
+                                          style: secondaryTextStyle(),
                                         ),
                                       ],
                                     ),
@@ -547,18 +546,14 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Logout",
-                                            style: TextStyle(
-                                              fontSize: size.width / 26,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Text(
-                                          "Sign out from this account ",
+                                        const Text(
+                                          "Logout",
                                           style: TextStyle(
-                                            fontSize: size.width / 37,
-                                            color: const Color(0XFF8A99B1),
+                                            fontSize: 16,
                                           ),
                                         ),
+                                        Text("Sign out from this account ",
+                                            style: secondaryTextStyle()),
                                       ],
                                     ),
                                   ),
@@ -597,18 +592,15 @@ class ProfileScreenState extends State<ProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Delete Account",
-                                            style: TextStyle(
-                                              fontFamily: "RedHatDisplay",
-                                              fontSize: size.width / 26,
-                                              fontWeight: FontWeight.bold,
-                                            )),
+                                        const Text(
+                                          "Delete Account",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
                                         Text(
                                           "Delete user account",
-                                          style: TextStyle(
-                                            fontSize: size.width / 37,
-                                            color: const Color(0XFF8A99B1),
-                                          ),
+                                          style: secondaryTextStyle(),
                                         ),
                                       ],
                                     ),

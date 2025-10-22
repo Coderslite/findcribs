@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:findcribs/controller/get_my_story_controller.dart';
 import 'package:findcribs/screens/story/single_story.dart';
-import 'package:findcribs/screens/story/story_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:form_builder_file_picker/form_builder_file_picker.dart';
@@ -25,7 +24,7 @@ class ItemModel {
 }
 
 class StoryList extends StatefulWidget {
-  const StoryList({Key? key}) : super(key: key);
+  const StoryList({super.key});
 
   @override
   State<StoryList> createState() => _StoryListState();

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:findcribs/controller/get_chat_controller.dart';
 import 'package:findcribs/controller/get_single_property_listing.dart';
+import 'package:findcribs/main.dart';
 import 'package:findcribs/models/chat_list_model.dart';
 import 'package:findcribs/models/message_model.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
@@ -21,7 +22,6 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart' as launchUrl;
 
 import '../../controller/socket_controller.dart';
-import '../../service/user_profile_by_id_service.dart';
 import '../../util/colors.dart';
 
 // ignore: library_prefixes
@@ -36,15 +36,14 @@ class ChatDetails extends StatefulWidget {
   final int? chatId;
   final int? lastReadMsg;
   const ChatDetails(
-      {Key? key,
+      {super.key,
       required this.chatIndex,
       required this.receiverId,
       required this.firstName,
       required this.lastName,
       required this.chatId,
       required this.receiverImage,
-      this.lastReadMsg})
-      : super(key: key);
+      this.lastReadMsg});
 
   @override
   State<ChatDetails> createState() => _ChatDetailsState();
@@ -169,7 +168,7 @@ class _ChatDetailsState extends State<ChatDetails> {
 
   handleGetProfile() {
     setState(() {
-      userProfile2 = getUserProfileById(widget.receiverId);
+      userProfile2 = agentService.getUserById(widget.receiverId);
       userProfile2.then((value) {
         receiverPhone = value.phoneNumber.toString();
       });
@@ -180,7 +179,7 @@ class _ChatDetailsState extends State<ChatDetails> {
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     print(token);
-
+    print(widget.lastReadMsg);
     socket.emit('BULK_READ', {
       "lastReadMesgId": widget.lastReadMsg,
     });
@@ -291,7 +290,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                     InkWell(
                       onTap: () {
                         Get.to(AgentProfileScreen(
-                          id: widget.receiverId,
+                          userId: widget.receiverId,
                         ));
                       },
                       child: CircleAvatar(
@@ -513,13 +512,7 @@ class _ChatDetailsState extends State<ChatDetails> {
       "message": chatMessage,
       "sentAt": DateTime.now().toIso8601String(),
     };
-    // var newMessage = MyMessageModel(
-    //     message: chatMessage,
-    //     senderId: id,
-    //     myId: id.toString(),
-    //     realReceiverId: widget.receiverId.toString(),
-    //     status: 'pending',
-    //     time: DateTime.now().toString());
+
     socket.emit('MESSAGE', messageMap);
     messageController.clear();
     if (mounted) {
@@ -544,7 +537,7 @@ class ChatItem extends StatefulWidget {
   final String message;
   // final String chatID;
   const ChatItem(
-      {Key? key,
+      {super.key,
       // required this.isMe,
       required this.senderId,
       required this.message,
@@ -553,8 +546,7 @@ class ChatItem extends StatefulWidget {
       required this.realReceiverId,
       required this.propertyId,
       required this.status,
-      required this.time})
-      : super(key: key);
+      required this.time});
 
   @override
   State<ChatItem> createState() => _ChatItemState();

@@ -1,4 +1,5 @@
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/active_listing/active_listing.dart';
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/disabled_listing/disabled_listing.dart';
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/saved_listing/saved_listing.dart';
@@ -7,9 +8,10 @@ import 'package:findcribs/service/disabled_list_service.dart';
 import 'package:findcribs/service/saved_list_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class UserListing extends StatefulWidget {
-  const UserListing({Key? key}) : super(key: key);
+  const UserListing({super.key});
 
   @override
   State<UserListing> createState() => _UserListingState();
@@ -186,15 +188,15 @@ class _UserListingState extends State<UserListing> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Active Listings",
+                              const Text("Active Listings",
                                   style: TextStyle(
                                     fontFamily: "RedHatDisplay",
-                                    fontSize: size.width / 26,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   )),
                               Text(
                                 "View and manage all published listings",
-                                style: TextStyle(fontSize: size.width / 37),
+                                style: secondaryTextStyle(),
                               ),
                             ],
                           ),
@@ -215,9 +217,9 @@ class _UserListingState extends State<UserListing> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Icon(
+                          const Icon(
                             Icons.arrow_forward_ios_outlined,
-                            size: size.width / 26,
+                            size: 16,
                           ),
                         ],
                       ),
@@ -256,15 +258,15 @@ class _UserListingState extends State<UserListing> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Saved Listings",
+                              const Text("Saved Listings",
                                   style: TextStyle(
                                     fontFamily: "RedHatDisplay",
-                                    fontSize: size.width / 26,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   )),
                               Text(
                                 "View, edit or publish listings in your draft",
-                                style: TextStyle(fontSize: size.width / 37),
+                                style: secondaryTextStyle(),
                               ),
                             ],
                           ),
@@ -284,9 +286,9 @@ class _UserListingState extends State<UserListing> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Icon(
+                            const Icon(
                               Icons.arrow_forward_ios_outlined,
-                              size: size.width / 26,
+                              size: 16,
                             ),
                           ],
                         ),
@@ -326,15 +328,15 @@ class _UserListingState extends State<UserListing> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Disabled Listings",
+                              const Text("Disabled Listings",
                                   style: TextStyle(
                                     fontFamily: "RedHatDisplay",
-                                    fontSize: size.width / 26,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   )),
                               Text(
                                 "View and manage all disabled listings",
-                                style: TextStyle(fontSize: size.width / 37),
+                                style: secondaryTextStyle(),
                               ),
                             ],
                           ),
@@ -354,9 +356,9 @@ class _UserListingState extends State<UserListing> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Icon(
+                            const Icon(
                               Icons.arrow_forward_ios_outlined,
-                              size: size.width / 26,
+                              size: 16,
                             ),
                           ],
                         ),

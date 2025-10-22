@@ -1,4 +1,5 @@
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/active_listing/category/single_property_status.dart';
 import 'package:findcribs/service/active_list_service.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 class ActiveListingForRent extends StatefulWidget {
-  const ActiveListingForRent({Key? key}) : super(key: key);
+  const ActiveListingForRent({super.key});
 
   @override
   State<ActiveListingForRent> createState() => _ActiveListingForRentState();
@@ -101,7 +102,7 @@ class _ActiveListingForRentState extends State<ActiveListingForRent> {
                   shrinkWrap: true,
                   itemCount: filteredList.length,
                   itemBuilder: (context, index) {
-                           int salesPrice =
+                    int salesPrice =
                         int.parse(filteredList[index].rentalFee.toString());
                     int cautionFee =
                         int.parse(filteredList[index].cautionFee.toString());

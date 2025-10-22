@@ -3,6 +3,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:findcribs/controller/user_favorited_agent_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
+import 'package:findcribs/models/house_list_model.dart';
 import 'package:findcribs/models/user_favourite_listing.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_agent.dart';
 import 'package:findcribs/screens/favourite_screen/favourite_listings.dart';
@@ -13,22 +14,23 @@ import 'package:flutter/material.dart';
 import 'package:findcribs/components/constants.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 import '../../controller/connectivity_controller.dart';
 import '../../widgets/property_listings.dart';
 import '../homepage/home_root.dart';
 
 class FavouritePageScreen extends StatefulWidget {
-  const FavouritePageScreen({Key? key}) : super(key: key);
+  const FavouritePageScreen({super.key});
 
   @override
   State<FavouritePageScreen> createState() => _FavouritePageScreenState();
 }
 
 class _FavouritePageScreenState extends State<FavouritePageScreen> {
-  List<UserFavouritedListingModel> filteredFavouritePropertyList = [];
-  List<UserFavouritedListingModel> firstFavouritePropertyList = [];
-  late Future<List<UserFavouritedListingModel>> favouritePropertyList;
+  List<HouseListModel> filteredFavouritePropertyList = [];
+  List<HouseListModel> firstFavouritePropertyList = [];
+  late Future<List<HouseListModel>> favouritePropertyList;
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
   @override
@@ -198,7 +200,7 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                     const SizedBox(height: 14),
                     Expanded(
                       child: userFavouritedListingController
-                              .userFavouritedListing.isEmpty
+                              .favouritedListing.isEmpty
                           ? const Center(child: Text("No Favourited Property"))
                           : Obx(
                               () => RefreshIndicator(
@@ -217,56 +219,42 @@ class _FavouritePageScreenState extends State<FavouritePageScreen> {
                                           .favouritedListing.length
                                       : 5,
                                   itemBuilder: (context, index) {
-                                    int rentFee =
+                                    HouseListModel listing =
                                         userFavouritedListingController
-                                            .favouritedListing[index]
-                                            .listing!['rental_fee'];
+                                            .favouritedListing[index];
+                                    int rentFee = listing.rentalFee.toInt();
 
                                     int price = (rentFee);
                                     var formatter = NumberFormat("#,###");
                                     var formatedPrice = formatter.format(price);
                                     return InkWell(
-                                        onTap: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(builder: (_) {
-                                            return ProductDetails(
-                                              id: userFavouritedListingController
-                                                  .favouritedListing[index]
-                                                  .listingId,
-                                            );
-                                          }));
-                                        },
-                                        child: Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                19, 0, 19, 15),
-                                            height: 130,
-                                            child: Property_Listings(
-                                              id: userFavouritedListingController
-                                                  .favouritedListing[index]
-                                                  .listingId,
-                                              images:
-                                                  userFavouritedListingController
-                                                      .favouritedListing[index]
-                                                      .listing!["listingImage"],
-                                              bedroom:
-                                                  userFavouritedListingController
-                                                      .favouritedListing[index]
-                                                      .listing!['bedroom'],
-                                              propertyAddress:
-                                                  userFavouritedListingController
-                                                          .favouritedListing[index]
-                                                          .listing![
-                                                      'property_address'],
-                                              propertyType:
-                                                  userFavouritedListingController
-                                                      .favouritedListing[index]
-                                                      .listing!['property_type'],
-                                              propertyState:
-                                                  userFavouritedListingController
-                                                      .favouritedListing[index]
-                                                      .listing!['state'],
-                                              price: formatedPrice,
-                                            )));
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) {
+                                          return ProductDetails(
+                                            id: userFavouritedListingController
+                                                .favouritedListing[index]
+                                                .listingId,
+                                          );
+                                        }));
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            19, 0, 19, 15),
+                                        height: 130,
+                                        child: Property_Listings(
+                                          id: listing.id,
+                                          images: listing.image,
+                                          bedroom: listing.bedroom,
+                                          propertyAddress:
+                                              listing.propertyAddress,
+                                          propertyType: listing.propertyType,
+                                          propertyState:
+                                              listing.state.toString(),
+                                          price: formatedPrice,
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),

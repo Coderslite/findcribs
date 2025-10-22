@@ -1,20 +1,19 @@
 // ignore_for_file: avoid_print, depend_on_referenced_packages, use_build_context_synchronously
-
-import 'dart:io';
 import 'package:badges/badges.dart' as badges;
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:findcribs/components/SuggestedAgents.dart';
 import 'package:findcribs/controller/connectivity_controller.dart';
+import 'package:findcribs/controller/login_controller.dart';
 import 'package:findcribs/controller/moment_socket_controller.dart';
 import 'package:findcribs/controller/story_list_controller.dart';
 import 'package:findcribs/controller/user_favourited_listing_controller.dart';
+import 'package:findcribs/main.dart';
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/screens/subscription/subscription_screen.dart';
 import 'package:findcribs/util/social_login.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:path/path.dart' as p;
 import 'package:findcribs/models/story_list_model.dart';
-import 'package:findcribs/screens/homepage/each_story.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
 import 'package:findcribs/screens/homepage/single_property.dart';
 import 'package:findcribs/screens/listing_screen/apartment.dart';
@@ -24,13 +23,13 @@ import 'package:findcribs/screens/listing_screen/estate_market.dart';
 import 'package:findcribs/screens/listing_screen/terrace_screen.dart';
 import 'package:findcribs/screens/notification_screen/notification_screen.dart';
 import 'package:findcribs/screens/search_screen/search.dart';
-import 'package:findcribs/screens/story_screen/story_base_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../components/story_widget.dart';
 import '../../controller/get_notification_controller.dart';
 // ignore: library_prefixes
 
@@ -38,12 +37,11 @@ import '../../service/all_property_listing.dart';
 import '../../service/property_by_category.dart';
 import '../../util/colors.dart';
 import '../../widgets/loading_widget.dart';
-import '../favourite_screen/all_agent/all_agent.dart';
 
 class HomepageScreen extends StatefulWidget {
   const HomepageScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<HomepageScreen> createState() => _HomepageScreenState();
@@ -70,10 +68,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   @override
   void initState() {
-    print("homescreen init");
     houseController.fetchPosts(1);
     super.initState();
     // _controller.addListener();
+    if (getProfileController.showSuggestedAgents.value) {
+      handleShowAgents();
+    }
   }
 
   @override
@@ -81,6 +81,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
     houseController.handleReset();
     controller.dispose();
     super.dispose();
+  }
+
+  handleShowAgents() async {
+    var agents = await agentService.getSuggestedAgents();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SuggestedAgents(
+            agents: agents,
+          );
+        });
   }
 
   ConnectivityController connectivityController =
@@ -99,7 +110,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuild homescreen widget");
     return Scaffold(
       // bottomNavigationBar:
       // backgroundColor: context.isDarkMode ? black : white,
@@ -208,168 +218,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          // crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    final token = prefs.getString('token');
-                                    token == null
-                                        ? showModalBottomSheet<void>(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return const SocialLogin();
-                                            })
-                                        :
-
-                                        //  Navigator.push(context,
-                                        //     MaterialPageRoute(builder: (_) {
-                                        //     return const CreateNetworkScreen();
-                                        //   }));
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (_) {
-                                            return const AllAgent();
-                                          }));
-                                  },
-                                  child: Container(
-                                    width: 75,
-                                    height: 75,
-                                    margin: const EdgeInsets.only(left: 20),
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0XFF0072BA)),
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                      size: 36,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(left: 20),
-                                  child: const Text(
-                                    "Pick a favourite",
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            getStoryListController.allStoryList.isEmpty
-                                ? GestureDetector(
-                                    onTap: () {
-                                      Get.to(const StoryBaseScreen(
-                                          moment: [],
-                                          profileImg: '',
-                                          agentId: 1,
-                                          type: 'findcribs'));
-                                    },
-                                    child: Column(
-                                      children: [
-                                        DottedBorder(
-                                          borderType: BorderType.Oval,
-                                          color: Colors.blue,
-                                          strokeWidth: 1.5,
-                                          strokeCap: StrokeCap.round,
-                                          padding: const EdgeInsets.all(2),
-                                          child: SizedBox(
-                                            width: 70,
-                                            height: 70,
-                                            child: ClipOval(
-                                                child: Image.asset(
-                                                    "assets/images/logo.png")),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text(
-                                          "FindCribs",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              height: 95,
-                              child: ListView.builder(
-                                  physics: const ScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: getStoryListController
-                                      .allStoryList.length,
-                                  itemBuilder: (context, index) {
-                                    String fileExtension = p.extension(File(
-                                            getStoryListController
-                                                .allStoryList[index]
-                                                .moment!
-                                                .last['mediaUrl']
-                                                .toString())
-                                        .path);
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) {
-                                                return StoryBaseScreen(
-                                                  type: 'individuals',
-                                                  agentId:
-                                                      getStoryListController
-                                                          .allStoryList[index]
-                                                          .id,
-                                                  profileImg:
-                                                      getStoryListController
-                                                          .allStoryList[index]
-                                                          .profilePic
-                                                          .toString(),
-                                                  moment: getStoryListController
-                                                      .allStoryList[index]
-                                                      .moment!
-                                                      .toList(),
-                                                );
-                                              }));
-                                            },
-                                            child: EachStory(
-                                              type: fileExtension,
-                                              firstName: getStoryListController
-                                                  .allStoryList[index].firstName
-                                                  .toString(),
-                                              lastName: getStoryListController
-                                                  .allStoryList[index].lastName
-                                                  .toString(),
-                                              fileName: getStoryListController
-                                                  .allStoryList[index]
-                                                  .moment!
-                                                  .last['mediaUrl'],
-                                            )),
-                                        const SizedBox(
-                                          width: 20,
-                                        )
-                                      ],
-                                    );
-                                  }),
-                            )
-                          ],
-                        ),
-                      ),
+                      storyWidget(context),
                       const SizedBox(
                         height: 20,
                       ),
@@ -386,7 +235,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                     PagedChildBuilderDelegate<HouseListModel>(
                                   animateTransitions: false,
                                   itemBuilder: (context, post, index) {
-                                    int price = (post.rentalFee!.toInt());
+                                    int price =
+                                        int.parse(post.rentalFee.toString());
                                     var formatter = NumberFormat("#,###");
                                     var formatedPrice = formatter.format(price);
                                     return Column(
@@ -409,7 +259,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                         children: [
                                                           GestureDetector(
                                                             onTap: () {
-                                                              // Get.to(ExternalDirScreen());
+                                                              Get.to(
+                                                                  const SubscriptionScreen());
                                                             },
                                                             child: const Row(
                                                               children: [
@@ -555,13 +406,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          Text(
-                                                                            "Duplex",
-                                                                            style: TextStyle(
-                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'RedHatDisplay',
-                                                                                fontWeight: FontWeight.w400),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(
+                                                                              "Duplex",
+                                                                              style: TextStyle(color: context.isDarkMode ? white : const Color(0xFF455A64), fontSize: 14, fontFamily: 'RedHatDisplay', fontWeight: FontWeight.w400),
+                                                                            ),
                                                                           ),
                                                                           SizedBox(
                                                                             height:
@@ -688,13 +538,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          Text(
-                                                                            "Apartments",
-                                                                            style: TextStyle(
-                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'RedHatDisplay',
-                                                                                fontWeight: FontWeight.w400),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(
+                                                                              "Apartments",
+                                                                              style: TextStyle(color: context.isDarkMode ? white : const Color(0xFF455A64), fontSize: 14, fontFamily: 'RedHatDisplay', fontWeight: FontWeight.w400),
+                                                                            ),
                                                                           ),
                                                                           SizedBox(
                                                                             height:
@@ -755,13 +604,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          Text(
-                                                                            "Terrace",
-                                                                            style: TextStyle(
-                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'RedHatDisplay',
-                                                                                fontWeight: FontWeight.w400),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(
+                                                                              "Terrace",
+                                                                              style: TextStyle(color: context.isDarkMode ? white : const Color(0xFF455A64), fontSize: 14, fontFamily: 'RedHatDisplay', fontWeight: FontWeight.w400),
+                                                                            ),
                                                                           ),
                                                                           SizedBox(
                                                                             height:
@@ -815,13 +663,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          Text(
-                                                                            "Hotels",
-                                                                            style: TextStyle(
-                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'RedHatDisplay',
-                                                                                fontWeight: FontWeight.w400),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(
+                                                                              "Hotels",
+                                                                              style: TextStyle(color: context.isDarkMode ? white : const Color(0xFF455A64), fontSize: 14, fontFamily: 'RedHatDisplay', fontWeight: FontWeight.w400),
+                                                                            ),
                                                                           ),
                                                                           SizedBox(
                                                                             height:
@@ -882,13 +729,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          Text(
-                                                                            "Estate Market",
-                                                                            style: TextStyle(
-                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'RedHatDisplay',
-                                                                                fontWeight: FontWeight.w400),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(
+                                                                              "Estate Market",
+                                                                              style: TextStyle(color: context.isDarkMode ? white : const Color(0xFF455A64), fontSize: 14, fontFamily: 'RedHatDisplay', fontWeight: FontWeight.w400),
+                                                                            ),
                                                                           ),
                                                                           SizedBox(
                                                                             height:
@@ -942,13 +788,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          Text(
-                                                                            "Land Title",
-                                                                            style: TextStyle(
-                                                                                color: context.isDarkMode ? white : const Color(0xFF455A64),
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'RedHatDisplay',
-                                                                                fontWeight: FontWeight.w400),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(
+                                                                              "Land Title",
+                                                                              style: TextStyle(color: context.isDarkMode ? white : const Color(0xFF455A64), fontSize: 14, fontFamily: 'RedHatDisplay', fontWeight: FontWeight.w400),
+                                                                            ),
                                                                           ),
                                                                           SizedBox(
                                                                             height:
@@ -1120,21 +965,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                               )
                                             : Container(),
                                         SingleProperty(
-                                            state: post.state!,
-                                            isPromoted: post.isPromoted,
-                                            id: post.id,
-                                            image: post.image,
-                                            designType: post.designType,
-                                            currency: post.currency,
-                                            propertyType: post.propertyType,
-                                            propertyAddress:
-                                                post.propertyAddress,
-                                            bedroom: post.bedroom,
-                                            propertyCategory:
-                                                post.propertyCategory,
-                                            price: formatedPrice,
-                                            propertyName:
-                                                post.propertyName.toString(),
+                                            listing: post,
                                             comingFrom: 'Homescreen')
                                       ],
                                     );

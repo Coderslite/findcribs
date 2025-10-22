@@ -10,12 +10,11 @@ class EachStory extends StatefulWidget {
   final String lastName;
   final String fileName;
   const EachStory(
-      {Key? key,
+      {super.key,
       required this.type,
       required this.firstName,
       required this.lastName,
-      required this.fileName})
-      : super(key: key);
+      required this.fileName});
 
   @override
   State<EachStory> createState() => _EachStoryState();
@@ -42,12 +41,12 @@ class _EachStoryState extends State<EachStory> {
         ? Column(
             children: [
               DottedBorder(
-                  borderType: BorderType.Oval,
-                  color: Colors.blue,
-                  strokeWidth: 1.5,
-                  strokeCap: StrokeCap.round,
-                  dashPattern: const [200 / 20 - (20), 2],
-                  padding: const EdgeInsets.all(2),
+                  options: OvalDottedBorderOptions(
+                      dashPattern: [200 / 20 - (20), 2],
+                      padding: EdgeInsets.all(2),
+                      color: Colors.blue,
+                      strokeWidth: 1.5,
+                      strokeCap: StrokeCap.round),
                   child: SizedBox(
                       width: 70,
                       height: 70,
@@ -69,12 +68,12 @@ class _EachStoryState extends State<EachStory> {
             ? Column(
                 children: [
                   DottedBorder(
-                    borderType: BorderType.Circle,
-                    color: Colors.blue,
-                    strokeWidth: 1.5,
-                    strokeCap: StrokeCap.square,
-                    dashPattern: const [300 / 5],
-                    padding: const EdgeInsets.all(2),
+                    options: CircularDottedBorderOptions(
+                        dashPattern: const [300 / 5],
+                        padding: EdgeInsets.all(2),
+                        color: Colors.blue,
+                        strokeWidth: 1.5,
+                        strokeCap: StrokeCap.square),
                     child: SizedBox(
                       width: 65,
                       height: 65,

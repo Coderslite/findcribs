@@ -30,10 +30,14 @@ class FirebaseMessagings {
       enableLights: true,
     );
 
-    const DarwinNotificationDetails darwinNotificationDetails =
-        DarwinNotificationDetails();
-
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    DarwinNotificationDetails darwinNotificationDetails =
+        const DarwinNotificationDetails(
+      presentSound: true,
+      presentBadge: true,
+      presentAlert: true,
+      badgeNumber: 1,
+    );
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: darwinNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
@@ -51,10 +55,8 @@ class FirebaseMessagings {
           options: DefaultFirebaseOptions.currentPlatform);
 
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
-
       const DarwinInitializationSettings darwinInitializationSettings =
           DarwinInitializationSettings();
       const InitializationSettings initializationSettings =
@@ -64,18 +66,21 @@ class FirebaseMessagings {
 
       await flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
-        // onDidReceiveNotificationResponse: notificationTapBackground,
-        // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       );
       // Request notification permissions
+      var result = await firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        provisional: false,
+        sound: true,
+      );
 
-      var result = await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestPermission();
+      if (result.authorizationStatus == AuthorizationStatus.authorized) {
+        print("authorized");
+      } else {
+        print("unauthorized");
+      }
 
-      if (result == true) {
-      } else {}
       var prefs = await SharedPreferences.getInstance();
       var token = await firebaseMessaging.getToken();
       print("fcmToken, $token");
@@ -89,12 +94,5 @@ class FirebaseMessagings {
         displayLocalNotification(message);
       });
     }
-  }
-
-  Future<void> cancelNotification() async {
-    await flutterLocalNotificationsPlugin
-        .cancelAll(); // or specify specific notification ID to cancel
-    var prefs = await SharedPreferences.getInstance();
-    prefs.remove('AppointmentId');
   }
 }

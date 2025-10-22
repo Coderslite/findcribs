@@ -17,6 +17,7 @@ Future<List<StoryListModel>> getAllStoryList() async {
   var responseData = jsonDecode(response.body);
   if (responseData['status'] == true) {
     List storyList = responseData['data']['moment'];
+    storyList.removeWhere((e) => e['friend'] == null);
     return storyList.map((e) => StoryListModel.fromJson(e)).toList();
   } else {
     throw Exception(response.statusCode);

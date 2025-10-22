@@ -1,4 +1,5 @@
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:findcribs/service/disabled_list_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +8,7 @@ import 'package:progress_indicators/progress_indicators.dart';
 import '../../active_listing/category/single_property_status.dart';
 
 class DisabledListingForSale extends StatefulWidget {
-  const DisabledListingForSale({Key? key}) : super(key: key);
+  const DisabledListingForSale({super.key});
 
   @override
   State<DisabledListingForSale> createState() => _DisabledListingForSaleState();
@@ -97,7 +98,7 @@ class _DisabledListingForSaleState extends State<DisabledListingForSale> {
                   shrinkWrap: true,
                   itemCount: filteredList.length,
                   itemBuilder: (context, index) {
-                             int salesPrice =
+                    int salesPrice =
                         int.parse(filteredList[index].rentalFee.toString());
                     int cautionFee =
                         int.parse(filteredList[index].cautionFee.toString());

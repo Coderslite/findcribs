@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import '../../../../../components/constants.dart';
 
 class ChangePasswordSettings extends StatefulWidget {
-  const ChangePasswordSettings({Key? key}) : super(key: key);
+  const ChangePasswordSettings({super.key});
 
   @override
   State<ChangePasswordSettings> createState() => _ChangePasswordSettingsState();

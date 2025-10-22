@@ -20,16 +20,28 @@ class GetAllChatController extends GetxController {
   }
 
   handleGetMessage() {
-    // allAvailableChats.value = [];
     getChat = getMessageList();
     getChat.then((chats) {
       allAvailableChats.value = myMessage.value = chats;
-      allAvailableChats.sort(
-        (a, b) {
-          return a.lastMessage!['createdAt']
-              .compareTo(b.lastMessage!['createdAt']);
-        },
-      );
+
+      // Safe sorting that handles null lastMessage or createdAt
+      allAvailableChats.sort((a, b) {
+        // Handle cases where lastMessage might be null
+        if (a.lastMessage == null && b.lastMessage == null) return 0;
+        if (a.lastMessage == null) return 1; // nulls last
+        if (b.lastMessage == null) return -1; // nulls last
+
+        // Handle cases where createdAt might be null
+        if (a.lastMessage!['createdAt'] == null &&
+            b.lastMessage!['createdAt'] == null) return 0;
+        if (a.lastMessage!['createdAt'] == null) return 1;
+        if (b.lastMessage!['createdAt'] == null) return -1;
+
+        // Now safely compare the dates
+        return b.lastMessage!['createdAt']
+            .compareTo(a.lastMessage!['createdAt']); // newest first
+      });
+
       handleGetUnreadMessages();
     });
 

@@ -15,20 +15,20 @@ class Agent_Listings extends StatelessWidget {
   final String category;
   final int? id;
   const Agent_Listings({
-    Key? key,
+    super.key,
     required this.name,
     required this.image,
     required this.category,
     required this.id,
     required this.isverified,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return AgentProfileScreen(id: id);
+          return AgentProfileScreen(userId: id);
         }));
       },
       child: DecoratedBox(
@@ -71,7 +71,8 @@ class Agent_Listings extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: context.isDarkMode ? white : const Color(0xFF4F5E76)),
+                    color:
+                        context.isDarkMode ? white : const Color(0xFF4F5E76)),
               ),
               const SizedBox(
                 height: 3,
@@ -81,7 +82,8 @@ class Agent_Listings extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
-                    color: context.isDarkMode ? white : const Color(0xFF4F5E76)),
+                    color:
+                        context.isDarkMode ? white : const Color(0xFF4F5E76)),
               ),
               const SizedBox(
                 height: 5,

@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart' as launchUrl;
 
 class HelpScreen extends StatefulWidget {
-  const HelpScreen({Key? key}) : super(key: key);
+  const HelpScreen({super.key});
 
   @override
   State<HelpScreen> createState() => _HelpScreenState();
@@ -41,10 +41,9 @@ class _HelpScreenState extends State<HelpScreen> {
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     "Get Help",
-                    style: TextStyle(
-                         fontSize: size.width / 22),
+                    style: TextStyle(fontSize: 18),
                   ),
                   const Text("           "),
                 ],
@@ -54,7 +53,7 @@ class _HelpScreenState extends State<HelpScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  launchUrl.launch("tel:07026195346");
+                  launchUrl.launch("tel:07078283549");
                 },
                 child: Container(
                   padding: const EdgeInsets.only(
@@ -70,25 +69,23 @@ class _HelpScreenState extends State<HelpScreen> {
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Call Us",
                                 style: TextStyle(
-                                  
-                                  fontSize: size.width / 26,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 )),
                             Text(
                               "Contact our call center",
                               style: TextStyle(
-                                  fontSize: size.width / 37,
-                                  color: const Color(0XFF8A99B1)),
+                                  fontSize: 14, color: Color(0XFF8A99B1)),
                             ),
                           ],
                         ),
@@ -124,14 +121,14 @@ class _HelpScreenState extends State<HelpScreen> {
               //           children: [
               //             Text("Chat with us",
               //                 style: TextStyle(
-              //                   
-              //                   fontSize: size.width / 26,
+              //
+              //                   fontSize: 16,
               //                   fontWeight: FontWeight.bold,
               //                 )),
               //             Text(
               //               "Send an in-app chat",
               //               style: TextStyle(
-              //                   fontSize: size.width / 37,
+              //                   fontSize: 14,
               //                   color: const Color(0XFF8A99B1)),
               //             ),
               //           ],
@@ -161,25 +158,23 @@ class _HelpScreenState extends State<HelpScreen> {
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Send an Email",
                                 style: TextStyle(
-                                  
-                                  fontSize: size.width / 26,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 )),
                             Text(
                               "We'll reply you as soon as possible",
                               style: TextStyle(
-                                  fontSize: size.width / 37,
-                                  color: const Color(0XFF8A99B1)),
+                                  fontSize: 14, color: Color(0XFF8A99B1)),
                             ),
                           ],
                         ),

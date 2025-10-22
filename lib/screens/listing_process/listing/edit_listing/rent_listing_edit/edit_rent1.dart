@@ -11,7 +11,7 @@ import '../../../../homepage/home_root.dart';
 import 'edit_rent2.dart';
 
 class EditRent1 extends StatefulWidget {
-  const EditRent1({Key? key}) : super(key: key);
+  const EditRent1({super.key});
 
   @override
   State<EditRent1> createState() => _EditRent1State();

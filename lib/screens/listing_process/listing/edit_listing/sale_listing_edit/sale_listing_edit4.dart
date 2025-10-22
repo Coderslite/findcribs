@@ -36,7 +36,7 @@ class EditSale4 extends StatefulWidget {
   final String? description;
   final String? sellerFee;
   const EditSale4(
-      {Key? key,
+      {super.key,
       this.propertyCategory,
       this.houseType,
       this.propertyAddress,
@@ -58,8 +58,7 @@ class EditSale4 extends StatefulWidget {
       this.salesPrice,
       this.facilities,
       this.description,
-      this.sellerFee})
-      : super(key: key);
+      this.sellerFee});
 
   @override
   State<EditSale4> createState() => _EditSale4State();

@@ -17,7 +17,7 @@ import '../homepage/single_property.dart';
 
 class DuplexScreen extends StatefulWidget {
   final String duplexType;
-  const DuplexScreen({Key? key, required this.duplexType}) : super(key: key);
+  const DuplexScreen({super.key, required this.duplexType});
 
   @override
   State<DuplexScreen> createState() => _DuplexScreenState();
@@ -752,23 +752,11 @@ class _DuplexScreenState extends State<DuplexScreen> {
                       builderDelegate:
                           PagedChildBuilderDelegate<HouseListModel>(
                         itemBuilder: (context, post, index) {
-                          int price = (post.rentalFee!.toInt());
-                          var formatter = NumberFormat("#,###");
-                          var formatedPrice = formatter.format(price);
+                     
                           return SingleProperty(
-                              id: post.id,
-                              image: post.image,
-                              designType: post.designType,
-                              currency: post.currency,
-                              propertyType: post.propertyType,
-                              propertyAddress: post.propertyAddress,
-                              bedroom: post.bedroom,
-                              propertyCategory: post.propertyCategory,
-                              price: formatedPrice,
-                              propertyName: post.propertyName.toString(),
-                              comingFrom: 'Homescreen',
-                                          state: post.state!,
-                              );
+                            listing: post,
+                            comingFrom: 'Homescreen',
+                          );
                         },
                         noItemsFoundIndicatorBuilder: (context) =>
                             const Center(child: Text('No property found.')),

@@ -14,12 +14,11 @@ class SalesScreen extends StatefulWidget {
   final String businessName;
   final String? isVerified;
   const SalesScreen(
-      {Key? key,
+      {super.key,
       required this.id,
       required this.image,
       required this.businessName,
-      required this.isVerified})
-      : super(key: key);
+      required this.isVerified});
 
   @override
   SalesScreenState createState() => SalesScreenState();
@@ -147,7 +146,7 @@ class SalesScreenState extends State<SalesScreen> {
                           InkWell(
                             onTap: () {
                               Get.to(AgentProfileScreen(
-                                id: widget.id,
+                                userId: widget.id,
                               ));
                             },
                             child: Stack(

@@ -14,10 +14,10 @@ class ImagePreview extends StatefulWidget {
   final File file;
   final String? listingId;
   const ImagePreview({
-    Key? key,
+    super.key,
     required this.file,
     this.listingId,
-  }) : super(key: key);
+  });
 
   @override
   State<ImagePreview> createState() => _ImagePreviewState();

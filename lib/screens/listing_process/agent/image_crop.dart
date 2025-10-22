@@ -7,7 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CropImage extends StatefulWidget {
-  const CropImage({Key? key}) : super(key: key);
+  const CropImage({super.key});
 
   @override
   State<CropImage> createState() => _CropImageState();
@@ -147,10 +147,12 @@ class _CropImageState extends State<CropImage> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: DottedBorder(
-                    radius: const Radius.circular(12.0),
-                    borderType: BorderType.RRect,
-                    dashPattern: const [8, 4],
-                    color: Theme.of(context).highlightColor.withOpacity(0.4),
+                    options: RectDottedBorderOptions(
+                      dashPattern: [8, 4],
+                      strokeWidth: 2,
+                      padding: EdgeInsets.all(16),
+                      color: Theme.of(context).highlightColor.withOpacity(0.4),
+                    ),
                     child: Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -217,16 +219,8 @@ class _CropImageState extends State<CropImage> {
           ),
           WebUiSettings(
             context: context,
-            presentStyle: CropperPresentStyle.dialog,
-            boundary: const CroppieBoundary(
-              width: 520,
-              height: 520,
-            ),
-            viewPort:
-                const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-            enableExif: true,
-            enableZoom: true,
-            showZoomer: true,
+            presentStyle: WebPresentStyle.dialog,
+            zoomable: true,
           ),
         ],
       );

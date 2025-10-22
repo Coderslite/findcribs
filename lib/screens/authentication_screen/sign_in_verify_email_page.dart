@@ -15,9 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class VerifyEmailScreen extends StatefulWidget {
   final String email;
   const VerifyEmailScreen({
-    Key? key,
+    super.key,
     required this.email,
-  }) : super(key: key);
+  });
 
   @override
   VerifyEmailScreenState createState() => VerifyEmailScreenState();
@@ -62,7 +62,6 @@ class VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 ),
                 // mobileSizedBoxHeight,
                 // mobileSizedBoxHeight,
-
                 mobileSizedBoxHeight,
                 mobileSizedBoxHeight2,
                 FormBuilderTextField(
@@ -71,14 +70,93 @@ class VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
                     FormBuilderValidators.numeric(),
-                    FormBuilderValidators.maxLength( 4),
-                    FormBuilderValidators.minLength( 4)
+                    FormBuilderValidators.maxLength(4),
+                    FormBuilderValidators.minLength(4)
                   ]),
                   decoration: const InputDecoration(
                       hintText: 'Enter Code',
                       border: OutlineInputBorder(borderSide: BorderSide())),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Note:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "If you didn't receive our verification email",
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "* ",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.orange),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Check your spam or junk email folder",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 1,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "* ",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.orange),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Confirm that your email address was entered correctly.",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+
                 mobileSizedBoxHeight,
+
                 SizedBox(
                   width: mobileWidth * 0.99,
                   child: ElevatedButton(

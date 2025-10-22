@@ -6,7 +6,7 @@ import '../controller/login_controller.dart';
 import '../screens/authentication_screen/sign_up_page.dart';
 
 class SocialLogin extends StatefulWidget {
-  const SocialLogin({Key? key}) : super(key: key);
+  const SocialLogin({super.key});
 
   @override
   State<SocialLogin> createState() => _SocialLoginState();
@@ -21,36 +21,37 @@ class _SocialLoginState extends State<SocialLogin> {
     var mobileHeight = MediaQuery.of(context).size.height;
     return Container(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-        height: 150,
+        height: 70,
         child: Column(children: [
-          OutlinedButton(
-            onPressed: () {
-              loginController.handleGoogleSignin();
-            },
-            child: SizedBox(
-              height: mobileHeight * .08,
-              width: mobileWidth * 99,
-              child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'lib/assets/icons/goog_le.png',
-                      height: 23,
-                      width: 30,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Text(
-                        'Continue with Google',
-                        style: TextStyle(
-                            fontFamily: 'RedHatDisplayLight',
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )
-                  ]),
-            ),
-          ),
+          // OutlinedButton(
+          //   onPressed: () {
+          //     loginController.handleGoogleSignin();
+          //   },
+          //   child: SizedBox(
+          //     height: mobileHeight * .08,
+          //     width: mobileWidth * 99,
+          //     child: Row(
+          //         mainAxisSize: MainAxisSize.min,
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Image.asset(
+          //             'lib/assets/icons/goog_le.png',
+          //             height: 23,
+          //             width: 30,
+          //           ),
+          //           const Padding(
+          //             padding: EdgeInsets.only(left: 8),
+          //             child: Text(
+          //               'Continue with Google',
+          //               style: TextStyle(
+          //                   fontFamily: 'RedHatDisplayLight',
+          //                   fontWeight: FontWeight.w600),
+          //             ),
+          //           )
+          //         ]),
+          //   ),
+          // ),
+
           // const SizedBox(
           //   height: 20,
           // ),
@@ -82,9 +83,9 @@ class _SocialLoginState extends State<SocialLogin> {
           //   ),
           // ),
 
-          const SizedBox(
-            height: 20,
-          ),
+          // const SizedBox(
+          //   height: 20,
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -10,19 +10,17 @@ import 'package:path/path.dart' as p;
 import 'package:photo_view/photo_view.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
-
 class StoryBaseScreen extends StatefulWidget {
   final List moment;
   final String profileImg;
   final int? agentId;
   final String type;
   const StoryBaseScreen(
-      {Key? key,
+      {super.key,
       required this.moment,
       required this.profileImg,
       required this.agentId,
-      required this.type})
-      : super(key: key);
+      required this.type});
 
   @override
   State<StoryBaseScreen> createState() => _StoryBaseScreenState();
@@ -165,7 +163,7 @@ class _StoryBaseScreenState extends State<StoryBaseScreen> {
                             : Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
                                 return AgentProfileScreen(
-                                  id: widget.agentId,
+                                  userId: widget.agentId,
                                 );
                               }));
                       },
@@ -263,13 +261,12 @@ class StoryItem extends StatelessWidget {
   final Color backgroundColor;
   final int index;
   const StoryItem(
-      {Key? key,
+      {super.key,
       required this.type,
       required this.content,
       required this.image,
       required this.backgroundColor,
-      required this.index})
-      : super(key: key);
+      required this.index});
 
   @override
   Widget build(BuildContext context) {

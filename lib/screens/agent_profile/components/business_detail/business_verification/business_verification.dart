@@ -13,7 +13,7 @@ import '../../../../../models/user_profile_information_model.dart';
 import '../../../../../service/user_profile_service.dart';
 
 class BusinessVerificationScreen extends StatefulWidget {
-  const BusinessVerificationScreen({Key? key}) : super(key: key);
+  const BusinessVerificationScreen({super.key});
 
   @override
   State<BusinessVerificationScreen> createState() =>

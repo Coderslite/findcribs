@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 class FavouriteAgentScreen extends StatefulWidget {
-  const FavouriteAgentScreen({Key? key}) : super(key: key);
+  const FavouriteAgentScreen({super.key});
 
   @override
   State<FavouriteAgentScreen> createState() => _FavouriteAgentScreenState();

@@ -8,21 +8,20 @@ import 'dart:developer' as developer;
 class ConnectivityController extends GetxController {
   var connectionStatus = ConnectivityResult.none.obs;
   final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> connectivitySubscription;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   @override
   void onInit() {
-      initConnectivity();
+    initConnectivity();
 
-    connectivitySubscription =
+    _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.onInit();
   }
 
-
-   // Platform messages are asynchronous, so we initialize in an async method.
+  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initConnectivity() async {
-    late ConnectivityResult result;
+    late List<ConnectivityResult> result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       result = await _connectivity.checkConnectivity();
@@ -38,8 +37,9 @@ class ConnectivityController extends GetxController {
     return _updateConnectionStatus(result);
   }
 
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-      connectionStatus.value = result;
-      
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    connectionStatus.value = result.first;
+
+    print('Connectivity changed: $connectionStatus');
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class SaleListingController extends GetxController {
   var ageRestriction = 0.obs;
@@ -55,18 +57,18 @@ class SaleListingController extends GetxController {
     designType.value = '';
     propertyAddress.value = '';
     bathroom.value = '';
-    bathroomIndex.value = 0;
+    bathroomIndex.value = 100;
     bedroom.value = '';
-    bedroomIndex.value = 0;
+    bedroomIndex.value = 100;
     livingRoom.value = '';
-    livingRoomIndex.value = 0;
+    livingRoomIndex.value = 100;
     kitchen.value = '';
-    kitchenIndex.value = 0;
+    kitchenIndex.value = 100;
     currency.value = '';
     saleFee.value = '';
     otherCharges.value = '';
     saleCommission.value = 0;
-    saleCommissionIndex.value = 0;
+    saleCommissionIndex.value = 100;
 
     coveredBy.value = '';
     totalArea.value = '';
@@ -85,6 +87,62 @@ class SaleListingController extends GetxController {
 
     legalFeeIndex.value = 0;
     agencyFeeIndex.value = 0;
-    Get.delete<SaleListingController>();
+  }
+
+  String _formatValue(String value) {
+    return value.replaceAll(',', '');
+  }
+
+  Future<bool> handleShowConfirmPrice(BuildContext context) async {
+    var res = false;
+    var formatter = NumberFormat("#,###");
+    var formatedPrice = otherCharges.value == 'Yes'
+        ? formatter.format(_formatValue(saleFee.value) == ''
+            ? 0
+            : int.parse(_formatValue(saleFee.value)))
+        : formatter.format(saleFee.value == ''
+            ? 0
+            : int.parse(_formatValue(saleFee.value)) +
+                (int.parse(_formatValue(saleFee.value)) *
+                        saleCommission.value) /
+                    100);
+
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              "Is this the price for your property?",
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "${currency.value == 'Naira' ? "NGN" : "\$"}$formatedPrice",
+                  style: const TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                  res = false;
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  res = true;
+                  Get.back();
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        });
+    return res;
   }
 }

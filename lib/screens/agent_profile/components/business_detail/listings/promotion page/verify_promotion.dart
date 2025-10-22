@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/screens/agent_profile/components/business_detail/listings/active_listing/active_listing.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../components/constants.dart';
@@ -9,7 +11,9 @@ import 'package:http/http.dart' as http;
 
 class VerifyPromotion extends StatefulWidget {
   final String reference;
-  const VerifyPromotion({Key? key, required this.reference}) : super(key: key);
+  final StatefulWidget returnUrl;
+  const VerifyPromotion(
+      {super.key, required this.reference, required this.returnUrl});
 
   @override
   State<VerifyPromotion> createState() => _VerifyPromotionState();
@@ -18,13 +22,14 @@ class VerifyPromotion extends StatefulWidget {
 class _VerifyPromotionState extends State<VerifyPromotion> {
   bool isLoading = true;
   String message = '';
+  GetProfileController getProfileController = Get.put(GetProfileController());
   handleVerifyPromotion() async {
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
+    print(widget.reference);
 
-    var response = await http.post(
-        Uri.parse(
-            "http://18.233.168.44:5000/user/promotions/verify?reference=${widget.reference}"),
+    var response = await http.get(
+        Uri.parse("$baseUrl/confirm-payment-status/${widget.reference}"),
         headers: {
           "Authorization": "$token",
         });
@@ -32,9 +37,10 @@ class _VerifyPromotionState extends State<VerifyPromotion> {
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
       setState(() {
-        message = 'success';
+        message = responseData['data']['status'];
         isLoading = false;
       });
+      await getProfileController.handleGetProfile();
     } else {
       setState(() {
         isLoading = false;
@@ -87,13 +93,12 @@ class _VerifyPromotionState extends State<VerifyPromotion> {
                         child: ElevatedButton(
                           // Connect EndPoint
                           onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) {
-                              return const ActiveListing();
-                            }));
+                            Navigator.pop(context);
+                            getProfileController.handleGetProfile();
                           },
                           style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
+                              fixedSize: const Size(500, 60),
+                              backgroundColor: mobileButtonColor),
                           child: const Text(
                             //  Connect EndPoint
 
@@ -119,7 +124,7 @@ class _VerifyPromotionState extends State<VerifyPromotion> {
                         height: 54,
                       ),
                       const Text(
-                        'Listing Promoted Successfully!',
+                        'Payment Successfully!',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontFamily: 'RedHatDisplay',
@@ -135,13 +140,11 @@ class _VerifyPromotionState extends State<VerifyPromotion> {
                         child: ElevatedButton(
                           // Connect EndPoint
                           onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) {
-                              return const ActiveListing();
-                            }));
+                            Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(500, 60), backgroundColor: mobileButtonColor),
+                              fixedSize: const Size(500, 60),
+                              backgroundColor: mobileButtonColor),
                           child: const Text(
                             //  Connect EndPoint
 

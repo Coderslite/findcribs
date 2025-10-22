@@ -6,6 +6,7 @@ class UserProfile {
   String? profileImg;
   String? phoneNumber;
   String? category;
+  String? whatsappNo;
   bool? verifyEmail;
   Map? agent;
   int? storyCount;
@@ -14,6 +15,7 @@ class UserProfile {
   int? favouritingAgentCount;
   String? createdAt;
   String? updatedAt;
+  Map? subscriptionLogs;
   // String? businessName;
 
   UserProfile({
@@ -23,6 +25,7 @@ class UserProfile {
     this.lastName,
     this.profileImg,
     this.phoneNumber,
+    this.whatsappNo,
     this.category,
     this.verifyEmail,
     this.createdAt,
@@ -32,6 +35,7 @@ class UserProfile {
     this.favouritingAgentCount,
     this.storyCount,
     this.listingCount,
+    this.subscriptionLogs,
     // this.businessName,
   });
   factory UserProfile.fromJson(Map<String, dynamic> json) {
@@ -42,6 +46,7 @@ class UserProfile {
       lastName: json['last_name'],
       profileImg: json['profile_pic'],
       phoneNumber: json['phone_number'],
+      whatsappNo: json['whatsapp_number'].toString(),
       category: json['category'],
       verifyEmail: json['verify_email'],
       createdAt: json['createdAt'],
@@ -51,6 +56,7 @@ class UserProfile {
       favouritedAgentCount: json['favouritedAgentCount'],
       favouritingAgentCount: json['favouritingAgentCount'],
       listingCount: json['listing_count'],
+      subscriptionLogs: json['subscriptionLogs'],
       // businessName: json['agent']['business_name'],
     );
   }

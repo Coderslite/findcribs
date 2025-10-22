@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<List<UserFavouriteAgentModel>> getMyFavouriteAgentList() async {
-  // var token = "be2dc9cdded61704c07c7e67eb8971f5f434e6a6";
   final prefs = await SharedPreferences.getInstance();
 
   var token = prefs.getString('token');

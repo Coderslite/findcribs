@@ -17,7 +17,6 @@ import '../../controller/get_chat_controller.dart';
 import '../../controller/get_single_property_listing.dart';
 import '../../controller/panel_controller.dart';
 import '../../controller/property_view_controller.dart';
-import '../../controller/share_link_controller.dart';
 import '../../controller/user_favourited_listing_controller.dart';
 import '../../models/house_list_model.dart';
 import '../../models/user_favourite_listing.dart';
@@ -29,13 +28,13 @@ import '../homepage/home_root.dart';
 class ProductMainDetails extends StatefulWidget {
   final bool isDeepLinking;
   ProductMainDetails({
-    Key? key,
+    super.key,
     required this.panelOpened,
-    this.id,
+    required this.id,
     required this.isDeepLinking,
-  }) : super(key: key);
+  });
   final bool panelOpened;
-  int? id;
+  int id;
 
   @override
   State<ProductMainDetails> createState() => _ProductMainDetailsState();
@@ -44,13 +43,12 @@ class ProductMainDetails extends StatefulWidget {
 class _ProductMainDetailsState extends State<ProductMainDetails> {
   List<HouseListModel> singlePropertyById = [];
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-  List<UserFavouritedListingModel> filteredFavouritePropertyList = [];
-  List<UserFavouritedListingModel> firstFavouritePropertyList = [];
-  late Future<List<UserFavouritedListingModel>> favouritePropertyList;
+  List<HouseListModel> filteredFavouritePropertyList = [];
+  List<HouseListModel> firstFavouritePropertyList = [];
+  late Future<List<HouseListModel>> favouritePropertyList;
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
   GetSinglePropertyController getSinglePropertyController =
       Get.put(GetSinglePropertyController());
-  ShareLinkController shareLinkController = Get.put(ShareLinkController());
   PropertyViewController propertyViewController =
       Get.put(PropertyViewController());
 
@@ -78,7 +76,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
     setState(() {
       filteredFavouritePropertyList =
           firstFavouritePropertyList.where((element) {
-        return element.listingId.toString().contains(value);
+        return element.id.toString().contains(value);
       }).toList();
       print("filter$filteredFavouritePropertyList");
     });
@@ -131,7 +129,6 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
   @override
   void dispose() {
     _controller.dispose();
-    shareLinkController.shareLink == '';
     getAllChatController.handleGetMessage();
 
     super.dispose();
@@ -147,20 +144,10 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
         return const Center(child: CircularProgressIndicator());
       } else {
         var property = getSinglePropertyController.singleProperty[0];
-        int price = (property.rentalFee!.toInt());
+        int price = int.parse(property.rentalFee!);
         var formatter = NumberFormat("#,###");
         var formatedPrice = formatter.format(price);
-        shareLinkController.handleGenerateLink(
-            widget.id.toString(),
-            property.image[0]['url'].toString(),
-            property.propertyCategory == 'Estate Market'
-                ? property.propertyName.toString()
-                : property.propertyCategory.toString(),
-            property.description.toString());
-
         images = property.image!;
-
-        
 
         return Column(children: [
           Stack(
@@ -171,7 +158,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return PhotoPreview(
-                      profilePreview: false,
+                        profilePreview: false,
                         images: property.image,
                         businessName: property.agentBusinessName.toString());
                   }));
@@ -204,8 +191,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (_) {
                                         return PhotoPreview(
-                      profilePreview: false,
-
+                                          profilePreview: false,
                                           images: property.image,
                                           businessName: property
                                               .agentBusinessName
@@ -369,36 +355,34 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                         return const SocialLogin();
                                       })
                                   : userFavouritedListingController
-                                      .handleLike(widget.id);
+                                      .handleLike(property);
                             },
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0XFFF0F7F8)),
-                              child: userFavouritedListingController
-                                      .userFavouritedListing
-                                      .contains(widget.id)
-                                  ? const Icon(CupertinoIcons.heart_solid,
-                                      size: 16, color: Color(0xFFDD1611))
-                                  : const Icon(CupertinoIcons.heart,
-                                      size: 16, color: Color(0XFF304059)),
-                            ),
+                            child: Obx(() {
+                              var favouritedProps =
+                                  userFavouritedListingController
+                                      .favouritedListing;
+                              return Container(
+                                width: 30,
+                                height: 30,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(0XFFF0F7F8)),
+                                child: favouritedProps
+                                        .where((e) => e.id == widget.id)
+                                        .toList()
+                                        .isNotEmpty
+                                    ? const Icon(CupertinoIcons.heart_solid,
+                                        size: 16, color: Color(0xFFDD1611))
+                                    : const Icon(CupertinoIcons.heart,
+                                        size: 16, color: Color(0XFF304059)),
+                              );
+                            }),
                           ),
                           const SizedBox(
                             width: 20,
                           ),
                           InkWell(
-                            onTap: () {
-                              shareLinkController.handleShareLink(
-                                  widget.id.toString(),
-                                  images[0],
-                                  property.propertyCategory == 'Estate Market'
-                                      ? property.propertyName.toString()
-                                      : property.propertyCategory.toString(),
-                                  property.description);
-                            },
+                            onTap: () {},
                             child: Container(
                               width: 30,
                               height: 30,
@@ -450,36 +434,34 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                                         return const SocialLogin();
                                       })
                                   : userFavouritedListingController
-                                      .handleLike(widget.id);
+                                      .handleLike(property);
                             },
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0XFFF0F7F8)),
-                              child: userFavouritedListingController
-                                      .userFavouritedListing
-                                      .contains(widget.id)
-                                  ? const Icon(CupertinoIcons.heart_solid,
-                                      size: 16, color: Color(0xFFDD1611))
-                                  : const Icon(CupertinoIcons.heart,
-                                      size: 16, color: Color(0XFF304059)),
-                            ),
+                            child: Obx(() {
+                              var favouritedProps =
+                                  userFavouritedListingController
+                                      .favouritedListing;
+                              return Container(
+                                width: 30,
+                                height: 30,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(0XFFF0F7F8)),
+                                child: favouritedProps
+                                        .where((e) => e.id == widget.id)
+                                        .toList()
+                                        .isNotEmpty
+                                    ? const Icon(CupertinoIcons.heart_solid,
+                                        size: 16, color: Color(0xFFDD1611))
+                                    : const Icon(CupertinoIcons.heart,
+                                        size: 16, color: Color(0XFF304059)),
+                              );
+                            }),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
                           InkWell(
-                            onTap: () {
-                              shareLinkController.handleShareLink(
-                                  widget.id.toString(),
-                                  images[0].toString(),
-                                  property.propertyCategory == 'Estate Market'
-                                      ? property.propertyName.toString()
-                                      : property.propertyCategory.toString(),
-                                  property.description.toString());
-                            },
+                            onTap: () {},
                             child: Container(
                               width: 30,
                               height: 30,
@@ -673,7 +655,7 @@ class _ProductMainDetailsState extends State<ProductMainDetails> {
                               ),
                             )
                           : Text(
-                              "Rent fee /${property.rentalFrequncy}",
+                              "Rent fee /${property.rentalFrequency}",
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'RedHatDisplay',

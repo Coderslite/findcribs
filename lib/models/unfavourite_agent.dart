@@ -8,7 +8,7 @@ class UserUnFavouritedAgentModel {
   String? profilePic;
   String? businessName;
   String? category;
-  bool? isVerified;
+  String? isVerified;
 
   UserUnFavouritedAgentModel({
     this.id,
@@ -27,13 +27,13 @@ class UserUnFavouritedAgentModel {
     return UserUnFavouritedAgentModel(
       id: json['id'],
       // connection: json['connection'],
-      userId: json['agent']['userId'],
-      // friendId: json['friendId'],
+      userId: json['userId'],
+      friendId: json['friendId'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      profilePic: json['profile_pic'],
-      businessName: json['agent']['business_name'],
-      category: json['agent']['category'],
+      profilePic: json['user']['profile_pic'],
+      businessName: json['business_name'],
+      category: json['category'],
       isVerified: json['is_verified'],
     );
   }

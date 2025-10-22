@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../controller/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   LoginScreenState createState() => LoginScreenState();

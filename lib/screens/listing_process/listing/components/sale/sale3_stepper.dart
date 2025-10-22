@@ -1,10 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:findcribs/components/constants.dart';
 import 'package:findcribs/screens/listing_process/listing/components/sale/sale4_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -15,8 +17,8 @@ import '../../../../../controller/sale_listing_controller.dart';
 
 class Sale3Stepper extends StatefulWidget {
   const Sale3Stepper({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<Sale3Stepper> createState() => _Sale3StepperState();
@@ -41,586 +43,592 @@ class _Sale3StepperState extends State<Sale3Stepper> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Obx(
-          () => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
+    return KeyboardDismissOnTap(
+      child: Scaffold(
+        body: SafeArea(
+          child: Obx(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.arrow_back_ios)),
+                      const Text(
+                        "Sale Listing",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      const Text("")
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
                         onTap: () {
-                          Navigator.pop(context);
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (_) {
+                          //   return ListPropertyScreen1(
+                          //     tab: 1,
+                          //   );
+                          // }));
                         },
-                        child: const Icon(Icons.arrow_back_ios)),
-                    const Text(
-                      "Sale Listing",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    const Text("")
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (_) {
-                        //   return ListPropertyScreen1(
-                        //     tab: 1,
-                        //   );
-                        // }));
-                      },
-                      child: const CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Color(0XFF0072BA),
-                        child: Text("1"),
+                        child: const CircleAvatar(
+                          radius: 12,
+                          backgroundColor: kPrimary,
+                          child: Text("1"),
+                        ),
                       ),
-                    ),
-                    Container(
-                      color: Colors.grey,
-                      height: 1,
-                      width: size.width / 5,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (_) {
-                        //   return Sale2();
-                        // }));
-                      },
-                      child: const CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Color(0XFF0072BA),
-                        child: Text("2"),
+                      Container(
+                        color: Colors.grey,
+                        height: 1,
+                        width: size.width / 5,
                       ),
-                    ),
-                    Container(
-                      color: Colors.grey,
-                      height: 1,
-                      width: size.width / 5,
-                    ),
-                    const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Color(0XFF0072BA),
-                      child: Text(
-                        "3",
-                        style: TextStyle(color: Colors.white),
+                      InkWell(
+                        onTap: () {
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (_) {
+                          //   return Sale2();
+                          // }));
+                        },
+                        child: const CircleAvatar(
+                          radius: 12,
+                          backgroundColor: kPrimary,
+                          child: Text("2"),
+                        ),
                       ),
-                    ),
-                    Container(
-                      color: Colors.grey,
-                      height: 1,
-                      width: size.width / 5,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (_) {
-                        //   return Sale4();
-                        // }));
-                      },
-                      child: const CircleAvatar(
+                      Container(
+                        color: Colors.grey,
+                        height: 1,
+                        width: size.width / 5,
+                      ),
+                      const CircleAvatar(
                         radius: 12,
-                        backgroundColor: Colors.grey,
+                        backgroundColor: kPrimary,
                         child: Text(
-                          "4",
+                          "3",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                    )
-                  ],
-                ),
-                Expanded(
-                    child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 0.0,
-                    ),
-                    child: FormBuilder(
-                      key: _formKey3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
+                      Container(
+                        color: Colors.grey,
+                        height: 1,
+                        width: size.width / 5,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (_) {
+                          //   return Sale4();
+                          // }));
+                        },
+                        child: const CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.grey,
+                          child: Text(
+                            "4",
+                            style: TextStyle(color: Colors.white),
                           ),
-                          Obx(
-                            () => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("state (State)"),
-                                saleListingController.state.value == ''
-                                    ? FormBuilderDropdown(
-                                        name: 'state',
-                                        isExpanded: true,
-                                        onChanged: (value) {
-                                          saleListingController.state.value =
-                                              value.toString();
-                                          loadStateLgaController
-                                              .handleSaleFetchLga();
-                                        },
-                                        style: TextStyle(
-                                          color: context
-                                              .textTheme.bodyMedium!.color,
-                                          fontFamily: "RedHatDisplay",
+                        ),
+                      )
+                    ],
+                  ),
+                  Expanded(
+                      child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 0.0,
+                      ),
+                      child: FormBuilder(
+                        key: _formKey3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Obx(
+                              () => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("state (State)"),
+                                  saleListingController.state.value == ''
+                                      ? FormBuilderDropdown(
+                                          name: 'state',
+                                          isExpanded: true,
+                                          onChanged: (value) {
+                                            saleListingController.state.value =
+                                                value.toString();
+                                            loadStateLgaController
+                                                .handleSaleFetchLga();
+                                          },
+                                          style: TextStyle(
+                                            color: context
+                                                .textTheme.bodyMedium!.color,
+                                            fontFamily: "RedHatDisplay",
+                                          ),
+                                          items: loadStateLgaController.data
+                                              .map((option) {
+                                            return DropdownMenuItem(
+                                              value: option['state'].toString(),
+                                              child: Text(
+                                                  option['state'].toString()),
+                                            );
+                                          }).toList(),
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(),
+                                            ),
+                                          ),
+                                        )
+                                      : FormBuilderDropdown(
+                                          name: 'State',
+                                          isExpanded: true,
+                                          initialValue:
+                                              saleListingController.state.value,
+                                          onChanged: (value) {
+                                            saleListingController.state.value =
+                                                value.toString();
+                                            loadStateLgaController
+                                                .handleSaleFetchLga();
+                                          },
+                                          style: TextStyle(
+                                            color: context
+                                                .textTheme.bodyMedium!.color,
+                                            fontFamily: "RedHatDisplay",
+                                          ),
+                                          items: loadStateLgaController.data
+                                              .map((option) {
+                                            return DropdownMenuItem(
+                                              value: option['state'].toString(),
+                                              child: Text(
+                                                  option['state'].toString()),
+                                            );
+                                          }).toList(),
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(),
+                                            ),
+                                          ),
                                         ),
-                                        items: loadStateLgaController.data
-                                            .map((option) {
-                                          return DropdownMenuItem(
-                                            value: option['state'].toString(),
-                                            child: Text(
-                                                option['state'].toString()),
-                                          );
-                                        }).toList(),
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Obx(
+                              () => Visibility(
+                                visible: saleListingController.state.string == ''
+                                    ? false
+                                    : true,
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text("LGA"),
+                                      InkWell(
+                                        onTap: () {
+                                          showLga();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 1,
+                                              color: context.iconColor!,
+                                            ),
                                             borderRadius:
-                                                BorderRadius.circular(5),
-                                            borderSide: const BorderSide(),
+                                                BorderRadius.circular(7),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(18.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(saleListingController
+                                                    .lga.string),
+                                                const Icon(
+                                                  CupertinoIcons
+                                                      .arrowtriangle_down_fill,
+                                                  size: 12,
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       )
-                                    : FormBuilderDropdown(
-                                        name: 'State',
-                                        isExpanded: true,
-                                        initialValue:
-                                            saleListingController.state.value,
-                                        onChanged: (value) {
-                                          saleListingController.state.value =
-                                              value.toString();
-                                          loadStateLgaController
-                                              .handleSaleFetchLga();
-                                        },
+                                    ]),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Total area of land (sqm)"),
+                            saleListingController.totalArea.value == ''
+                                ? FormBuilderTextField(
+                                    name: 'area',
+                                    // maxLength: 300,
+                                    keyboardType: TextInputType.number,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                      FormBuilderValidators.numeric()
+                                    ]),
+                                    onChanged: (value) {
+                                      saleListingController.totalArea.value =
+                                          value.toString();
+                                    },
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderTextField(
+                                    name: 'area',
+                                    // maxLength: 300,
+                                    keyboardType: TextInputType.number,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                      FormBuilderValidators.numeric()
+                                    ]),
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    initialValue:
+                                        saleListingController.totalArea.value,
+                                    onChanged: (value) {
+                                      saleListingController.totalArea.value =
+                                          value.toString();
+                                    },
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Covered by property (sqm)"),
+                            saleListingController.coveredBy.value == ''
+                                ? FormBuilderTextField(
+                                    name: 'covered',
+                                    // maxLength: 300,
+                                    keyboardType: TextInputType.number,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                      FormBuilderValidators.numeric()
+                                    ]),
+                                    onChanged: (value) {
+                                      saleListingController.coveredBy.value =
+                                          value.toString();
+                                    },
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderTextField(
+                                    name: 'covered',
+                                    // maxLength: 300,
+                                    keyboardType: TextInputType.number,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                      FormBuilderValidators.numeric()
+                                    ]),
+                                    initialValue:
+                                        saleListingController.coveredBy.value,
+                                    onChanged: (value) {
+                                      saleListingController.coveredBy.value =
+                                          value.toString();
+                                    },
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Availability of running water"),
+                            saleListingController.water.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'water',
+                                    isExpanded: true,
+                                    items: [
+                                      // "Excellent",
+                                      // "Very Good",
+                                      // "Good",
+                                      "Yes",
+                                      "No"
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      saleListingController.water.value =
+                                          value.toString();
+                                    },
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'water',
+                                    isExpanded: true,
+                                    items: [
+                                      // "Excellent",
+                                      // "Very Good",
+                                      // "Good",
+                                      "Yes",
+                                      "No"
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    initialValue:
+                                        saleListingController.water.value,
+                                    onChanged: (value) {
+                                      saleListingController.water.value =
+                                          value.toString();
+                                    },
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Availability of electricity"),
+                            saleListingController.electricity.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'electricity',
+                                    isExpanded: true,
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                      // "Excellent",
+                                      // "Very Good",
+                                      // "Good",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      saleListingController.electricity.value =
+                                          value.toString();
+                                    },
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'electricity',
+                                    isExpanded: true,
+                                    items: [
+                                      "Yes",
+                                      "No",
+                                      // "Excellent",
+                                      // "Very Good",
+                                      // "Good",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    initialValue:
+                                        saleListingController.electricity.value,
+                                    onChanged: (value) {
+                                      saleListingController.electricity.value =
+                                          value.toString();
+                                    },
+                                    style: TextStyle(
+                                      color: context.textTheme.bodyMedium!.color,
+                                      fontFamily: "RedHatDisplay",
+                                    ),
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Facilities in the area? (tick)"),
+                            MultiSelectDialogField(
+                              selectedColor: kPrimary,
+                              selectedItemsTextStyle:
+                                  TextStyle(color: context.iconColor),
+                              dialogWidth: MediaQuery.of(context).size.width,
+                              itemsTextStyle: TextStyle(color: context.iconColor),
+                              buttonIcon: const Icon(
+                                Icons.check_box,
+                                color: kPrimary,
+                                size: 15,
+                              ),
+                              initialValue: saleListingController.facilities
+                                  .cast<String>(), // Cast to List<String>
+                              items: [
+                                "Schools",
+                                "Food",
+                                "Market",
+                                "Restaurant",
+                                "Grocery Stores",
+                                "Church",
+                                "Cinema",
+                                "Free Wifi",
+                                "Swimming Pool",
+                                "Gym Center",
+                                "Recreational Centers",
+                                "SPA",
+                                "Saloon Centers",
+                                "Security",
+                                "Good Internet",
+                                "Air-Conditioning",
+                                "Furnished Interior",
+                                "Secured Parking Space",
+                                "Lounge",
+                                "Walldrobe",
+                                "Microwave",
+                                "Trash Collection"
+                              ].map((e) => MultiSelectItem(e, e)).toList(),
+                              onConfirm: (List<String> selected) {
+                                setState(() {
+                                  facilities = selected;
+                                  saleListingController.facilities.value =
+                                      facilities;
+                                });
+                              },
+                              onSaved: (newValue) {
+                                setState(() {
+                                  facilities = newValue!;
+                                  saleListingController.facilities.value =
+                                      newValue;
+                                });
+                              },
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  )),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Material(
+                                  color: kPrimary,
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      handleNextScreen();
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        left:
+                                            MediaQuery.of(context).size.width / 5,
+                                        right:
+                                            MediaQuery.of(context).size.width / 5,
+                                        top: 4.5,
+                                        bottom: 4.5,
+                                      ),
+                                      child: const Text(
+                                        "Save & Continue",
                                         style: TextStyle(
-                                          color: context
-                                              .textTheme.bodyMedium!.color,
+                                          color: Colors.white,
+                                          fontSize: 20,
                                           fontFamily: "RedHatDisplay",
                                         ),
-                                        items: loadStateLgaController.data
-                                            .map((option) {
-                                          return DropdownMenuItem(
-                                            value: option['state'].toString(),
-                                            child: Text(
-                                                option['state'].toString()),
-                                          );
-                                        }).toList(),
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            borderSide: const BorderSide(),
-                                          ),
-                                        ),
                                       ),
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Obx(
-                            () => Visibility(
-                              visible: saleListingController.state.string == ''
-                                  ? false
-                                  : true,
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text("LGA"),
-                                    InkWell(
-                                      onTap: () {
-                                        showLga();
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            width: 1,
-                                            color: context.iconColor!,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(saleListingController
-                                                  .lga.string),
-                                              const Icon(
-                                                CupertinoIcons
-                                                    .arrowtriangle_down_fill,
-                                                size: 12,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ]),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Total area of land (sqm)"),
-                          saleListingController.totalArea.value == ''
-                              ? FormBuilderTextField(
-                                  name: 'area',
-                                  // maxLength: 300,
-                                  keyboardType: TextInputType.number,
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.numeric()
-                                  ]),
-                                  onChanged: (value) {
-                                    saleListingController.totalArea.value =
-                                        value.toString();
-                                  },
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderTextField(
-                                  name: 'area',
-                                  // maxLength: 300,
-                                  keyboardType: TextInputType.number,
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.numeric()
-                                  ]),
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  initialValue:
-                                      saleListingController.totalArea.value,
-                                  onChanged: (value) {
-                                    saleListingController.totalArea.value =
-                                        value.toString();
-                                  },
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Covered by property (sqm)"),
-                          saleListingController.coveredBy.value == ''
-                              ? FormBuilderTextField(
-                                  name: 'covered',
-                                  // maxLength: 300,
-                                  keyboardType: TextInputType.number,
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.numeric()
-                                  ]),
-                                  onChanged: (value) {
-                                    saleListingController.coveredBy.value =
-                                        value.toString();
-                                  },
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderTextField(
-                                  name: 'covered',
-                                  // maxLength: 300,
-                                  keyboardType: TextInputType.number,
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.numeric()
-                                  ]),
-                                  initialValue:
-                                      saleListingController.coveredBy.value,
-                                  onChanged: (value) {
-                                    saleListingController.coveredBy.value =
-                                        value.toString();
-                                  },
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Availability of running water"),
-                          saleListingController.water.value == ''
-                              ? FormBuilderDropdown(
-                                  name: 'water',
-                                  isExpanded: true,
-                                  items: [
-                                    // "Excellent",
-                                    // "Very Good",
-                                    // "Good",
-                                    "Yes",
-                                    "No"
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    saleListingController.water.value =
-                                        value.toString();
-                                  },
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                  ]),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderDropdown(
-                                  name: 'water',
-                                  isExpanded: true,
-                                  items: [
-                                    // "Excellent",
-                                    // "Very Good",
-                                    // "Good",
-                                    "Yes",
-                                    "No"
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  initialValue:
-                                      saleListingController.water.value,
-                                  onChanged: (value) {
-                                    saleListingController.water.value =
-                                        value.toString();
-                                  },
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                  ]),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Availability of electricity"),
-                          saleListingController.electricity.value == ''
-                              ? FormBuilderDropdown(
-                                  name: 'electricity',
-                                  isExpanded: true,
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                    // "Excellent",
-                                    // "Very Good",
-                                    // "Good",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    saleListingController.electricity.value =
-                                        value.toString();
-                                  },
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                  ]),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                )
-                              : FormBuilderDropdown(
-                                  name: 'electricity',
-                                  isExpanded: true,
-                                  items: [
-                                    "Yes",
-                                    "No",
-                                    // "Excellent",
-                                    // "Very Good",
-                                    // "Good",
-                                  ].map((option) {
-                                    return DropdownMenuItem(
-                                      value: option,
-                                      child: Text(option),
-                                    );
-                                  }).toList(),
-                                  initialValue:
-                                      saleListingController.electricity.value,
-                                  onChanged: (value) {
-                                    saleListingController.electricity.value =
-                                        value.toString();
-                                  },
-                                  style: TextStyle(
-                                    color: context.textTheme.bodyMedium!.color,
-                                    fontFamily: "RedHatDisplay",
-                                  ),
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                  ]),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      borderSide: const BorderSide(),
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text("Facilities in the area? (tick)"),
-                          MultiSelectDialogField(
-                            selectedColor: const Color(0XFF0072BA),
-                            dialogWidth: MediaQuery.of(context).size.width,
-                            itemsTextStyle: TextStyle(color: context.iconColor),
-                            buttonIcon: const Icon(
-                              Icons.check_box,
-                              color: Color(0XFF0072BA),
-                              size: 15,
-                            ),
-                            items: [
-                              "Schools",
-                              "Food",
-                              "Market",
-                              "Restaurant",
-                              "Grocery Stores",
-                              "Church",
-                              "Cinema",
-                              "Free Wifi",
-                              "Swimming Pool",
-                              "Gym Center",
-                              "Recreational Centers",
-                              "SPA",
-                              "Saloon Centers",
-                              "Security",
-                              "Good Internet",
-                              "Air-Conditioning",
-                              "Furnished Interior",
-                              "Secured Parking Space",
-                              "Lounge",
-                              "Walldrobe",
-                              "Microwave",
-                              "Trash Collection"
-                            ].map((e) => MultiSelectItem(e, e)).toList(),
-                            onConfirm: (List<String> selected) {
-                              setState(() {
-                                facilities = selected;
-                                saleListingController.facilities.value =
-                                    facilities;
-                              });
-                            },
-                            onSaved: (newValue) {
-                              setState(() {
-                                facilities = newValue!;
-                                saleListingController.facilities.value =
-                                    newValue;
-                              });
-                            },
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                )),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Material(
-                                color: const Color(0XFF0072BA),
-                                borderRadius: BorderRadius.circular(5),
-                                child: MaterialButton(
-                                  onPressed: () {
-                                    handleNextScreen();
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      left:
-                                          MediaQuery.of(context).size.width / 5,
-                                      right:
-                                          MediaQuery.of(context).size.width / 5,
-                                      top: 4.5,
-                                      bottom: 4.5,
-                                    ),
-                                    child: const Text(
-                                      "Save & Continue",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: "RedHatDisplay",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ))
-              ],
+                  ))
+                ],
+              ),
             ),
           ),
         ),

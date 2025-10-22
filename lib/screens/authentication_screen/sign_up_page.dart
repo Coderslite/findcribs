@@ -16,10 +16,9 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 
 class EmailScreen extends StatefulWidget {
-  const EmailScreen({Key? key}) : super(key: key);
+  const EmailScreen({super.key});
 
   @override
   EmailScreenState createState() => EmailScreenState();
@@ -149,38 +148,39 @@ class EmailScreenState extends State<EmailScreen> {
                           ),
                         ]),
                         mobileSizedBoxHeight,
-                        OutlinedButton(
-                          onPressed: () {
-                            loginController.handleGoogleSignin();
-                          },
-                          child: SizedBox(
-                            height: mobileHeight * .08,
-                            width: mobileWidth * 99,
-                            child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'lib/assets/icons/goog_le.png',
-                                    height: 23,
-                                    width: 30,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: loginController.isLoading.isTrue
-                                        ? JumpingDotsProgressIndicator()
-                                        : const Text(
-                                            'Continue with Google',
-                                            style: TextStyle(
-                                                // color: mobileTextColor,
-                                                fontFamily:
-                                                    'RedHatDisplayLight',
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                  )
-                                ]),
-                          ),
-                        ),
+                        // OutlinedButton(
+                        //   onPressed: () {
+                        //     loginController.handleGoogleSignin();
+                        //   },
+                        //   child: SizedBox(
+                        //     height: mobileHeight * .08,
+                        //     width: mobileWidth * 99,
+                        //     child: Row(
+                        //         mainAxisSize: MainAxisSize.min,
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: [
+                        //           Image.asset(
+                        //             'lib/assets/icons/goog_le.png',
+                        //             height: 23,
+                        //             width: 30,
+                        //           ),
+                        //           Padding(
+                        //             padding: const EdgeInsets.only(left: 8),
+                        //             child: loginController.isLoading.isTrue
+                        //                 ? JumpingDotsProgressIndicator()
+                        //                 : const Text(
+                        //                     'Continue with Google',
+                        //                     style: TextStyle(
+                        //                         // color: mobileTextColor,
+                        //                         fontFamily:
+                        //                             'RedHatDisplayLight',
+                        //                         fontWeight: FontWeight.w600),
+                        //                   ),
+                        //           )
+                        //         ]),
+                        //   ),
+                        // ),
+
                         // mobileSizedBoxHeight2,
                         // OutlinedButton(
                         //   onPressed: () {

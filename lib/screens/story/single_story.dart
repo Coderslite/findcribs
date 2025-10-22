@@ -10,11 +10,10 @@ class SingleStory extends StatefulWidget {
   final String mediaUrl;
   final int storyId;
   const SingleStory(
-      {Key? key,
+      {super.key,
       required this.type,
       required this.mediaUrl,
-      required this.storyId})
-      : super(key: key);
+      required this.storyId});
 
   @override
   State<SingleStory> createState() => _SingleStoryState();

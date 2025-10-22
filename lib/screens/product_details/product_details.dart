@@ -14,10 +14,10 @@ class ProductDetails extends StatefulWidget {
   final bool? isDeepLinking;
   final int? id;
   const ProductDetails({
-    Key? key,
+    super.key,
     required this.id,
     this.isDeepLinking,
-  }) : super(key: key);
+  });
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -132,7 +132,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           /// product main details start ///
           body: ProductMainDetails(
             panelOpened: pageController.panelOpened,
-            id: widget.id,
+            id: widget.id!,
             isDeepLinking:
                 widget.isDeepLinking.toString() == 'true' ? true : false,
           ),

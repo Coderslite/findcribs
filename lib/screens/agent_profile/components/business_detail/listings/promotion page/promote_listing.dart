@@ -16,6 +16,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../util/colors.dart';
+import '../active_listing/active_listing.dart';
 
 class PromoteListingScreen extends StatefulWidget {
   final String id;
@@ -27,7 +28,7 @@ class PromoteListingScreen extends StatefulWidget {
   final String likeCount;
   final String formattedPrice;
   const PromoteListingScreen({
-    Key? key,
+    super.key,
     required this.id,
     required this.image,
     required this.currency,
@@ -36,7 +37,7 @@ class PromoteListingScreen extends StatefulWidget {
     required this.viewCount,
     required this.likeCount,
     required this.formattedPrice,
-  }) : super(key: key);
+  });
 
   @override
   State<PromoteListingScreen> createState() => _PromoteListingScreenState();
@@ -397,6 +398,7 @@ class _PromoteListingScreenState extends State<PromoteListingScreen> {
         return WebViewExample(
           webLink: responseData['data']['authorization_url'],
           referenceId: responseData['data']['reference'],
+          returnUrl: ActiveListing(),
         );
       }));
       // print(responseData);

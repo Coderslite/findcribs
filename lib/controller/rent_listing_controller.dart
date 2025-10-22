@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 
 class RentListingController extends GetxController {
   final propertyCategoryKey = GlobalKey<FormFieldState>();
@@ -36,12 +38,12 @@ class RentListingController extends GetxController {
   var description = ''.obs;
   var propertyCategory = ''.obs;
   var propertyType = ''.obs;
-  var state= ''.obs;
+  var state = ''.obs;
   var lga = ''.obs;
   var negotiable = 0.obs;
   var myImages = [].obs;
   var newfiles = [].obs;
-  var facilities = [].obs;
+  RxList facilities = [].obs;
 
   var legalFeeIndex = 0.obs;
   var agencyFeeIndex = 0.obs;
@@ -59,13 +61,13 @@ class RentListingController extends GetxController {
     designType.value = '';
     propertyAddress.value = '';
     bathroom.value = '';
-    bathroomIndex.value = 0;
+    bathroomIndex.value = 100;
     bedroom.value = '';
-    bedroomIndex.value = 0;
+    bedroomIndex.value = 100;
     livingRoom.value = '';
-    livingRoomIndex.value = 0;
+    livingRoomIndex.value = 100;
     kitchen.value = '';
-    kitchenIndex.value = 0;
+    kitchenIndex.value = 100;
     currency.value = '';
     rentFrequency.value = '';
     rentFee.value = '';
@@ -92,6 +94,77 @@ class RentListingController extends GetxController {
 
     legalFeeIndex.value = 0;
     agencyFeeIndex.value = 0;
-    Get.delete<RentListingController>();
+  }
+
+  String _formatValue(String value) {
+    return value.replaceAll(',', '');
+  }
+
+  Future<bool> handleShowConfirmPrice(BuildContext context) async {
+    var res = false;
+    var formatter = NumberFormat("#,###");
+    var formatedPrice = otherCharges.value == 'Yes'
+        ? formatter.format((_formatValue(rentFee.value) == ''
+            ? 0
+            : int.parse(_formatValue(rentFee.value))))
+        : formatter
+            .format((rentFee.value == ''
+                ? 0
+                : (int.parse(_formatValue(rentFee.value))) +
+                    (cautionFee.value == ''
+                        ? 0
+                        : (int.parse(_formatValue(cautionFee.value)))) +
+                    (serviceCharge.value == ''
+                        ? 0
+                        : (int.parse(_formatValue(serviceCharge.value)))) +
+                    (rentFee.value == ''
+                        ? 0
+                        : ((int.parse(_formatValue(rentFee.value))) *
+                                agencyFee.value) /
+                            100) +
+                    (rentFee.value == ''
+                        ? 0
+                        : ((int.parse(_formatValue(rentFee.value)) *
+                                legalFee.value) /
+                            100))))
+            .toString();
+
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              "Is this the price for your property?",
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "${currency.value == 'Naira' ? "NGN" : "\$"}$formatedPrice",
+                  style: const TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                  res = false;
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  res = true;
+                  Get.back();
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        });
+    return res;
   }
 }

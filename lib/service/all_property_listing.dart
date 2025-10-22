@@ -67,14 +67,13 @@ class AllPropertyListingController extends GetxController {
       if (response.statusCode == 200) {
         isFiltering.value = false;
         final data = jsonDecode(response.body);
-
         List houseData = data['data']['listing'];
-        final posts = List<HouseListModel>.from(
-            houseData.map((post) => HouseListModel.fromJson(post)));
-
+        var posts = houseData.map((e) => HouseListModel.fromJson(e)).toList();
+        // final posts = List<HouseListModel>.from(
+        //     houseData.map((post) => HouseListModel.fromJson(post)));
+        print(posts);
         if (posts.isNotEmpty) {
           if (pageKey == 1 && categoryPagingController.itemList != null) {
-            print("already added");
             // categoryPagingController.itemList!.fillRange(0, 1);
             categoryPagingController.itemList!.clear();
 
@@ -86,7 +85,6 @@ class AllPropertyListingController extends GetxController {
           for (var post in posts.toList()) {
             if (_posts.any((element) => element.id == post.id)) {
               posts.remove(post);
-              print("removed");
               update();
             }
           }

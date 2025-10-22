@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import '../../../components/constants.dart';
 
 class MostFavouritedAgent extends StatefulWidget {
-  const MostFavouritedAgent({Key? key}) : super(key: key);
+  const MostFavouritedAgent({super.key});
 
   @override
   State<MostFavouritedAgent> createState() => _MostFavouritedAgentState();
@@ -180,7 +180,7 @@ class _MostFavouritedAgentState extends State<MostFavouritedAgent> {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (_) {
                                       return AgentProfileScreen(
-                                        id: allAgents![index].id,
+                                        userId: allAgents![index].id,
                                       );
                                     }));
                                   },

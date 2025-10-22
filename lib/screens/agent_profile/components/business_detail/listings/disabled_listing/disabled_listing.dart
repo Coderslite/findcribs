@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../listings.dart';
 
 class DisabledListing extends StatefulWidget {
-  const DisabledListing({Key? key}) : super(key: key);
+  const DisabledListing({super.key});
 
   @override
   State<DisabledListing> createState() => _DisabledListingState();
@@ -102,12 +102,11 @@ class _DisabledListingState extends State<DisabledListing>
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10))),
-                            child: Text(
+                            child: const Text(
                               "For Rent",
                               style: TextStyle(
                                 // color: Colors.black,
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -123,11 +122,10 @@ class _DisabledListingState extends State<DisabledListing>
                                   // bottomLeft: Radius.circular(10),
                                   ),
                             ),
-                            child: Text(
+                            child: const Text(
                               "For Sale",
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -143,11 +141,10 @@ class _DisabledListingState extends State<DisabledListing>
                                 bottomRight: Radius.circular(10),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Estate Market",
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),

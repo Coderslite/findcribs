@@ -9,11 +9,10 @@ class PhotoPreview extends StatefulWidget {
   final bool profilePreview;
 
   const PhotoPreview(
-      {Key? key,
+      {super.key,
       this.images,
       required this.businessName,
-      required this.profilePreview})
-      : super(key: key);
+      required this.profilePreview});
 
   @override
   State<PhotoPreview> createState() => _PhotoPreviewState();

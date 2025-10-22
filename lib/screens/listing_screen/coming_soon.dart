@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ComingSoon extends StatefulWidget {
-  const ComingSoon({Key? key}) : super(key: key);
+  const ComingSoon({super.key});
 
   @override
   State<ComingSoon> createState() => _ComingSoonState();

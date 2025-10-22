@@ -16,7 +16,7 @@ import '../../widgets/back_arrow.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   final String otp;
-  const ChangePasswordScreen({Key? key, required this.otp}) : super(key: key);
+  const ChangePasswordScreen({super.key, required this.otp});
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
@@ -31,7 +31,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   var passwordController1 = TextEditingController();
   var passwordController2 = TextEditingController();
   bool isMatch = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +66,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 FormBuilderTextField(
                   controller: passwordController1,
                   name: 'password1',
-                  validator: FormBuilderValidators.compose(
-                    [
-                      FormBuilderValidators.minLength(
-                      6),
-                    ],
-                  ),
                   onChanged: (value) {
-                    _formKey.currentState!.validate();
+                    // _formKey.currentState!.validate();
                   },
                   // controller: emailController,
                   decoration: InputDecoration(
@@ -130,10 +123,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   },
                   validator: FormBuilderValidators.compose(
                     [
-                      FormBuilderValidators.minLength(
-                      6),
                       FormBuilderValidators.equal(
-                     passwordController1.text,
+                        passwordController1.text,
                         errorText: "Password does not match",
                       ),
                     ],
@@ -222,7 +213,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           });
           AwesomeDialog(
             context: context,
-                        dialogType: DialogType.success,
+            dialogType: DialogType.success,
             borderSide: const BorderSide(
               color: Colors.green,
               width: 2,
@@ -239,8 +230,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             desc: "You have successfully reset your password, Login now",
             showCloseIcon: true,
             btnOkOnPress: () {
-              Navigator.push(context,
-              MaterialPageRoute(builder: (_) {
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return const LoginScreen();
               }));
             },
@@ -252,7 +242,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
           AwesomeDialog(
             context: context,
-                        dialogType: DialogType.error,
+            dialogType: DialogType.error,
             borderSide: const BorderSide(
               color: Colors.red,
               width: 2,

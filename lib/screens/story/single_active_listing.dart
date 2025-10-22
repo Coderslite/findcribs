@@ -17,7 +17,7 @@ class SingleActiveListing extends StatefulWidget {
   final String viewCount;
   final bool? isPromoted;
   const SingleActiveListing({
-    Key? key,
+    super.key,
     required this.image,
     required this.currency,
     required this.propertyAddress,
@@ -28,7 +28,7 @@ class SingleActiveListing extends StatefulWidget {
     required this.viewCount,
     required this.isPromoted,
     required this.propertyLocation,
-  }) : super(key: key);
+  });
 
   @override
   State<SingleActiveListing> createState() => _SingleActiveListingState();

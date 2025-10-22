@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "285049044019",
     "project_id": "findcribs-917f9",
-    "storage_bucket": "findcribs-917f9.appspot.com"
+    "storage_bucket": "findcribs-917f9.firebasestorage.app"
   },
   "client": [
     {
@@ -55,11 +55,10 @@
               "client_type": 3
             },
             {
-              "client_id": "285049044019-gt2ehvaac2r40291pp13vor8fj6qm4lp.apps.googleusercontent.com",
+              "client_id": "285049044019-88f30jj3srd4ci6mvkhhrd47j6pl1u81.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.findcribs.findcribs",
-                "app_store_id": "1663939836"
+                "bundle_id": "com.findcribs.ng"
               }
             }
           ]
@@ -108,11 +107,10 @@
               "client_type": 3
             },
             {
-              "client_id": "285049044019-gt2ehvaac2r40291pp13vor8fj6qm4lp.apps.googleusercontent.com",
+              "client_id": "285049044019-88f30jj3srd4ci6mvkhhrd47j6pl1u81.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.findcribs.findcribs",
-                "app_store_id": "1663939836"
+                "bundle_id": "com.findcribs.ng"
               }
             }
           ]

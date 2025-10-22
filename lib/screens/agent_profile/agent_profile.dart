@@ -4,11 +4,11 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findcribs/controller/user_favorited_agent_controller.dart';
+import 'package:findcribs/main.dart';
 import 'package:findcribs/models/user_profile_information_model.dart';
 import 'package:findcribs/screens/agent_profile/agent_profile_listing.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/product_details/photo_view_preview.dart';
-import 'package:findcribs/service/user_profile_by_id_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,31 +23,30 @@ import 'package:http/http.dart' as http;
 
 import '../../components/constants.dart';
 import '../../controller/get_chat_controller.dart';
+import '../../controller/user_favourited_listing_controller.dart';
 import '../../models/user_favourite_agent.dart';
 import '../../service/favourited_agent_service.dart';
 
 class AgentProfileScreen extends StatefulWidget {
-  final int? id;
+  final int? userId;
   final int? propertyId;
-  const AgentProfileScreen({Key? key, this.id, this.propertyId})
-      : super(key: key);
+  const AgentProfileScreen({
+    super.key,
+    this.userId,
+    this.propertyId,
+  });
 
   @override
   AgentProfileScreenState createState() => AgentProfileScreenState();
 }
 
 class AgentProfileScreenState extends State<AgentProfileScreen> {
-  late Future<UserProfile> userProfile;
-  late Map userData;
-
   var messageController = TextEditingController();
   String message = '';
   late Socket socket;
   bool isLiked = false;
-
-  late Future<List<UserFavouriteAgentModel>> agentList;
-  List<UserFavouriteAgentModel> filteredList = [];
-  List<UserFavouriteAgentModel> firstList = [];
+  UserFavoritedAgentController userFavoritedAgentController =
+      Get.put(UserFavoritedAgentController());
 
   handleConnect() async {
     var prefs = await SharedPreferences.getInstance();
@@ -55,7 +54,7 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
     print(token);
 
     socket = IO.io(
-        'http://18.233.168.44:5000/',
+        socketUrl,
         OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
             .setExtraHeaders({'Authorization': "$token"}) // optional
             .build());
@@ -81,27 +80,16 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
   @override
   void initState() {
     super.initState();
-    handleGetProfile();
     handleConnect();
-    agentList = getMyFavouriteAgentList();
     // storyList = getFavouriteStoryList();
-    agentList.then((value) {
-      // print(value);
-      setState(() {
-        firstList = filteredList = value;
-        handleFilter(widget.id.toString());
-      });
-    });
+    handleFilter();
   }
 
-  handleFilter(String value) {
-    setState(() {
-      filteredList = firstList.where((element) {
-        return element.userId.toString().contains(value);
-      }).toList();
-      print(filteredList);
-    });
-    if (filteredList.isEmpty) {
+  handleFilter() {
+    var result = userFavoritedAgentController.allAgents
+        .where((element) => element.userId == widget.userId)
+        .toList();
+    if (result.isEmpty) {
       setState(() {
         isLiked = false;
       });
@@ -115,33 +103,15 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
   UserFavoritedAgentController userFavouritedAgentController =
       Get.put(UserFavoritedAgentController());
 
-  handleFavouriteAgent(int id) async {
-    userFavouritedAgentController.handleGetAllAgents();
-    setState(() {});
+  handleFavouriteAgent() async {
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     var response = await http.post(
-      Uri.parse("$baseUrl/agent/favourite/$id"),
+      Uri.parse("$baseUrl/agent/favourite/${widget.userId}"),
       headers: {"Authorization": "$token"},
     );
-    var responseJson = jsonDecode(response.body);
-    if (responseJson['status'] == true) {
-      print(responseJson['message']);
-
-      setState(() {});
-      // Fluttertoast.showToast(msg: responseJson['message']);
-    } else {
-      print(responseJson['message']);
-      setState(() {});
-      // Fluttertoast.showToast(msg: responseJson['message']);
-    }
-  }
-
-  handleGetProfile() {
-    setState(() {
-      userProfile = getUserProfileById(widget.id);
-      userProfile.then((value) {});
-    });
+    jsonDecode(response.body);
+    userFavouritedAgentController.handleGetAllAgents(id: widget.userId);
   }
 
   GetAllChatController getAllChatController = Get.put(GetAllChatController());
@@ -181,7 +151,7 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<UserProfile>(
-            future: userProfile,
+            future: agentService.getUserById(widget.userId),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return const Center(child: Text("You Don't have an account"));
@@ -192,519 +162,498 @@ class AgentProfileScreenState extends State<AgentProfileScreen> {
 
                 return SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: NotificationListener(
-                    onNotification: (notification) {
-                      handleGetProfile();
-                      return true;
-                    },
-                    // key: UniqueKey(),
-                    // onVisibilityChanged: (info) {
-                    //   setState(() {
-                    //     handleGetProfile();
-                    //   });
-                    //   print("visible");
-                    // },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left: 15.0),
-                        //   child: Row(
-                        //     children: [
-                        //       Container(
-                        //         width: 40,
-                        //         height: 40,
-                        //         decoration: BoxDecoration(
-                        //             color: const Color(0xFFF0F7F8),
-                        //             borderRadius: BorderRadius.circular(8)),
-                        //         child: GestureDetector(
-                        //           onTap: () {
-                        //             Navigator.pop(context);
-                        //           },
-                        //           child: const Icon(Icons.arrow_back_ios),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: const Color(0XFFF0F7F8),
-                                  borderRadius: BorderRadius.circular(13),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: SvgPicture.asset(
-                                      "assets/svgs/arrow_back.svg"),
-                                ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left: 15.0),
+                      //   child: Row(
+                      //     children: [
+                      //       Container(
+                      //         width: 40,
+                      //         height: 40,
+                      //         decoration: BoxDecoration(
+                      //             color: const Color(0xFFF0F7F8),
+                      //             borderRadius: BorderRadius.circular(8)),
+                      //         child: GestureDetector(
+                      //           onTap: () {
+                      //             Navigator.pop(context);
+                      //           },
+                      //           child: const Icon(Icons.arrow_back_ios),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color(0XFFF0F7F8),
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: SvgPicture.asset(
+                                    "assets/svgs/arrow_back.svg"),
                               ),
                             ),
-                            Text(
-                              "Profile",
-                              style: TextStyle(fontSize: size.width / 22),
-                            ),
-                            const Text(""),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    var images = [];
-                                    userData.profileImg == null
-                                        ? images.add(
-                                            'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg')
-                                        : images.add(
-                                            userData.profileImg.toString());
-                                    print(images.length);
-                                    Get.to(PhotoPreview(
-                                      businessName: '',
-                                      images: images,
-                                      profilePreview: true,
-                                    ));
-                                  },
-                                  child: ClipOval(
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      width: 126,
-                                      height: 126,
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              JumpingDotsProgressIndicator(
-                                        fontSize: 20.0,
-                                        color: Colors.blue,
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                      imageUrl: userData.profileImg == null
-                                          ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
-                                          : userData.profileImg.toString(),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  left: 100,
-                                  right: 5,
-                                  child: userData.agent!['is_verified'] == true
-                                      ? Image.asset("assets/images/tick.png")
-                                      : Container(),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "@${userData.agent!['business_name']}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 26),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          userData.agent!['category'] ?? "Not Identified",
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+                          Text(
+                            "Profile",
+                            style: TextStyle(fontSize: size.width / 22),
+                          ),
+                          const Text(""),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
                             children: [
-                              Column(
-                                children: [
-                                  Text(
-                                    "${userData.favouritingAgentCount}",
-                                  ),
-                                  const Text(
-                                    "Followers",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "${userData.favouritedAgentCount}",
-                                  ),
-                                  const Text(
-                                    "Following",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey),
-                                  ),
-                                ],
-                              ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SalesScreen(
-                                        id: int.parse(
-                                          widget.id.toString(),
-                                        ),
-                                        isVerified:
-                                            userData.agent!['is_verified'],
-                                        image: userData.profileImg == null
-                                            ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
-                                            : userData.profileImg.toString(),
-                                        businessName: userData
-                                            .agent!['business_name']
-                                            .toString(),
-                                      ),
-                                    ),
-                                  );
+                                  var images = [];
+                                  userData.profileImg == null
+                                      ? images.add(
+                                          'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg')
+                                      : images
+                                          .add(userData.profileImg.toString());
+                                  print(images.length);
+                                  Get.to(PhotoPreview(
+                                    businessName: '',
+                                    images: images,
+                                    profilePreview: true,
+                                  ));
                                 },
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "${userData.listingCount}",
+                                child: ClipOval(
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    width: 126,
+                                    height: 126,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            JumpingDotsProgressIndicator(
+                                      fontSize: 20.0,
+                                      color: Colors.blue,
                                     ),
-                                    const Text(
-                                      "Listings",
-                                      style: TextStyle(
-                                          color: Colors.blueGrey),
-                                    ),
-                                  ],
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                    imageUrl: userData.profileImg == null
+                                        ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                        : userData.profileImg.toString(),
+                                  ),
                                 ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                left: 100,
+                                right: 5,
+                                child: userData.agent!['is_verified'] == true
+                                    ? Image.asset("assets/images/tick.png")
+                                    : Container(),
                               ),
                             ],
                           ),
-                        ),
-
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     SvgPicture.asset("assets/svgs/star_spur.svg"),
-                        //     const SizedBox(
-                        //       width: 5,
-                        //     ),
-                        //     const Text(
-                        //       "4.4 Ratings",
-                        //       style: TextStyle(color: Colors.grey),
-                        //     )
-                        //   ],
-                        // ),
-                        // const SizedBox(
-                        //   height: 20,
-                        // ),
-                        const Divider(
-                          height: 1,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text(
-                          "About",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(26, 12, 26, 12),
-                          child: Text(
-                            userData.agent!['about'],
-                            style: const TextStyle(
-                                color: Color(0xFF8A99B1),
-                                fontSize: 12,
-                                height: 1.8),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        ],
+                      ),
+                      Text(
+                        "@${userData.agent!['business_name']}",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 26),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        userData.agent!['category'] ?? "Not Identified",
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              width: 60,
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                var phone = userData.agent!['phone_number'];
-                                launchUrl.launch("tel:$phone");
-                              },
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: const Color(0xFF0072BA),
-                                        width: 1)),
-                                child: const Icon(
-                                  Icons.call,
-                                  color: Color(0xFF0072BA),
+                            Column(
+                              children: [
+                                Text(
+                                  "${userData.favouritingAgentCount}",
                                 ),
-                              ),
+                                const Text(
+                                  "Followers",
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                              ],
                             ),
-                            const SizedBox(
-                              width: 21,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isLiked = !isLiked;
-                                });
-                                handleFavouriteAgent(
-                                    int.parse(widget.id.toString()));
-                              },
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: const Color(0xFF0072BA),
-                                        width: 1)),
-                                child: isLiked
-                                    ? const Icon(
-                                        Icons.favorite,
-                                        color: Color(0xFF0072BA),
-                                      )
-                                    : const Icon(
-                                        Icons.favorite_border,
-                                        color: Color(0xFF0072BA),
-                                      ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 21,
+                            Column(
+                              children: [
+                                Text(
+                                  "${userData.favouritedAgentCount}",
+                                ),
+                                const Text(
+                                  "Following",
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                              ],
                             ),
                             InkWell(
                               onTap: () {
-                                showModalBottomSheet<void>(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (BuildContext context) {
-                                      return AnimatedPadding(
-                                        padding:
-                                            MediaQuery.of(context).viewInsets,
-                                        duration:
-                                            const Duration(milliseconds: 100),
-                                        curve: Curves.decelerate,
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 200,
-                                          padding: const EdgeInsets.all(10),
-                                          child: Wrap(
-                                            children: <Widget>[
-                                              SizedBox(
-                                                // height: 20,
-                                                child: TextFormField(
-                                                    controller:
-                                                        messageController,
-                                                    onChanged: (value) {
-                                                      message = value;
-                                                    },
-                                                    onFieldSubmitted: (value) {
-                                                      handleSendMessage(
-                                                          messageController
-                                                              .text,
-                                                          userData.id,
-                                                          widget.propertyId);
-                                                    },
-                                                    style: const TextStyle(
-                                                        color: Colors.black),
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      hintText:
-                                                          "Send Message to Seller",
-                                                    )),
-                                              ),
-                                              ElevatedButton(
-                                                  onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SalesScreen(
+                                      id: int.parse(
+                                        widget.userId.toString(),
+                                      ),
+                                      isVerified:
+                                          userData.agent!['is_verified'],
+                                      image: userData.profileImg == null
+                                          ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                          : userData.profileImg.toString(),
+                                      businessName: userData
+                                          .agent!['business_name']
+                                          .toString(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "${userData.listingCount}",
+                                  ),
+                                  const Text(
+                                    "Listings",
+                                    style: TextStyle(color: Colors.blueGrey),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     SvgPicture.asset("assets/svgs/star_spur.svg"),
+                      //     const SizedBox(
+                      //       width: 5,
+                      //     ),
+                      //     const Text(
+                      //       "4.4 Ratings",
+                      //       style: TextStyle(color: Colors.grey),
+                      //     )
+                      //   ],
+                      // ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      const Divider(
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        "About",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(26, 12, 26, 12),
+                        child: Text(
+                          userData.agent!['about'],
+                          style: const TextStyle(
+                              color: Color(0xFF8A99B1),
+                              fontSize: 12,
+                              height: 1.8),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              var phone = userData.agent!['phone_number'];
+                              launchUrl.launch("tel:$phone");
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: const Color(0xFF0072BA),
+                                      width: 1)),
+                              child: const Icon(
+                                Icons.call,
+                                color: Color(0xFF0072BA),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 21,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isLiked = !isLiked;
+                              });
+                              handleFavouriteAgent();
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: const Color(0xFF0072BA),
+                                      width: 1)),
+                              child: isLiked
+                                  ? const Icon(
+                                      Icons.favorite,
+                                      color: Color(0xFF0072BA),
+                                    )
+                                  : const Icon(
+                                      Icons.favorite_border,
+                                      color: Color(0xFF0072BA),
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 21,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showModalBottomSheet<void>(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return AnimatedPadding(
+                                      padding:
+                                          MediaQuery.of(context).viewInsets,
+                                      duration:
+                                          const Duration(milliseconds: 100),
+                                      curve: Curves.decelerate,
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: 200,
+                                        padding: const EdgeInsets.all(10),
+                                        child: Wrap(
+                                          children: <Widget>[
+                                            SizedBox(
+                                              // height: 20,
+                                              child: TextFormField(
+                                                  controller: messageController,
+                                                  onChanged: (value) {
+                                                    message = value;
+                                                  },
+                                                  onFieldSubmitted: (value) {
                                                     handleSendMessage(
                                                         messageController.text,
                                                         userData.id,
                                                         widget.propertyId);
                                                   },
-                                                  child: const Text(
-                                                      "Send Message")),
-                                            ],
-                                          ),
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    hintText:
+                                                        "Send Message to Seller",
+                                                  )),
+                                            ),
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  handleSendMessage(
+                                                      messageController.text,
+                                                      userData.id,
+                                                      widget.propertyId);
+                                                },
+                                                child:
+                                                    const Text("Send Message")),
+                                          ],
                                         ),
-                                      );
-                                    });
-                              },
-                              child: Container(
-                                height: 50,
-                                width: 50,
+                                      ),
+                                    );
+                                  });
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: const Color(0xFF0072BA),
+                                      width: 1)),
+                              child: Center(
+                                child: SizedBox(
+                                  height: 24,
+                                  child:
+                                      SvgPicture.asset("assets/svgs/chat.svg"),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            width: 60,
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 26,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SalesScreen(
+                                id: int.parse(
+                                  widget.userId.toString(),
+                                ),
+                                isVerified: userData.agent!['is_verified'],
+                                image: userData.profileImg == null
+                                    ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
+                                    : userData.profileImg.toString(),
+                                businessName:
+                                    userData.agent!['business_name'].toString(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 330,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey.withOpacity(0.2))),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Image.asset("assets/images/house.png"),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              const Text(
+                                "All listings",
+                                style: TextStyle(fontWeight: FontWeight.w400),
+                              ),
+                              const SizedBox(
+                                width: 150,
+                              ),
+                              Container(
+                                width: 20,
+                                height: 20,
                                 decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: const Color(0xFF0072BA),
-                                        width: 1)),
+                                    color: Colors.amber,
+                                    borderRadius: BorderRadius.circular(8)),
                                 child: Center(
-                                  child: SizedBox(
-                                    height: 24,
-                                    child: SvgPicture.asset(
-                                        "assets/svgs/chat.svg"),
-                                  ),
-                                ),
+                                    child: Text(
+                                  userData.listingCount.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                )),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              width: 60,
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 26,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SalesScreen(
-                                  id: int.parse(
-                                    widget.id.toString(),
-                                  ),
-                                  isVerified: userData.agent!['is_verified'],
-                                  image: userData.profileImg == null
-                                      ? 'https://cdn2.vectorstock.com/i/1000x1000/20/76/man-avatar-profile-vector-21372076.jpg'
-                                      : userData.profileImg.toString(),
-                                  businessName: userData.agent!['business_name']
-                                      .toString(),
-                                ),
+                              const SizedBox(
+                                width: 16,
                               ),
-                            );
-                          },
-                          child: Container(
-                            width: 330,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    width: 1,
-                                    color: Colors.grey.withOpacity(0.2))),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Image.asset("assets/images/house.png"),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                const Text(
-                                  "All listings",
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                                const SizedBox(
-                                  width: 150,
-                                ),
-                                Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      color: Colors.amber,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Center(
-                                      child: Text(
-                                    userData.listingCount.toString(),
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.grey.withOpacity(0.3),
-                                )
-                              ],
-                            ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey.withOpacity(0.3),
+                              )
+                            ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                            width: 330,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    width: 1,
-                                    color: Colors.grey.withOpacity(0.2))),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Image.asset("assets/images/play.png"),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  "View Story",
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                                const SizedBox(
-                                  width: 140,
-                                ),
-                                Container(
-                                  width: 30,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      color: Colors.amber,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Center(
-                                      child: Text(
-                                    userData.storyCount.toString(),
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Icon(Icons.arrow_forward_ios,
-                                    color: Colors.grey.withOpacity(0.3))
-                              ],
-                            ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 330,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey.withOpacity(0.2))),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Image.asset("assets/images/play.png"),
+                              const SizedBox(width: 8),
+                              const Text(
+                                "View Story",
+                                style: TextStyle(fontWeight: FontWeight.w400),
+                              ),
+                              const SizedBox(
+                                width: 140,
+                              ),
+                              Container(
+                                width: 30,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                    color: Colors.amber,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Center(
+                                    child: Text(
+                                  userData.storyCount.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Icon(Icons.arrow_forward_ios,
+                                  color: Colors.grey.withOpacity(0.3))
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               }

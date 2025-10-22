@@ -5,13 +5,14 @@ import 'package:findcribs/controller/sale_listing_controller.dart';
 import 'package:findcribs/screens/listing_process/listing/components/sale/sale2_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 
 import '../../../../homepage/home_root.dart';
 
 class Sale1 extends StatefulWidget {
-  const Sale1({Key? key}) : super(key: key);
+  const Sale1({super.key});
 
   @override
   State<Sale1> createState() => _Sale1State();
@@ -1378,545 +1379,558 @@ class _Sale1State extends State<Sale1> {
             ),
     ];
 
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
+    return KeyboardDismissOnTap(
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Get.to(const HomePageRoot(navigateIndex: 0));
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
+                      "Sale Listing",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    const Text("")
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Color(0XFF0072BA),
+                      child: Text("1"),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
+                    ),
+                    InkWell(
                       onTap: () {
-                        Get.to(const HomePageRoot(navigateIndex: 0));
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return Sale2();
+                        // }));
                       },
-                      child: const Icon(Icons.arrow_back_ios)),
-                  const Text(
-                    "Sale Listing",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const Text("")
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Color(0XFF0072BA),
-                    child: Text("1"),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return Sale2();
-                      // }));
-                    },
-                    child: const CircleAvatar(
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.grey,
+                        child: Text(
+                          "2",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
+                    ),
+                    const CircleAvatar(
                       radius: 12,
                       backgroundColor: Colors.grey,
                       child: Text(
-                        "2",
+                        "3",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  const CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Colors.grey,
-                    child: Text(
-                      "3",
-                      style: TextStyle(color: Colors.white),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
                     ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  const CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Colors.grey,
-                    child: Text(
-                      "4",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                ],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Obx(
-                    () => Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: FormBuilder(
-                        key: _formKey1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // const SizedBox(
-                            //   height: 20,
-                            // ),
-                            const Text("Property Category"),
-                            saleListingController.propertyCategory.value
-                                        .toString() ==
-                                    ''
-                                ? FormBuilderDropdown(
-                                    name: 'propertyCategory',
-                                    isExpanded: true,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    onChanged: (value) {
-                                      saleListingController.propertyCategory
-                                          .value = value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    items: [
-                                      "Detached Duplex",
-                                      "Semi Duplex",
-                                      "Terrace",
-                                      "Flats",
-                                      "Self-Contained",
-                                      "Duplex Bungalow",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  )
-                                : FormBuilderDropdown(
-                                    name: 'propertyCategory',
-                                    isExpanded: true,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    initialValue: saleListingController
-                                        .propertyCategory.value,
-                                    onChanged: (value) {
-                                      saleListingController.propertyCategory
-                                          .value = value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    items: [
-                                      "Detached Duplex",
-                                      "Semi Duplex",
-                                      "Terrace",
-                                      "Flats",
-                                      "Self-Contained",
-                                      "Duplex Bungalow",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("House Design Type"),
-                            saleListingController.designType.value.toString() ==
-                                    ''
-                                ? FormBuilderDropdown(
-                                    name: 'houseDesignType',
-                                    isExpanded: true,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    onChanged: (value) {
-                                      saleListingController.designType.value =
-                                          value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    items: [
-                                      "Contemporary",
-                                      "Modern",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  )
-                                : FormBuilderDropdown(
-                                    name: 'houseDesignType',
-                                    isExpanded: true,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    initialValue:
-                                        saleListingController.designType.value,
-                                    onChanged: (value) {
-                                      saleListingController.designType.value =
-                                          value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    items: [
-                                      "Contemporary",
-                                      "Modern",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Property Address"),
-                            saleListingController.propertyAddress.value
-                                        .toString() ==
-                                    ''
-                                ? FormBuilderTextField(
-                                    name: 'address',
-                                    keyboardType: TextInputType.streetAddress,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    maxLength: 30,
-                                    onChanged: (value) {
-                                      saleListingController.propertyAddress
-                                          .value = value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  )
-                                : FormBuilderTextField(
-                                    name: 'address',
-                                    keyboardType: TextInputType.streetAddress,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    maxLength: 30,
-                                    initialValue: saleListingController
-                                        .propertyAddress.value,
-                                    onChanged: (value) {
-                                      saleListingController.propertyAddress
-                                          .value = value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  ),
-
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Interior design"),
-                            saleListingController.interiorDesign.value == ''
-                                ? FormBuilderDropdown(
-                                    name: 'interiorDesign',
-                                    isExpanded: true,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    onChanged: (value) {
-                                      saleListingController.interiorDesign
-                                          .value = value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    items: [
-                                      "Furnished",
-                                      "Semi-Furnished",
-                                      "Unfurnished"
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  )
-                                : FormBuilderDropdown(
-                                    name: 'interiorDesign',
-                                    isExpanded: true,
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    initialValue: saleListingController
-                                        .interiorDesign.value,
-                                    onChanged: (value) {
-                                      saleListingController.interiorDesign
-                                          .value = value.toString();
-                                    },
-                                    style: TextStyle(
-                                      color:
-                                          context.textTheme.bodyMedium!.color,
-                                      fontFamily: "RedHatDisplay",
-                                    ),
-                                    items: [
-                                      "Furnished",
-                                      "Semi-Furnished",
-                                      "Unfurnished"
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Bedroom"),
-                            Container(
-                              height: 32,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  // style: BorderStyle.none,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: List.generate(
-                                  rentBedroomItems.length,
-                                  (index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        selectedSaleBedroom(index);
+                    const CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Colors.grey,
+                      child: Text(
+                        "4",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Obx(
+                      () => Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: FormBuilder(
+                          key: _formKey1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // const SizedBox(
+                              //   height: 20,
+                              // ),
+                              const Text("Property Category"),
+                              saleListingController.propertyCategory.value
+                                          .toString() ==
+                                      ''
+                                  ? FormBuilderDropdown(
+                                      name: 'propertyCategory',
+                                      isExpanded: true,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      onChanged: (value) {
+                                        saleListingController.propertyCategory
+                                            .value = value.toString();
                                       },
-                                      child: SizedBox(
-                                        width: size.width / 12,
-                                        child: rentBedroomItems[index],
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Bathroom"),
-                            Container(
-                              height: 32,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  // style: BorderStyle.none,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: List.generate(
-                                  rentBathroomItems.length,
-                                  (index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        selectedSaleBathroom(index);
+                                      items: [
+                                        "Detached Duplex",
+                                        "Semi Duplex",
+                                        "Terrace",
+                                        "Flats",
+                                        "Self-Contained",
+                                        "Duplex Bungalow",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    )
+                                  : FormBuilderDropdown(
+                                      name: 'propertyCategory',
+                                      isExpanded: true,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      initialValue: saleListingController
+                                          .propertyCategory.value,
+                                      onChanged: (value) {
+                                        saleListingController.propertyCategory
+                                            .value = value.toString();
                                       },
-                                      child: SizedBox(
-                                        width: size.width / 12,
-                                        child: rentBathroomItems[index],
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Living Room"),
-                            Container(
-                              height: 32,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  // style: BorderStyle.none,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: List.generate(
-                                  rentLivingRoomItems.length,
-                                  (index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        selectedSaleLivingroom(index);
-                                      },
-                                      child: SizedBox(
-                                        width: size.width / 12,
-                                        child: rentLivingRoomItems[index],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Kitchen"),
-                            Container(
-                              height: 32,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  // style: BorderStyle.none,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: List.generate(
-                                  rentKitchenItems.length,
-                                  (index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        selectedSaleKitchen(index);
-                                      },
-                                      child: SizedBox(
-                                        width: size.width / 12,
-                                        child: rentKitchenItems[index],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Material(
-                                  color: const Color(0XFF0072BA),
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      handleNextScreen();
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        left:
-                                            MediaQuery.of(context).size.width /
-                                                5,
-                                        right:
-                                            MediaQuery.of(context).size.width /
-                                                5,
-                                        top: 4.5,
-                                        bottom: 4.5,
-                                      ),
-                                      child: const Text(
-                                        "Save & Continue",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontFamily: "RedHatDisplay",
+                                      items: [
+                                        "Detached Duplex",
+                                        "Semi Duplex",
+                                        "Terrace",
+                                        "Flats",
+                                        "Self-Contained",
+                                        "Duplex Bungalow",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
                                         ),
                                       ),
                                     ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("House Design Type"),
+                              saleListingController.designType.value
+                                          .toString() ==
+                                      ''
+                                  ? FormBuilderDropdown(
+                                      name: 'houseDesignType',
+                                      isExpanded: true,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      onChanged: (value) {
+                                        saleListingController.designType.value =
+                                            value.toString();
+                                      },
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
+                                      items: [
+                                        "Contemporary",
+                                        "Modern",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    )
+                                  : FormBuilderDropdown(
+                                      name: 'houseDesignType',
+                                      isExpanded: true,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      initialValue: saleListingController
+                                          .designType.value,
+                                      onChanged: (value) {
+                                        saleListingController.designType.value =
+                                            value.toString();
+                                      },
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
+                                      items: [
+                                        "Contemporary",
+                                        "Modern",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Property Address"),
+                              saleListingController.propertyAddress.value
+                                          .toString() ==
+                                      ''
+                                  ? FormBuilderTextField(
+                                      name: 'address',
+                                      keyboardType: TextInputType.streetAddress,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      maxLength: 30,
+                                      onChanged: (value) {
+                                        saleListingController.propertyAddress
+                                            .value = value.toString();
+                                      },
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    )
+                                  : FormBuilderTextField(
+                                      name: 'address',
+                                      keyboardType: TextInputType.streetAddress,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      maxLength: 30,
+                                      initialValue: saleListingController
+                                          .propertyAddress.value,
+                                      onChanged: (value) {
+                                        saleListingController.propertyAddress
+                                            .value = value.toString();
+                                      },
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    ),
+
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Interior design"),
+                              saleListingController.interiorDesign.value == ''
+                                  ? FormBuilderDropdown(
+                                      name: 'interiorDesign',
+                                      isExpanded: true,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      onChanged: (value) {
+                                        saleListingController.interiorDesign
+                                            .value = value.toString();
+                                      },
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
+                                      items: [
+                                        "Furnished",
+                                        "Semi-Furnished",
+                                        "Unfurnished"
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    )
+                                  : FormBuilderDropdown(
+                                      name: 'interiorDesign',
+                                      isExpanded: true,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      initialValue: saleListingController
+                                          .interiorDesign.value,
+                                      onChanged: (value) {
+                                        saleListingController.interiorDesign
+                                            .value = value.toString();
+                                      },
+                                      style: TextStyle(
+                                        color:
+                                            context.textTheme.bodyMedium!.color,
+                                        fontFamily: "RedHatDisplay",
+                                      ),
+                                      items: [
+                                        "Furnished",
+                                        "Semi-Furnished",
+                                        "Unfurnished"
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Bedroom"),
+                              Container(
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    // style: BorderStyle.none,
+                                    color: Colors.grey,
                                   ),
-                                )
-                              ],
-                            ),
-                          ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    rentBedroomItems.length,
+                                    (index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          selectedSaleBedroom(index);
+                                        },
+                                        child: SizedBox(
+                                          width: size.width / 12,
+                                          child: rentBedroomItems[index],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Bathroom"),
+                              Container(
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    // style: BorderStyle.none,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    rentBathroomItems.length,
+                                    (index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          selectedSaleBathroom(index);
+                                        },
+                                        child: SizedBox(
+                                          width: size.width / 12,
+                                          child: rentBathroomItems[index],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Living Room"),
+                              Container(
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    // style: BorderStyle.none,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    rentLivingRoomItems.length,
+                                    (index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          selectedSaleLivingroom(index);
+                                        },
+                                        child: SizedBox(
+                                          width: size.width / 12,
+                                          child: rentLivingRoomItems[index],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Kitchen"),
+                              Container(
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    // style: BorderStyle.none,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    rentKitchenItems.length,
+                                    (index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          selectedSaleKitchen(index);
+                                        },
+                                        child: SizedBox(
+                                          width: size.width / 12,
+                                          child: rentKitchenItems[index],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Material(
+                                    color: const Color(0XFF0072BA),
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        handleNextScreen();
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              5,
+                                          right: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              5,
+                                          top: 4.5,
+                                          bottom: 4.5,
+                                        ),
+                                        child: const Text(
+                                          "Save & Continue",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontFamily: "RedHatDisplay",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

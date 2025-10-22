@@ -4,7 +4,7 @@ import 'package:findcribs/screens/listing_process/listing/components/sale/sale1.
 import 'package:flutter/material.dart';
 
 class SelectListingType extends StatefulWidget {
-  const SelectListingType({Key? key}) : super(key: key);
+  const SelectListingType({super.key});
 
   @override
   State<SelectListingType> createState() => _SelectListingTypeState();

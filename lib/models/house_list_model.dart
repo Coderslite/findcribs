@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 class HouseListModel {
   int? id;
-  int? agentId;
+  int? userId;
+  int? agentUserId;
   String? propertyCategory;
   String? propertyType;
   String? designType;
@@ -10,14 +13,16 @@ class HouseListModel {
   int? livingRoom;
   int? kitchen;
   String? currency;
-  String? rentalFrequncy;
-  int? rentalFee;
+  String? rentalFrequency;
+  String? rentalFee; // Changed to String? to match JSON
   bool? otherCharges;
   int? cautionFee;
   int? serviceCharge;
   int? legalFee;
   int? agencyFee;
   String? state;
+  String? lga; // Added to match JSON
+  String? country; // Added to match JSON
   String? totalAreaOfLand;
   String? coveredByProperty;
   String? interiorDesign;
@@ -29,27 +34,29 @@ class HouseListModel {
   String? status;
   String? createdAt;
   String? updatedAt;
-  List? image;
+  List<Map<String, dynamic>>? image; // Specified type for listingImage
   int? viewCount;
   int? likeCount;
   bool? isPromoted;
+  String? promotionExpires; // Added to match JSON
   String? agentBusinessName;
   String? agentCategory;
   String? agentFirstName;
   String? agentLastName;
-  String? agentPhoneNUmber;
+  String? agentPhoneNumber; // Corrected spelling
   String? profilePic;
   bool? managedBy;
   bool? hasDocument;
   bool? negotiable;
-  String? availability;
+  List<String>? availability; // Changed to List<String>? for parsed JSON array
   String? propertyCondition;
-  String? facilities;
+  List<String>? facilities; // Changed to List<String>? for parsed JSON array
   String? propertyName;
 
   HouseListModel({
     this.id,
-    this.agentId,
+    this.userId,
+    this.agentUserId,
     this.propertyCategory,
     this.propertyType,
     this.designType,
@@ -59,7 +66,7 @@ class HouseListModel {
     this.livingRoom,
     this.kitchen,
     this.currency,
-    this.rentalFrequncy,
+    this.rentalFrequency,
     this.rentalFee,
     this.otherCharges,
     this.cautionFee,
@@ -67,6 +74,8 @@ class HouseListModel {
     this.legalFee,
     this.agencyFee,
     this.state,
+    this.lga,
+    this.country,
     this.totalAreaOfLand,
     this.coveredByProperty,
     this.interiorDesign,
@@ -82,11 +91,12 @@ class HouseListModel {
     this.viewCount,
     this.likeCount,
     this.isPromoted,
+    this.promotionExpires,
     this.agentBusinessName,
-    this.agentPhoneNUmber,
+    this.agentCategory,
     this.agentFirstName,
     this.agentLastName,
-    this.agentCategory,
+    this.agentPhoneNumber,
     this.profilePic,
     this.managedBy,
     this.hasDocument,
@@ -98,54 +108,72 @@ class HouseListModel {
   });
 
   factory HouseListModel.fromJson(Map<String, dynamic> json) {
+    // Parse JSON-encoded strings for facilities and availability
+    List<String>? parseJsonString(String? jsonString) {
+      if (jsonString == null) return null;
+      try {
+        final decoded = jsonDecode(jsonString) as List<dynamic>;
+        return decoded.cast<String>();
+      } catch (e) {
+        return null;
+      }
+    }
+
     return HouseListModel(
-      id: json['id'],
-      agentId: json['userId'],
-      propertyCategory: json['property_category'],
-      propertyType: json['property_type'],
-      designType: json['design_type'],
-      propertyAddress: json['property_address'],
-      bedroom: json['bedroom'],
-      bathroom: json['bathroom'],
-      livingRoom: json['living_room'],
-      kitchen: json['kitchen'],
-      currency: json['currency'],
-      rentalFrequncy: json['rental_frequency'],
-      rentalFee: json['rental_fee'],
-      otherCharges: json['other_charges'],
-      cautionFee: json['caution_fee'],
-      serviceCharge: json['serviceCharge'],
-      legalFee: json['legal_fee'],
-      agencyFee: json['agency_fee'],
-      state: json['state'],
-      totalAreaOfLand: json['total_area_of_land'],
-      coveredByProperty: json['covered_by_property'],
-      interiorDesign: json['interior_design'],
-      parkingSpace: json['parking_space'],
-      availabilityOfWater: json['availability_of_water'],
-      availabilityOfElectricity: json['availability_of_electricity'],
-      description: json['description'],
-      ageRestriction: json['age_restriction'],
-      status: json['status'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      image: json['listingImage'],
-      viewCount: json['viewCount'],
-      likeCount: json['likeCount'],
-      isPromoted: json['isPromoted'],
-      agentBusinessName: json['agent']['business_name'],
-      agentCategory: json['agent']['category'],
-      agentFirstName: json['agent']['user']['first_name'],
-      agentLastName: json['agent']['user']['last_name'],
-      agentPhoneNUmber: json['agent']['phone_number'],
-      profilePic: json['agent']['user']['profile_pic'],
-      managedBy: json['agent']['systemManaged'],
-      hasDocument: json['hasDocuments'],
-      negotiable: json['negotiable'],
-      availability: json['agent']['availability'],
-      propertyCondition: json['property_condition'],
-      facilities: json['facilities'],
-      propertyName: json['property_name'],
+      id: json['id'] as int?,
+      userId: json['userId'] as int?,
+      agentUserId: json['agentUserId'] as int?,
+      propertyCategory: json['property_category'] as String?,
+      propertyType: json['property_type'] as String?,
+      designType: json['design_type'] as String?,
+      propertyAddress: json['property_address'] as String?,
+      bedroom: json['bedroom'] as int?,
+      bathroom: json['bathroom'] as int?,
+      livingRoom: json['living_room'] as int?,
+      kitchen: json['kitchen'] as int?,
+      currency: json['currency'] as String?,
+      rentalFrequency: json['rental_frequency'] as String?,
+      rentalFee: json['rental_fee'].toString()
+          as String?, // Kept as String to match JSON
+      otherCharges: json['other_charges'] as bool?,
+      cautionFee: json['caution_fee'] as int?,
+      serviceCharge: json['serviceCharge'] as int?,
+      legalFee: json['legal_fee'] as int?,
+      agencyFee: json['agency_fee'] as int?,
+      state: json['state'] as String?,
+      lga: json['lga'] as String?, // Added
+      country: json['country'] as String?, // Added
+      totalAreaOfLand: json['total_area_of_land'] as String?,
+      coveredByProperty: json['covered_by_property'] as String?,
+      interiorDesign: json['interior_design'] as String?,
+      parkingSpace: json['parking_space'] as bool?,
+      availabilityOfWater: json['availability_of_water'] as bool?,
+      availabilityOfElectricity: json['availability_of_electricity'] as bool?,
+      description: json['description'] as String?,
+      ageRestriction: json['age_restriction'] as bool?,
+      status: json['status'] as String?,
+      createdAt: json['createdAt'] as String?,
+      updatedAt: json['updatedAt'] as String?,
+      image: json['listingImage'] != null
+          ? List<Map<String, dynamic>>.from(json['listingImage'] as List)
+          : null,
+      viewCount: json['viewCount'] as int?,
+      likeCount: json['likeCount'] as int?,
+      isPromoted: json['isPromoted'] as bool?,
+      promotionExpires: json['promotionExpires'] as String?,
+      agentBusinessName: json['agent']?['business_name'] as String?,
+      agentCategory: json['agent']?['category'] as String?,
+      agentFirstName: json['user']?['first_name'] as String?,
+      agentLastName: json['user']?['last_name'] as String?,
+      agentPhoneNumber: json['agent']?['phone_number'] as String?,
+      profilePic: json['user']?['profile_pic'] as String?,
+      managedBy: json['agent']?['systemManaged'] as bool?,
+      hasDocument: json['hasDocuments'] as bool?,
+      negotiable: json['negotiable'] as bool?,
+      availability: parseJsonString(json['agent']?['availability'] as String?),
+      propertyCondition: json['property_condition'] as String?,
+      facilities: parseJsonString(json['facilities'] as String?),
+      propertyName: json['property_name'] as String?,
     );
   }
 }

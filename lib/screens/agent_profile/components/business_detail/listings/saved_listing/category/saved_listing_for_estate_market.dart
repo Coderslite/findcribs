@@ -1,4 +1,5 @@
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:findcribs/service/saved_list_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +8,7 @@ import 'package:progress_indicators/progress_indicators.dart';
 import '../../active_listing/category/single_property_status.dart';
 
 class SavedListingForEstateMarket extends StatefulWidget {
-  const SavedListingForEstateMarket({Key? key}) : super(key: key);
+  const SavedListingForEstateMarket({super.key});
 
   @override
   State<SavedListingForEstateMarket> createState() =>
@@ -100,7 +101,7 @@ class _SavedListingForEstateMarketState
                   shrinkWrap: true,
                   itemCount: filteredList.length,
                   itemBuilder: (context, index) {
-             int salesPrice =
+                    int salesPrice =
                         int.parse(filteredList[index].rentalFee.toString());
                     int cautionFee =
                         int.parse(filteredList[index].cautionFee.toString());

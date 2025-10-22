@@ -1,4 +1,3 @@
-
 import 'package:findcribs/models/unfavourite_agent.dart';
 import 'package:findcribs/screens/agent_profile/agent_profile.dart';
 import 'package:findcribs/screens/homepage/home_root.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +17,7 @@ import '../../../service/all_agents.dart';
 import '../../../util/colors.dart';
 
 class AllAgent extends StatefulWidget {
-  const AllAgent({Key? key}) : super(key: key);
+  const AllAgent({super.key});
 
   @override
   State<AllAgent> createState() => _AllAgentState();
@@ -30,7 +30,8 @@ class _AllAgentState extends State<AllAgent> {
   List<SearchAgentModel>? searchedAgentList = [];
   String searchQuery = '';
   AllAgentController agentController = Get.put(AllAgentController());
-
+  UserFavoritedAgentController userFavoritedAgentController =
+      Get.put(UserFavoritedAgentController());
   bool isLoading = true;
   List<int> isChecked = [];
   @override
@@ -99,14 +100,14 @@ class _AllAgentState extends State<AllAgent> {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        width: 20,
-                        height: 20,
+                        width: 40,
+                        height: 40,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(13),
-                          color: const Color(0XFFF0F7F8),
-                        ),
-                        child: SvgPicture.asset(
-                          "assets/svgs/arrow_back.svg",
+                            color: const Color(0XFFF0F7F8),
+                            borderRadius: BorderRadius.circular(13)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SvgPicture.asset("assets/svgs/arrow_back.svg"),
                         ),
                       ),
                     ),
@@ -134,7 +135,7 @@ class _AllAgentState extends State<AllAgent> {
                       hintStyle: TextStyle(
                           fontWeight: FontWeight.w200,
                           color: context.isDarkMode
-                              ? white
+                              ? Colors.white
                               : const Color(0xFF7C7C7C))),
                   onFieldSubmitted: (val) {
                     setState(() {
@@ -171,7 +172,7 @@ class _AllAgentState extends State<AllAgent> {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (_) {
                                   return AgentProfileScreen(
-                                    id: post.id,
+                                    userId: post.userId,
                                   );
                                 }));
                               },
@@ -180,7 +181,7 @@ class _AllAgentState extends State<AllAgent> {
                                   // isChecked.add(int.parse(post.id.toString()));
 
                                   handleFavouriteAgent(
-                                      int.parse(post.id.toString()));
+                                      int.parse(post.userId.toString()));
                                 });
                               },
                               child: Column(
@@ -249,14 +250,19 @@ class _AllAgentState extends State<AllAgent> {
       Get.put(UserFavoritedAgentController());
 
   handleFavouriteAgent(int id) async {
-    userFavouritedAgentController.handleGetAllAgents();
+    print(id);
     agentController.agentPagingController.itemList!
         .removeWhere((element) => element.userId == id);
+    agentController.posts.removeWhere((element) => element.userId == id);
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     var response = await http.post(
       Uri.parse("$baseUrl/agent/favourite/$id"),
       headers: {"Authorization": "$token"},
     );
+    userFavoritedAgentController.handleGetAllAgents();
+    setState(() {});
+    // toast("agent followed");
+    print(response.body);
   }
 }

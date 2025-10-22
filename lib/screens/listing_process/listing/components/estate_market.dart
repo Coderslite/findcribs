@@ -6,10 +6,12 @@ import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:findcribs/controller/estate_listing_controller.dart';
+import 'package:findcribs/screens/listing_screen/estate_market.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -18,19 +20,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../components/constants.dart';
+import '../../../../components/payment_plan.dart';
+import '../../../../controller/get_profile_controller.dart';
 import '../../../../controller/load_state_lga_controller.dart';
+import '../../../../controller/login_controller.dart';
 import '../../../../controller/thousand_formatter.dart';
+import '../../../../models/payment_plan_model.dart';
+import '../../../../service/PaymentPlanService.dart';
 import '../../../homepage/home_root.dart';
 
 class EstateMarket extends StatefulWidget {
-  const EstateMarket({Key? key}) : super(key: key);
+  const EstateMarket({super.key});
 
   @override
   State<EstateMarket> createState() => _EstateMarketState();
 }
 
 class _EstateMarketState extends State<EstateMarket> {
-  final _formKey = GlobalKey<FormBuilderState>();
   List images = [];
   List<File> files = [];
   List myImages = [];
@@ -45,341 +51,690 @@ class _EstateMarketState extends State<EstateMarket> {
       Get.put(EstateListingController());
   LoadStateLgaController loadStateLgaController =
       Get.put(LoadStateLgaController());
-  final GlobalKey<FormBuilderState> _lgaForm = GlobalKey<FormBuilderState>();
+  // final GlobalKey<FormBuilderState> _lgaForm = GlobalKey<FormBuilderState>();
   final _estateFeeFormKey = GlobalKey<FormBuilderState>();
+  final _formKey = GlobalKey<FormBuilderState>();
+
+  bool gettingPlan = true;
+  List<PaymentPlanModel> plans = [];
+  handleGetPlans() async {
+    plans = await PaymentplanService().getPlans();
+    gettingPlan = false;
+    setState(() {});
+  }
 
   @override
   void initState() {
     forRent =
         estateListingController.propertyType.value == 'rent' ? true : false;
+    handleGetPlans();
     super.initState();
   }
 
   @override
   void dispose() {
     _formKey.currentState!.dispose();
-    _lgaForm.currentState!.dispose();
+    _estateFeeFormKey.currentState!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Obx(
-          () => Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: FormBuilder(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            Get.to(const HomePageRoot(navigateIndex: 0));
-                          },
-                          child: const Icon(Icons.arrow_back_ios)),
-                      const Text(
-                        "Estate Market Listing",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      const Text("")
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  const Text("Property Type"),
-                  estateListingController.propertyType.value == ''
-                      ? FormBuilderDropdown(
-                          name: 'propertyType',
-                          isExpanded: true,
-                          initialValue: "sale",
-                          items: [
-                            "rent",
-                            "sale",
-                          ].map((option) {
-                            return DropdownMenuItem(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            if (value == "rent") {
-                              setState(() {
-                                forRent = true;
-                                estateListingController.propertyType.value =
-                                    value.toString();
-                                _estateFeeFormKey.currentState!.validate();
-                              });
-                            } else {
-                              setState(() {
-                                forRent = false;
-                                estateListingController.propertyType.value =
-                                    value.toString();
-                                _estateFeeFormKey.currentState!.validate();
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
-                        )
-                      : FormBuilderDropdown(
-                          name: 'propertyType',
-                          isExpanded: true,
-                          initialValue:
-                              estateListingController.propertyType.value,
-                          items: [
-                            "rent",
-                            "sale",
-                          ].map((option) {
-                            return DropdownMenuItem(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            if (value == "rent") {
-                              setState(() {
-                                forRent = true;
-                                estateListingController.propertyType.value =
-                                    value.toString();
-                                _estateFeeFormKey.currentState!.validate();
-                              });
-                            } else {
-                              setState(() {
-                                forRent = false;
-                                estateListingController.propertyType.value =
-                                    value.toString();
-                                _estateFeeFormKey.currentState!.validate();
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
+    return KeyboardDismissOnTap(
+      child: Scaffold(
+        body: SafeArea(
+          child: Obx(
+            () => Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: FormBuilder(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                            onTap: () {
+                              Get.to(const HomePageRoot(navigateIndex: 0));
+                            },
+                            child: const Icon(Icons.arrow_back_ios)),
+                        const Text(
+                          "Estate Market Listing",
+                          style: TextStyle(fontSize: 20),
                         ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Property Name"),
-                  estateListingController.propertyName.value == ''
-                      ? FormBuilderTextField(
-                          name: 'propertyName',
-                          maxLength: 20,
-                          // maxLength: 300,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          onChanged: (value) {
-                            estateListingController.propertyName.value =
-                                value.toString();
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                            hintText: "e.g  malls, shop, schools...",
-                            hintStyle:
-                                const TextStyle(color: Color(0XFFB1B1B1)),
-                          ),
-                        )
-                      : FormBuilderTextField(
-                          name: 'propertyName',
-                          maxLength: 20,
-                          // maxLength: 300,
-                          initialValue:
-                              estateListingController.propertyName.value,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          onChanged: (value) {
-                            estateListingController.propertyName.value =
-                                value.toString();
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                            hintText: "e.g  malls, shop, schools...",
-                            hintStyle:
-                                const TextStyle(color: Color(0XFFB1B1B1)),
-                          ),
-                        ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Price"),
-                  estateListingController.price.value == ''
-                      ? FormBuilder(
-                          key: _estateFeeFormKey,
-                          child: FormBuilderTextField(
-                            name: 'price',
-                            // maxLength: 300,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              print(value);
-
-                              if (value!.isEmpty) {
-                                estateListingController.price.value =
-                                    0.toString();
-                              } else if (_estateFeeFormKey.currentState!
-                                  .validate()) {
-                                setState(() {
-                                  final numericValue =
-                                      int.tryParse(value.replaceAll(',', ''));
-                                  estateListingController.price.value =
-                                      numericValue.toString();
-                                });
-                              }
-                            },
-                            validator: (value) {
-                              if (forRent == true) {
-                                if (value!.isEmpty) {
-                                  return 'Value is required';
-                                }
-                                final numericValue =
-                                    int.tryParse(value.replaceAll(',', ''));
-                                if (numericValue == null) {
-                                  return 'Invalid number format';
-                                }
-                                if (numericValue < 3000) {
-                                  return 'Value must be at least 3,000';
-                                }
-                              } else {
-                                if (value!.isEmpty) {
-                                  return 'Value is required';
-                                }
-
-                                // Remove commas and parse as an integer
-                                final numericValue =
-                                    int.tryParse(value.replaceAll(',', ''));
-
-                                if (numericValue == null) {
-                                  return 'Invalid number format';
-                                }
-
-                                if (numericValue < 10000) {
-                                  return 'Value must be at least 10,000';
-                                }
-                              }
-                              return null;
-                            },
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                              ThousandsSeparatorInputFormatter(),
-                            ],
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(),
-                              ),
-                            ),
-                          ),
-                        )
-                      : FormBuilder(
-                          key: _estateFeeFormKey,
-                          child: FormBuilderTextField(
-                            name: 'price',
-                            // maxLength: 300,
-                            onChanged: (value) {
-                              print(value);
-                              if (value!.isEmpty) {
-                                estateListingController.price.value =
-                                    0.toString();
-                              } else if (_estateFeeFormKey.currentState!
-                                  .validate()) {
-                                final numericValue =
-                                    int.tryParse(value.replaceAll(',', ''));
-                                estateListingController.price.value =
-                                    numericValue.toString();
-                              }
-                            },
-                            validator: (value) {
-                              if (forRent == true) {
-                                if (value!.isEmpty) {
-                                  return 'Value is required';
-                                }
-                                final numericValue =
-                                    int.tryParse(value.replaceAll(',', ''));
-                                if (numericValue == null) {
-                                  return 'Invalid number format';
-                                }
-                                if (numericValue < 3000) {
-                                  return 'Value must be at least 3,000';
-                                }
-                              } else {
-                                if (value!.isEmpty) {
-                                  return 'Value is required';
-                                }
-
-                                // Remove commas and parse as an integer
-                                final numericValue =
-                                    int.tryParse(value.replaceAll(',', ''));
-
-                                if (numericValue == null) {
-                                  return 'Invalid number format';
-                                }
-
-                                if (numericValue < 10000) {
-                                  return 'Value must be at least 10,000';
-                                }
-                              }
-                              return null;
-                            },
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                              ThousandsSeparatorInputFormatter(),
-                            ],
-                            keyboardType: TextInputType.number,
-                            initialValue: estateListingController.price.value,
-
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(),
-                              ),
-                            ),
-                          ),
-                        ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  forRent == true
-                      ? Column(
+                        const Text("")
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Rental Frequency"),
-                            estateListingController.rentFrequency.value == ''
+                            const Text("Property Type"),
+                            estateListingController.propertyType.value == ''
                                 ? FormBuilderDropdown(
-                                    name: 'rentFrequency',
+                                    name: 'propertyType',
                                     isExpanded: true,
+                                    initialValue: "sale",
+                                    items: [
+                                      "rent",
+                                      "sale",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
                                     onChanged: (value) {
-                                      estateListingController.rentFrequency
+                                      if (value == "rent") {
+                                        setState(() {
+                                          forRent = true;
+                                          estateListingController.propertyType
+                                              .value = value.toString();
+                                          _estateFeeFormKey.currentState!
+                                              .validate();
+                                        });
+                                      } else {
+                                        setState(() {
+                                          forRent = false;
+                                          estateListingController.propertyType
+                                              .value = value.toString();
+                                          _estateFeeFormKey.currentState!
+                                              .validate();
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'propertyType',
+                                    isExpanded: true,
+                                    initialValue: estateListingController
+                                        .propertyType.value,
+                                    items: [
+                                      "rent",
+                                      "sale",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      if (value == "rent") {
+                                        setState(() {
+                                          forRent = true;
+                                          estateListingController.propertyType
+                                              .value = value.toString();
+                                          _estateFeeFormKey.currentState!
+                                              .validate();
+                                        });
+                                      } else {
+                                        setState(() {
+                                          forRent = false;
+                                          estateListingController.propertyType
+                                              .value = value.toString();
+                                          _estateFeeFormKey.currentState!
+                                              .validate();
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Property Name"),
+                            estateListingController.propertyName.value == ''
+                                ? FormBuilderTextField(
+                                    name: 'propertyName',
+                                    maxLength: 20,
+                                    // maxLength: 300,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    onChanged: (value) {
+                                      estateListingController.propertyName
                                           .value = value.toString();
                                     },
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                      hintText: "e.g  malls, shop, schools...",
+                                      hintStyle: const TextStyle(
+                                          color: Color(0XFFB1B1B1)),
+                                    ),
+                                  )
+                                : FormBuilderTextField(
+                                    name: 'propertyName',
+                                    maxLength: 20,
+                                    // maxLength: 300,
+                                    initialValue: estateListingController
+                                        .propertyName.value,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    onChanged: (value) {
+                                      estateListingController.propertyName
+                                          .value = value.toString();
+                                    },
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                      hintText: "e.g  malls, shop, schools...",
+                                      hintStyle: const TextStyle(
+                                          color: Color(0XFFB1B1B1)),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Price"),
+                            estateListingController.price.value == ''
+                                ? FormBuilder(
+                                    key: _estateFeeFormKey,
+                                    child: FormBuilderTextField(
+                                      name: 'price',
+                                      // maxLength: 300,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: (value) {
+                                        print(value);
+
+                                        if (value!.isEmpty) {
+                                          estateListingController.price.value =
+                                              0.toString();
+                                        } else if (_estateFeeFormKey
+                                            .currentState!
+                                            .validate()) {
+                                          setState(() {
+                                            final numericValue = int.tryParse(
+                                                value.replaceAll(',', ''));
+                                            estateListingController
+                                                    .price.value =
+                                                numericValue.toString();
+                                          });
+                                        }
+                                      },
+                                      validator: (String? value) {
+                                        if (forRent == true) {
+                                          if (value!.isEmpty) {
+                                            return 'Value is required';
+                                          }
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+                                          if (numericValue == null) {
+                                            return 'Invalid number format';
+                                          }
+                                          if (numericValue < 3000) {
+                                            return 'Value must be at least 3,000';
+                                          }
+                                        } else {
+                                          if (value!.isEmpty) {
+                                            return 'Value is required';
+                                          }
+
+                                          // Remove commas and parse as an integer
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+
+                                          if (numericValue == null) {
+                                            return 'Invalid number format';
+                                          }
+
+                                          if (numericValue < 10000) {
+                                            return 'Value must be at least 10,000';
+                                          }
+                                        }
+                                        return null;
+                                      },
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        ThousandsSeparatorInputFormatter(),
+                                      ],
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilder(
+                                    key: _estateFeeFormKey,
+                                    child: FormBuilderTextField(
+                                      name: 'price',
+                                      // maxLength: 300,
+                                      onChanged: (value) {
+                                        print(value);
+                                        if (value!.isEmpty) {
+                                          estateListingController.price.value =
+                                              0.toString();
+                                        } else if (_estateFeeFormKey
+                                            .currentState!
+                                            .validate()) {
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+                                          estateListingController.price.value =
+                                              numericValue.toString();
+                                        }
+                                      },
+                                      validator: (value) {
+                                        if (forRent == true) {
+                                          if (value!.isEmpty) {
+                                            return 'Value is required';
+                                          }
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+                                          if (numericValue == null) {
+                                            return 'Invalid number format';
+                                          }
+                                          if (numericValue < 3000) {
+                                            return 'Value must be at least 3,000';
+                                          }
+                                        } else {
+                                          if (value!.isEmpty) {
+                                            return 'Value is required';
+                                          }
+
+                                          // Remove commas and parse as an integer
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+
+                                          if (numericValue == null) {
+                                            return 'Invalid number format';
+                                          }
+
+                                          if (numericValue < 10000) {
+                                            return 'Value must be at least 10,000';
+                                          }
+                                        }
+                                        return null;
+                                      },
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        ThousandsSeparatorInputFormatter(),
+                                      ],
+                                      keyboardType: TextInputType.number,
+                                      initialValue:
+                                          estateListingController.price.value,
+
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            forRent == true
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text("Rental Frequency"),
+                                      estateListingController
+                                                  .rentFrequency.value ==
+                                              ''
+                                          ? FormBuilderDropdown(
+                                              name: 'rentFrequency',
+                                              isExpanded: true,
+                                              onChanged: (value) {
+                                                estateListingController
+                                                    .rentFrequency
+                                                    .value = value.toString();
+                                              },
+                                              items: [
+                                                "Per Day",
+                                                "Per Week",
+                                                "Per 2weeks",
+                                                "Per Month",
+                                                "Per 3Months",
+                                                "Per 6Months",
+                                                "Per Year",
+                                                "For 2Years",
+                                                "For 5Years",
+                                                "For 8Years",
+                                                "For 10Years",
+                                              ].map((option) {
+                                                return DropdownMenuItem(
+                                                  value: option,
+                                                  child: Text(option),
+                                                );
+                                              }).toList(),
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  borderSide:
+                                                      const BorderSide(),
+                                                ),
+                                              ),
+                                              validator: FormBuilderValidators
+                                                  .compose([
+                                                FormBuilderValidators
+                                                    .required(),
+                                              ]),
+                                            )
+                                          : FormBuilderDropdown(
+                                              name: 'rentFrequency',
+                                              isExpanded: true,
+                                              initialValue:
+                                                  estateListingController
+                                                      .rentFrequency.value,
+                                              onChanged: (value) {
+                                                estateListingController
+                                                    .rentFrequency
+                                                    .value = value.toString();
+                                              },
+                                              items: [
+                                                "Per Day",
+                                                "Per Week",
+                                                "Per 2weeks",
+                                                "Per Month",
+                                                "Per 3Months",
+                                                "Per 6Months",
+                                                "Per Year",
+                                                "For 2Years",
+                                                "For 5Years",
+                                                "For 8Years",
+                                                "For 10Years",
+                                              ].map((option) {
+                                                return DropdownMenuItem(
+                                                  value: option,
+                                                  child: Text(option),
+                                                );
+                                              }).toList(),
+                                              validator: FormBuilderValidators
+                                                  .compose([
+                                                FormBuilderValidators
+                                                    .required(),
+                                              ]),
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  borderSide:
+                                                      const BorderSide(),
+                                                ),
+                                              ),
+                                            ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                            const Text("Negotiable ?"),
+                            FormBuilderDropdown(
+                              name: 'negotiable',
+                              isExpanded: true,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                              ]),
+                              initialValue:
+                                  estateListingController.negotiable.value == 1
+                                      ? "Yes"
+                                      : "No",
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value == 'Yes') {
+                                    estateListingController.negotiable.value =
+                                        1;
+                                  } else {
+                                    estateListingController.negotiable.value =
+                                        0;
+                                  }
+                                });
+                              },
+                              items: [
+                                "Yes",
+                                "No",
+                              ].map((option) {
+                                return DropdownMenuItem(
+                                  value: option,
+                                  child: Text(option),
+                                );
+                              }).toList(),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Obx(
+                              () => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("state (State)"),
+                                  estateListingController.state.value == ''
+                                      ? FormBuilderDropdown(
+                                          name: 'state',
+                                          isExpanded: true,
+                                          validator:
+                                              FormBuilderValidators.compose([
+                                            FormBuilderValidators.required(),
+                                          ]),
+                                          onChanged: (value) {
+                                            estateListingController
+                                                .state.value = value.toString();
+                                            loadStateLgaController
+                                                .handleEstateFetchLga();
+                                          },
+                                          items: loadStateLgaController.data
+                                              .map((option) {
+                                            return DropdownMenuItem(
+                                              value: option['state'].toString(),
+                                              child: Text(
+                                                  option['state'].toString()),
+                                            );
+                                          }).toList(),
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(),
+                                            ),
+                                          ),
+                                        )
+                                      : FormBuilderDropdown(
+                                          name: 'State',
+                                          isExpanded: true,
+                                          validator:
+                                              FormBuilderValidators.compose([
+                                            FormBuilderValidators.required(),
+                                          ]),
+                                          initialValue: estateListingController
+                                              .state.value,
+                                          onChanged: (value) {
+                                            estateListingController
+                                                .state.value = value.toString();
+                                            loadStateLgaController
+                                                .handleEstateFetchLga();
+                                          },
+                                          items: loadStateLgaController.data
+                                              .map((option) {
+                                            return DropdownMenuItem(
+                                              value: option['state'].toString(),
+                                              child: Text(
+                                                  option['state'].toString()),
+                                            );
+                                          }).toList(),
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: const BorderSide(),
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Obx(
+                              () => Visibility(
+                                visible:
+                                    estateListingController.state.string == ''
+                                        ? false
+                                        : true,
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text("LGA"),
+                                      InkWell(
+                                        onTap: () {
+                                          showLga();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 1,
+                                              color: context.iconColor!,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(18.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(estateListingController
+                                                    .lga.string),
+                                                const Icon(
+                                                  CupertinoIcons
+                                                      .arrowtriangle_down_fill,
+                                                  size: 12,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Property Address"),
+                            FormBuilderTextField(
+                              name: 'propertyAddress',
+                              maxLength: 30,
+                              keyboardType: TextInputType.streetAddress,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                              ]),
+                              onChanged: (value) {
+                                setState(() {
+                                  estateListingController
+                                      .propertyAddress.value = value.toString();
+                                });
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: const BorderSide(),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Detail Description of Property"),
+                            estateListingController.description.value == ''
+                                ? FormBuilderTextField(
+                                    name: 'description',
+                                    minLines: 3,
+                                    maxLines: 5,
+                                    maxLength: 450,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    onChanged: (value) {
+                                      estateListingController
+                                          .description.value = value.toString();
+                                    },
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderTextField(
+                                    name: 'description',
+                                    minLines: 3,
+                                    maxLines: 5,
+                                    maxLength: 450,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    initialValue: estateListingController
+                                        .description.value,
+                                    onChanged: (value) {
+                                      estateListingController
+                                          .description.value = value.toString();
+                                    },
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Property Condition"),
+                            estateListingController.propertyCondition.value ==
+                                    ''
+                                ? FormBuilderDropdown(
+                                    name: 'propertyCondition',
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      estateListingController.propertyCondition
+                                          .value = value.toString();
+                                    },
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
                                     items: [
-                                      "Per Day",
-                                      "Per Week",
-                                      "Per 2weeks",
-                                      "Per Month",
-                                      "Per 3Months",
-                                      "Per 6Months",
-                                      "Per Year",
-                                      "For 2Years",
-                                      "For 5Years",
-                                      "For 8Years",
-                                      "For 10Years",
+                                      "Newly Built",
+                                      "Fairly Used",
+                                      "Old",
                                     ].map((option) {
                                       return DropdownMenuItem(
                                         value: option,
@@ -394,26 +749,21 @@ class _EstateMarketState extends State<EstateMarket> {
                                     ),
                                   )
                                 : FormBuilderDropdown(
-                                    name: 'rentFrequency',
+                                    name: 'propertyCondition',
                                     isExpanded: true,
                                     initialValue: estateListingController
-                                        .rentFrequency.value,
+                                        .propertyCondition.value,
                                     onChanged: (value) {
-                                      estateListingController.rentFrequency
+                                      estateListingController.propertyCondition
                                           .value = value.toString();
                                     },
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
                                     items: [
-                                      "Per Day",
-                                      "Per Week",
-                                      "Per 2weeks",
-                                      "Per Month",
-                                      "Per 3Months",
-                                      "Per 6Months",
-                                      "Per Year",
-                                      "For 2Years",
-                                      "For 5Years",
-                                      "For 8Years",
-                                      "For 10Years",
+                                      "Newly Built",
+                                      "Fairly Used",
+                                      "Old",
                                     ].map((option) {
                                       return DropdownMenuItem(
                                         value: option,
@@ -430,538 +780,310 @@ class _EstateMarketState extends State<EstateMarket> {
                             const SizedBox(
                               height: 20,
                             ),
-                          ],
-                        )
-                      : Container(),
-                  const Text("Negotiable ?"),
-                  FormBuilderDropdown(
-                    name: 'negotiable',
-                    isExpanded: true,
-                    initialValue: estateListingController.negotiable.value == 1
-                        ? "Yes"
-                        : "No",
-                    onChanged: (value) {
-                      setState(() {
-                        if (value == 'Yes') {
-                          estateListingController.negotiable.value = 1;
-                        } else {
-                          estateListingController.negotiable.value = 0;
-                        }
-                      });
-                    },
-                    items: [
-                      "Yes",
-                      "No",
-                    ].map((option) {
-                      return DropdownMenuItem(
-                        value: option,
-                        child: Text(option),
-                      );
-                    }).toList(),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Obx(
-                    () => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("state (State)"),
-                        estateListingController.state.value == ''
-                            ? FormBuilderDropdown(
-                                name: 'state',
-                                isExpanded: true,
-                                onChanged: (value) {
-                                  estateListingController.state.value =
-                                      value.toString();
-                                  loadStateLgaController.handleEstateFetchLga();
-                                },
-                                items:
-                                    loadStateLgaController.data.map((option) {
-                                  return DropdownMenuItem(
-                                    value: option['state'].toString(),
-                                    child: Text(option['state'].toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(),
+                            const Text("Currency Type"),
+                            // currency == null
+                            //     ?
+                            estateListingController.currency.value == ''
+                                ? FormBuilderDropdown(
+                                    name: 'currency',
+                                    isExpanded: true,
+                                    onChanged: (value) {
+                                      estateListingController.currency.value =
+                                          value.toString();
+                                    },
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    items: [
+                                      "Naira",
+                                      "Dollar",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                  )
+                                : FormBuilderDropdown(
+                                    name: 'currency',
+                                    isExpanded: true,
+                                    initialValue:
+                                        estateListingController.currency.value,
+                                    onChanged: (value) {
+                                      estateListingController.currency.value =
+                                          value.toString();
+                                    },
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(),
+                                    ]),
+                                    items: [
+                                      "Naira",
+                                      "Dollar",
+                                    ].map((option) {
+                                      return DropdownMenuItem(
+                                        value: option,
+                                        child: Text(option),
+                                      );
+                                    }).toList(),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              )
-                            : FormBuilderDropdown(
-                                name: 'State',
-                                isExpanded: true,
-                                initialValue:
-                                    estateListingController.state.value,
-                                onChanged: (value) {
-                                  estateListingController.state.value =
-                                      value.toString();
-                                  loadStateLgaController.handleEstateFetchLga();
-                                },
-                                items:
-                                    loadStateLgaController.data.map((option) {
-                                  return DropdownMenuItem(
-                                    value: option['state'].toString(),
-                                    child: Text(option['state'].toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(),
-                                  ),
-                                ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text("Facilities in the area? (tick)"),
+                            MultiSelectDialogField(
+                              selectedColor: kPrimary,
+                              selectedItemsTextStyle:
+                                  TextStyle(color: context.iconColor),
+                              dialogWidth: MediaQuery.of(context).size.width,
+                              itemsTextStyle:
+                                  TextStyle(color: context.iconColor),
+                              buttonIcon: const Icon(
+                                Icons.check_box,
+                                color: kPrimary,
+                                size: 15,
                               ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Obx(
-                    () => Visibility(
-                      visible: estateListingController.state.string == ''
-                          ? false
-                          : true,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("LGA"),
+                              initialValue: estateListingController.facilities
+                                  .cast<String>(), // Cast to List<String>
+                              items: [
+                                "Schools",
+                                "Food",
+                                "Market",
+                                "Restaurant",
+                                "Grocery Stores",
+                                "Church",
+                                "Cinema",
+                                "Free Wifi",
+                                "Swimming Pool",
+                                "Gym Center",
+                                "Recreational Centers",
+                                "SPA",
+                                "Saloon Centers",
+                                "Security",
+                                "Good Internet",
+                                "Air-Conditioning",
+                                "Furnished Interior",
+                                "Secured Parking Space",
+                                "Lounge",
+                                "Walldrobe",
+                                "Microwave",
+                                "Trash Collection"
+                              ].map((e) => MultiSelectItem(e, e)).toList(),
+                              onConfirm: (List<String> selected) {},
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  )),
+                              onSaved: (newValue) {
+                                setState(() {
+                                  estateListingController.facilities.value =
+                                      newValue!;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            getProfileController.hasSubscription.value
+                                ? Container()
+                                : gettingPlan
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: kPrimary,
+                                        ),
+                                      )
+                                    : SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            for (var x = 0;
+                                                x < plans.length;
+                                                x++)
+                                              paymentPlan(
+                                                id: plans[x].id!,
+                                                selected: getProfileController
+                                                        .subscriptionId.value ==
+                                                    plans[x].id.toString(),
+                                                name: plans[x].name!,
+                                                price:
+                                                    plans[x].price.toString(),
+                                                benefits: plans[x].benefit!,
+                                                subscriptionId:
+                                                    getProfileController
+                                                        .subscriptionId.value,
+                                                returnUrl: EstateMarketScreen(),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text(
+                              "Property Media",
+                            ),
+                            // ignore: duplicate_ignore
+
                             InkWell(
                               onTap: () {
-                                showLga();
+                                // handleGetImage();
+                                estateListingController.getImage();
                               },
-                              child: Container(
+                              child: AnimatedContainer(
+                                padding: const EdgeInsets.all(8),
+                                height: estateListingController.newfiles.isEmpty
+                                    ? 50
+                                    : newfiles.length > 3
+                                        ? 600
+                                        : 300,
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1,
-                                    color: context.iconColor!,
-                                  ),
-                                  borderRadius: BorderRadius.circular(7),
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: context.iconColor!),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(estateListingController.lga.string),
-                                      const Icon(
-                                        CupertinoIcons.arrowtriangle_down_fill,
-                                        size: 12,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
-                          ]),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Property Address"),
-                  FormBuilderTextField(
-                    name: 'propertyAddress',
-                    maxLength: 30,
-                    keyboardType: TextInputType.streetAddress,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                    ]),
-                    onChanged: (value) {
-                      setState(() {
-                        estateListingController.propertyAddress.value =
-                            value.toString();
-                      });
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Detail Description of Property"),
-                  estateListingController.description.value == ''
-                      ? FormBuilderTextField(
-                          name: 'description',
-                          minLines: 3,
-                          maxLines: 5,
-                          maxLength: 250,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          onChanged: (value) {
-                            estateListingController.description.value =
-                                value.toString();
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
-                        )
-                      : FormBuilderTextField(
-                          name: 'description',
-                          minLines: 3,
-                          maxLines: 5,
-                          maxLength: 250,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          initialValue:
-                              estateListingController.description.value,
-                          onChanged: (value) {
-                            estateListingController.description.value =
-                                value.toString();
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
-                        ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Property Condition"),
-                  estateListingController.propertyCondition.value == ''
-                      ? FormBuilderDropdown(
-                          name: 'propertyCondition',
-                          isExpanded: true,
-                          onChanged: (value) {
-                            estateListingController.propertyCondition.value =
-                                value.toString();
-                          },
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          items: [
-                            "Newly Built",
-                            "Fairly Used",
-                            "Old",
-                          ].map((option) {
-                            return DropdownMenuItem(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
-                        )
-                      : FormBuilderDropdown(
-                          name: 'propertyCondition',
-                          isExpanded: true,
-                          initialValue:
-                              estateListingController.propertyCondition,
-                          onChanged: (value) {
-                            estateListingController.propertyCondition.value =
-                                value.toString();
-                          },
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          items: [
-                            "Newly Built",
-                            "Fairly Used",
-                            "Old",
-                          ].map((option) {
-                            return DropdownMenuItem(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
-                        ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Currency Type"),
-                  // currency == null
-                  //     ?
-                  estateListingController.currency.value == ''
-                      ? FormBuilderDropdown(
-                          name: 'currency',
-                          isExpanded: true,
-                          onChanged: (value) {
-                            estateListingController.currency.value =
-                                value.toString();
-                          },
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          items: [
-                            "Naira",
-                            "Dollar",
-                          ].map((option) {
-                            return DropdownMenuItem(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
-                        )
-                      : FormBuilderDropdown(
-                          name: 'currency',
-                          isExpanded: true,
-                          initialValue: estateListingController.currency.value,
-                          onChanged: (value) {
-                            estateListingController.currency.value =
-                                value.toString();
-                          },
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                          items: [
-                            "Naira",
-                            "Dollar",
-                          ].map((option) {
-                            return DropdownMenuItem(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(),
-                            ),
-                          ),
-                        ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Facilities in the area? (tick)"),
-                  MultiSelectDialogField(
-                    selectedColor: const Color(0XFF0072BA),
-                    dialogWidth: MediaQuery.of(context).size.width,
-                    itemsTextStyle: TextStyle(color: context.iconColor),
-                    buttonIcon: const Icon(
-                      Icons.check_box,
-                      color: Color(0XFF0072BA),
-                      size: 15,
-                    ),
-                    items: [
-                      "Schools",
-                      "Food",
-                      "Market",
-                      "Restaurant",
-                      "Grocery Stores",
-                      "Church",
-                      "Cinema",
-                      "Free Wifi",
-                      "Swimming Pool",
-                      "Gym Center",
-                      "Recreational Centers",
-                      "SPA",
-                      "Saloon Centers",
-                      "Security",
-                      "Good Internet",
-                      "Air-Conditioning",
-                      "Furnished Interior",
-                      "Secured Parking Space",
-                      "Lounge",
-                      "Walldrobe",
-                      "Microwave",
-                      "Trash Collection"
-                    ].map((e) => MultiSelectItem(e, e)).toList(),
-                    onConfirm: (List<String> selected) {},
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: Colors.grey,
-                        )),
-                    onSaved: (newValue) {
-                      setState(() {
-                        estateListingController.facilities.value = newValue!;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text("Property Media"),
-                  // ignore: duplicate_ignore
-
-                  InkWell(
-                    onTap: () {
-                      // handleGetImage();
-                      estateListingController.getImage();
-                    },
-                    child: AnimatedContainer(
-                      padding: const EdgeInsets.all(8),
-                      height: estateListingController.newfiles.isEmpty
-                          ? 50
-                          : newfiles.length > 3
-                              ? 600
-                              : 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(),
-                      ),
-                      duration: const Duration(milliseconds: 500),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.camera_alt_outlined,
-                                    color: Color(0XFF0072BA),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  // files == null
-                                  //     ? const Text("select photo")
-                                  //     : const Text("image Available now"),
-                                ],
-                              ),
-                              // files.isEmpty
-                              //     ? Image.asset("assets/images/avatar.png")
-                              //     : CircleAvatar(
-                              //         child: Image.file(
-                              //         files[0],
-                              //         fit: BoxFit.fitHeight,
-                              //       ))
-                            ],
-                          ),
-                          estateListingController.newfiles.isEmpty
-                              ? Container()
-                              : SizedBox(
-                                  child: GridView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: estateListingController
-                                          .newfiles.length,
-                                      physics: const ScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                                              maxCrossAxisExtent: 150,
-                                              crossAxisSpacing: 5,
-                                              mainAxisSpacing: 5),
-                                      itemBuilder: (context, index) => Stack(
-                                            children: [
-                                              Image.file(estateListingController
-                                                  .newfiles[index]),
-                                              Positioned(
-                                                  child: InkWell(
-                                                onTap: () {
-                                                  setState(() {
+                                duration: const Duration(milliseconds: 500),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.camera_alt_outlined,
+                                              color: kPrimary,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            // files == null
+                                            //     ? const Text("select photo")
+                                            //     : const Text("image Available now"),
+                                          ],
+                                        ),
+                                        // files.isEmpty
+                                        //     ? Image.asset("assets/images/avatar.png")
+                                        //     : CircleAvatar(
+                                        //         child: Image.file(
+                                        //         files[0],
+                                        //         fit: BoxFit.fitHeight,
+                                        //       ))
+                                      ],
+                                    ),
+                                    estateListingController.newfiles.isEmpty
+                                        ? Container()
+                                        : SizedBox(
+                                            child: GridView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
                                                     estateListingController
-                                                        .newfiles
-                                                        .removeAt(index);
-                                                  });
-                                                },
-                                                child: const Icon(
-                                                  Icons.cancel_rounded,
-                                                  color: Colors.white,
-                                                ),
-                                              )),
-                                            ],
-                                          )),
+                                                        .newfiles.length,
+                                                physics: const ScrollPhysics(),
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                                        maxCrossAxisExtent: 150,
+                                                        crossAxisSpacing: 5,
+                                                        mainAxisSpacing: 5),
+                                                itemBuilder: (context, index) =>
+                                                    Stack(
+                                                      children: [
+                                                        Image.file(
+                                                            estateListingController
+                                                                    .newfiles[
+                                                                index]),
+                                                        Positioned(
+                                                            child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              estateListingController
+                                                                  .newfiles
+                                                                  .removeAt(
+                                                                      index);
+                                                            });
+                                                          },
+                                                          child: const Icon(
+                                                            Icons
+                                                                .cancel_rounded,
+                                                            color: Colors.white,
+                                                          ),
+                                                        )),
+                                                      ],
+                                                    )),
+                                          ),
+                                  ],
                                 ),
-                        ],
-                      ),
-                    ),
-                  ),
+                              ),
+                            ),
 
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 500,
-                    child: Material(
-                      color: const Color(0XFF0072BA),
-                      borderRadius: BorderRadius.circular(5),
-                      child: MaterialButton(
-                        onPressed: () {
-                          handlePublish();
-                          // print(newfiles.length);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.width / 35,
-                            bottom: MediaQuery.of(context).size.width / 35,
-                            left: MediaQuery.of(context).size.width / 9,
-                            right: MediaQuery.of(context).size.width / 9,
-                          ),
-                          child: isLoading
-                              ? const CircularProgressIndicator()
-                              : const Text(
-                                  "Publish",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              width: 500,
+                              child: Material(
+                                color: kPrimary,
+                                borderRadius: BorderRadius.circular(5),
+                                child: MaterialButton(
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate() &&
+                                        _estateFeeFormKey.currentState!
+                                            .validate()) {
+                                      var res = await estateListingController
+                                          .handleShowConfirmPrice(context);
+                                      if (res == true) {
+                                        handlePublish();
+                                      } else {
+                                        print("false");
+                                      }
+                                    }
+
+                                    // print(newfiles.length);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.width /
+                                          35,
+                                      bottom:
+                                          MediaQuery.of(context).size.width /
+                                              35,
+                                      left:
+                                          MediaQuery.of(context).size.width / 9,
+                                      right:
+                                          MediaQuery.of(context).size.width / 9,
+                                    ),
+                                    child: isLoading
+                                        ? const CircularProgressIndicator()
+                                        : const Text(
+                                            "Publish",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ),
                                   ),
                                 ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     InkWell(
-                  //       onTap: () {
-                  //         handleSave();
-                  //       },
-                  //       child: Container(
-                  //         decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(5),
-                  //             border: Border.all(
-                  //               color: const Color(0XFF0072BA),
-                  //             )),
-                  //         child: Padding(
-                  //           padding: EdgeInsets.only(
-                  //             top: MediaQuery.of(context).size.width / 35,
-                  //             bottom: MediaQuery.of(context).size.width / 35,
-                  //             left: MediaQuery.of(context).size.width / 11,
-                  //             right: MediaQuery.of(context).size.width / 11,
-                  //           ),
-                  //           child: isSaving
-                  //               ? const CircularProgressIndicator()
-                  //               : const Text(
-                  //                   "Save",
-                  //                   style: TextStyle(
-                  //                     color: Color(0XFF0072BA),
-                  //                     fontSize: 20,
-                  //                   ),
-                  //                 ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -1033,7 +1155,8 @@ class _EstateMarketState extends State<EstateMarket> {
 
   Future handlePublish() async {
     print(estateListingController.price.value);
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() &&
+        _estateFeeFormKey.currentState!.validate()) {
       if (estateListingController.newfiles.isEmpty ||
           estateListingController.newfiles.length < 3) {
         AwesomeDialog(
@@ -1083,7 +1206,7 @@ class _EstateMarketState extends State<EstateMarket> {
             isLoading = true;
           });
           _formKey.currentState!.save();
-
+          _estateFeeFormKey.currentState!.save();
           final prefs = await SharedPreferences.getInstance();
 
           var token = prefs.getString('token');
@@ -1103,7 +1226,7 @@ class _EstateMarketState extends State<EstateMarket> {
           request.fields['kitchen'] = "0";
           request.fields['rental_frequency'] = forRent == true
               ? estateListingController.rentFrequency.value
-              : 'Per year';
+              : '';
           request.fields['rental_fee'] = estateListingController.price.value;
           request.fields['other_charges'] = '0';
           request.fields['caution_fee'] = '0';
@@ -1150,321 +1273,6 @@ class _EstateMarketState extends State<EstateMarket> {
               isLoading = false;
             });
             estateListingController.dispose();
-            AwesomeDialog(
-                context: context,
-                dialogType: DialogType.success,
-                borderSide: const BorderSide(
-                  color: Colors.green,
-                  width: 2,
-                ),
-                width: MediaQuery.of(context).size.width / 1.2,
-                buttonsBorderRadius: const BorderRadius.all(
-                  Radius.circular(2),
-                ),
-                dismissOnTouchOutside: false,
-                dismissOnBackKeyPress: false,
-                headerAnimationLoop: false,
-                animType: AnimType.bottomSlide,
-                title: 'Published  successfully!',
-                desc: "You can check your profile page to edit few info!",
-                btnOk: ElevatedButton(
-                  onPressed: () {
-                    estateListingController.handleResetInformation();
-                    Get.off(const HomePageRoot(navigateIndex: 0));
-                  },
-                  child: const Text(
-                    "Go Home",
-                    style: TextStyle(color: mobileButtonColor, fontSize: 14),
-                  ),
-                )).show();
-            estateListingController.handleResetInformation();
-          } else if (response.statusCode == 500) {
-            var msg = jsonDecode(respStr);
-            print(msg['message']);
-            setState(() {
-              isLoading = false;
-            });
-            AwesomeDialog(
-              context: context,
-              dialogType: DialogType.error,
-              borderSide: const BorderSide(
-                color: Colors.red,
-                width: 2,
-              ),
-              width: 280,
-              buttonsBorderRadius: const BorderRadius.all(
-                Radius.circular(2),
-              ),
-              dismissOnTouchOutside: true,
-              dismissOnBackKeyPress: false,
-              headerAnimationLoop: false,
-              animType: AnimType.bottomSlide,
-              title: 'Listing Failed',
-              desc: "something went wrong",
-              showCloseIcon: true,
-              btnCancelOnPress: () {},
-            ).show();
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-            var msg = jsonDecode(respStr);
-            AwesomeDialog(
-              context: context,
-              dialogType: DialogType.error,
-              borderSide: const BorderSide(
-                color: Colors.red,
-                width: 2,
-              ),
-              width: 280,
-              buttonsBorderRadius: const BorderRadius.all(
-                Radius.circular(2),
-              ),
-              dismissOnTouchOutside: true,
-              dismissOnBackKeyPress: false,
-              headerAnimationLoop: false,
-              animType: AnimType.bottomSlide,
-              title: 'Listing Failed',
-              desc: msg['message'].toString(),
-              showCloseIcon: true,
-              btnCancelOnPress: () {},
-            ).show();
-          }
-        } on TimeoutException catch (e) {
-          setState(() {
-            isLoading = true;
-          });
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
-            width: 280,
-            buttonsBorderRadius: const BorderRadius.all(
-              Radius.circular(2),
-            ),
-            dismissOnTouchOutside: true,
-            dismissOnBackKeyPress: false,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            title: 'Listing Failed',
-            desc: e.toString(),
-            showCloseIcon: true,
-            btnCancelOnPress: () {},
-          ).show();
-        } on SocketException catch (e) {
-          setState(() {
-            isLoading = true;
-          });
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
-            width: 280,
-            buttonsBorderRadius: const BorderRadius.all(
-              Radius.circular(2),
-            ),
-            dismissOnTouchOutside: true,
-            dismissOnBackKeyPress: false,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            title: 'Listing Failed',
-            desc: e.toString(),
-            showCloseIcon: true,
-            btnCancelOnPress: () {},
-          ).show();
-        } on Error catch (e) {
-          setState(() {
-            isLoading = true;
-          });
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
-            width: 280,
-            buttonsBorderRadius: const BorderRadius.all(
-              Radius.circular(2),
-            ),
-            dismissOnTouchOutside: true,
-            dismissOnBackKeyPress: false,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            title: 'Listing Failed',
-            desc: e.toString(),
-            showCloseIcon: true,
-            btnCancelOnPress: () {},
-          ).show();
-        }
-      }
-    }
-  }
-
-  Future handleSave() async {
-    if (_formKey.currentState!.validate() &&
-        _estateFeeFormKey.currentState!.validate()) {
-      if (estateListingController.newfiles.isEmpty ||
-          estateListingController.newfiles.length < 3) {
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-          width: 280,
-          buttonsBorderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-          dismissOnTouchOutside: true,
-          dismissOnBackKeyPress: false,
-          headerAnimationLoop: false,
-          animType: AnimType.bottomSlide,
-          title: 'Listing Failed',
-          desc: "Require a minimum of 3 images",
-          showCloseIcon: true,
-          btnCancelOnPress: () {},
-        ).show();
-      } else if (estateListingController.newfiles.length > 5) {
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-          width: 280,
-          buttonsBorderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-          dismissOnTouchOutside: true,
-          dismissOnBackKeyPress: false,
-          headerAnimationLoop: false,
-          animType: AnimType.bottomSlide,
-          title: 'Listing Failed',
-          desc: "You can only upload a maximum of 5 images",
-          showCloseIcon: true,
-          btnCancelOnPress: () {},
-        ).show();
-      } else if (estateListingController.state.string == '') {
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-          width: 280,
-          buttonsBorderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-          dismissOnTouchOutside: true,
-          dismissOnBackKeyPress: false,
-          headerAnimationLoop: false,
-          animType: AnimType.bottomSlide,
-          desc: "Please select state",
-          showCloseIcon: true,
-          btnOkOnPress: () {},
-        ).show();
-      } else if (estateListingController.lga.string == '') {
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
-          width: 280,
-          buttonsBorderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-          dismissOnTouchOutside: true,
-          dismissOnBackKeyPress: false,
-          headerAnimationLoop: false,
-          animType: AnimType.bottomSlide,
-          desc: "Please select LGA",
-          showCloseIcon: true,
-          btnOkOnPress: () {},
-        ).show();
-      } else {
-        try {
-          setState(() {
-            isLoading = true;
-          });
-          _formKey.currentState!.save();
-
-          final prefs = await SharedPreferences.getInstance();
-
-          var token = prefs.getString('token');
-          final request =
-              http.MultipartRequest('POST', Uri.parse("$baseUrl/listing"));
-
-          request.fields['property_name'] =
-              estateListingController.propertyName.value;
-          request.fields['facilities'] =
-              jsonEncode(estateListingController.facilities);
-          request.fields['age_restriction'] = '0';
-          request.fields['design_type'] = 'Modern';
-          request.fields['bathroom'] = "0";
-          request.fields['bedroom'] = "0";
-          request.fields['living_room'] = "0";
-          request.fields['currency'] = estateListingController.currency.value;
-          request.fields['kitchen'] = "0";
-          request.fields['rental_frequency'] = forRent == true
-              ? estateListingController.rentFrequency.value
-              : 'Per year';
-          request.fields['rental_fee'] = estateListingController.price.value;
-          request.fields['other_charges'] = '0';
-          request.fields['caution_fee'] = '0';
-          request.fields['legal_fee'] = '0';
-          request.fields['covered_by_property'] = '0';
-          request.fields['agency_fee'] = '0';
-          request.fields['state'] = estateListingController.state.value;
-          request.fields['lga'] = estateListingController.lga.value;
-          request.fields['country'] = 'Nigeria';
-          request.fields['total_area_of_land'] = '0';
-          request.fields['interior_design'] = 'Furnished';
-          request.fields['parking_space'] = '0';
-
-          request.fields['availability_of_water'] = '0';
-
-          request.fields['availability_of_electricity'] = '0';
-
-          request.fields['description'] =
-              estateListingController.description.value;
-          request.fields['property_category'] = 'Estate Market';
-          request.fields['property_type'] =
-              estateListingController.propertyType.value;
-          request.fields['property_condition'] =
-              estateListingController.propertyCondition.value;
-          request.fields['status'] = 'Saved';
-          request.fields['property_address'] =
-              estateListingController.propertyAddress.value;
-          request.fields['negotiable'] =
-              estateListingController.negotiable.value == 1 ? "1" : "0";
-          request.headers['Authorization'] = "$token";
-
-          for (var file in estateListingController.newfiles) {
-            final httpImage =
-                await http.MultipartFile.fromPath('images', file.path);
-            request.files.add(httpImage);
-            print(httpImage);
-          }
-
-          var response = await request.send();
-          final respStr = await response.stream.bytesToString();
-          print(respStr);
-          if (response.statusCode == 200) {
-            setState(() {
-              isLoading = false;
-            });
             AwesomeDialog(
                 context: context,
                 dialogType: DialogType.success,

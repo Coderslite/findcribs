@@ -18,15 +18,14 @@ class Property_Listings extends StatefulWidget {
   final String? propertyType;
   final String? price;
   const Property_Listings(
-      {Key? key,
+      {super.key,
       this.id,
       this.images,
       this.bedroom,
       this.propertyAddress,
       this.propertyType,
       this.price,
-      required this.propertyState})
-      : super(key: key);
+      required this.propertyState});
 
   @override
   State<Property_Listings> createState() => _Property_ListingsState();
@@ -82,7 +81,8 @@ class _Property_ListingsState extends State<Property_Listings> {
                   style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: context.isDarkMode ? white : const Color(0xFF09172D)),
+                      color:
+                          context.isDarkMode ? white : const Color(0xFF09172D)),
                 ),
                 const SizedBox(
                   height: 7,
@@ -92,14 +92,16 @@ class _Property_ListingsState extends State<Property_Listings> {
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: context.isDarkMode ? white : const Color(0xFF304059)),
+                      color:
+                          context.isDarkMode ? white : const Color(0xFF304059)),
                 ),
                 Text(
                   widget.propertyState.toString(),
                   style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: context.isDarkMode ? white : const Color(0xFF8A99B1)),
+                      color:
+                          context.isDarkMode ? white : const Color(0xFF8A99B1)),
                 ),
                 const SizedBox(
                   height: 8.64,

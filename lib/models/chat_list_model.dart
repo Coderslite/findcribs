@@ -1,6 +1,7 @@
 class ChatMessageModel {
   int? id;
-  List? users;
+  Map? userOne;
+  Map? userTwo;
   List? messages;
   Map? count;
   Map? lastMessage;
@@ -18,7 +19,8 @@ class ChatMessageModel {
 
   ChatMessageModel({
     this.id,
-    this.users,
+    this.userOne,
+    this.userTwo,
     this.messages,
     this.count,
     this.lastMessage,
@@ -38,7 +40,8 @@ class ChatMessageModel {
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
       id: json['id'],
-      users: json['users'],
+      userOne: json['userOne'],
+      userTwo: json['userTwo'],
       messages: json['messages'],
       count: json['_count'],
       lastMessage: json['lastMessage'],

@@ -6,6 +6,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:findcribs/components/constants.dart';
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:findcribs/screens/listing_process/listing/edit_listing/estate_market_edit/estate_market_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,7 @@ class SinglePropertyStatus extends StatefulWidget {
   final String? category;
   final HouseListModel houseModel;
   const SinglePropertyStatus({
-    Key? key,
+    super.key,
     required this.image,
     required this.currency,
     required this.propertyAddress,
@@ -53,7 +54,7 @@ class SinglePropertyStatus extends StatefulWidget {
     this.category,
     required this.propertyName,
     required this.houseModel,
-  }) : super(key: key);
+  });
 
   @override
   State<SinglePropertyStatus> createState() => _SinglePropertyStatusState();
@@ -167,12 +168,6 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                           const Color(0XFFC62E3D),
                                         ),
                                         ItemModel(
-                                          'Promote',
-                                          Image.asset(
-                                              'assets/images/promote.png'),
-                                          const Color(0XFFFEC121),
-                                        ),
-                                        ItemModel(
                                           'Delete',
                                           Image.asset(
                                               'assets/images/delete.png'),
@@ -213,7 +208,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                                             .only(left: 10),
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 vertical: 10),
                                                         child: Text(
                                                           item.title,
@@ -279,7 +274,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                                   child: Container(
                                                     height: 40,
                                                     padding: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 20),
                                                     child: Row(
                                                       children: <Widget>[
@@ -288,11 +283,11 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                                           child: Container(
                                                             margin:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     left: 10),
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     vertical:
                                                                         10),
                                                             child: Text(
@@ -346,7 +341,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                                   child: Container(
                                                     height: 40,
                                                     padding: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 20),
                                                     child: Row(
                                                       children: <Widget>[
@@ -355,11 +350,11 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
                                                           child: Container(
                                                             margin:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     left: 10),
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     vertical:
                                                                         10),
                                                             child: Text(
@@ -488,7 +483,7 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
       editRentController.currency.value = widget.houseModel.currency.toString();
       editRentController.kitchen.value = widget.houseModel.kitchen.toString();
       editRentController.rentFrequency.value =
-          widget.houseModel.rentalFrequncy.toString();
+          widget.houseModel.rentalFrequency.toString();
       editRentController.rentFee.value = widget.houseModel.rentalFee.toString();
       editRentController.otherCharges.value =
           widget.houseModel.otherCharges.toString();
@@ -819,74 +814,81 @@ class _SinglePropertyStatusState extends State<SinglePropertyStatus> {
   }
 
   handleDeleteActiveListing(String id) async {
-    setState(() {
-      isDeleting = true;
-    });
-
-    var prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString('token');
-    var response =
-        await http.delete(Uri.parse("$baseUrl/listing/$id"), headers: {
-      "Authorization": "$token",
-    }, body: {
-      "id": id,
-      "status": "Active"
-    });
-    var responseData = jsonDecode(response.body);
-    if (responseData['status'] == true) {
+    try {
       setState(() {
-        _controller.hideMenu();
-        isDeleting = false;
+        isDeleting = true;
       });
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        borderSide: const BorderSide(
-          color: Colors.green,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        title: 'Listing Deleted',
-        desc: responseData['message'],
-        showCloseIcon: true,
-        btnOkOnPress: () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-            return const ActiveListing();
-          }));
-        },
-      ).show();
-    } else {
-      setState(() {
-        _controller.hideMenu();
 
-        isDeleting = false;
+      var prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+      var response =
+          await http.delete(Uri.parse("$baseUrl/listing/$id"), headers: {
+        "Authorization": "$token",
+      }, body: {
+        "id": id,
+        "status": "Active"
       });
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2,
-        ),
-        width: 280,
-        buttonsBorderRadius: const BorderRadius.all(
-          Radius.circular(2),
-        ),
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-        headerAnimationLoop: false,
-        animType: AnimType.bottomSlide,
-        desc: responseData['message'],
-        showCloseIcon: true,
-        btnOkOnPress: () {},
-      ).show();
+      var responseData = jsonDecode(response.body);
+      if (responseData['status'] == true) {
+        setState(() {
+          _controller.hideMenu();
+          isDeleting = false;
+        });
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          borderSide: const BorderSide(
+            color: Colors.green,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          title: 'Listing Deleted',
+          desc: responseData['message'],
+          showCloseIcon: true,
+          btnOkOnPress: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
+              return const ActiveListing();
+            }));
+          },
+        ).show();
+      } else {
+        setState(() {
+          _controller.hideMenu();
+
+          isDeleting = false;
+        });
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 2,
+          ),
+          width: 280,
+          buttonsBorderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+          dismissOnTouchOutside: true,
+          dismissOnBackKeyPress: false,
+          headerAnimationLoop: false,
+          animType: AnimType.bottomSlide,
+          desc: responseData['message'],
+          showCloseIcon: true,
+          btnOkOnPress: () {},
+        ).show();
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      isDeleting = false;
+      setState(() {});
     }
   }
 

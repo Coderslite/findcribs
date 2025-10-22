@@ -4,6 +4,7 @@ import 'package:findcribs/screens/listing_process/listing/components/rent/rent3_
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,15 +21,14 @@ class Rent2Stepper extends StatefulWidget {
   final String? livingroom;
   final String? kitchen;
   const Rent2Stepper(
-      {Key? key,
+      {super.key,
       this.propertyCategory,
       this.houseType,
       this.propertyAddress,
       this.bedroom,
       this.bathrooom,
       this.livingroom,
-      this.kitchen})
-      : super(key: key);
+      this.kitchen});
 
   @override
   State<Rent2Stepper> createState() => _Rent2StepperState();
@@ -409,286 +409,164 @@ class _Rent2StepperState extends State<Rent2Stepper> {
             ),
     ];
 
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
+    return KeyboardDismissOnTap(
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.arrow_back_ios)),
+                    const Text(
+                      "Rent Listing",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    const Text("")
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
                       onTap: () {
-                        Navigator.pop(context);
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return ListPropertyScreen1(
+                        //     tab: 0,
+                        //   );
+                        // }));
                       },
-                      child: const Icon(Icons.arrow_back_ios)),
-                  const Text(
-                    "Rent Listing",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const Text("")
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return ListPropertyScreen1(
-                      //     tab: 0,
-                      //   );
-                      // }));
-                    },
-                    child: const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Color(0XFF0072BA),
-                      child: Text("1"),
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Color(0XFF0072BA),
+                        child: Text("1"),
+                      ),
                     ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return const Rent2Stepper();
-                      // }));
-                    },
-                    child: const CircleAvatar(
-                      radius: 12,
-                      backgroundColor: Color(0XFF0072BA),
-                      child: Text("2"),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
                     ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return const Rent3();
-                      // }));
-                    },
-                    child: const CircleAvatar(
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return const Rent2Stepper();
+                        // }));
+                      },
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Color(0XFF0072BA),
+                        child: Text("2"),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return const Rent3();
+                        // }));
+                      },
+                      child: const CircleAvatar(
+                        radius: 12,
+                        backgroundColor: Colors.grey,
+                        child: Text(
+                          "3",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.grey,
+                      height: 1,
+                      width: size.width / 5,
+                    ),
+                    const CircleAvatar(
                       radius: 12,
                       backgroundColor: Colors.grey,
                       child: Text(
-                        "3",
+                        "4",
                         style: TextStyle(color: Colors.white),
                       ),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey,
-                    height: 1,
-                    width: size.width / 5,
-                  ),
-                  const CircleAvatar(
-                    radius: 12,
-                    backgroundColor: Colors.grey,
-                    child: Text(
-                      "4",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                ],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Obx(
-                    () => FormBuilder(
-                      key: formKey2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 10.0,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("Currency Type"),
-                            rentListingController.currency.value == ''
-                                ? FormBuilderDropdown(
-                                    name: 'currency',
-                                    isExpanded: true,
-                                    items: [
-                                      "Naira",
-                                      "Dollar",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      rentListingController.currency.value =
-                                          value.toString();
-                                    },
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  )
-                                : FormBuilderDropdown(
-                                    name: 'currency',
-                                    isExpanded: true,
-                                    initialValue:
-                                        rentListingController.currency.value,
-                                    items: [
-                                      "Naira",
-                                      "Dollar",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    onChanged: (value) {
-                                      rentListingController.currency.value =
-                                          value.toString();
-                                    },
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Rental Frequency"),
-                            rentListingController.rentFrequency.value == ''
-                                ? FormBuilderDropdown(
-                                    name: 'rent',
-                                    isExpanded: true,
-                                    items: [
-                                      "Per Day",
-                                      "Per Week",
-                                      "Per 2weeks",
-                                      "Per Month",
-                                      "Per 3Months",
-                                      "Per 6Months",
-                                      "Per Year",
-                                      "For 2Years",
-                                      "For 5Years",
-                                      "For 8Years",
-                                      "For 10Years",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      rentListingController.rentFrequency
-                                          .value = value.toString();
-                                    },
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  )
-                                : FormBuilderDropdown(
-                                    name: 'rent',
-                                    isExpanded: true,
-                                    initialValue: rentListingController
-                                        .rentFrequency.value,
-                                    items: [
-                                      "Per Day",
-                                      "Per Week",
-                                      "Per 2weeks",
-                                      "Per Month",
-                                      "Per 3Months",
-                                      "Per 6Months",
-                                      "Per Year",
-                                      "For 2Years",
-                                      "For 5Years",
-                                      "For 8Years",
-                                      "For 10Years",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      rentListingController.rentFrequency
-                                          .value = value.toString();
-                                    },
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Rental fee"),
-                            rentListingController.rentFee.value == '0'
-                                ? FormBuilder(
-                                    key: rentFeeFormKey,
-                                    child: FormBuilderTextField(
-                                      name: 'rentalFee',
-                                                  validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Value is required';
-                                        }
-                                        final numericValue = int.tryParse(
-                                            value.replaceAll(',', ''));
-                                        if (numericValue == null) {
-                                          return 'Invalid number format';
-                                        }
-                                        if (numericValue < 3000) {
-                                          return 'Value must be at least 3,000';
-                                        }
-                                        return null;
-                                      },
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly,
-                                        ThousandsSeparatorInputFormatter(),
-                                      ],
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Obx(
+                      () => FormBuilder(
+                        key: formKey2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 10.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Currency Type"),
+                              rentListingController.currency.value == ''
+                                  ? FormBuilderDropdown(
+                                      name: 'currency',
+                                      isExpanded: true,
+                                      items: [
+                                        "Naira",
+                                        "Dollar",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
                                       onChanged: (value) {
-                                        if (value!.isEmpty) {
-                                          rentListingController.rentFee.value =
-                                              0.toString();
-                                        } else if (rentFeeFormKey.currentState!
-                                            .validate()) {
-                                          final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
-                                          rentListingController.rentFee.value =
-                                              numericValue.toString();
-                                        }
+                                        rentListingController.currency.value =
+                                            value.toString();
                                       },
-                                      keyboardType: TextInputType.number,
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    )
+                                  : FormBuilderDropdown(
+                                      name: 'currency',
+                                      isExpanded: true,
+                                      initialValue:
+                                          rentListingController.currency.value,
+                                      items: [
+                                        "Naira",
+                                        "Dollar",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      onChanged: (value) {
+                                        rentListingController.currency.value =
+                                            value.toString();
+                                      },
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius:
@@ -697,591 +575,763 @@ class _Rent2StepperState extends State<Rent2Stepper> {
                                         ),
                                       ),
                                     ),
-                                  )
-                                : FormBuilder(
-                                    key: rentFeeFormKey,
-                                    child: FormBuilderTextField(
-                                      name: 'rentalFee',
-                                      initialValue: _formatValue(
-                                          rentListingController.rentFee.value),
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Value is required';
-                                        }
-                                        final numericValue = int.tryParse(
-                                            value.replaceAll(',', ''));
-                                        if (numericValue == null) {
-                                          return 'Invalid number format';
-                                        }
-                                        if (numericValue < 3000) {
-                                          return 'Value must be at least 3,000';
-                                        }
-                                        return null;
-                                      },
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly,
-                                        ThousandsSeparatorInputFormatter(),
-                                      ],
-                                      onChanged: (value) {
-                                        if (value!.isEmpty) {
-                                          rentListingController.rentFee.value =
-                                              0.toString();
-                                        } else if (rentFeeFormKey.currentState!
-                                            .validate()) {
-                                          final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
-                                          rentListingController.rentFee.value =
-                                              numericValue.toString();
-                                        }
-                                      },
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          borderSide: const BorderSide(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Other charges included Above?"),
-                            rentListingController.otherCharges.value == ''
-                                ? FormBuilderDropdown(
-                                    name: 'charge',
-                                    isExpanded: true,
-                                    initialValue: "No",
-                                    items: [
-                                      "Yes",
-                                      "No",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      if (value == 'Yes') {
-                                        setState(() {
-                                          otherChargesIncluded = true;
-                                          rentListingController
-                                              .otherCharges.value = 'Yes';
-                                        });
-                                      } else {
-                                        setState(() {
-                                          otherChargesIncluded = false;
-                                          rentListingController
-                                              .otherCharges.value = 'No';
-                                        });
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  )
-                                : FormBuilderDropdown(
-                                    name: 'charge',
-                                    isExpanded: true,
-                                    initialValue: rentListingController
-                                        .otherCharges.value,
-                                    items: [
-                                      "Yes",
-                                      "No",
-                                    ].map((option) {
-                                      return DropdownMenuItem(
-                                        value: option,
-                                        child: Text(option),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      if (value == 'Yes') {
-                                        setState(() {
-                                          otherChargesIncluded = true;
-                                          rentListingController
-                                              .otherCharges.value = 'Yes';
-                                        });
-                                      } else {
-                                        setState(() {
-                                          otherChargesIncluded = false;
-                                          rentListingController
-                                              .otherCharges.value = 'No';
-                                        });
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                  ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            otherChargesIncluded == false
-                                ? Column(
-                                    children: [
-                                      const Row(
-                                        children: [
-                                          Text("Caution fee"),
-                                          Icon(
-                                            Icons.info,
-                                            color: Color(0XFF8A99B1),
-                                          )
-                                        ],
-                                      ),
-                                      rentListingController.cautionFee.value ==
-                                              ''
-                                          ? Visibility(
-                                              visible:
-                                                  otherChargesIncluded == true
-                                                      ? false
-                                                      : true,
-                                              child: FormBuilder(
-                                                key: cautionFeeFormKey,
-                                                child: FormBuilderTextField(
-                                                  name: 'cautionFee',
-                                                  validator:
-                                                      FormBuilderValidators
-                                                          .compose([
-                                                    FormBuilderValidators
-                                                        .required(),
-                                                  ]),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                    ThousandsSeparatorInputFormatter(),
-                                                  ],
-                                                  onChanged: (value) {
-                                                    if (value!.isEmpty) {
-                                                      rentListingController
-                                                          .cautionFee
-                                                          .value = 0.toString();
-                                                    } else if (cautionFeeFormKey
-                                                        .currentState!
-                                                        .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
-                                                      setState(() {
-                                                        rentListingController
-                                                                .cautionFee
-                                                                .value =
-                                                        numericValue.toString();
-                                                      });
-                                                    }
-                                                  },
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      borderSide:
-                                                          const BorderSide(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : Visibility(
-                                              visible:
-                                                  otherChargesIncluded == true
-                                                      ? false
-                                                      : true,
-                                              child: FormBuilder(
-                                                key: cautionFeeFormKey,
-                                                child: FormBuilderTextField(
-                                                  name: 'cautionFee',
-                                                  initialValue: _formatValue(
-                                                      rentListingController
-                                                          .cautionFee.value),
-                                                  validator:
-                                                      FormBuilderValidators
-                                                          .compose([
-                                                    FormBuilderValidators
-                                                        .required(),
-                                                  ]),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                    ThousandsSeparatorInputFormatter(),
-                                                  ],
-                                                  onChanged: (value) {
-                                                    if (value!.isEmpty) {
-                                                      rentListingController
-                                                          .cautionFee
-                                                          .value = 0.toString();
-                                                    } else if (cautionFeeFormKey
-                                                        .currentState!
-                                                        .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
-                                                      setState(() {
-                                                        rentListingController
-                                                                .cautionFee
-                                                                .value =
-                                                            numericValue.toString();
-                                                      });
-                                                    }
-                                                  },
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      borderSide:
-                                                          const BorderSide(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      const Row(
-                                        children: [
-                                          Text("Legal fee (%)"),
-                                          Icon(
-                                            Icons.info,
-                                            color: Color(0XFF8A99B1),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border: Border.all(
-                                            // style: BorderStyle.none,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: List.generate(
-                                            rentLegalFees.length,
-                                            (index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  selectedRentLegalFee(index);
-                                                },
-                                                child: SizedBox(
-                                                  width: size.width / 12,
-                                                  child: rentLegalFees[index],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      const Row(
-                                        children: [
-                                          Text("Agency fee (%)"),
-                                          Icon(
-                                            Icons.info,
-                                            color: Color(0XFF8A99B1),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border: Border.all(
-                                            // style: BorderStyle.none,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: List.generate(
-                                            rentAgencyFees.length,
-                                            (index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  selectedRentAgencyFee(index);
-                                                },
-                                                child: SizedBox(
-                                                  width: size.width / 12,
-                                                  child: rentAgencyFees[index],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      const Row(
-                                        children: [
-                                          Text("Service Charge"),
-                                          Icon(
-                                            Icons.info,
-                                            color: Color(0XFF8A99B1),
-                                          )
-                                        ],
-                                      ),
-                                      rentListingController
-                                                  .serviceCharge.value ==
-                                              ''
-                                          ? Visibility(
-                                              visible:
-                                                  otherChargesIncluded == true
-                                                      ? false
-                                                      : true,
-                                              child: FormBuilder(
-                                                key: serviceChargeFormKey,
-                                                child: FormBuilderTextField(
-                                                  name: 'serviceCharge',
-                                                  validator:
-                                                      FormBuilderValidators
-                                                          .compose([
-                                                    FormBuilderValidators
-                                                        .required(),
-                                                  ]),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                    ThousandsSeparatorInputFormatter(),
-                                                  ],
-                                                  onChanged: (value) {
-                                                    if (value!.isEmpty) {
-                                                      rentListingController
-                                                          .serviceCharge
-                                                          .value = 0.toString();
-                                                    } else if (serviceChargeFormKey
-                                                        .currentState!
-                                                        .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
-                                                      setState(() {
-                                                        rentListingController
-                                                                .serviceCharge
-                                                                .value =
-                                                            numericValue.toString();
-                                                      });
-                                                    }
-                                                  },
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      borderSide:
-                                                          const BorderSide(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : Visibility(
-                                              visible:
-                                                  otherChargesIncluded == true
-                                                      ? false
-                                                      : true,
-                                              child: FormBuilder(
-                                                key: serviceChargeFormKey,
-                                                child: FormBuilderTextField(
-                                                  name: 'serviceCharge',
-                                                  validator:
-                                                      FormBuilderValidators
-                                                          .compose([
-                                                    FormBuilderValidators
-                                                        .required(),
-                                                  ]),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                    ThousandsSeparatorInputFormatter(),
-                                                  ],
-                                                  onChanged: (value) {
-                                                    if (value!.isEmpty) {
-                                                      rentListingController
-                                                          .serviceCharge
-                                                          .value = 0.toString();
-                                                    } else if (serviceChargeFormKey
-                                                        .currentState!
-                                                        .validate()) {
-                                                             final numericValue = int.tryParse(
-                                              value.replaceAll(',', ''));
-                                                      setState(() {
-                                                        rentListingController
-                                                                .serviceCharge
-                                                                .value =
-                                                            numericValue.toString();
-                                                      });
-                                                    }
-                                                  },
-                                                  initialValue: _formatValue(
-                                                      rentListingController
-                                                          .serviceCharge.value),
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      borderSide:
-                                                          const BorderSide(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("Total Price"),
-                                otherChargesIncluded == true
-                                    ? Text(
-                                        formatter
-                                            .format((_formatValue(
-                                                        rentListingController
-                                                            .rentFee.value) ==
-                                                    ''
-                                                ? 0
-                                                : int.parse(_formatValue(
-                                                    rentListingController
-                                                        .rentFee.value))))
-                                            .toString(),
-                                        style: const TextStyle(
-                                          color: Color(0XFF0072BA),
-                                        ),
-                                      )
-                                    : Text(
-                                        formatter
-                                            .format((rentListingController.rentFee.value == ''
-                                                ? 0
-                                                : (int.parse(_formatValue(rentListingController.rentFee.value))) +
-                                                    (rentListingController.cautionFee.value == ''
-                                                        ? 0
-                                                        : (int.parse(_formatValue(
-                                                            rentListingController
-                                                                .cautionFee
-                                                                .value)))) +
-                                                    (rentListingController.serviceCharge.value == ''
-                                                        ? 0
-                                                        : (int.parse(_formatValue(
-                                                            rentListingController
-                                                                .serviceCharge
-                                                                .value)))) +
-                                                    (rentListingController.rentFee.value == ''
-                                                        ? 0
-                                                        : ((int.parse(_formatValue(rentListingController.rentFee.value))) * rentListingController.agencyFee.value) / 100) +
-                                                    (rentListingController.rentFee.value == '' ? 0 : ((int.parse(_formatValue(rentListingController.rentFee.value)) * rentListingController.legalFee.value) / 100))))
-                                            .toString(),
-                                        style: const TextStyle(
-                                          color: Color(0XFF0072BA),
-                                        ),
-                                      ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("Negotiable?"),
-                            FormBuilderRadioGroup(
-                              name: "negotiable",
-                              initialValue:
-                                  rentListingController.negotiable.value == 1
-                                      ? "Yes"
-                                      : "No",
-                              onChanged: (value) {
-                                if (value == 'Yes') {
-                                  setState(() {
-                                    rentListingController.negotiable.value = 1;
-                                  });
-                                } else {
-                                  setState(() {
-                                    rentListingController.negotiable.value = 0;
-                                  });
-                                }
-                              },
-                              activeColor: const Color(0XFF0072BA),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
+                              const SizedBox(
+                                height: 20,
                               ),
-                              options: const [
-                                FormBuilderFieldOption(value: "Yes"),
-                                FormBuilderFieldOption(value: "No"),
-                              ],
-                              // initialValue: RentListingController.person.role,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Material(
-                                  color: const Color(0XFF0072BA),
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      handleNextScreen();
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        left:
-                                            MediaQuery.of(context).size.width /
-                                                5,
-                                        right:
-                                            MediaQuery.of(context).size.width /
-                                                5,
-                                        top: 4.5,
-                                        bottom: 4.5,
+                              const Text("Rental Frequency"),
+                              rentListingController.rentFrequency.value == ''
+                                  ? FormBuilderDropdown(
+                                      name: 'rent',
+                                      isExpanded: true,
+                                      items: [
+                                        "Per Day",
+                                        "Per Week",
+                                        "Per 2weeks",
+                                        "Per Month",
+                                        "Per 3Months",
+                                        "Per 6Months",
+                                        "Per Year",
+                                        "For 2Years",
+                                        "For 5Years",
+                                        "For 8Years",
+                                        "For 10Years",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        rentListingController.rentFrequency
+                                            .value = value.toString();
+                                      },
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
                                       ),
-                                      child: const Text(
-                                        "Save & Continue",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontFamily: "RedHatDisplay",
+                                    )
+                                  : FormBuilderDropdown(
+                                      name: 'rent',
+                                      isExpanded: true,
+                                      initialValue: rentListingController
+                                          .rentFrequency.value,
+                                      items: [
+                                        "Per Day",
+                                        "Per Week",
+                                        "Per 2weeks",
+                                        "Per Month",
+                                        "Per 3Months",
+                                        "Per 6Months",
+                                        "Per Year",
+                                        "For 2Years",
+                                        "For 5Years",
+                                        "For 8Years",
+                                        "For 10Years",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        rentListingController.rentFrequency
+                                            .value = value.toString();
+                                      },
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(),
+                                      ]),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Rental fee"),
+                              rentListingController.rentFee.value == '0'
+                                  ? FormBuilder(
+                                      key: rentFeeFormKey,
+                                      child: FormBuilderTextField(
+                                        name: 'rentalFee',
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Value is required';
+                                          }
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+                                          if (numericValue == null) {
+                                            return 'Invalid number format';
+                                          }
+                                          if (numericValue < 3000) {
+                                            return 'Value must be at least 3,000';
+                                          }
+                                          return null;
+                                        },
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          ThousandsSeparatorInputFormatter(),
+                                        ],
+                                        onChanged: (value) {
+                                          if (value!.isEmpty) {
+                                            rentListingController
+                                                .rentFee.value = 0.toString();
+                                          } else if (rentFeeFormKey
+                                              .currentState!
+                                              .validate()) {
+                                            final numericValue = int.tryParse(
+                                                value.replaceAll(',', ''));
+                                            rentListingController
+                                                    .rentFee.value =
+                                                numericValue.toString();
+                                          }
+                                        },
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: const BorderSide(),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : FormBuilder(
+                                      key: rentFeeFormKey,
+                                      child: FormBuilderTextField(
+                                        name: 'rentalFee',
+                                        initialValue: _formatValue(
+                                            rentListingController
+                                                .rentFee.value),
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Value is required';
+                                          }
+                                          final numericValue = int.tryParse(
+                                              value.replaceAll(',', ''));
+                                          if (numericValue == null) {
+                                            return 'Invalid number format';
+                                          }
+                                          if (numericValue < 3000) {
+                                            return 'Value must be at least 3,000';
+                                          }
+                                          return null;
+                                        },
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          ThousandsSeparatorInputFormatter(),
+                                        ],
+                                        onChanged: (value) {
+                                          if (value!.isEmpty) {
+                                            rentListingController
+                                                .rentFee.value = 0.toString();
+                                          } else if (rentFeeFormKey
+                                              .currentState!
+                                              .validate()) {
+                                            final numericValue = int.tryParse(
+                                                value.replaceAll(',', ''));
+                                            rentListingController
+                                                    .rentFee.value =
+                                                numericValue.toString();
+                                          }
+                                        },
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            borderSide: const BorderSide(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Other charges included Above?"),
+                              rentListingController.otherCharges.value == ''
+                                  ? FormBuilderDropdown(
+                                      name: 'charge',
+                                      isExpanded: true,
+                                      initialValue: "No",
+                                      items: [
+                                        "Yes",
+                                        "No",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        if (value == 'Yes') {
+                                          setState(() {
+                                            otherChargesIncluded = true;
+                                            rentListingController
+                                                .otherCharges.value = 'Yes';
+                                          });
+                                        } else {
+                                          setState(() {
+                                            otherChargesIncluded = false;
+                                            rentListingController
+                                                .otherCharges.value = 'No';
+                                          });
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    )
+                                  : FormBuilderDropdown(
+                                      name: 'charge',
+                                      isExpanded: true,
+                                      initialValue: rentListingController
+                                          .otherCharges.value,
+                                      items: [
+                                        "Yes",
+                                        "No",
+                                      ].map((option) {
+                                        return DropdownMenuItem(
+                                          value: option,
+                                          child: Text(option),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        if (value == 'Yes') {
+                                          setState(() {
+                                            otherChargesIncluded = true;
+                                            rentListingController
+                                                .otherCharges.value = 'Yes';
+                                          });
+                                        } else {
+                                          setState(() {
+                                            otherChargesIncluded = false;
+                                            rentListingController
+                                                .otherCharges.value = 'No';
+                                          });
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          borderSide: const BorderSide(),
+                                        ),
+                                      ),
+                                    ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              otherChargesIncluded == false
+                                  ? Column(
+                                      children: [
+                                        const Row(
+                                          children: [
+                                            Text("Caution fee"),
+                                            Icon(
+                                              Icons.info,
+                                              color: Color(0XFF8A99B1),
+                                            )
+                                          ],
+                                        ),
+                                        rentListingController
+                                                    .cautionFee.value ==
+                                                ''
+                                            ? Visibility(
+                                                visible:
+                                                    otherChargesIncluded == true
+                                                        ? false
+                                                        : true,
+                                                child: FormBuilder(
+                                                  key: cautionFeeFormKey,
+                                                  child: FormBuilderTextField(
+                                                    name: 'cautionFee',
+                                                    validator:
+                                                        FormBuilderValidators
+                                                            .compose([
+                                                      FormBuilderValidators
+                                                          .required(),
+                                                    ]),
+                                                    inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      ThousandsSeparatorInputFormatter(),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      if (value!.isEmpty) {
+                                                        rentListingController
+                                                                .cautionFee
+                                                                .value =
+                                                            0.toString();
+                                                      } else if (cautionFeeFormKey
+                                                          .currentState!
+                                                          .validate()) {
+                                                        final numericValue =
+                                                            int.tryParse(value
+                                                                .replaceAll(
+                                                                    ',', ''));
+                                                        setState(() {
+                                                          rentListingController
+                                                                  .cautionFee
+                                                                  .value =
+                                                              numericValue
+                                                                  .toString();
+                                                        });
+                                                      }
+                                                    },
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        borderSide:
+                                                            const BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Visibility(
+                                                visible:
+                                                    otherChargesIncluded == true
+                                                        ? false
+                                                        : true,
+                                                child: FormBuilder(
+                                                  key: cautionFeeFormKey,
+                                                  child: FormBuilderTextField(
+                                                    name: 'cautionFee',
+                                                    initialValue: _formatValue(
+                                                        rentListingController
+                                                            .cautionFee.value),
+                                                    validator:
+                                                        FormBuilderValidators
+                                                            .compose([
+                                                      FormBuilderValidators
+                                                          .required(),
+                                                    ]),
+                                                    inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      ThousandsSeparatorInputFormatter(),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      if (value!.isEmpty) {
+                                                        rentListingController
+                                                                .cautionFee
+                                                                .value =
+                                                            0.toString();
+                                                      } else if (cautionFeeFormKey
+                                                          .currentState!
+                                                          .validate()) {
+                                                        final numericValue =
+                                                            int.tryParse(value
+                                                                .replaceAll(
+                                                                    ',', ''));
+                                                        setState(() {
+                                                          rentListingController
+                                                                  .cautionFee
+                                                                  .value =
+                                                              numericValue
+                                                                  .toString();
+                                                        });
+                                                      }
+                                                    },
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        borderSide:
+                                                            const BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        const Row(
+                                          children: [
+                                            Text("Legal fee (%)"),
+                                            Icon(
+                                              Icons.info,
+                                              color: Color(0XFF8A99B1),
+                                            )
+                                          ],
+                                        ),
+                                        Container(
+                                          height: 32,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: Border.all(
+                                              // style: BorderStyle.none,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: List.generate(
+                                              rentLegalFees.length,
+                                              (index) {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    selectedRentLegalFee(index);
+                                                  },
+                                                  child: SizedBox(
+                                                    width: size.width / 12,
+                                                    child: rentLegalFees[index],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        const Row(
+                                          children: [
+                                            Text("Agency fee (%)"),
+                                            Icon(
+                                              Icons.info,
+                                              color: Color(0XFF8A99B1),
+                                            )
+                                          ],
+                                        ),
+                                        Container(
+                                          height: 32,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: Border.all(
+                                              // style: BorderStyle.none,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: List.generate(
+                                              rentAgencyFees.length,
+                                              (index) {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    selectedRentAgencyFee(
+                                                        index);
+                                                  },
+                                                  child: SizedBox(
+                                                    width: size.width / 12,
+                                                    child:
+                                                        rentAgencyFees[index],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        const Row(
+                                          children: [
+                                            Text("Service Charge"),
+                                            Icon(
+                                              Icons.info,
+                                              color: Color(0XFF8A99B1),
+                                            )
+                                          ],
+                                        ),
+                                        rentListingController
+                                                    .serviceCharge.value ==
+                                                ''
+                                            ? Visibility(
+                                                visible:
+                                                    otherChargesIncluded == true
+                                                        ? false
+                                                        : true,
+                                                child: FormBuilder(
+                                                  key: serviceChargeFormKey,
+                                                  child: FormBuilderTextField(
+                                                    name: 'serviceCharge',
+                                                    validator:
+                                                        FormBuilderValidators
+                                                            .compose([
+                                                      FormBuilderValidators
+                                                          .required(),
+                                                    ]),
+                                                    inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      ThousandsSeparatorInputFormatter(),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      if (value!.isEmpty) {
+                                                        rentListingController
+                                                                .serviceCharge
+                                                                .value =
+                                                            0.toString();
+                                                      } else if (serviceChargeFormKey
+                                                          .currentState!
+                                                          .validate()) {
+                                                        final numericValue =
+                                                            int.tryParse(value
+                                                                .replaceAll(
+                                                                    ',', ''));
+                                                        setState(() {
+                                                          rentListingController
+                                                                  .serviceCharge
+                                                                  .value =
+                                                              numericValue
+                                                                  .toString();
+                                                        });
+                                                      }
+                                                    },
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        borderSide:
+                                                            const BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Visibility(
+                                                visible:
+                                                    otherChargesIncluded == true
+                                                        ? false
+                                                        : true,
+                                                child: FormBuilder(
+                                                  key: serviceChargeFormKey,
+                                                  child: FormBuilderTextField(
+                                                    name: 'serviceCharge',
+                                                    validator:
+                                                        FormBuilderValidators
+                                                            .compose([
+                                                      FormBuilderValidators
+                                                          .required(),
+                                                    ]),
+                                                    inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      ThousandsSeparatorInputFormatter(),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      if (value!.isEmpty) {
+                                                        rentListingController
+                                                                .serviceCharge
+                                                                .value =
+                                                            0.toString();
+                                                      } else if (serviceChargeFormKey
+                                                          .currentState!
+                                                          .validate()) {
+                                                        final numericValue =
+                                                            int.tryParse(value
+                                                                .replaceAll(
+                                                                    ',', ''));
+                                                        setState(() {
+                                                          rentListingController
+                                                                  .serviceCharge
+                                                                  .value =
+                                                              numericValue
+                                                                  .toString();
+                                                        });
+                                                      }
+                                                    },
+                                                    initialValue: _formatValue(
+                                                        rentListingController
+                                                            .serviceCharge
+                                                            .value),
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        borderSide:
+                                                            const BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Total Price"),
+                                  otherChargesIncluded == true
+                                      ? Text(
+                                          formatter
+                                              .format((_formatValue(
+                                                          rentListingController
+                                                              .rentFee.value) ==
+                                                      ''
+                                                  ? 0
+                                                  : int.parse(_formatValue(
+                                                      rentListingController
+                                                          .rentFee.value))))
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: Color(0XFF0072BA),
+                                          ),
+                                        )
+                                      : Text(
+                                          formatter
+                                              .format((rentListingController.rentFee.value == ''
+                                                  ? 0
+                                                  : (int.parse(_formatValue(rentListingController.rentFee.value))) +
+                                                      (rentListingController.cautionFee.value == ''
+                                                          ? 0
+                                                          : (int.parse(_formatValue(
+                                                              rentListingController
+                                                                  .cautionFee
+                                                                  .value)))) +
+                                                      (rentListingController.serviceCharge.value == ''
+                                                          ? 0
+                                                          : (int.parse(_formatValue(
+                                                              rentListingController
+                                                                  .serviceCharge
+                                                                  .value)))) +
+                                                      (rentListingController.rentFee.value == ''
+                                                          ? 0
+                                                          : ((int.parse(_formatValue(rentListingController.rentFee.value))) * rentListingController.agencyFee.value) / 100) +
+                                                      (rentListingController.rentFee.value == '' ? 0 : ((int.parse(_formatValue(rentListingController.rentFee.value)) * rentListingController.legalFee.value) / 100))))
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: Color(0XFF0072BA),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("Negotiable?"),
+                              FormBuilderRadioGroup(
+                                name: "negotiable",
+                                initialValue:
+                                    rentListingController.negotiable.value == 1
+                                        ? "Yes"
+                                        : "No",
+                                onChanged: (value) {
+                                  if (value == 'Yes') {
+                                    setState(() {
+                                      rentListingController.negotiable.value =
+                                          1;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      rentListingController.negotiable.value =
+                                          0;
+                                    });
+                                  }
+                                },
+                                activeColor: const Color(0XFF0072BA),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                                options: const [
+                                  FormBuilderFieldOption(value: "Yes"),
+                                  FormBuilderFieldOption(value: "No"),
+                                ],
+                                // initialValue: RentListingController.person.role,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Material(
+                                    color: const Color(0XFF0072BA),
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: MaterialButton(
+                                      onPressed: () async {
+                                        if (formKey2.currentState!.validate() &&
+                                            rentFeeFormKey.currentState!
+                                                .validate()) {
+                                          var res = await rentListingController
+                                              .handleShowConfirmPrice(context);
+                                          if (res == true) {
+                                            handleNextScreen();
+                                          } else {
+                                            print("false");
+                                          }
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              5,
+                                          right: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              5,
+                                          top: 4.5,
+                                          bottom: 4.5,
+                                        ),
+                                        child: const Text(
+                                          "Save & Continue",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontFamily: "RedHatDisplay",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

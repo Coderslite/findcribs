@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:findcribs/controller/get_chat_controller.dart';
 import 'package:findcribs/controller/get_profile_controller.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_page.dart';
 import 'package:findcribs/screens/authentication_screen/sign_in_verify_email_page.dart';
@@ -34,6 +35,9 @@ class LoginController extends GetxController {
     isLoading.value = true;
     final prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('fcmToken');
+    print("email address");
+    print(email);
+    print(password);
 
     final response = await http.post(
       Uri.parse("$baseUrl/auth/login"),
@@ -43,23 +47,25 @@ class LoginController extends GetxController {
       body: jsonEncode(<String, String>{
         "email": email,
         "password": password,
-        "deviceToken": "$token",
+        // "deviceToken": "$token",
       }),
     );
     var userDetails = jsonDecode(response.body);
-
+    print(userDetails);
     if (userDetails['status'] == true) {
-      await getProfileController.handleGetProfile();
-
       var token = userDetails['data']['token'];
-
-      isLoading.value = false;
-      isLogin.value = true;
 
       prefs.setString('token', token.toString());
       prefs.setString('email', email.toString());
 
       prefs.setString('action', 'LoggedIn');
+
+      await getProfileController.handleGetProfile();
+      await GetAllChatController().handleGetMessage();
+
+      isLoading.value = false;
+      isLogin.value = true;
+
       Get.off(const HomePageRoot(navigateIndex: 0));
       // return ;
     } else {
@@ -91,6 +97,7 @@ class LoginController extends GetxController {
           },
         ).show();
       } else {
+        print(userDetails['message']);
         AwesomeDialog(
           context: Get.context!,
           dialogType: DialogType.error,

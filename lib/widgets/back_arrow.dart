@@ -4,8 +4,8 @@ import '../components/constants.dart';
 
 class BackArrow extends StatelessWidget {
   const BackArrow({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

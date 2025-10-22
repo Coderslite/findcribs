@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class Faqs extends StatefulWidget {
-  const Faqs({Key? key}) : super(key: key);
+  const Faqs({super.key});
 
   @override
   State<Faqs> createState() => _FaqsState();
@@ -163,7 +162,7 @@ class _FaqsState extends State<Faqs> {
                   const Text(
                     "FAQs",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -206,11 +205,10 @@ class EachFAQ extends StatelessWidget {
   final String answer;
   final bool children;
   const EachFAQ(
-      {Key? key,
+      {super.key,
       required this.question,
       required this.answer,
-      required this.children})
-      : super(key: key);
+      required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -250,11 +248,10 @@ class EachFAQWithChildren extends StatelessWidget {
   final bool children;
   final List<String> column;
   const EachFAQWithChildren(
-      {Key? key,
+      {super.key,
       required this.question,
       required this.children,
-      required this.column})
-      : super(key: key);
+      required this.column});
 
   @override
   Widget build(BuildContext context) {

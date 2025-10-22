@@ -14,7 +14,7 @@ import '../../widgets/loading_widget.dart';
 import '../homepage/single_property.dart';
 
 class EstateMarketScreen extends StatefulWidget {
-  const EstateMarketScreen({Key? key}) : super(key: key);
+  const EstateMarketScreen({super.key});
 
   @override
   State<EstateMarketScreen> createState() => _EstateMarketScreenState();
@@ -66,44 +66,47 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
         body: SafeArea(
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: const Color(0XFFF0F7F8),
+                        borderRadius: BorderRadius.circular(13)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SvgPicture.asset("assets/svgs/arrow_back.svg"),
+                    ),
+                  ),
+                ),
+                const Text(
+                  "Estate Market",
+                  style: TextStyle(
+                      fontFamily: 'RedHatDisplay',
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700),
+                ),
+                Container(
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                      color: const Color(0XFFF0F7F8),
+                      // color: const Color(0XFFF0F7F8),
                       borderRadius: BorderRadius.circular(13)),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: SvgPicture.asset("assets/svgs/arrow_back.svg"),
+                    child: SvgPicture.asset("assets/svgs/blank.svg"),
                   ),
                 ),
-              ),
-              const Text(
-                "Estate Market",
-                style: TextStyle(
-                    fontFamily: 'RedHatDisplay',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700),
-              ),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    // color: const Color(0XFFF0F7F8),
-                    borderRadius: BorderRadius.circular(13)),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SvgPicture.asset("assets/svgs/blank.svg"),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           const Divider(),
           Container(
@@ -127,7 +130,7 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                         suffixIconColor: Colors.blue,
                       ),
                       onChanged: (value) {
-                        houseController.category.value = value.toString();
+                        houseController.search.value = value.toString();
                       },
                       onFieldSubmitted: (value) {
                         setState(() {
@@ -324,7 +327,7 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         18.0),
                                                                 child: Row(
                                                                   mainAxisAlignment:
@@ -410,23 +413,11 @@ class _EstateMarketScreenState extends State<EstateMarketScreen> {
                       builderDelegate:
                           PagedChildBuilderDelegate<HouseListModel>(
                         itemBuilder: (context, post, index) {
-                          int price = (post.rentalFee!.toInt());
-                          var formatter = NumberFormat("#,###");
-                          var formatedPrice = formatter.format(price);
+                     
                           return SingleProperty(
-                              id: post.id,
-                              image: post.image,
-                              designType: post.designType,
-                              currency: post.currency,
-                              propertyType: post.propertyType,
-                              propertyAddress: post.propertyAddress,
-                              bedroom: post.bedroom,
-                              propertyCategory: post.propertyCategory,
-                              price: formatedPrice,
-                              propertyName: post.propertyName.toString(),
-                              comingFrom: 'Homescreen',
-                                          state: post.state!,
-                              );
+                            listing: post,
+                            comingFrom: 'Homescreen',
+                          );
                         },
                         noItemsFoundIndicatorBuilder: (context) =>
                             const Center(child: Text('No property found.')),

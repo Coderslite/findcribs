@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TermsAndCondition extends StatefulWidget {
-  const TermsAndCondition({Key? key}) : super(key: key);
+  const TermsAndCondition({super.key});
 
   @override
   State<TermsAndCondition> createState() => _TermsAndConditionState();
@@ -196,8 +196,7 @@ class EachTermsAndCondition extends StatelessWidget {
   final String title;
   final String body;
   const EachTermsAndCondition(
-      {Key? key, required this.title, required this.body})
-      : super(key: key);
+      {super.key, required this.title, required this.body});
 
   @override
   Widget build(BuildContext context) {

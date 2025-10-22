@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LegalSettings extends StatefulWidget {
-  const LegalSettings({Key? key}) : super(key: key);
+  const LegalSettings({super.key});
 
   @override
   State<LegalSettings> createState() => _LegalSettingsState();
@@ -41,10 +41,9 @@ class _LegalSettingsState extends State<LegalSettings> {
                 ),
               ),
             ),
-            Text(
+            const Text(
               "Legal",
-              style: TextStyle(
-                   fontSize: size.width / 22),
+              style: TextStyle(fontSize: 18),
             ),
             const Text("            "),
           ],
@@ -72,31 +71,29 @@ class _LegalSettingsState extends State<LegalSettings> {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Policy Privacy",
                           style: TextStyle(
-                            
-                            fontSize: size.width / 26,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           )),
                       Text(
                         "Know what binds us together",
                         style: TextStyle(
-                            fontSize: size.width / 37,
-                            color: const Color(0XFF8A99B1)),
+                            fontSize: 14, color: Color(0XFF8A99B1)),
                       ),
                     ],
                   ),
                 ),
                 Icon(Icons.arrow_forward_ios_outlined,
-                    size: size.width / 26, color: const Color(0XFF8A99B1)),
+                    size: 16, color: Color(0XFF8A99B1)),
               ],
             ),
           ),
@@ -124,31 +121,29 @@ class _LegalSettingsState extends State<LegalSettings> {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("FAQs",
                           style: TextStyle(
-                            
-                            fontSize: size.width / 26,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           )),
                       Text(
                         "Some basic questions you may have",
                         style: TextStyle(
-                            fontSize: size.width / 37,
-                            color: const Color(0XFF8A99B1)),
+                            fontSize: 14, color: Color(0XFF8A99B1)),
                       ),
                     ],
                   ),
                 ),
                 Icon(Icons.arrow_forward_ios_outlined,
-                    size: size.width / 26, color: const Color(0XFF8A99B1)),
+                    size: 16, color: Color(0XFF8A99B1)),
               ],
             ),
           ),
@@ -176,31 +171,29 @@ class _LegalSettingsState extends State<LegalSettings> {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Terms and Conditions",
                           style: TextStyle(
-                            
-                            fontSize: size.width / 26,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           )),
                       Text(
                         "Know what binds us together",
                         style: TextStyle(
-                            fontSize: size.width / 37,
-                            color: const Color(0XFF8A99B1)),
+                            fontSize: 14, color: Color(0XFF8A99B1)),
                       ),
                     ],
                   ),
                 ),
                 Icon(Icons.arrow_forward_ios_outlined,
-                    size: size.width / 26, color: const Color(0XFF8A99B1)),
+                    size: 16, color: Color(0XFF8A99B1)),
               ],
             ),
           ),

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class OnboardingText extends StatelessWidget {
   final String text;
   const OnboardingText({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

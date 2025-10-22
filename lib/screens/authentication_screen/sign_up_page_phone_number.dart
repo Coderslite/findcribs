@@ -13,13 +13,12 @@ class SignUpPhoneNumber extends StatefulWidget {
   final String firstname;
   final String lastname;
   const SignUpPhoneNumber(
-      {Key? key,
+      {super.key,
       required this.email,
       required this.password1,
       required this.password2,
       required this.firstname,
-      required this.lastname})
-      : super(key: key);
+      required this.lastname});
 
   @override
   SignUpPhoneNumberState createState() => SignUpPhoneNumberState();

@@ -23,7 +23,7 @@ import '../../../../../service/user_profile_service.dart';
 import 'package:http/http.dart' as http;
 
 class BusinessProfileUpdate extends StatefulWidget {
-  const BusinessProfileUpdate({Key? key}) : super(key: key);
+  const BusinessProfileUpdate({super.key});
 
   @override
   State<BusinessProfileUpdate> createState() => _BusinessProfileUpdateState();
@@ -357,7 +357,6 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                               const SizedBox(
                                 height: 30,
                               ),
-
                               const Text(
                                 "About Business",
                                 style: TextStyle(color: Color(0XFF5A5A5A)),
@@ -401,70 +400,29 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                   ),
                                 ),
                               ),
-                              // const SizedBox(
-                              //   height: 30,
-                              // ),
-                              // const Text(
-                              //   "Upload Photo",
-                              //   style: TextStyle(
-                              //
-                              //       color: Color(0XFF5A5A5A)),
-                              // ),
-
-                              // InkWell(
-                              //   onTap: () {
-                              //     handleGetImage();
-                              //   },
-                              //   child: Container(
-                              //     padding: const EdgeInsets.all(8),
-                              //     decoration: BoxDecoration(
-                              //       borderRadius: BorderRadius.circular(5),
-                              //       border: Border.all(),
-                              //     ),
-                              //     child: Row(
-                              //       mainAxisAlignment:
-                              //           MainAxisAlignment.spaceBetween,
-                              //       children: [
-                              //         Row(
-                              //           children: [
-                              //             Image.asset("assets/images/file.png"),
-                              //             const SizedBox(
-                              //               width: 5,
-                              //             ),
-                              //             croppedFile == null
-                              //                 ? const Text("select photo")
-                              //                 : const Text(
-                              //                     "image Available now"),
-                              //           ],
-                              //         ),
-                              //         croppedFile == null
-                              //             ? ClipOval(
-                              //                 child: SizedBox(
-                              //                   width: 40,
-                              //                   height: 40,
-                              //                   child: Image.network(
-                              //                     snapshot.data!.profileImg
-                              //                         .toString(),
-                              //                     fit: BoxFit.cover,
-                              //                   ),
-                              //                 ),
-                              //               )
-                              //             : ClipOval(
-                              //                 child: SizedBox(
-                              //                   width: 40,
-                              //                   height: 40,
-                              //                   child: Image.file(
-                              //                     File(croppedFile!.path
-                              //                         .toString()),
-                              //                     fit: BoxFit.cover,
-                              //                   ),
-                              //                 ),
-                              //               )
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
-
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Text(
+                                "Whatsapp Number",
+                                style: TextStyle(color: Color(0XFF5A5A5A)),
+                              ),
+                              FormBuilderTextField(
+                                name: 'whatsapp',
+                                validator: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(),
+                                  FormBuilderValidators.minLength(11),
+                                  FormBuilderValidators.maxLength(11),
+                                ]),
+                                initialValue:
+                                    snapshot.data!.agent!['whatsapp_number'],
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: const BorderSide(),
+                                  ),
+                                ),
+                              ),
                               snapshot.data!.agent!['category'] ==
                                       'Property_Owner'
                                   ? Column(
@@ -526,7 +484,6 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                       ],
                                     )
                                   : Container(),
-
                               snapshot.data!.agent!['category'] ==
                                       'Real_Estate_Company'
                                   ? Column(
@@ -569,7 +526,6 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                       ],
                                     )
                                   : Container(),
-
                               snapshot.data!.agent!['category'] ==
                                           'Property_Owner' &&
                                       manageAllowed == true
@@ -598,8 +554,8 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
                                             // initialValue:  jsonDecode(snapshot.data!.agent!['availability']),a\
                                             validator: (valid) {
                                               FormBuilderValidators.compose([
-                                                FormBuilderValidators.required(
-                                                ),
+                                                FormBuilderValidators
+                                                    .required(),
                                               ]);
                                               return null;
                                             },
@@ -707,16 +663,8 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
           ),
           WebUiSettings(
             context: context,
-            presentStyle: CropperPresentStyle.dialog,
-            boundary: const CroppieBoundary(
-              width: 520,
-              height: 520,
-            ),
-            viewPort:
-                const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-            enableExif: true,
-            enableZoom: true,
-            showZoomer: true,
+            presentStyle: WebPresentStyle.dialog,
+            zoomable: true,
           ),
         ],
       );
@@ -744,6 +692,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
       }, body: {
         "about": formData['about'],
         "phone_number": formData['phone'],
+        "whatsapp_number": formData['whatsapp'],
         "systemManaged": formData['findCribManage'] == 'Yes' ? '1' : '0',
         "availability": formData['findCribManage'] == 'Yes'
             ? jsonEncode(
@@ -762,6 +711,9 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
             : "",
       });
       if (response.statusCode == 200) {
+        setState(() {
+          isLoading = false;
+        });
         AwesomeDialog(
           context: context,
           dialogType: DialogType.success,
@@ -780,9 +732,7 @@ class _BusinessProfileUpdateState extends State<BusinessProfileUpdate> {
           title: 'Updated Successfully',
           desc: "Information Updated successfully",
           showCloseIcon: true,
-          btnOkOnPress: () {
-            Navigator.pop(context);
-          },
+          btnOkOnPress: () {},
         ).show();
       } else if (response.statusCode == 500) {
         // print(responseData);

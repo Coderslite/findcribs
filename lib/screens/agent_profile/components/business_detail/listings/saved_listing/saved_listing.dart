@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../listings.dart';
 
 class SavedListing extends StatefulWidget {
-  const SavedListing({Key? key}) : super(key: key);
+  const SavedListing({super.key});
 
   @override
   State<SavedListing> createState() => _SavedListingState();
@@ -102,12 +102,11 @@ class _SavedListingState extends State<SavedListing>
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10))),
-                            child: Text(
+                            child: const Text(
                               "For Rent",
                               style: TextStyle(
                                 // color: Colors.black,
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -123,11 +122,10 @@ class _SavedListingState extends State<SavedListing>
                                   // bottomLeft: Radius.circular(10),
                                   ),
                             ),
-                            child: Text(
+                            child: const Text(
                               "For Sale",
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -143,11 +141,10 @@ class _SavedListingState extends State<SavedListing>
                                 bottomRight: Radius.circular(10),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Estate Market",
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 33,
+                                fontSize: 16,
                               ),
                             ),
                           ),

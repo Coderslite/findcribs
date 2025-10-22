@@ -1,4 +1,5 @@
 import 'package:findcribs/models/house_list_model.dart';
+import 'package:findcribs/models/my_listing_model.dart';
 import 'package:findcribs/service/saved_list_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +8,7 @@ import 'package:progress_indicators/progress_indicators.dart';
 import '../../active_listing/category/single_property_status.dart';
 
 class SavedListingForSale extends StatefulWidget {
-  const SavedListingForSale({Key? key}) : super(key: key);
+  const SavedListingForSale({super.key});
 
   @override
   State<SavedListingForSale> createState() => _SavedListingForSaleState();

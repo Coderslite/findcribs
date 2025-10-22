@@ -19,7 +19,7 @@ import 'package:http/http.dart' as http;
 import '../../../../../components/constants.dart';
 
 class EditEstateMarket extends StatefulWidget {
-  const EditEstateMarket({Key? key}) : super(key: key);
+  const EditEstateMarket({super.key});
 
   @override
   State<EditEstateMarket> createState() => _EditEstateMarketState();
